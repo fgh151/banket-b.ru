@@ -22,13 +22,16 @@ class m180723_082855_create_proposal_table extends Migration
             'amount' => $this->double(2)->notNull(),
             'type' => $this->integer()->notNull(),
             'event_type' => $this->integer()->notNull(),
-            'metro' => $this->integer()->notNull(),
+            'metro' => $this->integer(),
             'cuisine' => $this->integer()->notNull(),
             'dance' => $this->boolean()->defaultValue(false),
             'private' => $this->boolean()->defaultValue(false),
             'own_alcohol' => $this->boolean()->defaultValue(false),
             'parking' => $this->boolean()->defaultValue(false),
-            'comment' => $this->text()
+            'comment' => $this->text(),
+            'created_at' => $this->integer()->notNull(),
+            'updated_at' => $this->integer()->notNull(),
+            'status' => $this->integer()->notNull()
         ]);
 
         $this->addForeignKey('proposal_user_fk', 'proposal', 'owner_id', 'mobile_user', 'id');

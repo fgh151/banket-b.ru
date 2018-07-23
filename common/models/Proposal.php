@@ -3,6 +3,7 @@
 namespace app\common\models;
 
 use Yii;
+use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
 
 /**
@@ -24,6 +25,9 @@ use yii\db\ActiveRecord;
  * @property bool $own_alcohol
  * @property bool $parking
  * @property string $comment
+ * @property int $status
+ * @property int $created_at
+ * @property int $updated_at
  *
  * @property MobileUser $owner
  */
@@ -40,10 +44,20 @@ class Proposal extends ActiveRecord
     /**
      * {@inheritdoc}
      */
+    public function behaviors()
+    {
+        return [
+            TimestampBehavior::class,
+        ];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function rules()
     {
         return [
-            [['owner_id', 'City', 'date', 'time', 'guests_count', 'amount', 'type', 'event_type', 'metro', 'cuisine'], 'required'],
+            [['status','owner_id', 'City', 'date', 'time', 'guests_count', 'amount', 'type', 'event_type', 'metro', 'cuisine'], 'required'],
             [['owner_id', 'guests_count', 'type', 'event_type', 'metro', 'cuisine'], 'default', 'value' => null],
             [['owner_id', 'guests_count', 'type', 'event_type', 'metro', 'cuisine'], 'integer'],
             [['date', 'time'], 'safe'],
@@ -52,6 +66,8 @@ class Proposal extends ActiveRecord
             [['comment'], 'string'],
             [['City'], 'string', 'max' => 255],
             [['owner_id'], 'exist', 'skipOnError' => true, 'targetClass' => MobileUser::class, 'targetAttribute' => ['owner_id' => 'id']],
+            [['created_at', 'updated_at'], 'default', 'value' => time()],
+            [['created_at', 'updated_at'], 'integer'],
         ];
     }
 
