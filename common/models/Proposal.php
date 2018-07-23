@@ -2,7 +2,7 @@
 
 namespace app\common\models;
 
-use Yii;
+use app\common\components\Constants;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
 
@@ -57,6 +57,7 @@ class Proposal extends ActiveRecord
     public function rules()
     {
         return [
+            ['status', 'default', 'value' => Constants::PROPOSAL_STATUS_CREATED],
             [['status','owner_id', 'City', 'date', 'time', 'guests_count', 'amount', 'type', 'event_type', 'metro', 'cuisine'], 'required'],
             [['owner_id', 'guests_count', 'type', 'event_type', 'metro', 'cuisine'], 'default', 'value' => null],
             [['owner_id', 'guests_count', 'type', 'event_type', 'metro', 'cuisine'], 'integer'],

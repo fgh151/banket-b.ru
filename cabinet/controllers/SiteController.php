@@ -1,17 +1,22 @@
 <?php
 namespace app\cabinet\controllers;
 
-use Yii;
-use yii\base\InvalidParamException;
-use yii\web\BadRequestHttpException;
-use yii\web\Controller;
-use yii\filters\VerbFilter;
-use yii\filters\AccessControl;
-use common\models\LoginForm;
+use app\cabinet\models\SignupForm;
+use app\common\components\Constants;
+use app\common\models\LoginForm;
+use app\common\models\Organization;
+use app\common\models\OrganizationProposalStatus;
+use app\common\models\Proposal;
+use frontend\models\ContactForm;
 use frontend\models\PasswordResetRequestForm;
 use frontend\models\ResetPasswordForm;
-use app\cabinet\models\SignupForm;
-use frontend\models\ContactForm;
+use Yii;
+use yii\base\InvalidArgumentException;
+use yii\data\ActiveDataProvider;
+use yii\filters\AccessControl;
+use yii\filters\VerbFilter;
+use yii\web\BadRequestHttpException;
+use yii\web\Controller;
 
 /**
  * Site controller
@@ -69,10 +74,32 @@ class SiteController extends Controller
      * Displays homepage.
      *
      * @return mixed
+     * @throws \Throwable
      */
     public function actionIndex()
     {
-        return $this->render('index');
+        $dataProvider = new ActiveDataProvider();
+        /** @var Organization $organization */
+        $organization = Yii::$app->getUser()->getIdentity();
+        if ($organization->state == Constants::ORGANIZATION_STATE_PAID) {
+            $dataProvider->query = Proposal::find()
+                ->where(['status' => Constants::PROPOSAL_STATUS_CREATED])
+                ->andWhere([
+                    'not in',
+                    'id',
+                    OrganizationProposalStatus::find()
+                        ->where([
+                            'organization_id' => $organization->getId(),
+                            'status' => Constants::ORGANIZATION_PROPOSAL_STATUS_REJECT
+                        ])
+                        ->select('proposal_id')
+                ]);
+        }
+
+        return $this->render('index', [
+            'organization' => $organization,
+            'dataProvider' => $dataProvider
+        ]);
     }
 
     /**
@@ -198,7 +225,7 @@ class SiteController extends Controller
     {
         try {
             $model = new ResetPasswordForm($token);
-        } catch (InvalidParamException $e) {
+        } catch (InvalidArgumentException $e) {
             throw new BadRequestHttpException($e->getMessage());
         }
 

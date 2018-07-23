@@ -2,18 +2,21 @@
 
 namespace app\admin\controllers;
 
-use Yii;
+use app\admin\components\ProposalFindOneTrait;
 use app\common\models\Proposal;
 use app\common\models\ProposalSearch;
+use Yii;
+use yii\filters\VerbFilter;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
-use yii\filters\VerbFilter;
 
 /**
  * ProposalController implements the CRUD actions for Proposal model.
  */
 class ProposalController extends Controller
 {
+    use ProposalFindOneTrait;
+
     /**
      * {@inheritdoc}
      */
@@ -111,21 +114,5 @@ class ProposalController extends Controller
         $this->findModel($id)->delete();
 
         return $this->redirect(['index']);
-    }
-
-    /**
-     * Finds the Proposal model based on its primary key value.
-     * If the model is not found, a 404 HTTP exception will be thrown.
-     * @param integer $id
-     * @return Proposal the loaded model
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-    protected function findModel($id)
-    {
-        if (($model = Proposal::findOne($id)) !== null) {
-            return $model;
-        }
-
-        throw new NotFoundHttpException('The requested page does not exist.');
     }
 }
