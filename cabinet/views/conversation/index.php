@@ -90,6 +90,7 @@ function getNewMessages() {
 }
 
 setInterval(getNewMessages, 10000);
+scrollMessages();
 
 JS;
 

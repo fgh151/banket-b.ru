@@ -12,6 +12,7 @@ namespace app\cabinet\controllers;
 use app\admin\components\ProposalFindOneTrait;
 use app\common\models\Message;
 use Yii;
+use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\Response;
 use yii\widgets\ActiveForm;
@@ -19,6 +20,25 @@ use yii\widgets\ActiveForm;
 class ConversationController extends Controller
 {
     use ProposalFindOneTrait;
+
+    /**
+     * {@inheritdoc}
+     */
+    public function behaviors()
+    {
+        return [
+            'access' => [
+                'class' => AccessControl::class,
+                'rules' => [
+                    [
+                        'actions' => ['*'],
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ]
+                ],
+            ],
+        ];
+    }
 
     /**
      * @param $proposalId

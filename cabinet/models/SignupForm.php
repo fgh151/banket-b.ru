@@ -70,7 +70,7 @@ class SignupForm extends Model
         $user->created_at = time();
         $user->updated_at = time();
         $user->status     = Constants::USER_STATUS_ACTIVE;
-
+        $user->state = Constants::ORGANIZATION_STATE_FREE;
 
         return  $user->save() ? $user : null;
     }

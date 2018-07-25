@@ -13,6 +13,7 @@ use frontend\models\ResetPasswordForm;
 use Yii;
 use yii\base\InvalidArgumentException;
 use yii\data\ActiveDataProvider;
+use yii\db\Query;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use yii\web\BadRequestHttpException;
@@ -31,7 +32,6 @@ class SiteController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::class,
-                'only' => ['logout', 'signup'],
                 'rules' => [
                     [
                         'actions' => ['signup'],
@@ -39,10 +39,23 @@ class SiteController extends Controller
                         'roles' => ['?'],
                     ],
                     [
-                        'actions' => ['logout'],
+                        'actions' => ['login'],
+                        'allow' => true,
+                        'roles' => ['?'],
+                    ],
+                    [
+                        'actions' => ['error'],
+                        'allow' => true,
+                    ],
+                    [
                         'allow' => true,
                         'roles' => ['@'],
                     ],
+                    [
+                        'actions' => ['*'],
+                        'allow' => false,
+                        'roles' => ['?'],
+                    ]
                 ],
             ],
             'verbs' => [
@@ -94,6 +107,10 @@ class SiteController extends Controller
                         ])
                         ->select('proposal_id')
                 ]);
+        } else {
+            // Формируем запрос, который заведомо ничего не вернет
+
+            $dataProvider->query = Proposal::find()->where(['id' => 0]);
         }
 
         return $this->render('index', [
@@ -174,6 +191,7 @@ class SiteController extends Controller
      * Signs user up.
      *
      * @return mixed
+     * @throws \yii\base\Exception
      */
     public function actionSignup()
     {
