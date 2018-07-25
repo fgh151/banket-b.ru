@@ -9,6 +9,7 @@
 namespace app\api\controllers;
 
 
+use app\common\models\Proposal;
 use yii\filters\AccessControl;
 use yii\filters\auth\HttpBearerAuth;
 use yii\filters\ContentNegotiator;
@@ -56,6 +57,11 @@ class ProposalController extends Controller
 
         var_dump(\Yii::$app->request->post());
 
+    }
+
+    public function actionList()
+    {
+        return Proposal::find()->where(['owner_id' => 1])->all();
     }
 
 }
