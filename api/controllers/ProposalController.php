@@ -22,25 +22,25 @@ class ProposalController extends Controller
     public function behaviors()
     {
         return [
-            'authenticator' => [
-                'class' => HttpBearerAuth::class
-            ],
+//            'authenticator' => [
+//                'class' => HttpBearerAuth::class
+//            ],
             'contentNegotiator' => [
                 'class' => ContentNegotiator::class,
                 'formats' => [
                     'application/json' => Response::FORMAT_JSON,
                 ]
             ],
-            'access' => [
-                'class' => AccessControl::class,
-                'rules' => [
-                    [
-                        'actions' => ['create'],
-                        'allow' => true,
-                        'roles' => ['@'],
-                    ],
-                ],
-            ]
+//            'access' => [
+//                'class' => AccessControl::class,
+//                'rules' => [
+//                    [
+//                        'actions' => ['create'],
+//                        'allow' => true,
+//                        'roles' => ['@'],
+//                    ],
+//                ],
+//            ]
         ];
     }
 
