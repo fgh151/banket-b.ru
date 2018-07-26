@@ -46,7 +46,7 @@ class Message extends Model
             foreach ($response as $organizationId => $messages) {
                 foreach ($messages as $message) {
                     /** @var self $decodedMessage */
-                    $decodedMessage = self::decode(base64_decode($message));
+                    $decodedMessage = self::decode($message);
                     $result[$organizationId][$decodedMessage->created_at] = $decodedMessage;
                 }
             }
@@ -80,7 +80,7 @@ class Message extends Model
         if (is_array($response)) {
             foreach ($response as $message) {
                 /** @var self $decodedMessage */
-                $decodedMessage = self::decode(base64_decode($message));
+                $decodedMessage = self::decode($message);
                 $result[$decodedMessage->created_at] = $decodedMessage;
             }
             return $result;
@@ -141,7 +141,7 @@ class Message extends Model
 
         $database = Yii::$app->firebase->getDatabase();
         $reference = $database->getReference($path);
-        $reference->set(base64_encode(self::encode($this)));
+        $reference->set(self::encode($this));
 
         return $this;
     }
