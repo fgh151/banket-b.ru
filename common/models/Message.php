@@ -13,6 +13,7 @@ use Kreait\Firebase\Database\Query;
 use Kreait\Firebase\Database\Reference;
 use Yii;
 use yii\base\Model;
+use yii\helpers\Json;
 
 /**
  *
@@ -45,7 +46,7 @@ class Message extends Model
             foreach ($response as $organizationId => $messages) {
                 foreach ($messages as $message) {
                     /** @var self $decodedMessage */
-                    $decodedMessage = unserialize(base64_decode($message));
+                    $decodedMessage = self::decode(base64_decode($message));
                     $result[$organizationId][$decodedMessage->created_at] = $decodedMessage;
                 }
             }
@@ -79,7 +80,7 @@ class Message extends Model
         if (is_array($response)) {
             foreach ($response as $message) {
                 /** @var self $decodedMessage */
-                $decodedMessage = unserialize(base64_decode($message));
+                $decodedMessage = self::decode(base64_decode($message));
                 $result[$decodedMessage->created_at] = $decodedMessage;
             }
             return $result;
@@ -140,7 +141,7 @@ class Message extends Model
 
         $database = Yii::$app->firebase->getDatabase();
         $reference = $database->getReference($path);
-        $reference->set(base64_encode(serialize($this)));
+        $reference->set(base64_encode(self::encode($this)));
 
         return $this;
     }
@@ -155,6 +156,16 @@ class Message extends Model
         } else {
             return Proposal::findOne($this->proposal_id)->owner;
         }
+    }
+
+    private static function encode(Message $message)
+    {
+        return Json::encode($message);
+    }
+
+    private static function decode($json)
+    {
+        return new Message(Json::decode($json, true));
     }
 
 }
