@@ -44,9 +44,14 @@ class Message extends Model
 
         if (is_array($response)) {
             foreach ($response as $organizationId => $messages) {
-                foreach ($messages as $message) {
-                    /** @var self $decodedMessage */
-                    $decodedMessage = self::decode($message);
+                if (is_array($messages)) {
+                    foreach ($messages as $message) {
+                        /** @var self $decodedMessage */
+                        $decodedMessage = self::decode($message);
+                        $result[$organizationId][$decodedMessage->created_at] = $decodedMessage;
+                    }
+                } else {
+                    $decodedMessage = self::decode($messages);
                     $result[$organizationId][$decodedMessage->created_at] = $decodedMessage;
                 }
             }
