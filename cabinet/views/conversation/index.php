@@ -12,7 +12,10 @@ use yii\widgets\ActiveForm;
 
 ?>
 
-    <div class="row" id="messages-area">
+    <div class="conversation">
+        <h1>Заявка №<?= $proposal->id ?></h1>
+
+        <div id="messages-area">
 
         <?= $this->render('_message_list', ['messages' => $messages]); ?>
 
@@ -28,9 +31,12 @@ use yii\widgets\ActiveForm;
 <?= $form->field($model, 'message'); ?>
 
 
-<?= Html::submitButton('send') ?>
+        <?= Html::submitButton('Отправить') ?>
 
 <?php ActiveForm::end(); ?>
+
+
+    </div>
 
 <?php
 
@@ -66,10 +72,14 @@ $csrfParam = Yii::$app->request->csrfParam;
 $csrfToken = Yii::$app->request->getCsrfToken();
 $js = <<<JS
 
-function scrollMessages() {
-  var scroll = $('#messages-area');
-  var height = scroll[0].scrollHeight;
-  scroll.scrollTop(height);
+function scrollMessages(force = false) {
+    
+    if ($('#messages-area > div').last().offset() > 500 || force) {
+    
+      var scroll = $('#messages-area');
+      var height = scroll[0].scrollHeight;
+      scroll.scrollTop(height);
+  }
 }
 
 function getNewMessages() {
@@ -90,7 +100,7 @@ function getNewMessages() {
 }
 
 setInterval(getNewMessages, 10000);
-scrollMessages();
+scrollMessages(true);
 
 JS;
 

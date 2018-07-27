@@ -104,4 +104,30 @@ class Proposal extends ActiveRecord
     {
         return $this->hasOne(MobileUser::class, ['id' => 'owner_id']);
     }
+
+    /**
+     * @return \DateTime
+     */
+    public function getWhen()
+    {
+        return new \DateTime($this->date . ' ' . $this->time);
+    }
+
+    /**
+     * TODO: Realize it!
+     * @return int
+     */
+    public function getEventType()
+    {
+        return $this->event_type;
+    }
+
+    /**
+     * TODO: Realize it!
+     * @return int
+     */
+    public function getCuisineString()
+    {
+        return $this->cuisine;
+    }
 }

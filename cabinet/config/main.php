@@ -11,6 +11,8 @@ return [
     'name' => 'bb-cabinet',
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
+    'language' => 'ru-RU',
+    'sourceLanguage' => 'en-US',
     'controllerNamespace' => 'app\cabinet\controllers',
     'components' => [
         'request' => [
@@ -43,6 +45,9 @@ return [
             'rules' => [
             ],
         ],
+        'formatter' => [
+            'class' => \app\common\components\Formatter::class
+        ]
     ],
     'params' => $params,
 ];

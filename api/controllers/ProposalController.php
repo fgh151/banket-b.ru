@@ -61,6 +61,10 @@ class ProposalController extends Controller
 
     }
 
+    /**
+     * @return array|\yii\db\ActiveRecord[]
+     * TODO: Fix owner
+     */
     public function actionList()
     {
         return Proposal::find()->where(['owner_id' => 1])->all();

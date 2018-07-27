@@ -12,6 +12,7 @@ namespace app\cabinet\controllers;
 use app\admin\components\ProposalFindOneTrait;
 use app\common\models\Message;
 use Yii;
+use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\Response;
 use yii\widgets\ActiveForm;
@@ -23,21 +24,20 @@ class ConversationController extends Controller
     /**
      * {@inheritdoc}
      */
-//    public function behaviors()
-//    {
-//        return [
-//            'access' => [
-//                'class' => AccessControl::class,
-//                'rules' => [
-//                    [
-//                        'actions' => ['*'],
-//                        'allow' => true,
-//                        'roles' => ['@'],
-//                    ]
-//                ],
-//            ],
-//        ];
-//    }
+    public function behaviors()
+    {
+        return [
+            'access' => [
+                'class' => AccessControl::class,
+                'rules' => [
+                    [
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ]
+                ],
+            ],
+        ];
+    }
 
     /**
      * @param $proposalId
@@ -51,10 +51,6 @@ class ConversationController extends Controller
         $model = new Message(['proposal_id' => $proposalId]);
 
         $messages = Message::getConversation($proposalId, Yii::$app->getUser()->getId());
-
-//        $model->author_class = MobileUser::class;
-//        $model->message = 'NOOOO )';
-//        $model->save(); die;
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             Yii::$app->session->setFlash('success', 'saved');

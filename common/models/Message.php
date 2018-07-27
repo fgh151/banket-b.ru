@@ -60,6 +60,13 @@ class Message extends Model
         return null;
     }
 
+    public function attributeLabels()
+    {
+        return [
+            'message' => 'Сообщение'
+        ];
+    }
+
     /**
      * @param $proposalId
      * @param $organizationId

@@ -1,9 +1,9 @@
 <?php
 namespace app\cabinet\controllers;
 
+use app\cabinet\models\LoginForm;
 use app\cabinet\models\SignupForm;
 use app\common\components\Constants;
-use app\common\models\LoginForm;
 use app\common\models\Organization;
 use app\common\models\OrganizationProposalStatus;
 use app\common\models\Proposal;
@@ -13,7 +13,6 @@ use frontend\models\ResetPasswordForm;
 use Yii;
 use yii\base\InvalidArgumentException;
 use yii\data\ActiveDataProvider;
-use yii\db\Query;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use yii\web\BadRequestHttpException;
@@ -126,6 +125,11 @@ class SiteController extends Controller
      */
     public function actionLogin()
     {
+
+//        $u = Organization::findOne(1);
+//        Yii::$app->user->login($u);
+
+
         if (!Yii::$app->user->isGuest) {
             return $this->goHome();
         }

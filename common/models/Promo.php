@@ -14,6 +14,7 @@ use yii\db\ActiveRecord;
  * @property string            $image
  * @property Organization|null $organization
  * @property string            $link
+ * @property int               $sort
  */
 class Promo extends ActiveRecord
 {
@@ -43,6 +44,7 @@ class Promo extends ActiveRecord
             [['organization_id'], 'default', 'value' => null],
             [['organization_id'], 'integer'],
             [['title', 'image', 'link'], 'string', 'max' => 255],
+            ['sort', 'default', 'value' => 500]
         ];
     }
 
@@ -54,14 +56,24 @@ class Promo extends ActiveRecord
         return [
             'id' => 'ID',
             'organization_id' => 'Organization ID',
-            'title' => 'Title',
-            'image' => 'Image',
-            'link' => 'Link',
+            'title' => 'Заголовок',
+            'image' => 'Картинка',
+            'link' => 'Ссылка для перехода',
         ];
     }
 
     public function getOrganization()
     {
         return $this->hasOne(Organization::class, ['id' => 'organization_id']);
+    }
+
+    public function getBrowsingCount()
+    {
+        return $this->getBrowsing()->count();
+    }
+
+    public function getBrowsing()
+    {
+        return $this->hasMany(PromoStatistic::class, ['promo_id' => 'id']);
     }
 }

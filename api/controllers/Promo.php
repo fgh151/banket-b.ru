@@ -17,8 +17,9 @@ class Promo extends Controller
 
     public function actionList()
     {
-        return PromoModel::findActive()->all();
-
+        return PromoModel::findActive()
+            ->orderBy('sort')
+            ->all();
     }
 
 }

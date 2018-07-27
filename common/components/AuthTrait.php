@@ -16,6 +16,8 @@ use yii\behaviors\TimestampBehavior;
 trait AuthTrait
 {
 
+    protected $PASSWORD_SALT = 'DengIePh5aiT2raibeexi5ae';
+
     /**
      * Finds an identity by the given ID.
      *
@@ -146,7 +148,7 @@ trait AuthTrait
      */
     public function validatePassword($password)
     {
-        return Yii::$app->security->validatePassword($password, $this->password_hash);
+        return md5($password . $this->PASSWORD_SALT) === $this->password_hash;
     }
 
     /**
@@ -158,7 +160,7 @@ trait AuthTrait
      */
     public function setPassword($password)
     {
-        $this->password_hash = Yii::$app->security->generatePasswordHash($password);
+        $this->password_hash = md5($password . $this->PASSWORD_SALT);
     }
 
     /**

@@ -26,6 +26,9 @@ use yii\web\IdentityInterface;
  */
 class Organization extends ActiveRecord implements IdentityInterface
 {
+
+    public $password;
+
     use AuthTrait;
 
     /**
@@ -51,6 +54,7 @@ class Organization extends ActiveRecord implements IdentityInterface
             [['email'], 'unique'],
             [['password_reset_token'], 'unique'],
             ['state', 'default', 'value' => Constants::ORGANIZATION_STATE_FREE],
+            ['password', 'safe']
         ];
     }
 
