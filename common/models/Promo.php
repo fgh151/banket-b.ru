@@ -14,6 +14,8 @@ use yii\db\ActiveRecord;
  * @property string            $image
  * @property Organization|null $organization
  * @property string            $link
+ * @property mixed             $browsingCount
+ * @property mixed             $browsing
  * @property int               $sort
  */
 class Promo extends ActiveRecord
@@ -45,6 +47,13 @@ class Promo extends ActiveRecord
             [['organization_id'], 'integer'],
             [['title', 'image', 'link'], 'string', 'max' => 255],
             ['sort', 'default', 'value' => 500]
+        ];
+    }
+
+    public function fields()
+    {
+        return [
+            'title', 'image', 'link'
         ];
     }
 

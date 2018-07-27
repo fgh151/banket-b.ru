@@ -9,26 +9,29 @@ use yii\db\ActiveRecord;
 /**
  * This is the model class for table "proposal".
  *
- * @property int $id
- * @property int $owner_id
- * @property string $City
- * @property string $date
- * @property string $time
- * @property int $guests_count
- * @property double $amount
- * @property int $type
- * @property int $event_type
- * @property int $metro
- * @property int $cuisine
- * @property bool $dance
- * @property bool $private
- * @property bool $own_alcohol
- * @property bool $parking
- * @property string $comment
- * @property int $status
- * @property int $created_at
- * @property int $updated_at
+ * @property int        $id
+ * @property int        $owner_id
+ * @property string     $City
+ * @property string     $date
+ * @property string     $time
+ * @property int        $guests_count
+ * @property double     $amount
+ * @property int        $type
+ * @property int        $event_type
+ * @property int        $metro
+ * @property int        $cuisine
+ * @property bool       $dance
+ * @property bool       $private
+ * @property bool       $own_alcohol
+ * @property bool       $parking
+ * @property string     $comment
+ * @property int        $status
+ * @property int        $created_at
+ * @property int        $updated_at
  *
+ * @property \DateTime  $when
+ * @property int        $cuisineString
+ * @property int        $eventType
  * @property MobileUser $owner
  */
 class Proposal extends ActiveRecord
@@ -94,6 +97,19 @@ class Proposal extends ActiveRecord
             'own_alcohol' => 'Own Alcohol',
             'parking' => 'Parking',
             'comment' => 'Comment',
+        ];
+    }
+
+    public function fields()
+    {
+        return [
+            'City', 'date',
+            'time', 'guests_count',
+            'amount', 'type',
+            'event_type', 'metro',
+            'cuisine', 'dance',
+            'private', 'own_alcohol',
+            'parking', 'comment'
         ];
     }
 

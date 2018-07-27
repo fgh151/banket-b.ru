@@ -14,6 +14,9 @@ use app\common\models\Message;
 use app\common\models\Organization;
 use app\common\models\OrganizationProposalStatus;
 use app\common\models\Proposal;
+use Yii;
+use yii\filters\AccessControl;
+use yii\filters\auth\HttpBearerAuth;
 use yii\filters\ContentNegotiator;
 use yii\rest\Controller;
 use yii\web\Response;
@@ -24,25 +27,25 @@ class ProposalController extends Controller
     public function behaviors()
     {
         return [
-//            'authenticator' => [
-//                'class' => HttpBearerAuth::class
-//            ],
+            'authenticator' => [
+                'class' => HttpBearerAuth::class
+            ],
             'contentNegotiator' => [
                 'class' => ContentNegotiator::class,
                 'formats' => [
                     'application/json' => Response::FORMAT_JSON,
                 ]
             ],
-//            'access' => [
-//                'class' => AccessControl::class,
-//                'rules' => [
-//                    [
-//                        'actions' => ['create'],
-//                        'allow' => true,
-//                        'roles' => ['@'],
-//                    ],
-//                ],
-//            ]
+            'access' => [
+                'class' => AccessControl::class,
+                'rules' => [
+                    [
+                        'actions' => ['create'],
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ],
+                ],
+            ]
         ];
     }
 
@@ -63,13 +66,17 @@ class ProposalController extends Controller
 
     /**
      * @return array|\yii\db\ActiveRecord[]
-     * TODO: Fix owner
      */
     public function actionList()
     {
-        return Proposal::find()->where(['owner_id' => 1])->all();
+        return Proposal::find()->where(['owner_id' => Yii::$app->user->id])->all();
     }
 
+    /**
+     * @param $proposalId
+     *
+     * @return array|\yii\db\ActiveRecord[]
+     */
     public function actionDialogs($proposalId)
     {
         $organizationsFromMessages = array_keys(Message::findAll($proposalId));
