@@ -10,8 +10,8 @@ namespace app\api\models;
 
 
 use app\common\models\MobileUser;
-use yii\base\Model;
 use yii;
+use yii\base\Model;
 
 class RegisterForm extends Model
 {
@@ -56,6 +56,8 @@ class RegisterForm extends Model
         $this->user->email = $this->email;
         $this->user->setPassword($this->password);
         $this->user->auth_key = \Yii::$app->security->generateRandomString();
+        $this->user->created_at = $this->user->updated_at = time();
+        $this->user->phone = time();
         $this->user->save();
 
         var_dump($this->user->errors);

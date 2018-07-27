@@ -8,10 +8,10 @@
 
 namespace app\api\controllers;
 
+use app\api\models\LoginForm;
 use app\api\models\RegisterForm;
-use app\common\models\LoginForm;
-use yii\rest\Controller;
 use yii;
+use yii\rest\Controller;
 
 class AuthController extends Controller
 {

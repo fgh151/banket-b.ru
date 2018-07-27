@@ -11,11 +11,11 @@ namespace app\api\controllers;
 
 use app\common\components\Constants;
 use app\common\models\Message;
+use app\common\models\MobileUser;
 use app\common\models\Organization;
 use app\common\models\OrganizationProposalStatus;
 use app\common\models\Proposal;
 use Yii;
-use yii\filters\AccessControl;
 use yii\filters\auth\HttpBearerAuth;
 use yii\filters\ContentNegotiator;
 use yii\rest\Controller;
@@ -36,16 +36,16 @@ class ProposalController extends Controller
                     'application/json' => Response::FORMAT_JSON,
                 ]
             ],
-            'access' => [
-                'class' => AccessControl::class,
-                'rules' => [
-                    [
-                        'actions' => ['create'],
-                        'allow' => true,
-                        'roles' => ['@'],
-                    ],
-                ],
-            ]
+//            'access' => [
+//                'class' => AccessControl::class,
+//                'rules' => [
+//                    [
+//                        'actions' => ['create'],
+//                        'allow' => true,
+//                        'roles' => ['@'],
+//                    ],
+//                ],
+//            ]
         ];
     }
 
@@ -56,11 +56,38 @@ class ProposalController extends Controller
         ];
     }
 
+    /**
+     * @return array
+     * @throws \yii\base\Exception
+     */
     public function actionCreate()
     {
 
+        $response = [];
+        $request = Yii::$app->getRequest();
+        $loggedIn = $request->post('loggedIn', false);
+        $email = $request->post('email', '');
+        $password = $request->post('password', '');
 
-        var_dump(\Yii::$app->request->post());
+        if (!$loggedIn) {
+            $user = new MobileUser();
+            $user->email = $email;
+            $user->setPassword($password);
+            $user->generateAuthKey();
+            $user->created_at = $user->updated_at = time();
+            $user->phone = time();
+            $user->save();
+            if ($user->errors) {
+                return $user->errors;
+            }
+            Yii::$app->user->login($user, 3600 * 24 * 30);
+            $response['access_token'] = $user->auth_key;
+        }
+
+
+        $proposal = new Proposal();
+        $proposal->load(Yii::$app->request->post(), '');
+        $proposal->save();
 
     }
 
