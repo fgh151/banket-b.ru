@@ -4,11 +4,11 @@
 /* @var $content string */
 
 use admin\assets\AppAsset;
-use yii\helpers\Html;
+use app\common\widgets\Alert;
 use yii\bootstrap\Nav;
 use yii\bootstrap\NavBar;
+use yii\helpers\Html;
 use yii\widgets\Breadcrumbs;
-use common\widgets\Alert;
 
 AppAsset::register($this);
 ?>
