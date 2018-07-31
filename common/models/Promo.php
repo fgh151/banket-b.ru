@@ -20,6 +20,8 @@ use yii\db\ActiveRecord;
  */
 class Promo extends ActiveRecord
 {
+    public $file_input;
+
     /**
      * {@inheritdoc}
      */
@@ -42,11 +44,13 @@ class Promo extends ActiveRecord
     public function rules()
     {
         return [
-            [['organization_id', 'title', 'image'], 'required'],
+            [['organization_id', 'title'], 'required'],
             [['organization_id'], 'default', 'value' => null],
             [['organization_id'], 'integer'],
             [['title', 'image', 'link'], 'string', 'max' => 255],
-            ['sort', 'default', 'value' => 500]
+            ['sort', 'default', 'value' => 500],
+            ['image', 'safe'],
+            ['file_input', 'file']
         ];
     }
 
@@ -64,10 +68,11 @@ class Promo extends ActiveRecord
     {
         return [
             'id' => 'ID',
-            'organization_id' => 'Organization ID',
+            'organization_id' => 'Организация',
             'title' => 'Заголовок',
             'image' => 'Картинка',
             'link' => 'Ссылка для перехода',
+            'sort' => 'Сортировка'
         ];
     }
 

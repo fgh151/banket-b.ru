@@ -7,7 +7,7 @@
 use yii\widgets\ActiveForm;
 
 ?>
-
+<div class="panel">
 <?php $form = ActiveForm::begin(); ?>
 
 <?= $form->field($model, 'name'); ?>
@@ -21,3 +21,4 @@ use yii\widgets\ActiveForm;
 
 
 <?php ActiveForm::end() ?>
+</div>

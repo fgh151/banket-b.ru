@@ -1,13 +1,14 @@
 <?php
 
-use yii\helpers\Html;
 use yii\grid\GridView;
+use yii\helpers\Html;
 use yii\widgets\Pjax;
+
 /* @var $this yii\web\View */
-/* @var $searchModel common\models\Proposal */
+/* @var $searchModel app\common\models\ProposalSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Proposals';
+$this->title = 'Заявки';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="proposal-index">
@@ -17,7 +18,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
-        <?= Html::a('Create Proposal', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Добавить заявку', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
     <?= GridView::widget([
@@ -27,7 +28,7 @@ $this->params['breadcrumbs'][] = $this->title;
             ['class' => 'yii\grid\SerialColumn'],
 
             'id',
-            'owner_id',
+            'owner.email',
             'City',
             'date',
             'time',

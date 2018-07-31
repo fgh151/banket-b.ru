@@ -22,6 +22,13 @@ AppAsset::register($this);
     <?= Html::csrfMetaTags() ?>
     <title><?= Html::encode($this->title) ?></title>
     <?php $this->head() ?>
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#0a2adb">
+    <meta name="msapplication-TileColor" content="#0a2adb">
+    <meta name="theme-color" content="#ffffff">
 </head>
 <body>
 <?php $this->beginBody() ?>
@@ -45,6 +52,7 @@ AppAsset::register($this);
         $menuItems[] = ['label' => 'Организации', 'url' => ['/organization/index']];
         $menuItems[] = ['label' => 'Пользователи приложения', 'url' => ['/mobile-user/index']];
         $menuItems[] = ['label' => 'Заявки', 'url' => ['/proposal/index']];
+        $menuItems[] = ['label' => 'Промо', 'url' => ['/promo/index']];
 
 
         $menuItems[] = '<li>'
@@ -76,7 +84,8 @@ AppAsset::register($this);
     <div class="container">
         <p class="pull-left">&copy; <?= Html::encode(Yii::$app->name) ?> <?= date('Y') ?></p>
 
-        <p class="pull-right"><?= Yii::powered() ?></p>
+        <p class="pull-right">Разработка и
+            поддержка <?= Html::a('OpenItStudio', 'http://www.openitstudio.ru', ['target' => '_blank']); ?></p>
     </div>
 </footer>
 

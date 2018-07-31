@@ -2,12 +2,12 @@
 
 namespace app\admin\controllers;
 
+use app\common\models\Organization;
 use app\common\models\OrganizationSearch;
 use Yii;
-use app\common\models\Organization;
+use yii\filters\VerbFilter;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
-use yii\filters\VerbFilter;
 
 /**
  * OrganizationController implements the CRUD actions for Organization model.
@@ -61,12 +61,19 @@ class OrganizationController extends Controller
      * Creates a new Organization model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
+     * @throws \yii\base\Exception
      */
     public function actionCreate()
     {
         $model = new Organization();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        if ($model->load(Yii::$app->request->post())) {
+            $model->generateAuthKey();
+            $model->created_at = time();
+            $model->updated_at = time();
+            $model->setPassword($model->password);
+            $model->save();
+
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
@@ -78,15 +85,21 @@ class OrganizationController extends Controller
     /**
      * Updates an existing Organization model.
      * If update is successful, the browser will be redirected to the 'view' page.
+     *
      * @param integer $id
+     *
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
+     * @throws \yii\base\Exception
      */
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        if ($model->load(Yii::$app->request->post())) {
+
+            $model->setPassword($model->password);
+            $model->save();
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
@@ -98,9 +111,13 @@ class OrganizationController extends Controller
     /**
      * Deletes an existing Organization model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
+     *
      * @param integer $id
+     *
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
+     * @throws \Throwable
+     * @throws \yii\db\StaleObjectException
      */
     public function actionDelete($id)
     {

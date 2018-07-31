@@ -11,8 +11,10 @@ namespace app\cabinet\controllers;
 
 use app\common\models\Promo;
 use yii\data\ActiveDataProvider;
+use yii\helpers\FileHelper;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
+use yii\web\UploadedFile;
 
 class PromoController extends Controller
 {
@@ -30,12 +32,36 @@ class PromoController extends Controller
         ]);
     }
 
+    /**
+     * @return string|\yii\web\Response
+     * @throws \yii\base\Exception
+     */
     public function actionCreate()
     {
         $model = new Promo();
         $model->organization_id = \Yii::$app->getUser()->getId();
 
-        if ($model->load(\Yii::$app->request->post()) && $model->save()) {
+        if ($model->load(\Yii::$app->request->post())) {
+
+            $model->file_input = UploadedFile::getInstance($model, 'file_input');
+
+            if ($model->file_input && $model->validate()) {
+
+                $relativePath = '/promo/' . $model->organization_id . '/' . time() . '/';
+
+                $path = \Yii::getAlias('@app/web/' . $relativePath);
+
+                FileHelper::createDirectory($path);
+
+                $file = $path . $model->file_input->baseName . '.' . $model->file_input->extension;
+
+                $model->file_input->saveAs($file);
+
+                $model->image = $relativePath . $model->file_input->baseName . '.' . $model->file_input->extension;
+            }
+
+            $model->save();
+
             return $this->redirect('index');
         }
 

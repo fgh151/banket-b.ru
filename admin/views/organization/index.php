@@ -1,13 +1,15 @@
 <?php
 
-use yii\helpers\Html;
+use app\common\models\Organization;
 use yii\grid\GridView;
+use yii\helpers\Html;
 use yii\widgets\Pjax;
+
 /* @var $this yii\web\View */
-/* @var $searchModel app\OrganizationSearch */
+/* @var $searchModel app\common\models\OrganizationSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Organizations';
+$this->title = 'Организации';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="organization-index">
@@ -17,7 +19,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
-        <?= Html::a('Create Organization', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Добавить организацию', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
     <?= GridView::widget([
@@ -27,15 +29,18 @@ $this->params['breadcrumbs'][] = $this->title;
             ['class' => 'yii\grid\SerialColumn'],
 
             'id',
-            'auth_key',
-            'password_hash',
-            'password_reset_token',
             'email:email',
-            //'name',
+            'name',
             //'address:ntext',
             //'contact',
-            //'phone',
-            //'status',
+            'phone',
+            [
+                'attribute' => 'state',
+                'filter' => Organization::stateLabels(),
+                'value' => function (Organization $model) {
+                    return Organization::stateLabels()[$model->state];
+                }
+            ],
             //'created_at',
             //'updated_at',
 

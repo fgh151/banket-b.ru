@@ -28,9 +28,6 @@ class UserController extends Controller
 
         $admin->save();
 
-
-
-
         print_r($admin->errors);
     }
 

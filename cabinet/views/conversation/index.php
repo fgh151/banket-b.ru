@@ -15,25 +15,38 @@ use yii\widgets\ActiveForm;
     <div class="conversation">
         <h1>Заявка №<?= $proposal->id ?></h1>
 
+        <?= \yii\widgets\DetailView::widget([
+            'model' => $proposal,
+            'attributes' => [
+                'City', 'amount', 'date', 'time', 'comment',
+                [
+                    'attribute' => 'cuisine',
+                    'value' => function ($model) {
+                        return \app\common\models\Proposal::cuisineLabels()[$model->cuisine];
+                    }
+                ], 'guests_count'
+            ]
+        ]); ?>
+
         <div id="messages-area">
 
-        <?= $this->render('_message_list', ['messages' => $messages]); ?>
+            <?= $this->render('_message_list', ['messages' => $messages]); ?>
 
-    </div>
+        </div>
 
-<?php $form = ActiveForm::begin([
-    'id' => 'message-form',
-    'action' => Url::to(['conversation/send-message', 'proposalId' => $model->proposal_id]),
-    'enableAjaxValidation' => true,
-    'validationUrl' => Url::to(['conversation/validate-message', 'proposalId' => $model->proposal_id]),
-]); ?>
+        <?php $form = ActiveForm::begin([
+            'id' => 'message-form',
+            'action' => Url::to(['conversation/send-message', 'proposalId' => $model->proposal_id]),
+            'enableAjaxValidation' => true,
+            'validationUrl' => Url::to(['conversation/validate-message', 'proposalId' => $model->proposal_id]),
+        ]); ?>
 
-<?= $form->field($model, 'message'); ?>
+        <?= $form->field($model, 'message'); ?>
 
 
         <?= Html::submitButton('Отправить') ?>
 
-<?php ActiveForm::end(); ?>
+        <?php ActiveForm::end(); ?>
 
 
     </div>

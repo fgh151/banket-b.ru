@@ -2,12 +2,12 @@
 
 namespace app\admin\controllers;
 
-use Yii;
 use app\common\models\MobileUser;
 use common\models\MobileUserSearch;
+use Yii;
+use yii\filters\VerbFilter;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
-use yii\filters\VerbFilter;
 
 /**
  * MobileUserController implements the CRUD actions for MobileUser model.
@@ -61,12 +61,19 @@ class MobileUserController extends Controller
      * Creates a new MobileUser model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
+     * @throws \yii\base\Exception
      */
     public function actionCreate()
     {
         $model = new MobileUser();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+
+        if ($model->load(Yii::$app->request->post())) {
+            $model->generateAuthKey();
+            $model->created_at = time();
+            $model->updated_at = time();
+            $model->setPassword($model->password);
+            $model->save();
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
@@ -78,15 +85,24 @@ class MobileUserController extends Controller
     /**
      * Updates an existing MobileUser model.
      * If update is successful, the browser will be redirected to the 'view' page.
+     *
      * @param integer $id
+     *
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
+     * @throws \yii\base\Exception
      */
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+
+        if ($model->load(Yii::$app->request->post())) {
+            $model->generateAuthKey();
+            $model->created_at = time();
+            $model->updated_at = time();
+            $model->setPassword($model->password);
+            $model->save();
             return $this->redirect(['view', 'id' => $model->id]);
         }
 

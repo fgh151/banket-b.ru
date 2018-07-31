@@ -6,8 +6,8 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model app\common\models\MobileUser */
 
-$this->title = 'Create Mobile User';
-$this->params['breadcrumbs'][] = ['label' => 'Mobile Users', 'url' => ['index']];
+$this->title = 'Добавить пользователя';
+$this->params['breadcrumbs'][] = ['label' => 'Пользователи приложения', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="mobile-user-create">

@@ -6,8 +6,8 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model app\common\models\Proposal */
 
-$this->title = 'Create Proposal';
-$this->params['breadcrumbs'][] = ['label' => 'Proposals', 'url' => ['index']];
+$this->title = 'Создать заявку';
+$this->params['breadcrumbs'][] = ['label' => 'Заявки', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="proposal-create">

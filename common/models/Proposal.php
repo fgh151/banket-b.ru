@@ -32,7 +32,16 @@ use yii\db\ActiveRecord;
  * @property \DateTime  $when
  * @property int        $cuisineString
  * @property int        $eventType
+ * @property $this      $isConstructor
  * @property MobileUser $owner
+ * @property boolean    $floristics
+ * @property boolean    $hall
+ * @property boolean    $photo
+ * @property boolean    $stylists
+ * @property boolean    $entertainment
+ * @property boolean    $cake
+ * @property boolean    $transport
+ * @property boolean    $present
  */
 class Proposal extends ActiveRecord
 {
@@ -42,6 +51,38 @@ class Proposal extends ActiveRecord
     public static function tableName()
     {
         return 'proposal';
+    }
+
+    public static function cuisineLabels()
+    {
+        return [
+            1 => 'Нет предпочтений',
+            2 => 'Русская',
+            3 => 'Европейская',
+            4 => 'Азиатская',
+            5 => 'Восточная',
+            6 => 'Латиноамериканская',
+        ];
+    }
+
+    public static function typeLabels()
+    {
+        return [
+            1 => 'Встреча друзей',
+            2 => 'Корпоратив',
+            3 => 'Свадьба',
+            4 => 'День Рождения',
+            5 => 'Презентация',
+            6 => 'Поминки',
+        ];
+    }
+
+    public static function types()
+    {
+        return [
+            1 => 'Банкет',
+            2 => 'Фукршет'
+        ];
     }
 
     /**
@@ -61,7 +102,7 @@ class Proposal extends ActiveRecord
     {
         return [
             ['status', 'default', 'value' => Constants::PROPOSAL_STATUS_CREATED],
-            [['status','owner_id', 'City', 'date', 'time', 'guests_count', 'amount', 'type', 'event_type', 'metro', 'cuisine'], 'required'],
+            [['status', 'owner_id', 'City', 'date', 'time', 'guests_count', 'amount', 'type', 'event_type', 'cuisine'], 'required'],
             [['owner_id', 'guests_count', 'type', 'event_type', 'metro', 'cuisine'], 'default', 'value' => null],
             [['owner_id', 'guests_count', 'type', 'event_type', 'metro', 'cuisine'], 'integer'],
             [['date', 'time'], 'safe'],
@@ -72,6 +113,8 @@ class Proposal extends ActiveRecord
             [['owner_id'], 'exist', 'skipOnError' => true, 'targetClass' => MobileUser::class, 'targetAttribute' => ['owner_id' => 'id']],
             [['created_at', 'updated_at'], 'default', 'value' => time()],
             [['created_at', 'updated_at'], 'integer'],
+
+            [['floristics', 'hall', 'photo', 'stylists', 'cake', 'entertainment', 'transport', 'present'], 'boolean']
         ];
     }
 
@@ -82,21 +125,30 @@ class Proposal extends ActiveRecord
     {
         return [
             'id' => 'ID',
-            'owner_id' => 'Owner ID',
-            'City' => 'City',
-            'date' => 'Date',
-            'time' => 'Time',
-            'guests_count' => 'Guests Count',
-            'amount' => 'Amount',
+            'owner_id' => 'Заявитель',
+            'City' => 'Город',
+            'date' => 'Дата',
+            'time' => 'Время',
+            'guests_count' => 'Количество гостей',
             'type' => 'Type',
             'event_type' => 'Event Type',
-            'metro' => 'Metro',
-            'cuisine' => 'Cuisine',
-            'dance' => 'Dance',
-            'private' => 'Private',
-            'own_alcohol' => 'Own Alcohol',
-            'parking' => 'Parking',
-            'comment' => 'Comment',
+            'metro' => 'Метро',
+            'cuisine' => 'Кухня',
+            'dance' => 'Танцпол',
+            'private' => 'Отдельный зал',
+            'own_alcohol' => 'Свой алкоголь',
+            'parking' => 'Парковка',
+            'comment' => 'Комментарий',
+            'amount' => 'Сумма на человека',
+
+            'floristics' => 'Флористика',
+            'hall' => 'Оформление зала',
+            'photo' => 'Фото / видео',
+            'stylists' => 'Стилисты',
+            'cake' => 'Торты на заказ',
+            'entertainment' => 'Развлекательная программа',
+            'transport' => 'Транспорт на заказа',
+            'present' => 'Подарки',
         ];
     }
 
@@ -127,6 +179,21 @@ class Proposal extends ActiveRecord
     public function getWhen()
     {
         return new \DateTime($this->date . ' ' . $this->time);
+    }
+
+    /**
+     * @return bool
+     */
+    public function getIsConstructor()
+    {
+        return $this->floristics ||
+            $this->hall ||
+            $this->photo ||
+            $this->stylists ||
+            $this->cake ||
+            $this->entertainment ||
+            $this->transport ||
+            $this->present;
     }
 
     /**

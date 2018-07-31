@@ -1,19 +1,28 @@
 <?php
-/**
- * @var $this \yii\web\View
- * @var $model \app\common\models\Promo
- */
 
+use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
+/* @var $this yii\web\View */
+/* @var $model app\common\models\Promo */
+/* @var $form yii\widgets\ActiveForm */
 ?>
 
-<?php $form = ActiveForm::begin(); ?>
+<div class="promo-form">
 
-<?= $form->field($model, 'title'); ?>
-<?= $form->field($model, 'image'); ?>
-<?= $form->field($model, 'link'); ?>
+    <?php $form = ActiveForm::begin(); ?>
 
-<?= \yii\helpers\Html::submitButton('Сохранить'); ?>
+    <?= $form->field($model, 'title')->textInput(['maxlength' => true]) ?>
 
-<?php ActiveForm::end() ?>
+    <?= $form->field($model, 'file_input')->fileInput(['maxlength' => true]) ?>
+
+    <?= $form->field($model, 'link')->textInput(['maxlength' => true]) ?>
+
+
+    <div class="form-group">
+        <?= Html::submitButton('Сохранить', ['class' => 'btn btn-success']) ?>
+    </div>
+
+    <?php ActiveForm::end(); ?>
+
+</div>

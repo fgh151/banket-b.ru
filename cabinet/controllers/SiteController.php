@@ -1,15 +1,15 @@
 <?php
 namespace app\cabinet\controllers;
 
+use app\cabinet\models\ContactForm;
 use app\cabinet\models\LoginForm;
+use app\cabinet\models\PasswordResetRequestForm;
+use app\cabinet\models\ResetPasswordForm;
 use app\cabinet\models\SignupForm;
 use app\common\components\Constants;
 use app\common\models\Organization;
 use app\common\models\OrganizationProposalStatus;
 use app\common\models\Proposal;
-use frontend\models\ContactForm;
-use frontend\models\PasswordResetRequestForm;
-use frontend\models\ResetPasswordForm;
 use Yii;
 use yii\base\InvalidArgumentException;
 use yii\data\ActiveDataProvider;
@@ -39,6 +39,11 @@ class SiteController extends Controller
                     ],
                     [
                         'actions' => ['login'],
+                        'allow' => true,
+                        'roles' => ['?'],
+                    ],
+                    [
+                        'actions' => ['request-password-reset', 'reset-password'],
                         'allow' => true,
                         'roles' => ['?'],
                     ],
@@ -217,17 +222,18 @@ class SiteController extends Controller
      * Requests password reset.
      *
      * @return mixed
+     * @throws \yii\base\Exception
      */
     public function actionRequestPasswordReset()
     {
         $model = new PasswordResetRequestForm();
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             if ($model->sendEmail()) {
-                Yii::$app->session->setFlash('success', 'Check your email for further instructions.');
+                Yii::$app->session->setFlash('success', 'Проверьте вашу почту.');
 
                 return $this->goHome();
             } else {
-                Yii::$app->session->setFlash('error', 'Sorry, we are unable to reset password for the provided email address.');
+                Yii::$app->session->setFlash('error', 'Мы не можем сбросить пароль.');
             }
         }
 

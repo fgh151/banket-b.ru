@@ -2,10 +2,8 @@
 
 namespace app\common\models;
 
-use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use app\common\models\Organization;
 
 /**
  * OrganizationSearch represents the model behind the search form of `app\common\models\Organization`.
@@ -18,7 +16,7 @@ class OrganizationSearch extends Organization
     public function rules()
     {
         return [
-            [['id', 'status', 'created_at', 'updated_at'], 'integer'],
+            [['id', 'status', 'created_at', 'updated_at', 'state'], 'integer'],
             [['auth_key', 'password_hash', 'password_reset_token', 'email', 'name', 'address', 'contact', 'phone'], 'safe'],
         ];
     }
@@ -63,6 +61,7 @@ class OrganizationSearch extends Organization
             'status' => $this->status,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
+            'state' => $this->state,
         ]);
 
         $query->andFilterWhere(['ilike', 'auth_key', $this->auth_key])

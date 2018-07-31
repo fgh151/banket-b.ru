@@ -12,6 +12,7 @@ namespace app\common\components;
 use Yii;
 use yii\base\NotSupportedException;
 use yii\behaviors\TimestampBehavior;
+use yii\web\IdentityInterface;
 
 trait AuthTrait
 {
@@ -156,7 +157,6 @@ trait AuthTrait
      *
      * @param string $password
      *
-     * @throws \yii\base\Exception
      */
     public function setPassword($password)
     {

@@ -39,6 +39,14 @@ class Organization extends ActiveRecord implements IdentityInterface
         return 'organization';
     }
 
+    public static function stateLabels()
+    {
+        return [
+            Constants::ORGANIZATION_STATE_FREE => 'Не оплачено',
+            Constants::ORGANIZATION_STATE_PAID => 'Оплачено'
+        ];
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -76,11 +84,13 @@ class Organization extends ActiveRecord implements IdentityInterface
             'password_hash' => 'Password Hash',
             'password_reset_token' => 'Password Reset Token',
             'email' => 'Email',
-            'name' => 'Name',
-            'address' => 'Address',
-            'contact' => 'Contact',
-            'phone' => 'Phone',
-            'status' => 'Status',
+            'name' => 'Название',
+            'address' => 'Адрес',
+            'contact' => 'Контактное лицо',
+            'phone' => 'Телефон',
+            'status' => 'Статус',
+            'state' => 'Состояние',
+            'password' => 'Пароль',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
         ];

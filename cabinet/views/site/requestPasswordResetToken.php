@@ -2,18 +2,19 @@
 
 /* @var $this yii\web\View */
 /* @var $form yii\bootstrap\ActiveForm */
-/* @var $model \frontend\models\PasswordResetRequestForm */
 
-use yii\helpers\Html;
+/* @var $model app\cabinet\models\PasswordResetRequestForm */
+
 use yii\bootstrap\ActiveForm;
+use yii\helpers\Html;
 
-$this->title = 'Request password reset';
+$this->title = 'Восстановление пароля';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="site-request-password-reset">
     <h1><?= Html::encode($this->title) ?></h1>
 
-    <p>Please fill out your email. A link to reset password will be sent there.</p>
+    <p>Укажите почту, на которую мы отправим инструкцию по восстановлению пароля.</p>
 
     <div class="row">
         <div class="col-lg-5">
@@ -22,7 +23,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 <?= $form->field($model, 'email')->textInput(['autofocus' => true]) ?>
 
                 <div class="form-group">
-                    <?= Html::submitButton('Send', ['class' => 'btn btn-primary']) ?>
+                    <?= Html::submitButton('Отправить', ['class' => 'btn btn-primary']) ?>
                 </div>
 
             <?php ActiveForm::end(); ?>

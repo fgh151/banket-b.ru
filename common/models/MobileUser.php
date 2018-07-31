@@ -3,7 +3,6 @@
 namespace app\common\models;
 
 use app\common\components\AuthTrait;
-use Yii;
 use yii\db\ActiveRecord;
 use yii\web\IdentityInterface;
 
@@ -23,6 +22,8 @@ use yii\web\IdentityInterface;
 class MobileUser extends ActiveRecord implements IdentityInterface
 {
     use AuthTrait;
+
+    public $password;
 
     /**
      * {@inheritdoc}
@@ -46,6 +47,7 @@ class MobileUser extends ActiveRecord implements IdentityInterface
             [['email'], 'unique'],
             [['password_reset_token'], 'unique'],
             [['phone'], 'unique'],
+            ['password', 'safe']
         ];
     }
 
@@ -60,8 +62,8 @@ class MobileUser extends ActiveRecord implements IdentityInterface
             'password_hash' => 'Password Hash',
             'password_reset_token' => 'Password Reset Token',
             'email' => 'Email',
-            'phone' => 'Phone',
-            'status' => 'Status',
+            'phone' => 'Телефон',
+            'status' => 'Статус',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
         ];

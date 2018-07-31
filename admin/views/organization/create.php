@@ -6,8 +6,8 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model app\common\models\Organization */
 
-$this->title = 'Create Organization';
-$this->params['breadcrumbs'][] = ['label' => 'Organizations', 'url' => ['index']];
+$this->title = 'Добавить организацию';
+$this->params['breadcrumbs'][] = ['label' => 'Организации', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="organization-create">

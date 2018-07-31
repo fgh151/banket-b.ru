@@ -2,16 +2,16 @@
 
 namespace app\common\models;
 
-use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use app\common\models\Proposal;
 
 /**
  * ProposalSearch represents the model behind the search form of `app\common\models\Proposal`.
  */
 class ProposalSearch extends Proposal
 {
+    public $rejected;
+
     /**
      * {@inheritdoc}
      */
@@ -19,7 +19,7 @@ class ProposalSearch extends Proposal
     {
         return [
             [['id', 'owner_id', 'guests_count', 'type', 'event_type', 'metro', 'cuisine'], 'integer'],
-            [['City', 'date', 'time', 'comment'], 'safe'],
+            [['City', 'date', 'time', 'comment', 'status', 'rejected'], 'safe'],
             [['amount'], 'number'],
             [['dance', 'private', 'own_alcohol', 'parking'], 'boolean'],
         ];
@@ -66,7 +66,6 @@ class ProposalSearch extends Proposal
             'date' => $this->date,
             'time' => $this->time,
             'guests_count' => $this->guests_count,
-            'amount' => $this->amount,
             'type' => $this->type,
             'event_type' => $this->event_type,
             'metro' => $this->metro,
@@ -75,10 +74,19 @@ class ProposalSearch extends Proposal
             'private' => $this->private,
             'own_alcohol' => $this->own_alcohol,
             'parking' => $this->parking,
+            'status' => $this->status
         ]);
+
+        $query->andFilterWhere(['>', 'amount', $this->amount]);
 
         $query->andFilterWhere(['ilike', 'City', $this->City])
             ->andFilterWhere(['ilike', 'comment', $this->comment]);
+
+        if ($this->rejected) {
+            $query->andWhere([
+                'not in',
+                'id', $this->rejected]);
+        }
 
         return $dataProvider;
     }

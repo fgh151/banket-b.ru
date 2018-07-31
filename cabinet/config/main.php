@@ -43,6 +43,10 @@ return [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
+                'site/reset-password/<token:\S+>' => 'site/reset-password',
+                'conversation/index/<proposalId:\d+>' => 'conversation/index',
+                '<controller:\w+>/<action:\w+>/<id:\d+>/' => '<controller>/<action>',
+                '<controller:\w+>/<action:\w+>' => '<controller>/<action>',
             ],
         ],
         'formatter' => [
