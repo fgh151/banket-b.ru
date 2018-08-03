@@ -12,7 +12,7 @@ namespace app\api\controllers;
 use app\common\models\Promo as PromoModel;
 use yii\rest\Controller;
 
-class Promo extends Controller
+class PromoController extends Controller
 {
 
     public function actionList()

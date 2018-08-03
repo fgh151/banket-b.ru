@@ -9,13 +9,14 @@
 namespace app\api\models;
 
 
+use app\common\components\Constants;
 use app\common\models\MobileUser;
 use yii;
 use yii\base\Model;
 
 class RegisterForm extends Model
 {
-    public $email;
+    public $username;
     public $password;
 
     /**
@@ -30,8 +31,9 @@ class RegisterForm extends Model
     {
         return [
             // username and password are both required
-            [['email', 'password'], 'required'],
-            ['email', 'email']
+            [['username', 'password'], 'required'],
+            ['username', 'email'],
+            ['username', 'unique', 'targetClass' => MobileUser::class, 'targetAttribute' => 'email']
         ];
     }
 
@@ -41,7 +43,7 @@ class RegisterForm extends Model
     public function attributeLabels()
     {
         return [
-            'email' => \Yii::t('app', 'Email'),
+            'username' => \Yii::t('app', 'Email'),
             'password' => \Yii::t('app', 'Password')
         ];
     }
@@ -52,17 +54,15 @@ class RegisterForm extends Model
      */
     public function register()
     {
-        $this->user = new MobileUser();
-        $this->user->email = $this->email;
-        $this->user->setPassword($this->password);
-        $this->user->auth_key = \Yii::$app->security->generateRandomString();
-        $this->user->created_at = $this->user->updated_at = time();
-        $this->user->phone = time();
-        $this->user->save();
+        $user = new MobileUser();
+        $user->email = $this->username;
+        $user->setPassword($this->password);
+        $user->generateAuthKey();
+        $user->created_at = $user->updated_at = time();
+        $user->phone = (string) time();
+        $user->status = Constants::USER_STATUS_ACTIVE;
 
-        var_dump($this->user->errors);
-
-        return $this->user->save();
+        return $user->save() ? $user->getAuthKey() : false;
     }
 
     /**
@@ -85,8 +85,8 @@ class RegisterForm extends Model
      */
     public function getUser()
     {
-        if ($this->user === false) {
-            $this->user = MobileUser::findByUsername($this->email);
+        if ($this->user === null) {
+            $this->user = MobileUser::findByUsername($this->username);
         }
         return $this->user;
     }
@@ -97,7 +97,7 @@ class RegisterForm extends Model
     public function getAuthKey()
     {
         if ($this->user === false) {
-            return $this->user->authKey;
+            return $this->user->auth_key;
         }
         return null;
     }

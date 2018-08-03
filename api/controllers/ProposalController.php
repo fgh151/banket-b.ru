@@ -18,6 +18,7 @@ use app\common\models\Proposal;
 use Yii;
 use yii\filters\auth\HttpBearerAuth;
 use yii\filters\ContentNegotiator;
+use yii\helpers\Json;
 use yii\rest\Controller;
 use yii\web\Response;
 
@@ -62,12 +63,13 @@ class ProposalController extends Controller
      */
     public function actionCreate()
     {
-
         $response = [];
-        $request = Yii::$app->getRequest();
-        $loggedIn = $request->post('loggedIn', false);
-        $email = $request->post('email', '');
-        $password = $request->post('password', '');
+        $request = Json::decode(Yii::$app->getRequest()->getRawBody(), true);
+
+        $loggedIn = $request['loggedIn'];
+        $email = $request['email'];
+        $password = $request['password'];
+
 
         if (!$loggedIn) {
             $user = new MobileUser();
@@ -84,11 +86,14 @@ class ProposalController extends Controller
             $response['access_token'] = $user->auth_key;
         }
 
+        $request['owner_id'] = Yii::$app->getUser()->getId();
+        $request['City'] = $request['city'];
 
         $proposal = new Proposal();
-        $proposal->load(Yii::$app->request->post(), '');
+        $proposal->load($request, '');
         $proposal->save();
 
+        return $proposal->errors;
     }
 
     /**

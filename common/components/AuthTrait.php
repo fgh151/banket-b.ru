@@ -47,7 +47,7 @@ trait AuthTrait
      */
     public static function findIdentityByAccessToken($token, $type = null)
     {
-        throw new NotSupportedException('"findIdentityByAccessToken" is not implemented.');
+        return self::findOne(['auth_key' => $token]);
     }
 
     /**

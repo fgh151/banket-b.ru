@@ -35,7 +35,7 @@ class Promo extends ActiveRecord
      */
     public static function findActive()
     {
-        return self::find()->where(['in', 'organization_id', Organization::find()->where(['state' => Constants::ORGANIZATION_STATE_PAID])]);
+        return self::find()->where(['in', 'organization_id', Organization::find()->where(['state' => Constants::ORGANIZATION_STATE_PAID])->select('id')]);
     }
 
     /**
@@ -57,7 +57,7 @@ class Promo extends ActiveRecord
     public function fields()
     {
         return [
-            'title', 'image', 'link'
+            'title', 'image', 'link', 'organizationName'
         ];
     }
 
@@ -76,6 +76,14 @@ class Promo extends ActiveRecord
         ];
     }
 
+    public function getOrganizationName()
+    {
+        return $this->organization->name;
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery|Organization
+     */
     public function getOrganization()
     {
         return $this->hasOne(Organization::class, ['id' => 'organization_id']);

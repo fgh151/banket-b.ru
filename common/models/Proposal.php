@@ -155,6 +155,7 @@ class Proposal extends ActiveRecord
     public function fields()
     {
         return [
+            'id',
             'City', 'date',
             'time', 'guests_count',
             'amount', 'type',

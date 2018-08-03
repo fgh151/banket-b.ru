@@ -69,7 +69,7 @@ class Organization extends ActiveRecord implements IdentityInterface
     public function fields()
     {
         return [
-            'name', 'contact', 'phone', 'email', 'address'
+            'id', 'name', 'contact', 'phone', 'email', 'address'
         ];
     }
 
