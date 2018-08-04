@@ -95,31 +95,38 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        $dataProvider = new ActiveDataProvider();
-        /** @var Organization $organization */
-        $organization = Yii::$app->getUser()->getIdentity();
-        if ($organization->state == Constants::ORGANIZATION_STATE_PAID) {
-            $dataProvider->query = Proposal::find()
-                ->where(['status' => Constants::PROPOSAL_STATUS_CREATED])
-                ->andWhere([
-                    'not in',
-                    'id',
-                    OrganizationProposalStatus::find()
-                        ->where([
-                            'organization_id' => $organization->getId(),
-                            'status' => Constants::ORGANIZATION_PROPOSAL_STATUS_REJECT
-                        ])
-                        ->select('proposal_id')
-                ]);
-        } else {
-            // Формируем запрос, который заведомо ничего не вернет
 
-            $dataProvider->query = Proposal::find()->where(['id' => 0]);
+        $db = Yii::$app->getDb();
+        $sql = 'SELECT to_char(date, \'Day\') AS day, * FROM proposal ORDER BY day';
+        $proposals = $db->createCommand($sql)->queryAll();
+
+        $tmp = [];
+        foreach ($proposals as $proposal) {
+            $tmp[] = $proposal['day'];
         }
+        $tmp = array_count_values($tmp);
+
+        $byDay['Понедельник'] = isset($tmp['Monday   ']) ? $tmp['Monday   ']: 0;
+        $byDay['Вторник'] = isset($tmp['Tuesday   ']) ? $tmp['Tuesday   ']: 0;
+        $byDay['Среда'] = isset($tmp['Wednesday   ']) ? $tmp['Wednesday   ']: 0;
+        $byDay['Четверг'] = isset($tmp['Thursday   ']) ? $tmp['Thursday   ']: 0;
+        $byDay['Пятница'] = isset($tmp['Friday   ']) ? $tmp['Friday   ']: 0;
+        $byDay['Суббота'] = isset($tmp['Saturday   ']) ? $tmp['Saturday   ']: 0;
+        $byDay['Воскресенье'] = isset($tmp['Sunday   ']) ? $tmp['Sunday   ']: 0;
+
+        $sql = 'SELECT date_part(\'hour\', time) AS hour, * FROM proposal ORDER BY hour';
+        $proposals = $db->createCommand($sql)->queryAll();
+        foreach ($proposals as $proposal) {
+            $tmp[] = $proposal['hour'];
+        }
+        $tmp = array_count_values($tmp);
+        $hours = array_fill(1, 24, 0);
+        $byHours = $tmp+$hours;
+        ksort($byHours);
 
         return $this->render('index', [
-            'organization' => $organization,
-            'dataProvider' => $dataProvider
+            'byDay' => $byDay,
+            'byHours' => $byHours
         ]);
     }
 

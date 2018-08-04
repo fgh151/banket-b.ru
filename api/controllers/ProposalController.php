@@ -15,6 +15,7 @@ use app\common\models\MobileUser;
 use app\common\models\Organization;
 use app\common\models\OrganizationProposalStatus;
 use app\common\models\Proposal;
+use Prophecy\Exception\Doubler\MethodNotExtendableException;
 use Yii;
 use yii\filters\auth\HttpBearerAuth;
 use yii\filters\ContentNegotiator;
@@ -123,6 +124,24 @@ class ProposalController extends Controller
         return Organization::find()
             ->where(['in', 'id', $organizationsFromMessages])
             ->all();
+    }
+
+    public function actionDelete($proposalId, $organizationId) {
+        $status = new OrganizationProposalStatus();
+        $status->organization_id = $organizationId;
+        $status->proposal_id = $proposalId;
+        $status->status = Constants::PROPOSAL_STATUS_REJECT;
+        return $status->save();
+
+    }
+
+    /**
+     * @param $proposalId
+     * @param $organizationId
+     */
+    public function actionApprove($proposalId, $organizationId) {
+        throw new MethodNotExtendableException('метод еще не реализован');
+
     }
 
 }

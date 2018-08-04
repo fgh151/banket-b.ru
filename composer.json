@@ -19,7 +19,8 @@
         "yiisoft/yii2-bootstrap": "~2.0.0",
       "yiisoft/yii2-swiftmailer": "~2.0.0 || ~2.1.0",
       "grptx/yii2-firebase": "~0.3.1",
-      "yiisoft/yii2-imagine": "^2.1"
+      "yiisoft/yii2-imagine": "^2.1",
+        "2amigos/yii2-chartjs-widget": "^2.1"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.0.0",
