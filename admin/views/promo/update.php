@@ -5,8 +5,8 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model app\common\models\Promo */
 
-$this->title = 'Изменить промо: ' . $model->title;
-$this->params['breadcrumbs'][] = ['label' => 'Промо', 'url' => ['index']];
+$this->title = 'Изменить : ' . $model->title;
+$this->params['breadcrumbs'][] = ['label' => 'Предложения от ресторанов', 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $model->title, 'url' => ['view', 'id' => $model->id]];
 $this->params['breadcrumbs'][] = 'Изменить';
 ?>

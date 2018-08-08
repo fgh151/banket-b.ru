@@ -7,8 +7,9 @@ use yii\widgets\Pjax;
 /* @var $this yii\web\View */
 /* @var $searchModel app\common\models\PromoSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
+//TODO: img path (
 
-$this->title = 'Промо';
+$this->title                   = 'Предложения от ресторанов';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="promo-index">
@@ -23,13 +24,20 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
-        'filterModel' => $searchModel,
-        'columns' => [
+        'filterModel'  => $searchModel,
+        'columns'      => [
             ['class' => 'yii\grid\SerialColumn'],
 
-            'id',
+            'organization.name:ntext:Организация',
             'title',
-            'image:image',
+            [
+                'attribute' => 'image',
+                'value'     => function (\app\common\models\Promo $model) {
+                    return 'http://f-cabinet.banket.restorate.ru/' . \Yii::$app->imageresize->getUrl('/var/www/battle/cabinet/web/' . $model->image,
+                            200, 200);
+                },
+                'format'    => 'image'
+            ],
             'link:url',
             //'sort',
 

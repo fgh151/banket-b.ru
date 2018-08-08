@@ -7,6 +7,7 @@ use app\cabinet\models\PasswordResetRequestForm;
 use app\cabinet\models\ResetPasswordForm;
 use app\cabinet\models\SignupForm;
 use app\common\components\Constants;
+use app\common\components\NotPayException;
 use app\common\models\Organization;
 use app\common\models\OrganizationProposalStatus;
 use app\common\models\Proposal;
@@ -23,6 +24,7 @@ use yii\web\Controller;
  */
 class SiteController extends Controller
 {
+    use CheckPayTrait;
     /**
      * {@inheritdoc}
      */
@@ -95,6 +97,8 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
+
+        $this->throwIfNotPay();
 
         $db = Yii::$app->getDb();
         $sql = 'SELECT to_char(date, \'Day\') AS day, * FROM proposal ORDER BY day';

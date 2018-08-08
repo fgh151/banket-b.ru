@@ -78,7 +78,7 @@ a.desc:after {
 }
 
 .grid-view td {
-    white-space: nowrap;
+    /*white-space: nowrap;*/
 }
 
 .grid-view .filters input,
@@ -219,4 +219,8 @@ a.desc:after {
     border-left: 0;
     margin-left: -10px;
     margin-bottom: -20px;
+}
+
+.grid-view td {
+    white-space: normal;
 }

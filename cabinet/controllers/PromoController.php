@@ -18,6 +18,20 @@ use yii\web\UploadedFile;
 
 class PromoController extends Controller
 {
+    use CheckPayTrait;
+
+    /**
+     * @param $action
+     *
+     * @return bool
+     * @throws \Throwable
+     * @throws \yii\web\BadRequestHttpException
+     */
+    public function beforeAction($action)
+    {
+        $this->throwIfNotPay();
+        return parent::beforeAction($action);
+    }
 
     public function actionIndex()
     {

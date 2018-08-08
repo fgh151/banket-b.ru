@@ -7,16 +7,16 @@
 use yii\grid\GridView;
 
 ?>
+<div class="row">
+    <div class="col-xs-12"><div class="panel">
 
-<div class="panel">
-
-    <?= \yii\helpers\Html::a('Добавить', ['create']) ?>
+    <?= \yii\helpers\Html::a('Добавить', ['create'], ['class' => 'btn btn-success']) ?>
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
-            'title:ntext',
+            'title',
             [
                 'attribute' => 'image',
                 'value' => function (\app\common\models\Promo $model) {
@@ -29,4 +29,7 @@ use yii\grid\GridView;
             ['class' => 'yii\grid\ActionColumn'],
         ]
 ]); ?>
+</div>
+    </div>
+
 </div>

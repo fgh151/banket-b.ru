@@ -45,6 +45,8 @@ use yii\db\ActiveRecord;
  */
 class Proposal extends ActiveRecord
 {
+    public $constructorComment;
+
     /**
      * {@inheritdoc}
      */
@@ -105,7 +107,7 @@ class Proposal extends ActiveRecord
             [['status', 'owner_id', 'City', 'date', 'time', 'guests_count', 'amount', 'type', 'event_type', 'cuisine'], 'required'],
             [['owner_id', 'guests_count', 'type', 'event_type', 'metro', 'cuisine'], 'default', 'value' => null],
             [['owner_id', 'guests_count', 'type', 'event_type', 'metro', 'cuisine'], 'integer'],
-            [['date', 'time'], 'safe'],
+            [['date', 'time', 'constructorComment'], 'safe'],
             [['amount'], 'number'],
             [['dance', 'private', 'own_alcohol', 'parking'], 'boolean'],
             [['comment'], 'string'],
@@ -180,6 +182,12 @@ class Proposal extends ActiveRecord
     public function getWhen()
     {
         return new \DateTime($this->date . ' ' . $this->time);
+    }
+
+    public function beforeValidate()
+    {
+        $this->comment .= $this->constructorComment;
+        return parent::beforeValidate();
     }
 
     /**

@@ -19,7 +19,7 @@ use yii\widgets\ActiveForm;
 
 class ConversationController extends Controller
 {
-    use ProposalFindOneTrait;
+    use ProposalFindOneTrait, CheckPayTrait;
 
     /**
      * {@inheritdoc}
@@ -37,6 +37,19 @@ class ConversationController extends Controller
                 ],
             ],
         ];
+    }
+
+    /**
+     * @param $action
+     *
+     * @return bool
+     * @throws \Throwable
+     * @throws \yii\web\BadRequestHttpException
+     */
+    public function beforeAction($action)
+    {
+        $this->throwIfNotPay();
+        return parent::beforeAction($action);
     }
 
     /**

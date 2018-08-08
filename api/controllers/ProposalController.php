@@ -132,14 +132,12 @@ class ProposalController extends Controller
         $status->proposal_id = $proposalId;
         $status->status = Constants::PROPOSAL_STATUS_REJECT;
         return $status->save();
-
     }
 
     /**
-     * @param $proposalId
-     * @param $organizationId
+     * @param $id
      */
-    public function actionApprove($proposalId, $organizationId) {
+    public function actionClose($id) {
         throw new MethodNotExtendableException('метод еще не реализован');
 
     }

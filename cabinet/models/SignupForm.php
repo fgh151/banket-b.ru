@@ -47,6 +47,18 @@ class SignupForm extends Model
         ];
     }
 
+    public function attributeLabels()
+    {
+        return [
+            'name' => 'Название организации',
+            'address' => 'Адрес',
+            'contact' => 'Контактное лицо',
+            'phone' => 'Контактный телефон',
+            'confirm_password' => 'Повторите пароль',
+            'password' => 'Пароль'
+        ];
+    }
+
     /**
      * Signs user up.
      *

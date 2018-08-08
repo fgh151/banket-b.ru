@@ -7,7 +7,7 @@
 use yii\widgets\ActiveForm;
 
 ?>
-<div class="panel">
+<div class="profile-edit">
 <?php $form = ActiveForm::begin(); ?>
 
 <?= $form->field($model, 'name'); ?>
@@ -17,7 +17,7 @@ use yii\widgets\ActiveForm;
 <?= $form->field($model, 'email'); ?>
 <?= $form->field($model, 'password'); ?>
 
-<?= \yii\helpers\Html::submitButton('Сохранить'); ?>
+<?= \yii\helpers\Html::submitButton('Сохранить', ['class' => 'btn btn-success']); ?>
 
 
 <?php ActiveForm::end() ?>

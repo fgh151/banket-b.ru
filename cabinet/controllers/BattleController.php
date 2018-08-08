@@ -21,6 +21,21 @@ use yii\web\Controller;
 
 class BattleController extends Controller
 {
+
+    use CheckPayTrait;
+    /**
+     * @param $action
+     *
+     * @return bool
+     * @throws \Throwable
+     * @throws \yii\web\BadRequestHttpException
+     */
+    public function beforeAction($action)
+    {
+        $this->throwIfNotPay();
+        return parent::beforeAction($action);
+    }
+
     /**
      * @return string
      * @throws \Throwable

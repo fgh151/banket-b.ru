@@ -52,7 +52,7 @@ AppAsset::register($this);
         $menuItems[] = ['label' => 'Организации', 'url' => ['/organization/index']];
         $menuItems[] = ['label' => 'Пользователи приложения', 'url' => ['/mobile-user/index']];
         $menuItems[] = ['label' => 'Заявки', 'url' => ['/proposal/index']];
-        $menuItems[] = ['label' => 'Промо', 'url' => ['/promo/index']];
+        $menuItems[] = ['label' => 'Предложения от ресторанов', 'url' => ['/promo/index']];
 
 
         $menuItems[] = '<li>'
