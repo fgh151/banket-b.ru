@@ -16,6 +16,7 @@ use yii\base\InvalidArgumentException;
 use yii\data\ActiveDataProvider;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
+use yii\helpers\Url;
 use yii\web\BadRequestHttpException;
 use yii\web\Controller;
 
@@ -45,7 +46,7 @@ class SiteController extends Controller
                         'roles' => ['?'],
                     ],
                     [
-                        'actions' => ['request-password-reset', 'reset-password'],
+                        'actions' => ['request-password-reset', 'reset-password', 'about'],
                         'allow' => true,
                         'roles' => ['?'],
                     ],
@@ -110,6 +111,13 @@ class SiteController extends Controller
         }
         $tmp = array_count_values($tmp);
 
+
+
+
+
+
+
+
         $byDay['Понедельник'] = isset($tmp['Monday   ']) ? $tmp['Monday   ']: 0;
         $byDay['Вторник'] = isset($tmp['Tuesday   ']) ? $tmp['Tuesday   ']: 0;
         $byDay['Среда'] = isset($tmp['Wednesday   ']) ? $tmp['Wednesday   ']: 0;
@@ -128,9 +136,89 @@ class SiteController extends Controller
         $byHours = $tmp+$hours;
         ksort($byHours);
 
+
+
+
+
+
+
+
+
+
+        $sql = 'SELECT to_char(date, \'Month\') AS month, * FROM proposal ORDER BY month';
+        $proposals = $db->createCommand($sql)->queryAll();
+
+        $tmp = [];
+        foreach ($proposals as $proposal) {
+            $tmp[] = $proposal['month'];
+        }
+        $byMonth = array_count_values($tmp);
+
+
+
+
+
+        $byPrice = [];
+        $proposalsByPrice = Proposal::find()->select(['amount'])->asArray()->all();
+        foreach ($proposalsByPrice as $p) {
+            $amount = $p['amount'];
+            $byPrice[$amount] = isset($byPrice[$amount]) ? $byPrice[$amount] +1: 1;
+        }
+        ksort($byPrice);
+
+        $byPeoples =[];
+        $proposalsByPrice = Proposal::find()->select(['guests_count'])->asArray()->all();
+        foreach ($proposalsByPrice as $p) {
+            $count = $p['guests_count'];
+            $byPeoples[$count] = isset($byPeoples[$count]) ? $byPeoples[$count] +1: 1;
+        }
+        ksort($byPeoples);
+
+        $proposalsCount = Proposal::find()->count();
+
+        $hall = Proposal::find()->where(['hall' => true])->count();
+        $byHall = ['Нужен' => $hall, 'Не нужен' => $proposalsCount-$hall];
+
+        $dance = Proposal::find()->where(['dance' => true])->count();
+        $byDance = ['Нужен' => $dance, 'Не нужен' => $proposalsCount-$dance];
+
+        $alko = Proposal::find()->where(['own_alcohol' => true])->count();
+        $byAlko = ['Нужен' => $alko, 'Не нужен' => $proposalsCount-$alko];
+
+        $parking = Proposal::find()->where(['parking' => true])->count();
+        $byParking = ['Нужна' => $parking, 'Не нужна' => $proposalsCount-$parking];
+
+
+        $kitchen = Proposal::find()->select(['cuisine'])->asArray()->all();
+
+        $byCuisine =[];
+        foreach ($kitchen as $item) {
+            $cuisine = $item['cuisine'];
+            $byCuisine[$cuisine] = isset($byCuisine[$cuisine]) ? $byCuisine[$cuisine]+1:1;
+        }
+        ksort($byCuisine);
+
+        $type = Proposal::find()->select(['event_type'])->asArray()->all();
+        $byTypes =[];
+        foreach ($type as $item) {
+            $cuisine = $item['event_type'];
+            $byTypes[$cuisine] = isset($byTypes[$cuisine]) ? $byTypes[$cuisine]+1:1;
+        }
+        ksort($byTypes);
+
+
         return $this->render('index', [
             'byDay' => $byDay,
-            'byHours' => $byHours
+            'byHours' => $byHours,
+            'byPrice' => $byPrice,
+            'byPeoples' => $byPeoples,
+            'byHall' => $byHall,
+            'byDance' => $byDance,
+            'byAlko' => $byAlko,
+            'byParking' => $byParking,
+            'byCuisine' => $byCuisine,
+            'byTypes' => $byTypes,
+            'byMonth' => $byMonth
         ]);
     }
 
@@ -204,7 +292,16 @@ class SiteController extends Controller
      */
     public function actionAbout()
     {
+        $this->layout = 'blank';
         return $this->render('about');
+    }
+
+    public function beforeAction($action)
+    {
+        if (Yii::$app->getUser()->getIsGuest()) {
+            Yii::$app->homeUrl = Url::to('about');
+        }
+        return parent::beforeAction($action);
     }
 
     /**

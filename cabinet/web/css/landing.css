@@ -1,0 +1,9 @@
+h1 {
+    font-size: 3.8rem;
+    font-weight: 200;
+    color: #d80 !important;
+}
+
+p, li {
+    color: #fff;
+}

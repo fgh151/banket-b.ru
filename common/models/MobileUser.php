@@ -18,6 +18,7 @@ use yii\web\IdentityInterface;
  * @property int $status
  * @property int $created_at
  * @property int $updated_at
+ * @property string $name
  */
 class MobileUser extends ActiveRecord implements IdentityInterface
 {
@@ -42,7 +43,7 @@ class MobileUser extends ActiveRecord implements IdentityInterface
             [['auth_key', 'password_hash', 'email', 'phone', 'created_at', 'updated_at'], 'required'],
             [['status', 'created_at', 'updated_at'], 'default', 'value' => null],
             [['status', 'created_at', 'updated_at'], 'integer'],
-            [['auth_key'], 'string', 'max' => 32],
+            [['auth_key', 'name'], 'string', 'max' => 32],
             [['password_hash', 'password_reset_token', 'email', 'phone'], 'string', 'max' => 255],
             [['email'], 'unique'],
             [['password_reset_token'], 'unique'],

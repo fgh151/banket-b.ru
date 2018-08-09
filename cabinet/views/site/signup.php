@@ -6,6 +6,7 @@
 
 use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
+use yii\widgets\MaskedInput;
 
 $this->title = 'Регистрация';
 $this->params['breadcrumbs'][] = $this->title;
@@ -24,7 +25,7 @@ $this->params['breadcrumbs'][] = $this->title;
             <?= $form->field($model, 'address')->textarea()?>
 
             <?= $form->field($model, 'contact') ?>
-            <?= $form->field($model, 'phone') ?>
+            <?= $form->field($model, 'phone')->widget(MaskedInput::class, ['mask' => '+7 (999) 999-99-99']) ?>
 
 
 

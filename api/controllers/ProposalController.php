@@ -69,12 +69,16 @@ class ProposalController extends Controller
 
         $loggedIn = $request['loggedIn'];
         $email = $request['email'];
+        $phone = $request['phone'];
+        $name = $request['name'];
         $password = $request['password'];
 
 
         if (!$loggedIn) {
             $user = new MobileUser();
             $user->email = $email;
+            $user->name = $name;
+            $user->phone = $phone;
             $user->setPassword($password);
             $user->generateAuthKey();
             $user->created_at = $user->updated_at = time();
