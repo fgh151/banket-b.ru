@@ -2,6 +2,7 @@
 
 use app\common\models\Proposal;
 use yii\helpers\Html;
+use yii\bootstrap\Modal;
 
 /**
  * @var $this yii\web\View
@@ -77,7 +78,7 @@ $formatter = Yii::$app->formatter;
 
                             [
                                 'class' => 'yii\grid\ActionColumn',
-                                'template' => '{view} {reject}',
+                                'template' => '{view} {reject} {info}',
                                 'buttons' => [
                                     'reject' => function ($model, $key, $index) {
                                         return Html::a('Отклонить', ['reject', 'id' => $key->id], ['class' => 'btn btn-danger']);
@@ -85,6 +86,14 @@ $formatter = Yii::$app->formatter;
                                     'view' => function ($model, $key, $index) {
                                         return Html::a('Перейти', ['conversation/index', 'proposalId' => $key->id], ['class' => 'btn btn-primary']);
                                     },
+                                    'info' => function ($model, $key, $index) {
+
+
+
+                        return $this->render('_info', ['model' => $model, 'key' => $key, 'index' => $index]);
+
+
+                                    }
                                 ]
                             ],
                         ],

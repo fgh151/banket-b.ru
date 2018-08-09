@@ -240,6 +240,7 @@ class SiteController extends Controller
 
         $model = new LoginForm();
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
+            Yii::$app->homeUrl = Url::to('index');
             return $this->goBack();
         } else {
             $model->password = '';
@@ -316,6 +317,7 @@ class SiteController extends Controller
         if ($model->load(Yii::$app->request->post())) {
             if ($user = $model->signup()) {
                 if (Yii::$app->getUser()->login($user)) {
+                    Yii::$app->homeUrl = Url::to('index');
                     return $this->goHome();
                 }
             }
