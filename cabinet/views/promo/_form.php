@@ -14,6 +14,7 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'title')->textInput(['maxlength' => true]) ?>
 
+    <p>Оптимальный размер изображения 255 х 130 пикселей</p>
     <?= $form->field($model, 'file_input')->fileInput(['maxlength' => true]) ?>
 
     <?= $form->field($model, 'link')->textInput(['maxlength' => true]) ?>

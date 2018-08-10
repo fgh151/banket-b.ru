@@ -42,7 +42,7 @@ return [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
-                'proposal/delete/<proposalId:\d+>/<organizationId:\d+>' => 'proposal/delete',
+                'proposal/delete/<proposalId:\w+>/<organizationId:\w+>' => 'proposal/delete',
                 'proposal/dialogs/<proposalId:\d+>' => 'proposal/dialogs',
                 '<controller:\w+>/<action:\w+>/<id:\d+>/' => '<controller>/<action>',
                 '<controller:\w+>/<action:\w+>' => '<controller>/<action>',

@@ -235,7 +235,7 @@ class SiteController extends Controller
 
 
         if (!Yii::$app->user->isGuest) {
-            return $this->goHome();
+            return $this->redirect('index');
         }
 
         $model = new LoginForm();
@@ -260,7 +260,7 @@ class SiteController extends Controller
     {
         Yii::$app->user->logout();
 
-        return $this->goHome();
+        return $this->redirect('index');
     }
 
     /**
@@ -293,6 +293,9 @@ class SiteController extends Controller
      */
     public function actionAbout()
     {
+        if (!Yii::$app->getUser()->getIsGuest()) {
+            return $this->redirect('index');
+        }
         $this->layout = 'blank';
         return $this->render('about');
     }

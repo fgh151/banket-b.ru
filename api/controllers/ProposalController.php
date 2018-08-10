@@ -116,7 +116,7 @@ class ProposalController extends Controller
      */
     public function actionDialogs($proposalId)
     {
-        $organizationsFromMessages = array_keys(Message::findAll($proposalId));
+        $organizationsFromMessages = array_keys(Message::findAll($proposalId)?:[]);
         /** @var OrganizationProposalStatus[] $rejected */
         $rejected = OrganizationProposalStatus::find()->where(['proposal_id' => $proposalId])
             ->andWhere(['!=', 'status', Constants::ORGANIZATION_PROPOSAL_STATUS_REJECT])
@@ -142,8 +142,9 @@ class ProposalController extends Controller
      * @param $id
      */
     public function actionClose($id) {
-        throw new MethodNotExtendableException('метод еще не реализован');
-
+        $proposal = Proposal::findOne($id);
+        $proposal->status = Constants::PROPOSAL_STATUS_CLOSED;
+        $proposal->save();
     }
 
 }
