@@ -106,7 +106,12 @@ class ProposalController extends Controller
      */
     public function actionList()
     {
-        return Proposal::find()->where(['owner_id' => Yii::$app->user->id])->all();
+        return Proposal::find()
+                       ->where([
+                           'owner_id' => Yii::$app->user->id,
+                           'status' => Constants::PROPOSAL_STATUS_CREATED
+                       ])
+                       ->all();
     }
 
     /**

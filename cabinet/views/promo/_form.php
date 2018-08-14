@@ -12,12 +12,12 @@ use yii\widgets\ActiveForm;
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'title')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'title')->textInput(['maxlength' => true])->label('Разместить текст ') ?>
 
     <p>Оптимальный размер изображения 255 х 130 пикселей</p>
-    <?= $form->field($model, 'file_input')->fileInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'file_input')->fileInput(['maxlength' => true])->label('Поставить картинку') ?>
 
-    <?= $form->field($model, 'link')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'link')->textInput(['maxlength' => true])->label('Разместить ссылку') ?>
 
 
     <div class="form-group">

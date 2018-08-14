@@ -51,7 +51,7 @@ $this->title = 'Банкетный Баттл';
         $menuItems[] = ['label' => 'Вход', 'url' => ['/site/login']];
     } else {
         $menuItems[] = ['label' => 'Главная', 'url' => ['/site/index']];
-        $menuItems[] = ['label' => 'Промо', 'url' => ['/promo/index']];
+        $menuItems[] = ['label' => 'Предложения', 'url' => ['/promo/index']];
         $menuItems[] = ['label' => 'Аукционы', 'url' => ['/battle/index']];
         $menuItems[] = ['label' => 'Профиль', 'url' => ['/user/edit']];
         $menuItems[] = '<li>'

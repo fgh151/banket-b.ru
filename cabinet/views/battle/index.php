@@ -2,7 +2,6 @@
 
 use app\common\models\Proposal;
 use yii\helpers\Html;
-use yii\bootstrap\Modal;
 
 /**
  * @var $this yii\web\View
@@ -11,10 +10,38 @@ use yii\bootstrap\Modal;
  * @var $searchModel app\common\models\ProposalSearch
  */
 
+use app\common\components\Constants;
+
 $this->title = 'Аукционы';
 
-$ru_month = ['Января', 'Февраля', 'Марта', 'Апреля', 'Майя', 'Июня', 'Июля', 'Августа', 'Сентября', 'Октября', 'Ноября', 'Декабря'];
-$en_month = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+$ru_month = [
+    'Января',
+    'Февраля',
+    'Марта',
+    'Апреля',
+    'Майя',
+    'Июня',
+    'Июля',
+    'Августа',
+    'Сентября',
+    'Октября',
+    'Ноября',
+    'Декабря'
+];
+$en_month = [
+    'January',
+    'February',
+    'March',
+    'April',
+    'May',
+    'June',
+    'July',
+    'August',
+    'September',
+    'October',
+    'November',
+    'December'
+];
 
 /** @var \app\common\components\Formatter $formatter */
 $formatter = Yii::$app->formatter;
@@ -39,60 +66,66 @@ $formatter = Yii::$app->formatter;
                     <?= /** @noinspection PhpUnhandledExceptionInspection */
                     \yii\grid\GridView::widget([
                         'dataProvider' => $dataProvider,
-                        'filterModel' => $searchModel,
-                        'columns' => [
+                        'filterModel'  => $searchModel,
+                        'rowOptions'=>function(Proposal $model){
+                            if($model->status !== Constants::PROPOSAL_STATUS_CREATED){
+                                return ['class' => 'proposal-inactive'];
+                            }
+                        },
+                        'columns'      => [
                             ['class' => 'yii\grid\SerialColumn'],
 
                             [
                                 'attribute' => 'id',
-                                'label' => '№'
+                                'label'     => '№'
                             ],
                             [
+                                    'attribute' =>'date',
                                 'label' => 'Дата',
                                 'value' => function (Proposal $model) use ($ru_month, $en_month) {
-                                    return str_replace($en_month, $ru_month, $model->getWhen()->format('d F Y в H:i'));
+                                    return str_replace($en_month, $ru_month,
+                                        $model->getWhen()->format('d F Y в H:i'));
                                 }
                             ],
                             [
                                 'attribute' => 'event_type',
-                                'label' => 'Тип мероприятия',
-                                'value' => function (Proposal $model) {
+                                'label'     => 'Тип мероприятия',
+                                'value'     => function (Proposal $model) {
                                     return Proposal::typeLabels()[$model->event_type];
                                 },
-                                'filter' => Proposal::typeLabels()
+                                'filter'    => Proposal::typeLabels()
                             ],
                             'guests_count',
                             [
                                 'attribute' => 'amount',
-                                'label' => 'Сумма от'
+                                'label'     => 'Сумма от'
                             ],
-                            //'type',
-                            //'event_type',
-                            //'metro',
-                            //'cuisine',
                             'dance:boolean',
                             'private:boolean',
                             'own_alcohol:boolean',
                             'parking:boolean',
-                            //'comment:ntext',
 
                             [
                                 'class' => 'yii\grid\ActionColumn',
                                 'template' => '{view} {reject} {info}',
                                 'buttons' => [
                                     'reject' => function ($model, $key, $index) {
-                                        return Html::a('Отклонить', ['reject', 'id' => $key->id], ['class' => 'btn btn-danger']);
+                                        if ($key->status === Constants::PROPOSAL_STATUS_CREATED) {
+
+                                            return Html::a('Отклонить',
+                                                ['reject', 'id' => $key->id],
+                                                ['class' => 'btn btn-danger']);
+                                        }
+                                        return null;
                                     },
-                                    'view' => function ($model, $key, $index) {
-                                        return Html::a('Перейти', ['conversation/index', 'proposalId' => $key->id], ['class' => 'btn btn-primary']);
+                                    'view'   => function ($model, $key, $index) {
+                                        return Html::a('Перейти',
+                                            ['conversation/index', 'proposalId' => $key->id],
+                                            ['class' => 'btn btn-primary']);
                                     },
-                                    'info' => function ($model, $key, $index) {
-
-
-
-                        return $this->render('_info', ['model' => $model, 'key' => $key, 'index' => $index]);
-
-
+                                    'info'   => function ($model, $key, $index) {
+                                        return $this->render('_info',
+                                            ['model' => $model, 'key' => $key, 'index' => $index]);
                                     }
                                 ]
                             ],

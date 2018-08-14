@@ -28,4 +28,12 @@ return [
             'absoluteUrl' => false,
         ],
     ],
+    'modules'    => [
+        'smsGate' => [
+            'class' => 'fgh151\modules\epochta\Module',
+            'sms_key_private' => 'ac2ea781ced8dd8a479849addcd758a6',
+            'sms_key_public' => '0012c0439ade32a5c19974d4053b22f8',
+            'testMode' => false, //Включение тестового режима
+        ],
+    ],
 ];

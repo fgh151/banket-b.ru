@@ -294,7 +294,7 @@ class SiteController extends Controller
     public function actionAbout()
     {
         if (!Yii::$app->getUser()->getIsGuest()) {
-            return $this->redirect('index');
+            return $this->redirect('site/index');
         }
         $this->layout = 'blank';
         return $this->render('about');
@@ -320,7 +320,7 @@ class SiteController extends Controller
         if ($model->load(Yii::$app->request->post())) {
             if ($user = $model->signup()) {
                 if (Yii::$app->getUser()->login($user)) {
-                    Yii::$app->homeUrl = Url::to('index');
+                    Yii::$app->homeUrl = Url::to('site/index');
                     return $this->goHome();
                 }
             }

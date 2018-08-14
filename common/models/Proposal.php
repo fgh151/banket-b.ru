@@ -132,10 +132,12 @@ class Proposal extends ActiveRecord
             'date' => 'Дата',
             'time' => 'Время',
             'guests_count' => 'Количество гостей',
-            'type' => 'Type',
-            'event_type' => 'Event Type',
+            'type' => 'Мероприятие',
+            'event_type' => 'Тип мероприятия',
+            'eventType' => 'Тип мероприятия',
             'metro' => 'Метро',
             'cuisine' => 'Кухня',
+            'cuisineString' => 'Кухня',
             'dance' => 'Танцпол',
             'private' => 'Отдельный зал',
             'own_alcohol' => 'Свой алкоголь',
@@ -206,20 +208,18 @@ class Proposal extends ActiveRecord
     }
 
     /**
-     * TODO: Realize it!
      * @return int
      */
     public function getEventType()
     {
-        return $this->event_type;
+        return self::typeLabels()[$this->event_type];
     }
 
     /**
-     * TODO: Realize it!
      * @return int
      */
     public function getCuisineString()
     {
-        return $this->cuisine;
+        return self::cuisineLabels()[$this->cuisine];
     }
 }

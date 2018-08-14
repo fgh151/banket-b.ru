@@ -6,6 +6,7 @@
  * @var $proposal \app\common\models\Proposal
  */
 
+use app\common\components\Constants;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\widgets\ActiveForm;
@@ -13,40 +14,56 @@ use yii\widgets\ActiveForm;
 ?>
 
     <div class="conversation">
-        <h1>Заявка №<?= $proposal->id ?></h1>
-
+        <a onclick="$('#proposal-info').toggle();">
+            <h1>Заявка №<?= $proposal->id ?></h1>
+        </a>
+        <div id="proposal-info" style="display: none">
         <?= \yii\widgets\DetailView::widget([
-            'model' => $proposal,
+            'model'      => $proposal,
             'attributes' => [
-                'City', 'amount', 'date', 'time', 'comment',
+                'City',
+                'amount',
+                'date',
+                'time',
+                'comment',
                 [
                     'attribute' => 'cuisine',
-                    'value' => function ($model) {
+                    'value'     => function ($model) {
                         return \app\common\models\Proposal::cuisineLabels()[$model->cuisine];
                     }
-                ], 'guests_count'
+                ],
+                'guests_count'
             ]
         ]); ?>
+        </div>
 
         <div id="messages-area">
 
             <?= $this->render('_message_list', ['messages' => $messages]); ?>
 
         </div>
+        <?php if ($proposal->status === Constants::PROPOSAL_STATUS_CREATED): ?>
 
-        <?php $form = ActiveForm::begin([
-            'id' => 'message-form',
-            'action' => Url::to(['conversation/send-message', 'proposalId' => $model->proposal_id]),
-            'enableAjaxValidation' => true,
-            'validationUrl' => Url::to(['conversation/validate-message', 'proposalId' => $model->proposal_id]),
-        ]); ?>
+            <?php $form = ActiveForm::begin([
+                'id'                   => 'message-form',
+                'action'               => Url::to([
+                    'conversation/send-message',
+                    'proposalId' => $model->proposal_id
+                ]),
+                'enableAjaxValidation' => true,
+                'validationUrl'        => Url::to([
+                    'conversation/validate-message',
+                    'proposalId' => $model->proposal_id
+                ]),
+            ]); ?>
 
-        <?= $form->field($model, 'message'); ?>
+            <?= $form->field($model, 'message'); ?>
 
 
-        <?= Html::submitButton('Отправить') ?>
+            <?= Html::submitButton('Отправить') ?>
 
-        <?php ActiveForm::end(); ?>
+            <?php ActiveForm::end(); ?>
+        <?php endif; ?>
 
 
     </div>
@@ -80,10 +97,10 @@ JS;
 $this->registerJs($js);
 
 $newMessagesUrl = Url::to(['conversation/new-messages']);
-$proposalId = $proposal->id;
-$csrfParam = Yii::$app->request->csrfParam;
-$csrfToken = Yii::$app->request->getCsrfToken();
-$js = <<<JS
+$proposalId     = $proposal->id;
+$csrfParam      = Yii::$app->request->csrfParam;
+$csrfToken      = Yii::$app->request->getCsrfToken();
+$js             = <<<JS
 
 function scrollMessages(force = false) {
     

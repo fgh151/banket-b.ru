@@ -88,7 +88,7 @@ $this->title = 'My Yii Application';
                     'labels' => array_keys($byMonth),
                     'datasets' => [
                         [
-                            'label' => "Распределение заявок по часам",
+                            'label' => "Распределение заявок по месяцам",
                             'backgroundColor' => ["rgba(179,181,198,0.2)", 'red', 'blue','white', 'green', 'brown', 'yellow'],
                             'borderColor' => "rgba(179,181,198,1)",
                             'pointBackgroundColor' => "rgba(179,181,198,1)",

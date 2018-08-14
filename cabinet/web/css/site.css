@@ -5,7 +5,12 @@ body {
     background: #69f;
     background-image: -webkit-gradient(linear, left top, left bottom, from(#69f), to(#03c));
     background-image: linear-gradient(to bottom, #69f, #03c);
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#6699ff', endColorstr='#0033cc', GradientType=0)
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#6699ff', endColorstr='#0033cc', GradientType=0);
+    background-attachment: fixed;
+}
+
+html {
+
 }
 
 .wrap {
@@ -224,4 +229,8 @@ a.desc:after {
 
 .grid-view td {
     white-space: normal;
+}
+
+.proposal-inactive {
+    opacity: .5;
 }
