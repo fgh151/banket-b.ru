@@ -25,8 +25,8 @@ use yii\grid\GridView;
                 'format' => 'image'
             ],
             'link:url',
-            'browsingCount:integer:Просмотры',
-            ['class' => 'yii\grid\ActionColumn'],
+//            'browsingCount:integer:Просмотры',
+//            ['class' => 'yii\grid\ActionColumn'],
         ]
 ]); ?>
 </div>

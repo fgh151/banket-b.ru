@@ -75,6 +75,10 @@ $(document).on("beforeSubmit", "#message-form", function () {
     
      var form = $(this);
     var formData = form.serialize();
+    
+    
+    console.log(form.attr("action"));
+    
     $.ajax({
         url: form.attr("action"),
         type: form.attr("method"),
@@ -83,6 +87,7 @@ $(document).on("beforeSubmit", "#message-form", function () {
             $('#messages-area').append(data.element);
              console.log(data);
             form[0].reset();
+            scrollMessages(true);
         },
         error: function () {
             alert("Something went wrong");
@@ -111,7 +116,7 @@ function scrollMessages(force = false) {
       scroll.scrollTop(height);
   }
 }
-
+scrollMessages(true);
 function getNewMessages() {
     
     var lastMessage = $('#messages-area>div').last().data('id');
@@ -130,7 +135,7 @@ function getNewMessages() {
 }
 
 setInterval(getNewMessages, 10000);
-scrollMessages(true);
+
 
 JS;
 

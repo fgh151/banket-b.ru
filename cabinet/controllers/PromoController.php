@@ -39,6 +39,8 @@ class PromoController extends Controller
         $dataProvider = new ActiveDataProvider([
             'query' => Promo::find()
                 ->where(['organization_id' => \Yii::$app->getUser()->getId()])
+                ->andFilterWhere(['<=', 'start', date('Y-M-d')])
+                ->andFilterWhere(['>=', 'end', date('Y-M-d')])
         ]);
 
         return $this->render('index', [
@@ -96,5 +98,7 @@ class PromoController extends Controller
 
         throw new NotFoundHttpException('The requested page does not exist.');
     }
+
+
 
 }

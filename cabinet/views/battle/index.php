@@ -71,6 +71,9 @@ $formatter = Yii::$app->formatter;
                             if($model->status !== Constants::PROPOSAL_STATUS_CREATED){
                                 return ['class' => 'proposal-inactive'];
                             }
+                            if ($model->date < date('Y-m-d')) {
+                                return ['class' => 'proposal-inactive'];
+                            }
                         },
                         'columns'      => [
                             ['class' => 'yii\grid\SerialColumn'],
@@ -110,7 +113,7 @@ $formatter = Yii::$app->formatter;
                                 'template' => '{view} {reject} {info}',
                                 'buttons' => [
                                     'reject' => function ($model, $key, $index) {
-                                        if ($key->status === Constants::PROPOSAL_STATUS_CREATED) {
+                                        if ($key->status === Constants::PROPOSAL_STATUS_CREATED && $key->date >= date('Y-m-d')) {
 
                                             return Html::a('Отклонить',
                                                 ['reject', 'id' => $key->id],

@@ -35,7 +35,7 @@ echo \yii\widgets\DetailView::widget([
         'dance:boolean',
         'private:boolean',
         'own_alcohol:boolean',
-        'parking',
+        'parking:boolean',
         'comment',
         'floristics:boolean',
         'hall:boolean',

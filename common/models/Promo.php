@@ -44,12 +44,12 @@ class Promo extends ActiveRecord
     public function rules()
     {
         return [
-            [['organization_id', 'title'], 'required'],
+            [['organization_id', 'title', 'start', 'end'], 'required'],
             [['organization_id'], 'default', 'value' => null],
             [['organization_id'], 'integer'],
             [['title', 'image', 'link'], 'string', 'max' => 255],
             ['sort', 'default', 'value' => 500],
-            ['image', 'safe'],
+            [['image'], 'safe'],
             ['file_input', 'file']
         ];
     }
@@ -69,10 +69,12 @@ class Promo extends ActiveRecord
         return [
             'id' => 'ID',
             'organization_id' => 'Организация',
-            'title' => 'Заголовок',
+            'title' => 'Текст предложения',
             'image' => 'Картинка',
             'link' => 'Ссылка для перехода',
-            'sort' => 'Сортировка'
+            'sort' => 'Сортировка',
+            'start' => 'Дата начала показа',
+            'end' => 'Дата окончания показа'
         ];
     }
 

@@ -82,6 +82,8 @@ class ProposalSearch extends Proposal
         $query->andFilterWhere(['ilike', 'City', $this->City])
             ->andFilterWhere(['ilike', 'comment', $this->comment]);
 
+        $query->orderBy('date DESC');
+
         if ($this->rejected) {
             $query->andWhere([
                 'not in',

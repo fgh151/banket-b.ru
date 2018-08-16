@@ -131,7 +131,7 @@ a.desc:after {
 }
 
 #messages-area {
-    max-height: 300px;
+    max-height: 100vh;
     overflow-y: scroll;
     padding: 15px;
 }
@@ -232,5 +232,10 @@ a.desc:after {
 }
 
 .proposal-inactive {
-    opacity: .5;
+
+    background-color: rgba(102, 153, 255, .5) !important;
+}
+
+.conversation a h1 {
+    cursor: pointer;
 }

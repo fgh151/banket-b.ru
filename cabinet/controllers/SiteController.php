@@ -320,7 +320,7 @@ class SiteController extends Controller
         if ($model->load(Yii::$app->request->post())) {
             if ($user = $model->signup()) {
                 if (Yii::$app->getUser()->login($user)) {
-                    Yii::$app->homeUrl = Url::to('site/index');
+                    Yii::$app->homeUrl = Url::to('/site/index');
                     return $this->goHome();
                 }
             }

@@ -13,6 +13,7 @@ use app\api\models\RegisterForm;
 use app\common\models\MobileUser;
 use yii;
 use yii\base\Exception;
+use yii\helpers\ArrayHelper;
 use yii\helpers\Json;
 use yii\rest\Controller;
 
@@ -79,17 +80,18 @@ class AuthController extends Controller
          * Находим человека и отправляем еу СМС
          */
         $user = MobileUser::find()->where(['phone' => $phone])->one();
+
+
         if ($user) {
 
-            $user->password_reset_token = Yii::$app->security->generateRandomKey(6);
+            $user->password_reset_token = Yii::$app->security->generateRandomString(6);
             $user->save();
 
-
-            $this->sendSms(
-                'Код подтверждения '+$user->password_reset_token,
+            return $this->sendSms(
+                'Код подтверждения '.$user->password_reset_token,
                 $user->phone,
-                'ac2ea781ced8dd8a479849addcd758a6',
-                '0012c0439ade32a5c19974d4053b22f8'
+                '0012c0439ade32a5c19974d4053b22f8',
+                'ac2ea781ced8dd8a479849addcd758a6'
             );
         }
     }
@@ -116,6 +118,7 @@ class AuthController extends Controller
             return ['access_token' => $user->getAuthKey()];
         }
 
+        return $user;
 
     }
 
@@ -174,12 +177,12 @@ class AuthController extends Controller
             'action'  => 'sendSMS',
             'version' => '3.0'
         ];
-        $resultParams = yii\helpers\ArrayHelper::merge($options, $sumParams);
-        $sortedKeys = array_keys($resultParams);
+        $resultParams = ArrayHelper::merge($options, $sumParams);
+        ksort($resultParams);
         $resultString = '';
 
-        foreach ($sortedKeys as $key) {
-            $resultString .=$resultParams[$key];
+        foreach ($resultParams as $param) {
+            $resultString .=$param;
         }
         $resultString .= $secret;
         return md5($resultString);

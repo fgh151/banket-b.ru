@@ -10,7 +10,7 @@ $this->params['breadcrumbs'][] = $this->title;
 $this->registerCssFile('@web/css/landing.css');
 ?>
 
-<div class="row">
+<div class="row" style="margin-top: 50px">
     <div class="col-xs-12 col-md-6">
         <img src="/img/phone-mockup.png">
     </div>

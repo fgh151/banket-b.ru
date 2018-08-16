@@ -124,7 +124,7 @@ class ProposalController extends Controller
         $organizationsFromMessages = array_keys(Message::findAll($proposalId)?:[]);
         /** @var OrganizationProposalStatus[] $rejected */
         $rejected = OrganizationProposalStatus::find()->where(['proposal_id' => $proposalId])
-            ->andWhere(['!=', 'status', Constants::ORGANIZATION_PROPOSAL_STATUS_REJECT])
+            ->andWhere(['<>', 'status', Constants::ORGANIZATION_PROPOSAL_STATUS_REJECT])
             ->all();
         foreach ($rejected as $item) {
             unset($organizationsFromMessages[$item->organization_id]);
@@ -132,6 +132,7 @@ class ProposalController extends Controller
 
         return Organization::find()
             ->where(['in', 'id', $organizationsFromMessages])
+            ->andFilterWhere(['state' => Constants::ORGANIZATION_STATE_PAID])
             ->all();
     }
 
