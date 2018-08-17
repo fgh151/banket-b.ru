@@ -295,7 +295,7 @@ $this->title = 'My Yii Application';
                     'labels' => array_values(\app\common\models\Proposal::typeLabels()),
                     'datasets' => [
                         [
-                            'label' => "Распределение заявок по кухне",
+                            'label' => "Распределение заявок по типу",
                             'backgroundColor' => ["rgba(179,181,198,0.2)", 'red', 'blue','white', 'green', 'brown', 'yellow'],
                             'borderColor' => "rgba(179,181,198,1)",
                             'pointBackgroundColor' => "rgba(179,181,198,1)",

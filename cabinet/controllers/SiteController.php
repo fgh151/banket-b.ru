@@ -118,13 +118,13 @@ class SiteController extends Controller
 
 
 
-        $byDay['Понедельник'] = isset($tmp['Monday   ']) ? $tmp['Monday   ']: 0;
-        $byDay['Вторник'] = isset($tmp['Tuesday   ']) ? $tmp['Tuesday   ']: 0;
-        $byDay['Среда'] = isset($tmp['Wednesday   ']) ? $tmp['Wednesday   ']: 0;
-        $byDay['Четверг'] = isset($tmp['Thursday   ']) ? $tmp['Thursday   ']: 0;
-        $byDay['Пятница'] = isset($tmp['Friday   ']) ? $tmp['Friday   ']: 0;
-        $byDay['Суббота'] = isset($tmp['Saturday   ']) ? $tmp['Saturday   ']: 0;
-        $byDay['Воскресенье'] = isset($tmp['Sunday   ']) ? $tmp['Sunday   ']: 0;
+        $byDay['Понедельник'] = (isset($tmp['Monday   ']) ? $tmp['Monday   ']: 0) + Yii::$app->params['chart']['byDay']['Понедельник'];
+        $byDay['Вторник'] = (isset($tmp['Tuesday   ']) ? $tmp['Tuesday   ']: 0) + Yii::$app->params['chart']['byDay']['Вторник'];
+        $byDay['Среда'] = (isset($tmp['Wednesday   ']) ? $tmp['Wednesday   ']: 0) + Yii::$app->params['chart']['byDay']['Среда'];
+        $byDay['Четверг'] = (isset($tmp['Thursday   ']) ? $tmp['Thursday   ']: 0) + Yii::$app->params['chart']['byDay']['Четверг'];
+        $byDay['Пятница'] = (isset($tmp['Friday   ']) ? $tmp['Friday   ']: 0) + Yii::$app->params['chart']['byDay']['Пятница'];
+        $byDay['Суббота'] = (isset($tmp['Saturday   ']) ? $tmp['Saturday   ']: 0) + Yii::$app->params['chart']['byDay']['Суббота'];
+        $byDay['Воскресенье'] = (isset($tmp['Sunday   ']) ? $tmp['Sunday   ']: 0) + Yii::$app->params['chart']['byDay']['Воскресенье'];
 
         $sql = 'SELECT date_part(\'hour\', time) AS hour, * FROM proposal ORDER BY hour';
         $proposals = $db->createCommand($sql)->queryAll();
@@ -132,27 +132,24 @@ class SiteController extends Controller
             $tmp[] = $proposal['hour'];
         }
         $tmp = array_count_values($tmp);
-        $hours = array_fill(1, 24, 0);
+        $hours = Yii::$app->params['chart']['byHours'];
         $byHours = $tmp+$hours;
         ksort($byHours);
-
-
-
-
-
-
-
-
-
 
         $sql = 'SELECT to_char(date, \'Month\') AS month, * FROM proposal ORDER BY month';
         $proposals = $db->createCommand($sql)->queryAll();
 
         $tmp = [];
         foreach ($proposals as $proposal) {
-            $tmp[] = $proposal['month'];
+            $tmp[] = str_replace(
+                ['January','February','March','April','May','June','July','August','September','October','November', 'December'],
+                ['Январь','Февраль','Март','Апрель','Май','Июнь','Июль','Август','Сентябрь','Октябрь','Ноябрь', 'Декабрь'],
+                trim($proposal['month'])
+            );
         }
         $byMonth = array_count_values($tmp);
+        $byMonth =  Yii::$app->params['chart']['byMonth'] + $byMonth;
+
 
 
 
@@ -164,6 +161,7 @@ class SiteController extends Controller
             $amount = $p['amount'];
             $byPrice[$amount] = isset($byPrice[$amount]) ? $byPrice[$amount] +1: 1;
         }
+        $byPrice = Yii::$app->params['chart']['byPrice'] + $byPrice;
         ksort($byPrice);
 
         $byPeoples =[];
@@ -172,6 +170,7 @@ class SiteController extends Controller
             $count = $p['guests_count'];
             $byPeoples[$count] = isset($byPeoples[$count]) ? $byPeoples[$count] +1: 1;
         }
+        $byPeoples =  Yii::$app->params['chart']['byPeoples'] + $byPeoples;
         ksort($byPeoples);
 
         $proposalsCount = Proposal::find()->count();
