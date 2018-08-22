@@ -18,8 +18,8 @@ class PromoController extends Controller
     public function actionList()
     {
         return PromoModel::findActive()
-                         ->andFilterWhere(['<=', 'start', date('Y-M-d')])
-                         ->andFilterWhere(['>=', 'end', date('Y-M-d')])
+                         ->andWhere(['<=', 'start', date('Y-M-d')])
+                         ->andWhere(['>=', 'end', date('Y-M-d')])
                          ->limit(20)
                          ->orderBy('random()')
                          ->all();

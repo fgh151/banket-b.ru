@@ -1,0 +1,40 @@
+version: '2'
+volumes:
+  fs_database:
+services:
+  app:
+    image: 'ruvents/php:7.1'
+    links:
+      - database
+    environment:
+      DOCKER: yep
+      DATABASE_TYPE: pgsql
+      DATABASE_PORT: 5432
+      DATABASE_HOSTNAME: database
+      DATABASE_PASSWORD: ohnfdhbreh43qu2
+      DATABASE_USERNAME: battle
+      DATABASE_DATABASE: battle
+    volumes:
+      - '.:/var/www/html/'
+      - './docker/bootstrap.sh:/init.sh'
+  nginx:
+    image: nginx
+    ports:
+      - '8090:8090'
+    links:
+      - app
+    volumes:
+      - './docker/nginx.conf:/etc/nginx/nginx.conf'
+    volumes_from:
+      - app
+  database:
+    image: 'postgres:9.6'
+    environment:
+      POSTGRES_PASSWORD: ohnfdhbreh43qu2
+      POSTGRES_USER: battle
+      POSTGRES_DB: battle
+    ports:
+      - '5432:5432'
+    volumes:
+      - './docker/database.sql:/docker-entrypoint-initdb.d/dump.sql'
+      - 'fs_database:/var/lib/postgresql/data'

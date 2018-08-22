@@ -16,11 +16,12 @@ return [
     'components' => [
         'request' => [
             'csrfParam' => '_csrf-admin',
+            'cookieValidationKey' => 'jds87y8^&hgf65&GHVCR%5r5$#^&*(JDtdkj'
         ],
         'user' => [
             'identityClass' => 'app\common\models\MobileUser',
             'enableAutoLogin' => true,
-            'identityCookie' => ['name' => '_identity-admin', 'httpOnly' => true],
+            'identityCookie' => ['name' => '_identity-api', 'httpOnly' => true],
         ],
         'session' => [
             // this is the name of the session cookie used for login on the admin

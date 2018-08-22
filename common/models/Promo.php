@@ -35,7 +35,14 @@ class Promo extends ActiveRecord
      */
     public static function findActive()
     {
-        return self::find()->where(['in', 'organization_id', Organization::find()->where(['state' => Constants::ORGANIZATION_STATE_PAID])->select('id')]);
+        return self::find()
+                   ->where([
+                       'in',
+                       'organization_id',
+                       Organization::find()
+                                   ->where(['state' => Constants::ORGANIZATION_STATE_PAID])
+                                   ->select('id')
+                   ]);
     }
 
     /**
@@ -57,7 +64,13 @@ class Promo extends ActiveRecord
     public function fields()
     {
         return [
-            'title', 'image', 'link', 'organizationName'
+            'title',
+            'image',
+            'link',
+            'organizationName',
+            'start',
+            'end',
+            'sort'
         ];
     }
 
@@ -67,14 +80,14 @@ class Promo extends ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => 'ID',
+            'id'              => 'ID',
             'organization_id' => 'Организация',
-            'title' => 'Текст предложения',
-            'image' => 'Картинка',
-            'link' => 'Ссылка для перехода',
-            'sort' => 'Сортировка',
-            'start' => 'Дата начала показа',
-            'end' => 'Дата окончания показа'
+            'title'           => 'Текст предложения',
+            'image'           => 'Картинка',
+            'link'            => 'Ссылка для перехода',
+            'sort'            => 'Сортировка',
+            'start'           => 'Дата начала показа',
+            'end'             => 'Дата окончания показа'
         ];
     }
 
