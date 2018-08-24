@@ -4,6 +4,7 @@ namespace app\cabinet\models;
 use app\common\components\Constants;
 use app\common\components\validators\ConfirmPassword;
 use app\common\models\Organization;
+use app\common\models\OrganizationLinkActivity;
 use yii\base\Model;
 
 /**
@@ -20,6 +21,8 @@ class SignupForm extends Model
     public $phone;
 
     public $confirm_password;
+
+    public $activities = [];
 
 
     /**
@@ -44,6 +47,8 @@ class SignupForm extends Model
 
 
             ['confirm_password', ConfirmPassword::class, 'second_argument' => 'password'],
+
+            ['activities', 'safe']
         ];
     }
 
@@ -84,6 +89,17 @@ class SignupForm extends Model
         $user->status     = Constants::USER_STATUS_ACTIVE;
         $user->state = Constants::ORGANIZATION_STATE_FREE;
 
-        return  $user->save() ? $user : null;
+        $saved = $user->save();
+
+        if ($saved && !empty($this->activities)) {
+            foreach ($this->activities as $activity) {
+                $link = new OrganizationLinkActivity();
+                $link->organization_id = $user->id;
+                $link->activity_id = $activity;
+                $link->save();
+            }
+        }
+
+        return  $saved ? $user : null;
     }
 }

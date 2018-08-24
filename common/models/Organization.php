@@ -95,4 +95,13 @@ class Organization extends ActiveRecord implements IdentityInterface
             'updated_at' => 'Updated At',
         ];
     }
+
+    /**
+     * @return \yii\db\ActiveQuery | Activity[]
+     */
+    public function getActivities()
+    {
+        return $this->hasMany(Activity::class, ['id' => 'activity_id'])
+            ->viaTable(OrganizationLinkActivity::tableName(), ['organization_id', 'id']);
+    }
 }
