@@ -32,11 +32,11 @@ $this->params['breadcrumbs'][] = $this->title;
             'title',
             [
                 'attribute' => 'image',
-                'value'     => function (\app\common\models\Promo $model) {
-                    return 'http://f-cabinet.banket.restorate.ru/' . \Yii::$app->imageresize->getUrl('/var/www/battle/cabinet/web/' . $model->image,
-                            200, 200);
-                },
-                'format'    => 'image'
+//                'value'     => function (\app\common\models\Promo $model) {
+//                    return 'http://f-cabinet.banket.restorate.ru/' . \Yii::$app->imageresize->getUrl('/var/www/battle/cabinet/web/' . $model->image,
+//                            200, 200);
+//                },
+//                'format'    => 'image'
             ],
             'link:url',
             //'sort',

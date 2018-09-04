@@ -32,7 +32,7 @@ class BattleController extends Controller
      */
     public function beforeAction($action)
     {
-        $this->throwIfNotPay();
+        $this->throwIfNotPay('state');
         return parent::beforeAction($action);
     }
 
@@ -81,6 +81,7 @@ class BattleController extends Controller
     {
         $model = new OrganizationProposalStatus();
         $model->organization_id = Yii::$app->getUser()->getId();
+        $model->proposal_id = $id;
         $model->status = Constants::ORGANIZATION_PROPOSAL_STATUS_REJECT;
         $model->save();
         $this->redirect('index');

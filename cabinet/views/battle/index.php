@@ -46,7 +46,7 @@ $en_month = [
 /** @var \app\common\components\Formatter $formatter */
 $formatter = Yii::$app->formatter;
 ?>
-<div class="site-index">
+<div class="battle-index">
     <div class="panel panel-default">
         <div class="panel-heading">
             <div class="row">
@@ -116,7 +116,7 @@ $formatter = Yii::$app->formatter;
                                         if ($key->status === Constants::PROPOSAL_STATUS_CREATED && $key->date >= date('Y-m-d')) {
 
                                             return Html::a('Отклонить',
-                                                ['reject', 'id' => $key->id],
+                                                ['battle/reject', 'id' => $key->id],
                                                 ['class' => 'btn btn-danger']);
                                         }
                                         return null;

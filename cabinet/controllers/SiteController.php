@@ -99,7 +99,7 @@ class SiteController extends Controller
     public function actionIndex()
     {
 
-        $this->throwIfNotPay();
+        $this->throwIfNotPay('state_statistic');
 
         $db = Yii::$app->getDb();
         $sql = 'SELECT to_char(date, \'Day\') AS day, * FROM proposal ORDER BY day';

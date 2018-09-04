@@ -50,6 +50,7 @@ class AuthController extends Controller
         $model = new RegisterForm();
 
         $request = Json::decode(Yii::$app->getRequest()->getRawBody(), true);
+
         if ($model->load($request, '')) {
             if ($key = $model->register()) {
                 return ['access_token' => $key];

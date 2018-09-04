@@ -65,14 +65,15 @@ class Promo extends ActiveRecord
     {
         return [
             'title',
-            'image',
+            'image' => function ($model) { return '/'. $model->image;},
             'link',
             'organizationName',
             'start',
             'end',
-            'sort'
         ];
     }
+
+
 
     /**
      * {@inheritdoc}

@@ -23,6 +23,9 @@ use yii\web\IdentityInterface;
  * @property int    $created_at
  * @property int    $updated_at
  * @property int    $state
+ * @property string $url
+ * @property int $state_promo
+ * @property int $state_statistic
  */
 class Organization extends ActiveRecord implements IdentityInterface
 {
@@ -61,8 +64,8 @@ class Organization extends ActiveRecord implements IdentityInterface
             [['password_hash', 'password_reset_token', 'email', 'name', 'contact', 'phone'], 'string', 'max' => 255],
             [['email'], 'unique'],
             [['password_reset_token'], 'unique'],
-            ['state', 'default', 'value' => Constants::ORGANIZATION_STATE_FREE],
-            ['password', 'safe']
+            [['state', 'state_statistic', 'state_promo'],'default', 'value' => Constants::ORGANIZATION_STATE_FREE],
+            [['password', 'url'], 'safe']
         ];
     }
 
@@ -89,7 +92,9 @@ class Organization extends ActiveRecord implements IdentityInterface
             'contact' => 'Контактное лицо',
             'phone' => 'Телефон',
             'status' => 'Статус',
-            'state' => 'Состояние',
+            'state' => 'Оплата участия в аукционах',
+            'state_promo' => 'Оплата возможности размещения рекамы',
+            'state_statistic' => 'Оплата работы со статистикой',
             'password' => 'Пароль',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',

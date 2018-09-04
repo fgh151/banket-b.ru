@@ -16,8 +16,10 @@ use yii\base\Model;
 
 class RegisterForm extends Model
 {
-    public $username;
+    public $email;
     public $password;
+    public $name;
+    public $phone;
 
     /**
      * @var $user MobileUser
@@ -31,9 +33,10 @@ class RegisterForm extends Model
     {
         return [
             // username and password are both required
-            [['username', 'password'], 'required'],
-            ['username', 'email'],
-            ['username', 'unique', 'targetClass' => MobileUser::class, 'targetAttribute' => 'email']
+            [['email', 'password'], 'required'],
+            ['email', 'email'],
+            ['email', 'unique', 'targetClass' => MobileUser::class, 'targetAttribute' => 'email'],
+            [['name', 'phone'], 'safe']
         ];
     }
 
@@ -55,7 +58,9 @@ class RegisterForm extends Model
     public function register()
     {
         $user = new MobileUser();
-        $user->email = $this->username;
+        $user->email = $this->email;
+        $user->name = $this->name;
+        $user->phone = $this->phone;
         $user->setPassword($this->password);
         $user->generateAuthKey();
         $user->created_at = $user->updated_at = time();
@@ -86,7 +91,7 @@ class RegisterForm extends Model
     public function getUser()
     {
         if ($this->user === null) {
-            $this->user = MobileUser::findByUsername($this->username);
+            $this->user = MobileUser::findByUsername($this->email);
         }
         return $this->user;
     }

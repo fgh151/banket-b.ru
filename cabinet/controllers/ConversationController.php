@@ -48,7 +48,7 @@ class ConversationController extends Controller
      */
     public function beforeAction($action)
     {
-        $this->throwIfNotPay();
+        $this->throwIfNotPay('state');
         return parent::beforeAction($action);
     }
 

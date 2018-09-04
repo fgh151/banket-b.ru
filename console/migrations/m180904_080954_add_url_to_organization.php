@@ -3,17 +3,16 @@
 use yii\db\Migration;
 
 /**
- * Class m180815_094215_add_dates_to_promo
+ * Class m180904_080954_add_url_to_organization
  */
-class m180815_094215_add_dates_to_promo extends Migration
+class m180904_080954_add_url_to_organization extends Migration
 {
     /**
      * {@inheritdoc}
      */
     public function safeUp()
     {
-        $this->addColumn('promo', 'start', $this->date());
-        $this->addColumn('promo', 'end', $this->date());
+        $this->addColumn('organization', 'url', $this->string());
     }
 
     /**
@@ -21,7 +20,7 @@ class m180815_094215_add_dates_to_promo extends Migration
      */
     public function safeDown()
     {
-        echo "m180815_094215_add_dates_to_promo cannot be reverted.\n";
+        echo "m180904_080954_add_url_to_organization cannot be reverted.\n";
 
         return false;
     }
@@ -35,7 +34,7 @@ class m180815_094215_add_dates_to_promo extends Migration
 
     public function down()
     {
-        echo "m180815_094215_add_dates_to_promo cannot be reverted.\n";
+        echo "m180904_080954_add_url_to_organization cannot be reverted.\n";
 
         return false;
     }

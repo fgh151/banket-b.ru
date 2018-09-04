@@ -9,7 +9,7 @@
 namespace app\api\controllers;
 
 
-use app\common\models\Promo as PromoModel;
+use app\api\models\Promo as PromoModel;
 use yii\rest\Controller;
 
 class PromoController extends Controller
@@ -18,8 +18,8 @@ class PromoController extends Controller
     public function actionList()
     {
         return PromoModel::findActive()
-                         ->andWhere(['<=', 'start', date('Y-M-d')])
-                         ->andWhere(['>=', 'end', date('Y-M-d')])
+                         ->andWhere(['<=', 'start', date('Y-m-d')])
+                         ->andWhere(['>=', 'end', date('Y-m-d')])
                          ->limit(20)
                          ->orderBy('random()')
                          ->all();

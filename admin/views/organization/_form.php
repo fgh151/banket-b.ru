@@ -32,6 +32,10 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'state')->dropDownList(Organization::stateLabels()) ?>
 
+    <?= $form->field($model, 'state_promo')->dropDownList(Organization::stateLabels()) ?>
+
+    <?= $form->field($model, 'state_statistic')->dropDownList(Organization::stateLabels()) ?>
+
 
     <?= $form->field($model, 'password')->passwordInput() ?>
 

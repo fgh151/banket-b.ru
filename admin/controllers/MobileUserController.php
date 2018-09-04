@@ -35,6 +35,7 @@ class MobileUserController extends Controller
      */
     public function actionIndex()
     {
+
         $searchModel = new MobileUserSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 

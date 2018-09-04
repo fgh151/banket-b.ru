@@ -24,6 +24,8 @@ class SignupForm extends Model
 
     public $activities = [];
 
+    public $url;
+
 
     /**
      * {@inheritdoc}
@@ -48,7 +50,7 @@ class SignupForm extends Model
 
             ['confirm_password', ConfirmPassword::class, 'second_argument' => 'password'],
 
-            ['activities', 'safe']
+            [['activities', 'url'], 'safe']
         ];
     }
 
@@ -60,7 +62,9 @@ class SignupForm extends Model
             'contact' => 'Контактное лицо',
             'phone' => 'Контактный телефон',
             'confirm_password' => 'Повторите пароль',
-            'password' => 'Пароль'
+            'password' => 'Пароль',
+            'activities' => 'Деятельность компании',
+            'url' => 'Web сайт'
         ];
     }
 
@@ -88,6 +92,7 @@ class SignupForm extends Model
         $user->updated_at = time();
         $user->status     = Constants::USER_STATUS_ACTIVE;
         $user->state = Constants::ORGANIZATION_STATE_FREE;
+        $user->url = $this->url;
 
         $saved = $user->save();
 

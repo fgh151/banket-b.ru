@@ -120,6 +120,9 @@ scrollMessages(true);
 function getNewMessages() {
     
     var lastMessage = $('#messages-area>div').last().data('id');
+    
+    
+    
   $.ajax({
         url: '$newMessagesUrl',
         type: 'post',

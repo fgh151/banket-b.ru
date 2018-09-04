@@ -29,7 +29,7 @@ class PromoController extends Controller
      */
     public function beforeAction($action)
     {
-        $this->throwIfNotPay();
+        $this->throwIfNotPay('state_promo');
         return parent::beforeAction($action);
     }
 
@@ -58,30 +58,50 @@ class PromoController extends Controller
         $model->organization_id = \Yii::$app->getUser()->getId();
 
         if ($model->load(\Yii::$app->request->post())) {
-
-            $model->file_input = UploadedFile::getInstance($model, 'file_input');
-
-            if ($model->file_input && $model->validate()) {
-
-                $relativePath = '/promo/' . $model->organization_id . '/' . time() . '/';
-
-                $path = \Yii::getAlias('@app/web/' . $relativePath);
-
-                FileHelper::createDirectory($path);
-
-                $file = $path . $model->file_input->baseName . '.' . $model->file_input->extension;
-
-                $model->file_input->saveAs($file);
-
-                $model->image = $relativePath . $model->file_input->baseName . '.' . $model->file_input->extension;
-            }
-
+            $this->saveImage($model);
             $model->save();
-
             return $this->redirect('index');
         }
-
         return $this->render('create', ['model' => $model]);
+    }
+
+    /**
+     * @param $id
+     *
+     * @return string|\yii\web\Response
+     * @throws NotFoundHttpException
+     * @throws \yii\base\Exception
+     */
+    public function actionUpdate($id)
+    {
+        $model = $this->findModel($id);
+        if ($model->organization_id !== \Yii::$app->getUser()->getId()) {
+            throw new NotFoundHttpException('The requested page does not exist.');
+        }
+        if ($model->load(\Yii::$app->request->post())) {
+            $this->saveImage($model);
+            $model->save();
+            return $this->redirect('index');
+        }
+        return $this->render('update', ['model' => $model]);
+    }
+
+    /**
+     * @param Promo $model
+     *
+     * @throws \yii\base\Exception
+     */
+    protected function saveImage(Promo $model)
+    {
+        $model->file_input = UploadedFile::getInstance($model, 'file_input');
+        if ($model->file_input && $model->validate()) {
+            $relativePath = 'promo/' . $model->organization_id . '/' . time() . '/';
+            $path = \Yii::getAlias('@app/web/' . $relativePath);
+            FileHelper::createDirectory($path);
+            $file = $path . $model->file_input->baseName . '.' . $model->file_input->extension;
+            $model->file_input->saveAs($file);
+            $model->image = $relativePath . $model->file_input->baseName . '.' . $model->file_input->extension;
+        }
     }
 
     /**

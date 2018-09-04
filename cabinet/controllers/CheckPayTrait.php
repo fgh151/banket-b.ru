@@ -21,11 +21,11 @@ trait CheckPayTrait
      *
      * @throws \Throwable
      */
-    public function throwIfNotPay()
+    public function throwIfNotPay($state_attribute)
     {
         /** @var Organization $user */
         $user = Yii::$app->getUser()->getIdentity();
-        if ($user->state === Constants::ORGANIZATION_STATE_FREE) {
+        if ($user->$state_attribute === Constants::ORGANIZATION_STATE_FREE) {
             throw new NotPayException();
         }
     }

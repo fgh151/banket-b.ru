@@ -38,6 +38,7 @@ $this->params['breadcrumbs'][] = $this->title;
             ])->asArray()->all(), 'id', 'title'), ['multiply']); ?>
 
             <?= $form->field($model, 'email') ?>
+            <?= $form->field($model, 'url') ?>
 
             <?= $form->field($model, 'password')->passwordInput() ?>
             <?= $form->field($model, 'confirm_password')->passwordInput() ?>

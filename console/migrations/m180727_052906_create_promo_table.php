@@ -17,7 +17,9 @@ class m180727_052906_create_promo_table extends Migration
             'organization_id' => $this->integer()->notNull(),
             'title' => $this->string()->notNull(),
             'image' => $this->string()->notNull(),
-            'link' => $this->string()
+            'link' => $this->string(),
+            'start' => $this->date(),
+            'end' => $this->date()
         ]);
     }
 

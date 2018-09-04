@@ -39,6 +39,7 @@ class PromoController extends Controller
      */
     public function actionIndex()
     {
+
         $searchModel = new PromoSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
