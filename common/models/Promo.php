@@ -17,6 +17,8 @@ use yii\db\ActiveRecord;
  * @property mixed             $browsingCount
  * @property mixed             $browsing
  * @property int               $sort
+ * @property string            $start [date]
+ * @property string            $end [date]
  */
 class Promo extends ActiveRecord
 {
@@ -64,16 +66,12 @@ class Promo extends ActiveRecord
     public function fields()
     {
         return [
+            'id',
             'title',
             'image' => function ($model) { return '/'. $model->image;},
-            'link',
             'organizationName',
-            'start',
-            'end',
         ];
     }
-
-
 
     /**
      * {@inheritdoc}
@@ -92,6 +90,9 @@ class Promo extends ActiveRecord
         ];
     }
 
+    /**
+     * @return string
+     */
     public function getOrganizationName()
     {
         return $this->organization->name;
@@ -105,11 +106,33 @@ class Promo extends ActiveRecord
         return $this->hasOne(Organization::class, ['id' => 'organization_id']);
     }
 
+    /**
+     * @return int
+     */
     public function getBrowsingCount()
     {
         return $this->getBrowsing()->count();
     }
 
+    /**
+     * @return int
+     */
+    public function getRedirectCount()
+    {
+        return $this->getRedirects()->count();
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery | PromoRedirect[]
+     */
+    public function getRedirects()
+    {
+        return $this->hasMany(PromoRedirect::class, ['promo_id' => 'id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery|PromoStatistic{}
+     */
     public function getBrowsing()
     {
         return $this->hasMany(PromoStatistic::class, ['promo_id' => 'id']);

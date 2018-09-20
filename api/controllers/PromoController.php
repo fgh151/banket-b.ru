@@ -10,6 +10,8 @@ namespace app\api\controllers;
 
 
 use app\api\models\Promo as PromoModel;
+use app\common\models\Promo;
+use app\common\models\PromoRedirect;
 use yii\rest\Controller;
 
 class PromoController extends Controller
@@ -23,6 +25,18 @@ class PromoController extends Controller
                          ->limit(20)
                          ->orderBy('random()')
                          ->all();
+    }
+
+    public function actionRedirect($id)
+    {
+        $model = Promo::findOne($id);
+
+        $redirect = new PromoRedirect();
+        $redirect->promo_id = $model->id;
+        $redirect->created_at = time();
+        $redirect->save();
+
+        $this->redirect($model->link);
     }
 
 }

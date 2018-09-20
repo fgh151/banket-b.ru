@@ -4,8 +4,8 @@
  * @var $datProvider \yii\data\ActiveDataProvider
  */
 
-use yii\grid\GridView;
 use app\common\models\Promo;
+use yii\grid\GridView;
 use yii\helpers\Html;
 
 ?>
@@ -36,7 +36,8 @@ use yii\helpers\Html;
                         'format'    => 'image'
                     ],
                     'link:url',
-//            'browsingCount:integer:Просмотры',
+                    'browsingCount:integer:Просмотры',
+                    'redirectCount:integer:переходы'
 //            ['class' => 'yii\grid\ActionColumn'],
                 ]
             ]); ?>
