@@ -42,6 +42,9 @@ use yii\db\ActiveRecord;
  * @property boolean    $cake
  * @property boolean    $transport
  * @property boolean    $present
+ * @property integer    $city_id
+ * @property integer    $region_id
+ * @property integer    $all_regions
  */
 class Proposal extends ActiveRecord
 {
@@ -104,7 +107,7 @@ class Proposal extends ActiveRecord
     {
         return [
             ['status', 'default', 'value' => Constants::PROPOSAL_STATUS_CREATED],
-            [['status', 'owner_id', 'City', 'date', 'time', 'guests_count', 'amount', 'type', 'event_type', 'cuisine'], 'required'],
+            [['status', 'owner_id', 'date', 'time', 'guests_count', 'amount', 'type', 'event_type', 'cuisine'], 'required'],
             [['owner_id', 'guests_count', 'type', 'event_type', 'metro', 'cuisine'], 'default', 'value' => null],
             [['owner_id', 'guests_count', 'type', 'event_type', 'metro', 'cuisine'], 'integer'],
             [['date', 'time', 'constructorComment'], 'safe'],
@@ -116,7 +119,9 @@ class Proposal extends ActiveRecord
             [['created_at', 'updated_at'], 'default', 'value' => time()],
             [['created_at', 'updated_at'], 'integer'],
 
-            [['floristics', 'hall', 'photo', 'stylists', 'cake', 'entertainment', 'transport', 'present'], 'boolean']
+            [['floristics', 'hall', 'photo', 'stylists', 'cake', 'entertainment', 'transport', 'present'], 'boolean'],
+
+            [['city_id', 'region_id', 'all_regions'], 'integer']
         ];
     }
 

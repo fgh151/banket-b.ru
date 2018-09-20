@@ -6,14 +6,10 @@ use app\cabinet\models\LoginForm;
 use app\cabinet\models\PasswordResetRequestForm;
 use app\cabinet\models\ResetPasswordForm;
 use app\cabinet\models\SignupForm;
-use app\common\components\Constants;
-use app\common\components\NotPayException;
 use app\common\models\Organization;
-use app\common\models\OrganizationProposalStatus;
 use app\common\models\Proposal;
 use Yii;
 use yii\base\InvalidArgumentException;
-use yii\data\ActiveDataProvider;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use yii\helpers\Url;
@@ -93,30 +89,34 @@ class SiteController extends Controller
     /**
      * Displays homepage.
      *
+     * @param null $proposals
+     *
      * @return mixed
      * @throws \Throwable
+     * @throws \yii\db\Exception
      */
-    public function actionIndex()
+    public function actionIndex($proposals = null)
     {
+        /** @var Organization $organization */
+        $organization = Yii::$app->getUser()->getIdentity();
+
+        $criteriaSql = '';
+        if ($proposals === 'my') {
+            $criteriaSql = 'WHERE city_id = '.$organization->city_id;
+        }
+
 
         $this->throwIfNotPay('state_statistic');
 
         $db = Yii::$app->getDb();
-        $sql = 'SELECT to_char(date, \'Day\') AS day, * FROM proposal ORDER BY day';
-        $proposals = $db->createCommand($sql)->queryAll();
+        $sql = 'SELECT to_char(date, \'Day\') AS day, * FROM proposal '.$criteriaSql.' ORDER BY day';
+        $proposalsAr = $db->createCommand($sql)->queryAll();
 
         $tmp = [];
-        foreach ($proposals as $proposal) {
+        foreach ($proposalsAr as $proposal) {
             $tmp[] = $proposal['day'];
         }
         $tmp = array_count_values($tmp);
-
-
-
-
-
-
-
 
         $byDay['Понедельник'] = (isset($tmp['Monday   ']) ? $tmp['Monday   ']: 0) + Yii::$app->params['chart']['byDay']['Понедельник'];
         $byDay['Вторник'] = (isset($tmp['Tuesday   ']) ? $tmp['Tuesday   ']: 0) + Yii::$app->params['chart']['byDay']['Вторник'];
@@ -126,9 +126,9 @@ class SiteController extends Controller
         $byDay['Суббота'] = (isset($tmp['Saturday   ']) ? $tmp['Saturday   ']: 0) + Yii::$app->params['chart']['byDay']['Суббота'];
         $byDay['Воскресенье'] = (isset($tmp['Sunday   ']) ? $tmp['Sunday   ']: 0) + Yii::$app->params['chart']['byDay']['Воскресенье'];
 
-        $sql = 'SELECT date_part(\'hour\', time) AS hour, * FROM proposal ORDER BY hour';
-        $proposals = $db->createCommand($sql)->queryAll();
-        foreach ($proposals as $proposal) {
+        $sql = 'SELECT date_part(\'hour\', time) AS hour, * FROM proposal '.$criteriaSql.' ORDER BY hour';
+        $proposalsAr = $db->createCommand($sql)->queryAll();
+        foreach ($proposalsAr as $proposal) {
             $tmp[] = $proposal['hour'];
         }
         $tmp = array_count_values($tmp);
@@ -136,11 +136,11 @@ class SiteController extends Controller
         $byHours = $tmp+$hours;
         ksort($byHours);
 
-        $sql = 'SELECT to_char(date, \'Month\') AS month, * FROM proposal ORDER BY month';
-        $proposals = $db->createCommand($sql)->queryAll();
+        $sql = 'SELECT to_char(date, \'Month\') AS month, * FROM proposal '.$criteriaSql.' ORDER BY month';
+        $proposalsAr = $db->createCommand($sql)->queryAll();
 
         $tmp = [];
-        foreach ($proposals as $proposal) {
+        foreach ($proposalsAr as $proposal) {
             $tmp[] = str_replace(
                 ['January','February','March','April','May','June','July','August','September','October','November', 'December'],
                 ['Январь','Февраль','Март','Апрель','Май','Июнь','Июль','Август','Сентябрь','Октябрь','Ноябрь', 'Декабрь'],
@@ -156,7 +156,12 @@ class SiteController extends Controller
 
 
         $byPrice = [];
-        $proposalsByPrice = Proposal::find()->select(['amount'])->asArray()->all();
+        $proposalsByPrice = Proposal::find()->select(['amount']);
+
+        if ($proposals === 'my') {
+            $proposalsByPrice->where(['city_id' => $organization->city_id]);
+        }
+        $proposalsByPrice = $proposalsByPrice->asArray()->all();
         foreach ($proposalsByPrice as $p) {
             $amount = $p['amount'];
             $byPrice[$amount] = isset($byPrice[$amount]) ? $byPrice[$amount] +1: 1;
@@ -165,7 +170,11 @@ class SiteController extends Controller
         ksort($byPrice);
 
         $byPeoples =[];
-        $proposalsByPrice = Proposal::find()->select(['guests_count'])->asArray()->all();
+        $proposalsByPrice = Proposal::find()->select(['guests_count']);
+        if ($proposals === 'my') {
+            $proposalsByPrice->where(['city_id' => $organization->city_id]);
+        }
+        $proposalsByPrice = $proposalsByPrice->asArray()->all();
         foreach ($proposalsByPrice as $p) {
             $count = $p['guests_count'];
             $byPeoples[$count] = isset($byPeoples[$count]) ? $byPeoples[$count] +1: 1;
@@ -173,22 +182,46 @@ class SiteController extends Controller
         $byPeoples =  Yii::$app->params['chart']['byPeoples'] + $byPeoples;
         ksort($byPeoples);
 
-        $proposalsCount = Proposal::find()->count();
+        $proposalsCount = Proposal::find();
+        if ($proposals === 'my') {
+            $proposalsCount->where(['city_id' => $organization->city_id]);
+        }
+        $proposalsCount = $proposalsCount->count();
 
-        $hall = Proposal::find()->where(['hall' => true])->count();
+        $hall = Proposal::find()->where(['hall' => true]);
+        if ($proposals === 'my') {
+            $hall->andWhere(['city_id' => $organization->city_id]);
+        }
+        $hall = $hall->count();
         $byHall = ['Нужен' => $hall, 'Не нужен' => $proposalsCount-$hall];
 
-        $dance = Proposal::find()->where(['dance' => true])->count();
+        $dance = Proposal::find()->where(['dance' => true]);
+        if ($proposals === 'my') {
+            $dance->andWhere(['city_id' => $organization->city_id]);
+        }
+        $dance = $dance->count();
         $byDance = ['Нужен' => $dance, 'Не нужен' => $proposalsCount-$dance];
 
-        $alko = Proposal::find()->where(['own_alcohol' => true])->count();
+        $alko = Proposal::find()->where(['own_alcohol' => true]);
+        if ($proposals === 'my') {
+            $alko->andWhere(['city_id' => $organization->city_id]);
+        }
+        $alko = $alko->count();
         $byAlko = ['Нужен' => $alko, 'Не нужен' => $proposalsCount-$alko];
 
-        $parking = Proposal::find()->where(['parking' => true])->count();
+        $parking = Proposal::find()->where(['parking' => true]);
+        if ($proposals === 'my') {
+            $parking->andWhere(['city_id' => $organization->city_id]);
+        }
+        $parking = $parking->count();
         $byParking = ['Нужна' => $parking, 'Не нужна' => $proposalsCount-$parking];
 
 
-        $kitchen = Proposal::find()->select(['cuisine'])->asArray()->all();
+        $kitchen = Proposal::find()->select(['cuisine']);
+        if ($proposals === 'my') {
+            $kitchen->where(['city_id' => $organization->city_id]);
+        }
+        $kitchen = $kitchen->asArray()->all();
 
         $byCuisine =[];
         foreach ($kitchen as $item) {
@@ -197,7 +230,11 @@ class SiteController extends Controller
         }
         ksort($byCuisine);
 
-        $type = Proposal::find()->select(['event_type'])->asArray()->all();
+        $type = Proposal::find()->select(['event_type']);
+        if ($proposals === 'my') {
+            $type->where(['city_id' => $organization->city_id]);
+        }
+        $type = $type->asArray()->all();
         $byTypes =[];
         foreach ($type as $item) {
             $cuisine = $item['event_type'];
@@ -299,6 +336,12 @@ class SiteController extends Controller
         return $this->render('about');
     }
 
+    /**
+     * @param $action
+     *
+     * @return bool
+     * @throws BadRequestHttpException
+     */
     public function beforeAction($action)
     {
         if (Yii::$app->getUser()->getIsGuest()) {
@@ -358,8 +401,10 @@ class SiteController extends Controller
      * Resets password.
      *
      * @param string $token
+     *
      * @return mixed
      * @throws BadRequestHttpException
+     * @throws \yii\base\Exception
      */
     public function actionResetPassword($token)
     {

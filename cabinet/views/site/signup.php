@@ -10,6 +10,7 @@ use yii\helpers\Html;
 use yii\widgets\MaskedInput;
 use app\common\models\Activity;
 use yii\helpers\ArrayHelper;
+use app\common\models\geo\GeoCity;
 
 $this->title = 'Регистрация';
 $this->params['breadcrumbs'][] = $this->title;
@@ -24,6 +25,13 @@ $this->params['breadcrumbs'][] = $this->title;
             <?php $form = ActiveForm::begin(['id' => 'form-signup']); ?>
 
             <?= $form->field($model, 'name')->textInput(['autofocus' => true]) ?>
+
+
+            <?= $form->field($model,
+                'city_id')->dropDownList(ArrayHelper::map(GeoCity::find()->select([
+                'id',
+                'title'
+            ])->asArray()->all(), 'id', 'title')); ?>
 
             <?= $form->field($model, 'address')->textarea() ?>
 

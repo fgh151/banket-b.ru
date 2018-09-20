@@ -17,11 +17,19 @@
  */
 
 use dosamigos\chartjs\ChartJs;
+use yii\helpers\Html;
 
 
 $this->title = 'My Yii Application';
 ?>
 <div class="site-index">
+
+    <div class="row">
+        <div class="col-xs-12">
+            <?= Html::a('Все заявки', ['site/index'])?>
+            <?= Html::a('Заявки в моем городе', ['site/index', 'proposals' => 'my'])?>
+        </div>
+    </div>
 
     <div class="row">
         <div class="col-xs-12 col-md-4" style="background-color: #fff">

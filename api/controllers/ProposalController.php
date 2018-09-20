@@ -93,6 +93,9 @@ class ProposalController extends Controller
 
         $request['owner_id'] = Yii::$app->getUser()->getId();
         $request['City'] = $request['city'];
+        $request['city_id'] = $request['cityId'];
+        $request['region_id'] = $request['regionId'];
+        $request['all_regions'] = $request['allRegions'];
 
         $proposal = new Proposal();
         $proposal->load($request, '');

@@ -3,9 +3,11 @@ namespace app\cabinet\models;
 
 use app\common\components\Constants;
 use app\common\components\validators\ConfirmPassword;
+use app\common\models\geo\GeoCity;
 use app\common\models\Organization;
 use app\common\models\OrganizationLinkActivity;
 use yii\base\Model;
+use yii\validators\ExistValidator;
 
 /**
  * Signup form
@@ -25,6 +27,8 @@ class SignupForm extends Model
     public $activities = [];
 
     public $url;
+
+    public $city_id;
 
 
     /**
@@ -50,7 +54,8 @@ class SignupForm extends Model
 
             ['confirm_password', ConfirmPassword::class, 'second_argument' => 'password'],
 
-            [['activities', 'url'], 'safe']
+            [['activities', 'url'], 'safe'],
+            ['city_id', ExistValidator::class, 'targetClass' => GeoCity::class, 'targetAttribute' => 'id']
         ];
     }
 
@@ -64,7 +69,8 @@ class SignupForm extends Model
             'confirm_password' => 'Повторите пароль',
             'password' => 'Пароль',
             'activities' => 'Деятельность компании',
-            'url' => 'Web сайт'
+            'url' => 'Web сайт',
+            'city_id' => 'Город'
         ];
     }
 
@@ -93,6 +99,7 @@ class SignupForm extends Model
         $user->status     = Constants::USER_STATUS_ACTIVE;
         $user->state = Constants::ORGANIZATION_STATE_FREE;
         $user->url = $this->url;
+        $user->city_id = $this->city_id;
 
         $saved = $user->save();
 

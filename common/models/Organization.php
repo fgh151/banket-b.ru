@@ -4,7 +4,9 @@ namespace app\common\models;
 
 use app\common\components\AuthTrait;
 use app\common\components\Constants;
+use app\common\models\geo\GeoCity;
 use yii\db\ActiveRecord;
+use yii\validators\ExistValidator;
 use yii\web\IdentityInterface;
 
 /**
@@ -26,6 +28,8 @@ use yii\web\IdentityInterface;
  * @property string $url
  * @property int $state_promo
  * @property int $state_statistic
+ * @property integer $city_id
+ *
  */
 class Organization extends ActiveRecord implements IdentityInterface
 {
@@ -59,13 +63,14 @@ class Organization extends ActiveRecord implements IdentityInterface
             [['state', 'auth_key', 'password_hash', 'email', 'name', 'address', 'contact', 'phone', 'created_at', 'updated_at'], 'required'],
             [['address'], 'string'],
             [['status', 'created_at', 'updated_at'], 'default', 'value' => null],
-            [['status', 'created_at', 'updated_at'], 'integer'],
+            [['status', 'created_at', 'updated_at', 'city_id'], 'integer'],
             [['auth_key'], 'string', 'max' => 32],
             [['password_hash', 'password_reset_token', 'email', 'name', 'contact', 'phone'], 'string', 'max' => 255],
             [['email'], 'unique'],
             [['password_reset_token'], 'unique'],
             [['state', 'state_statistic', 'state_promo'],'default', 'value' => Constants::ORGANIZATION_STATE_FREE],
-            [['password', 'url'], 'safe']
+            [['password', 'url'], 'safe'],
+            ['city_id', ExistValidator::class, 'targetClass' => GeoCity::class, 'targetAttribute' => 'id']
         ];
     }
 

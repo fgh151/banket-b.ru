@@ -1,7 +1,10 @@
 <?php
 
+use app\common\components\Constants;
 use app\common\models\Proposal;
 use yii\helpers\Html;
+use yii\helpers\ArrayHelper;
+use app\common\models\geo\GeoCity;
 
 /**
  * @var $this yii\web\View
@@ -9,8 +12,6 @@ use yii\helpers\Html;
  * @var $dataProvider \yii\data\ActiveDataProvider
  * @var $searchModel app\common\models\ProposalSearch
  */
-
-use app\common\components\Constants;
 
 $this->title = 'Аукционы';
 
@@ -67,13 +68,14 @@ $formatter = Yii::$app->formatter;
                     \yii\grid\GridView::widget([
                         'dataProvider' => $dataProvider,
                         'filterModel'  => $searchModel,
-                        'rowOptions'=>function(Proposal $model){
-                            if($model->status !== Constants::PROPOSAL_STATUS_CREATED){
+                        'rowOptions'   => function (Proposal $model) {
+                            if ($model->status !== Constants::PROPOSAL_STATUS_CREATED) {
                                 return ['class' => 'proposal-inactive'];
                             }
                             if ($model->date < date('Y-m-d')) {
                                 return ['class' => 'proposal-inactive'];
                             }
+                            return [];
                         },
                         'columns'      => [
                             ['class' => 'yii\grid\SerialColumn'],
@@ -83,9 +85,19 @@ $formatter = Yii::$app->formatter;
                                 'label'     => '№'
                             ],
                             [
-                                    'attribute' =>'date',
-                                'label' => 'Дата',
-                                'value' => function (Proposal $model) use ($ru_month, $en_month) {
+                                'attribute' => 'city_id',
+                                'filter' => ArrayHelper::map(GeoCity::find()->select([
+                                    'id',
+                                    'title'
+                                ])->asArray()->all(), 'id', 'title')
+                            ],
+                            [
+                                'attribute' => 'date',
+                                'label'     => 'Дата',
+                                'value'     => function (Proposal $model) use (
+                                    $ru_month,
+                                    $en_month
+                                ) {
                                     return str_replace($en_month, $ru_month,
                                         $model->getWhen()->format('d F Y в H:i'));
                                 }
@@ -119,6 +131,7 @@ $formatter = Yii::$app->formatter;
                                                 ['battle/reject', 'id' => $key->id],
                                                 ['class' => 'btn btn-danger']);
                                         }
+
                                         return null;
                                     },
                                     'view'   => function ($model, $key, $index) {
