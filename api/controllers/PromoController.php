@@ -10,6 +10,7 @@ namespace app\api\controllers;
 
 
 use app\api\models\Promo as PromoModel;
+use app\common\models\Activity;
 use app\common\models\Promo;
 use app\common\models\PromoRedirect;
 use yii\rest\Controller;
@@ -17,9 +18,9 @@ use yii\rest\Controller;
 class PromoController extends Controller
 {
 
-    public function actionList()
+    public function actionList($id = null)
     {
-        return PromoModel::findActive()
+        return PromoModel::findActive($id)
                          ->andWhere(['<=', 'start', date('Y-m-d')])
                          ->andWhere(['>=', 'end', date('Y-m-d')])
                          ->limit(20)
@@ -37,6 +38,11 @@ class PromoController extends Controller
         $redirect->save();
 
         $this->redirect($model->link);
+    }
+
+    public function actionActivity()
+    {
+        return Activity::find()->all();
     }
 
 }

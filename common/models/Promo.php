@@ -35,15 +35,27 @@ class Promo extends ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public static function findActive()
+    public static function findActive($id)
     {
+
+        $organizationQuery = Organization::find()
+                                         ->where(['state' => Constants::ORGANIZATION_STATE_PAID])
+                                         ->select('id');
+        if ($id) {
+            $organizationQuery->andFilterWhere([
+                'in',
+                'id',
+                OrganizationLinkActivity::find()
+                                        ->where(['activity_id' => $id])
+                                        ->select('organization_id')
+            ]);
+        }
+
         return self::find()
                    ->where([
                        'in',
                        'organization_id',
-                       Organization::find()
-                                   ->where(['state' => Constants::ORGANIZATION_STATE_PAID])
-                                   ->select('id')
+                       $organizationQuery
                    ]);
     }
 
@@ -68,7 +80,9 @@ class Promo extends ActiveRecord
         return [
             'id',
             'title',
-            'image' => function ($model) { return '/'. $model->image;},
+            'image' => function ($model) {
+                return '/' . $model->image;
+            },
             'organizationName',
         ];
     }
@@ -115,6 +129,14 @@ class Promo extends ActiveRecord
     }
 
     /**
+     * @return \yii\db\ActiveQuery|PromoStatistic{}
+     */
+    public function getBrowsing()
+    {
+        return $this->hasMany(PromoStatistic::class, ['promo_id' => 'id']);
+    }
+
+    /**
      * @return int
      */
     public function getRedirectCount()
@@ -128,13 +150,5 @@ class Promo extends ActiveRecord
     public function getRedirects()
     {
         return $this->hasMany(PromoRedirect::class, ['promo_id' => 'id']);
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery|PromoStatistic{}
-     */
-    public function getBrowsing()
-    {
-        return $this->hasMany(PromoStatistic::class, ['promo_id' => 'id']);
     }
 }
