@@ -76,11 +76,11 @@ class SiteController extends Controller
     public function actions()
     {
         return [
-            'error' => [
+            'error'   => [
                 'class' => 'yii\web\ErrorAction',
             ],
             'captcha' => [
-                'class' => 'yii\captcha\CaptchaAction',
+                'class'           => 'yii\captcha\CaptchaAction',
                 'fixedVerifyCode' => YII_ENV_TEST ? 'testme' : null,
             ],
         ];
@@ -99,6 +99,13 @@ class SiteController extends Controller
     {
         /** @var Organization $organization */
         $organization = Yii::$app->getUser()->getIdentity();
+
+        $proposalsCount = Proposal::find();
+        if ($proposals === 'my') {
+            $proposalsCount->where(['city_id' => $organization->city_id]);
+        }
+        $proposalsCount->count();
+        $onePercent = $proposalsCount / 10;
 
         $criteriaSql = '';
         if ($proposals === 'my') {
@@ -126,6 +133,14 @@ class SiteController extends Controller
         $byDay['Суббота'] = (isset($tmp['Saturday   ']) ? $tmp['Saturday   ']: 0) + Yii::$app->params['chart']['byDay']['Суббота'];
         $byDay['Воскресенье'] = (isset($tmp['Sunday   ']) ? $tmp['Sunday   ']: 0) + Yii::$app->params['chart']['byDay']['Воскресенье'];
 
+
+        array_walk($byDay, function (&$val, $key) use ($onePercent) {
+            $val = round($val * $onePercent, 2);
+        });
+
+
+
+
         $sql = 'SELECT date_part(\'hour\', time) AS hour, * FROM proposal '.$criteriaSql.' ORDER BY hour';
         $proposalsAr = $db->createCommand($sql)->queryAll();
         foreach ($proposalsAr as $proposal) {
@@ -135,6 +150,11 @@ class SiteController extends Controller
         $hours = Yii::$app->params['chart']['byHours'];
         $byHours = $tmp+$hours;
         ksort($byHours);
+
+        array_walk($byHours, function (&$val, $key) use ($onePercent) {
+            $val = round($val * $onePercent, 2);
+        });
+
 
         $sql = 'SELECT to_char(date, \'Month\') AS month, * FROM proposal '.$criteriaSql.' ORDER BY month';
         $proposalsAr = $db->createCommand($sql)->queryAll();
@@ -149,7 +169,9 @@ class SiteController extends Controller
         }
         $byMonth = array_count_values($tmp);
         $byMonth =  Yii::$app->params['chart']['byMonth'] + $byMonth;
-
+        array_walk($byMonth, function (&$val, $key) use ($onePercent) {
+            $val = round($val * $onePercent, 2);
+        });
 
 
 
@@ -168,6 +190,9 @@ class SiteController extends Controller
         }
         $byPrice = Yii::$app->params['chart']['byPrice'] + $byPrice;
         ksort($byPrice);
+        array_walk($byPrice, function (&$val, $key) use ($onePercent) {
+            $val = round($val * $onePercent, 2);
+        });
 
         $byPeoples =[];
         $proposalsByPrice = Proposal::find()->select(['guests_count']);
@@ -181,6 +206,9 @@ class SiteController extends Controller
         }
         $byPeoples =  Yii::$app->params['chart']['byPeoples'] + $byPeoples;
         ksort($byPeoples);
+        array_walk($byPrice, function (&$val, $key) use ($onePercent) {
+            $val = round($val * $onePercent, 2);
+        });
 
         $proposalsCount = Proposal::find();
         if ($proposals === 'my') {
@@ -195,12 +223,19 @@ class SiteController extends Controller
         $hall = $hall->count();
         $byHall = ['Нужен' => $hall, 'Не нужен' => $proposalsCount-$hall];
 
+        array_walk($byHall, function (&$val, $key) use ($onePercent) {
+            $val = round($val * $onePercent, 2);
+        });
+
         $dance = Proposal::find()->where(['dance' => true]);
         if ($proposals === 'my') {
             $dance->andWhere(['city_id' => $organization->city_id]);
         }
         $dance = $dance->count();
         $byDance = ['Нужен' => $dance, 'Не нужен' => $proposalsCount-$dance];
+        array_walk($byDance, function (&$val, $key) use ($onePercent) {
+            $val = round($val * $onePercent, 2);
+        });
 
         $alko = Proposal::find()->where(['own_alcohol' => true]);
         if ($proposals === 'my') {
@@ -208,6 +243,9 @@ class SiteController extends Controller
         }
         $alko = $alko->count();
         $byAlko = ['Нужен' => $alko, 'Не нужен' => $proposalsCount-$alko];
+        array_walk($byAlko, function (&$val, $key) use ($onePercent) {
+            $val = round($val * $onePercent, 2);
+        });
 
         $parking = Proposal::find()->where(['parking' => true]);
         if ($proposals === 'my') {
@@ -215,6 +253,9 @@ class SiteController extends Controller
         }
         $parking = $parking->count();
         $byParking = ['Нужна' => $parking, 'Не нужна' => $proposalsCount-$parking];
+        array_walk($byParking, function (&$val, $key) use ($onePercent) {
+            $val = round($val * $onePercent, 2);
+        });
 
 
         $kitchen = Proposal::find()->select(['cuisine']);
@@ -229,6 +270,9 @@ class SiteController extends Controller
             $byCuisine[$cuisine] = isset($byCuisine[$cuisine]) ? $byCuisine[$cuisine]+1:1;
         }
         ksort($byCuisine);
+        array_walk($byCuisine, function (&$val, $key) use ($onePercent) {
+            $val = round($val * $onePercent, 2);
+        });
 
         $type = Proposal::find()->select(['event_type']);
         if ($proposals === 'my') {
@@ -241,6 +285,9 @@ class SiteController extends Controller
             $byTypes[$cuisine] = isset($byTypes[$cuisine]) ? $byTypes[$cuisine]+1:1;
         }
         ksort($byTypes);
+        array_walk($byTypes, function (&$val, $key) use ($onePercent) {
+            $val = round($val * $onePercent, 2);
+        });
 
 
         return $this->render('index', [

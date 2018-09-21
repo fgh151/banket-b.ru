@@ -26,8 +26,8 @@ $this->title = 'My Yii Application';
 
     <div class="row">
         <div class="col-xs-12">
-            <?= Html::a('Все заявки', ['site/index'])?>
-            <?= Html::a('Заявки в моем городе', ['site/index', 'proposals' => 'my'])?>
+            <?= Html::a('Все заявки', ['site/index']) ?>
+            <?= Html::a('Заявки в моем городе', ['site/index', 'proposals' => 'my']) ?>
         </div>
     </div>
 
@@ -35,23 +35,31 @@ $this->title = 'My Yii Application';
         <div class="col-xs-12 col-md-4" style="background-color: #fff">
             <h3>Распределение заявок по дням недели</h3>
             <?= ChartJs::widget([
-                'type' => 'pie',
+                'type'    => 'pie',
                 'options' => [
                     'height' => 400,
-                    'width' => 500
+                    'width'  => 500
                 ],
-                'data' => [
-                    'labels' => array_keys($byDay),
+                'data'    => [
+                    'labels'   => array_keys($byDay),
                     'datasets' => [
                         [
-                            'label' => "Распределение заявок по дням недели",
-                            'backgroundColor' => ["rgba(179,181,198,0.2)", 'red', 'blue','white', 'green', 'brown', 'yellow'],
-                            'borderColor' => "rgba(179,181,198,1)",
-                            'pointBackgroundColor' => "rgba(179,181,198,1)",
-                            'pointBorderColor' => "#fff",
+                            'label'                     => "Распределение заявок по дням недели",
+                            'backgroundColor'           => [
+                                "rgba(179,181,198,0.2)",
+                                'red',
+                                'blue',
+                                'white',
+                                'green',
+                                'brown',
+                                'yellow'
+                            ],
+                            'borderColor'               => "rgba(179,181,198,1)",
+                            'pointBackgroundColor'      => "rgba(179,181,198,1)",
+                            'pointBorderColor'          => "#fff",
                             'pointHoverBackgroundColor' => "#fff",
-                            'pointHoverBorderColor' => "rgba(179,181,198,1)",
-                            'data' => array_values($byDay)
+                            'pointHoverBorderColor'     => "rgba(179,181,198,1)",
+                            'data'                      => array_values($byDay)
                         ],
                     ]
                 ]
@@ -61,25 +69,50 @@ $this->title = 'My Yii Application';
         <div class="col-xs-12 col-md-4" style="background-color: #fff">
             <h3>Распределение заявок по часам</h3>
             <?= ChartJs::widget([
-                'type' => 'bar',
+                'type'    => 'bar',
                 'options' => [
                     'height' => 400,
-                    'width' => 500
+                    'width'  => 500
                 ],
-                'data' => [
-                    'labels' => array_keys($byHours),
+                'data'    => [
+                    'labels'   => array_keys($byHours),
                     'datasets' => [
                         [
-                            'label' => "Распределение заявок по часам",
-                            'backgroundColor' => ["rgba(179,181,198,0.2)", 'red', 'blue','white', 'green', 'brown', 'yellow'],
-                            'borderColor' => "rgba(179,181,198,1)",
-                            'pointBackgroundColor' => "rgba(179,181,198,1)",
-                            'pointBorderColor' => "#fff",
+                            'label'                     => "Распределение заявок по часам",
+                            'backgroundColor'           => [
+                                "rgba(179,181,198,0.2)",
+                                'red',
+                                'blue',
+                                'white',
+                                'green',
+                                'brown',
+                                'yellow'
+                            ],
+                            'borderColor'               => "rgba(179,181,198,1)",
+                            'pointBackgroundColor'      => "rgba(179,181,198,1)",
+                            'pointBorderColor'          => "#fff",
                             'pointHoverBackgroundColor' => "#fff",
-                            'pointHoverBorderColor' => "rgba(179,181,198,1)",
-                            'data' => array_values($byHours)
+                            'pointHoverBorderColor'     => "rgba(179,181,198,1)",
+                            'data'                      => array_values($byHours)
                         ],
+                    ],
+
+                ],
+                'options' => [
+                    'scales' => [
+                        'yAxes' => [
+                            'ticks'      => [
+                                'min'      => 100,
+                                'max'      => 100,
+                            ],
+                            'scaleLabel' => [
+                                'display'     => true,
+                                'labelString' => 'Percentage'
+                            ]
+                        ]
+
                     ]
+
                 ]
             ]);
             ?>
@@ -87,23 +120,31 @@ $this->title = 'My Yii Application';
         <div class="col-xs-12 col-md-4" style="background-color: #fff">
             <h3>Распределение заявок по месяцам</h3>
             <?= ChartJs::widget([
-                'type' => 'bar',
+                'type'    => 'bar',
                 'options' => [
                     'height' => 400,
-                    'width' => 500
+                    'width'  => 500
                 ],
-                'data' => [
-                    'labels' => array_keys($byMonth),
+                'data'    => [
+                    'labels'   => array_keys($byMonth),
                     'datasets' => [
                         [
-                            'label' => "Распределение заявок по месяцам",
-                            'backgroundColor' => ["rgba(179,181,198,0.2)", 'red', 'blue','white', 'green', 'brown', 'yellow'],
-                            'borderColor' => "rgba(179,181,198,1)",
-                            'pointBackgroundColor' => "rgba(179,181,198,1)",
-                            'pointBorderColor' => "#fff",
+                            'label'                     => "Распределение заявок по месяцам",
+                            'backgroundColor'           => [
+                                "rgba(179,181,198,0.2)",
+                                'red',
+                                'blue',
+                                'white',
+                                'green',
+                                'brown',
+                                'yellow'
+                            ],
+                            'borderColor'               => "rgba(179,181,198,1)",
+                            'pointBackgroundColor'      => "rgba(179,181,198,1)",
+                            'pointBorderColor'          => "#fff",
                             'pointHoverBackgroundColor' => "#fff",
-                            'pointHoverBorderColor' => "rgba(179,181,198,1)",
-                            'data' => array_values($byMonth)
+                            'pointHoverBorderColor'     => "rgba(179,181,198,1)",
+                            'data'                      => array_values($byMonth)
                         ],
                     ]
                 ]
@@ -113,23 +154,31 @@ $this->title = 'My Yii Application';
         <div class="col-xs-12 col-md-4" style="background-color: #fff">
             <h3>Распределение заявок по стоимости</h3>
             <?= ChartJs::widget([
-                'type' => 'line',
+                'type'    => 'line',
                 'options' => [
                     'height' => 400,
-                    'width' => 500
+                    'width'  => 500
                 ],
-                'data' => [
-                    'labels' => array_keys($byPrice),
+                'data'    => [
+                    'labels'   => array_keys($byPrice),
                     'datasets' => [
                         [
-                            'label' => "Распределение заявок по стоимости",
-                            'backgroundColor' => ["rgba(179,181,198,0.2)", 'red', 'blue','white', 'green', 'brown', 'yellow'],
-                            'borderColor' => "rgba(179,181,198,1)",
-                            'pointBackgroundColor' => "rgba(179,181,198,1)",
-                            'pointBorderColor' => "#fff",
+                            'label'                     => "Распределение заявок по стоимости",
+                            'backgroundColor'           => [
+                                "rgba(179,181,198,0.2)",
+                                'red',
+                                'blue',
+                                'white',
+                                'green',
+                                'brown',
+                                'yellow'
+                            ],
+                            'borderColor'               => "rgba(179,181,198,1)",
+                            'pointBackgroundColor'      => "rgba(179,181,198,1)",
+                            'pointBorderColor'          => "#fff",
                             'pointHoverBackgroundColor' => "#fff",
-                            'pointHoverBorderColor' => "rgba(179,181,198,1)",
-                            'data' => array_values($byPrice)
+                            'pointHoverBorderColor'     => "rgba(179,181,198,1)",
+                            'data'                      => array_values($byPrice)
                         ],
                     ]
                 ]
@@ -139,23 +188,31 @@ $this->title = 'My Yii Application';
         <div class="col-xs-12 col-md-4" style="background-color: #fff">
             <h3>Распределение заявок по количеству людей</h3>
             <?= ChartJs::widget([
-                'type' => 'line',
+                'type'    => 'line',
                 'options' => [
                     'height' => 400,
-                    'width' => 500
+                    'width'  => 500
                 ],
-                'data' => [
-                    'labels' => array_keys($byPeoples),
+                'data'    => [
+                    'labels'   => array_keys($byPeoples),
                     'datasets' => [
                         [
-                            'label' => "Распределение заявок по гостям",
-                            'backgroundColor' => ["rgba(179,181,198,0.2)", 'red', 'blue','white', 'green', 'brown', 'yellow'],
-                            'borderColor' => "rgba(179,181,198,1)",
-                            'pointBackgroundColor' => "rgba(179,181,198,1)",
-                            'pointBorderColor' => "#fff",
+                            'label'                     => "Распределение заявок по гостям",
+                            'backgroundColor'           => [
+                                "rgba(179,181,198,0.2)",
+                                'red',
+                                'blue',
+                                'white',
+                                'green',
+                                'brown',
+                                'yellow'
+                            ],
+                            'borderColor'               => "rgba(179,181,198,1)",
+                            'pointBackgroundColor'      => "rgba(179,181,198,1)",
+                            'pointBorderColor'          => "#fff",
                             'pointHoverBackgroundColor' => "#fff",
-                            'pointHoverBorderColor' => "rgba(179,181,198,1)",
-                            'data' => array_values($byPeoples)
+                            'pointHoverBorderColor'     => "rgba(179,181,198,1)",
+                            'data'                      => array_values($byPeoples)
                         ],
                     ]
                 ]
@@ -165,23 +222,31 @@ $this->title = 'My Yii Application';
         <div class="col-xs-12 col-md-4" style="background-color: #fff">
             <h3>Распределение заявок по отдельным залам</h3>
             <?= ChartJs::widget([
-                'type' => 'pie',
+                'type'    => 'pie',
                 'options' => [
                     'height' => 400,
-                    'width' => 500
+                    'width'  => 500
                 ],
-                'data' => [
-                    'labels' => array_keys($byHall),
+                'data'    => [
+                    'labels'   => array_keys($byHall),
                     'datasets' => [
                         [
-                            'label' => "Распределение заявок по отдельным залам",
-                            'backgroundColor' => ["rgba(179,181,198,0.2)", 'red', 'blue','white', 'green', 'brown', 'yellow'],
-                            'borderColor' => "rgba(179,181,198,1)",
-                            'pointBackgroundColor' => "rgba(179,181,198,1)",
-                            'pointBorderColor' => "#fff",
+                            'label'                     => "Распределение заявок по отдельным залам",
+                            'backgroundColor'           => [
+                                "rgba(179,181,198,0.2)",
+                                'red',
+                                'blue',
+                                'white',
+                                'green',
+                                'brown',
+                                'yellow'
+                            ],
+                            'borderColor'               => "rgba(179,181,198,1)",
+                            'pointBackgroundColor'      => "rgba(179,181,198,1)",
+                            'pointBorderColor'          => "#fff",
                             'pointHoverBackgroundColor' => "#fff",
-                            'pointHoverBorderColor' => "rgba(179,181,198,1)",
-                            'data' => array_values($byHall)
+                            'pointHoverBorderColor'     => "rgba(179,181,198,1)",
+                            'data'                      => array_values($byHall)
                         ],
                     ]
                 ]
@@ -191,23 +256,31 @@ $this->title = 'My Yii Application';
         <div class="col-xs-12 col-md-4" style="background-color: #fff">
             <h3>Распределение заявок по танцполу</h3>
             <?= ChartJs::widget([
-                'type' => 'pie',
+                'type'    => 'pie',
                 'options' => [
                     'height' => 400,
-                    'width' => 500
+                    'width'  => 500
                 ],
-                'data' => [
-                    'labels' => array_keys($byDance),
+                'data'    => [
+                    'labels'   => array_keys($byDance),
                     'datasets' => [
                         [
-                            'label' => "Распределение заявок по танцполу",
-                            'backgroundColor' => ["rgba(179,181,198,0.2)", 'red', 'blue','white', 'green', 'brown', 'yellow'],
-                            'borderColor' => "rgba(179,181,198,1)",
-                            'pointBackgroundColor' => "rgba(179,181,198,1)",
-                            'pointBorderColor' => "#fff",
+                            'label'                     => "Распределение заявок по танцполу",
+                            'backgroundColor'           => [
+                                "rgba(179,181,198,0.2)",
+                                'red',
+                                'blue',
+                                'white',
+                                'green',
+                                'brown',
+                                'yellow'
+                            ],
+                            'borderColor'               => "rgba(179,181,198,1)",
+                            'pointBackgroundColor'      => "rgba(179,181,198,1)",
+                            'pointBorderColor'          => "#fff",
                             'pointHoverBackgroundColor' => "#fff",
-                            'pointHoverBorderColor' => "rgba(179,181,198,1)",
-                            'data' => array_values($byDance)
+                            'pointHoverBorderColor'     => "rgba(179,181,198,1)",
+                            'data'                      => array_values($byDance)
                         ],
                     ]
                 ]
@@ -217,23 +290,31 @@ $this->title = 'My Yii Application';
         <div class="col-xs-12 col-md-4" style="background-color: #fff">
             <h3>Распределение заявок по алкоголю</h3>
             <?= ChartJs::widget([
-                'type' => 'pie',
+                'type'    => 'pie',
                 'options' => [
                     'height' => 400,
-                    'width' => 500
+                    'width'  => 500
                 ],
-                'data' => [
-                    'labels' => array_keys($byAlko),
+                'data'    => [
+                    'labels'   => array_keys($byAlko),
                     'datasets' => [
                         [
-                            'label' => "Распределение заявок по танцполу",
-                            'backgroundColor' => ["rgba(179,181,198,0.2)", 'red', 'blue','white', 'green', 'brown', 'yellow'],
-                            'borderColor' => "rgba(179,181,198,1)",
-                            'pointBackgroundColor' => "rgba(179,181,198,1)",
-                            'pointBorderColor' => "#fff",
+                            'label'                     => "Распределение заявок по танцполу",
+                            'backgroundColor'           => [
+                                "rgba(179,181,198,0.2)",
+                                'red',
+                                'blue',
+                                'white',
+                                'green',
+                                'brown',
+                                'yellow'
+                            ],
+                            'borderColor'               => "rgba(179,181,198,1)",
+                            'pointBackgroundColor'      => "rgba(179,181,198,1)",
+                            'pointBorderColor'          => "#fff",
                             'pointHoverBackgroundColor' => "#fff",
-                            'pointHoverBorderColor' => "rgba(179,181,198,1)",
-                            'data' => array_values($byAlko)
+                            'pointHoverBorderColor'     => "rgba(179,181,198,1)",
+                            'data'                      => array_values($byAlko)
                         ],
                     ]
                 ]
@@ -243,48 +324,65 @@ $this->title = 'My Yii Application';
         <div class="col-xs-12 col-md-4" style="background-color: #fff">
             <h3>Распределение заявок по парковке</h3>
             <?= ChartJs::widget([
-                'type' => 'pie',
+                'type'    => 'pie',
                 'options' => [
                     'height' => 400,
-                    'width' => 500
+                    'width'  => 500
                 ],
-                'data' => [
-                    'labels' => array_keys($byParking),
+                'data'    => [
+                    'labels'   => array_keys($byParking),
                     'datasets' => [
                         [
-                            'label' => "Распределение заявок по танцполу",
-                            'backgroundColor' => ["rgba(179,181,198,0.2)", 'red', 'blue','white', 'green', 'brown', 'yellow'],
-                            'borderColor' => "rgba(179,181,198,1)",
-                            'pointBackgroundColor' => "rgba(179,181,198,1)",
-                            'pointBorderColor' => "#fff",
+                            'label'                     => "Распределение заявок по танцполу",
+                            'backgroundColor'           => [
+                                "rgba(179,181,198,0.2)",
+                                'red',
+                                'blue',
+                                'white',
+                                'green',
+                                'brown',
+                                'yellow'
+                            ],
+                            'borderColor'               => "rgba(179,181,198,1)",
+                            'pointBackgroundColor'      => "rgba(179,181,198,1)",
+                            'pointBorderColor'          => "#fff",
                             'pointHoverBackgroundColor' => "#fff",
-                            'pointHoverBorderColor' => "rgba(179,181,198,1)",
-                            'data' => array_values($byParking)
+                            'pointHoverBorderColor'     => "rgba(179,181,198,1)",
+                            'data'                      => array_values($byParking)
                         ],
                     ]
                 ]
             ]);
             ?>
-        </div> <div class="col-xs-12 col-md-4" style="background-color: #fff">
+        </div>
+        <div class="col-xs-12 col-md-4" style="background-color: #fff">
             <h3>Распределение заявок по кухне</h3>
             <?= ChartJs::widget([
-                'type' => 'bar',
+                'type'    => 'bar',
                 'options' => [
                     'height' => 400,
-                    'width' => 500
+                    'width'  => 500
                 ],
-                'data' => [
-                    'labels' => array_values(\app\common\models\Proposal::cuisineLabels()),
+                'data'    => [
+                    'labels'   => array_values(\app\common\models\Proposal::cuisineLabels()),
                     'datasets' => [
                         [
-                            'label' => "Распределение заявок по кухне",
-                            'backgroundColor' => ["rgba(179,181,198,0.2)", 'red', 'blue','white', 'green', 'brown', 'yellow'],
-                            'borderColor' => "rgba(179,181,198,1)",
-                            'pointBackgroundColor' => "rgba(179,181,198,1)",
-                            'pointBorderColor' => "#fff",
+                            'label'                     => "Распределение заявок по кухне",
+                            'backgroundColor'           => [
+                                "rgba(179,181,198,0.2)",
+                                'red',
+                                'blue',
+                                'white',
+                                'green',
+                                'brown',
+                                'yellow'
+                            ],
+                            'borderColor'               => "rgba(179,181,198,1)",
+                            'pointBackgroundColor'      => "rgba(179,181,198,1)",
+                            'pointBorderColor'          => "#fff",
                             'pointHoverBackgroundColor' => "#fff",
-                            'pointHoverBorderColor' => "rgba(179,181,198,1)",
-                            'data' => array_values($byCuisine)
+                            'pointHoverBorderColor'     => "rgba(179,181,198,1)",
+                            'data'                      => array_values($byCuisine)
                         ],
                     ]
                 ]
@@ -294,23 +392,31 @@ $this->title = 'My Yii Application';
         <div class="col-xs-12 col-md-4" style="background-color: #fff">
             <h3>Распределение заявок по типам</h3>
             <?= ChartJs::widget([
-                'type' => 'bar',
+                'type'    => 'bar',
                 'options' => [
                     'height' => 400,
-                    'width' => 500
+                    'width'  => 500
                 ],
-                'data' => [
-                    'labels' => array_values(\app\common\models\Proposal::typeLabels()),
+                'data'    => [
+                    'labels'   => array_values(\app\common\models\Proposal::typeLabels()),
                     'datasets' => [
                         [
-                            'label' => "Распределение заявок по типу",
-                            'backgroundColor' => ["rgba(179,181,198,0.2)", 'red', 'blue','white', 'green', 'brown', 'yellow'],
-                            'borderColor' => "rgba(179,181,198,1)",
-                            'pointBackgroundColor' => "rgba(179,181,198,1)",
-                            'pointBorderColor' => "#fff",
+                            'label'                     => "Распределение заявок по типу",
+                            'backgroundColor'           => [
+                                "rgba(179,181,198,0.2)",
+                                'red',
+                                'blue',
+                                'white',
+                                'green',
+                                'brown',
+                                'yellow'
+                            ],
+                            'borderColor'               => "rgba(179,181,198,1)",
+                            'pointBackgroundColor'      => "rgba(179,181,198,1)",
+                            'pointBorderColor'          => "#fff",
                             'pointHoverBackgroundColor' => "#fff",
-                            'pointHoverBorderColor' => "rgba(179,181,198,1)",
-                            'data' => array_values($byTypes)
+                            'pointHoverBorderColor'     => "rgba(179,181,198,1)",
+                            'data'                      => array_values($byTypes)
                         ],
                     ]
                 ]
