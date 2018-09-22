@@ -46,7 +46,7 @@ class MobileUser extends ActiveRecord implements IdentityInterface
             [['status', 'created_at', 'updated_at'], 'default', 'value' => null],
             [['status', 'created_at', 'updated_at'], 'integer'],
             [['auth_key', 'name'], 'string', 'max' => 32],
-            [['password_hash', 'password_reset_token', 'email', 'phone'], 'string', 'max' => 255],
+            [['password_hash', 'password_reset_token', 'email'], 'string', 'max' => 255],
             [['email'], 'unique'],
             [['password_reset_token'], 'unique'],
             [['phone'], 'unique'],

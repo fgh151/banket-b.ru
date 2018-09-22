@@ -17,8 +17,10 @@ use app\common\models\OrganizationProposalStatus;
 use app\common\models\Proposal;
 use Prophecy\Exception\Doubler\MethodNotExtendableException;
 use Yii;
+use yii\filters\AccessControl;
 use yii\filters\auth\HttpBearerAuth;
 use yii\filters\ContentNegotiator;
+use yii\helpers\ArrayHelper;
 use yii\helpers\Json;
 use yii\rest\Controller;
 use yii\web\Response;
@@ -29,25 +31,25 @@ class ProposalController extends Controller
     public function behaviors()
     {
         return [
-            'authenticator' => [
-                'class' => HttpBearerAuth::class
-            ],
+//            'authenticator' => [
+//                'class' => HttpBearerAuth::class
+//            ],
             'contentNegotiator' => [
                 'class' => ContentNegotiator::class,
                 'formats' => [
                     'application/json' => Response::FORMAT_JSON,
                 ]
             ],
-//            'access' => [
-//                'class' => AccessControl::class,
-//                'rules' => [
-//                    [
-//                        'actions' => ['create'],
-//                        'allow' => true,
-//                        'roles' => ['@'],
-//                    ],
-//                ],
-//            ]
+            'access' => [
+                'class' => AccessControl::class,
+                'rules' => [
+                    [
+                        'actions' => ['create'],
+                        'allow' => true,
+                        'roles' => ['?'],
+                    ],
+                ],
+            ]
         ];
     }
 
@@ -83,6 +85,7 @@ class ProposalController extends Controller
             $user->generateAuthKey();
             $user->created_at = $user->updated_at = time();
             $user->phone = time();
+            $user->status = Constants::USER_STATUS_ACTIVE;
             $user->save();
             if ($user->errors) {
                 return $user->errors;
@@ -100,8 +103,9 @@ class ProposalController extends Controller
         $proposal = new Proposal();
         $proposal->load($request, '');
         $proposal->save();
+        $response = ArrayHelper::merge($response, $proposal->errors);
 
-        return $proposal->errors;
+        return $response;
     }
 
     /**
