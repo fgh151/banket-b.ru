@@ -64,7 +64,6 @@ class RegisterForm extends Model
         $user->setPassword($this->password);
         $user->generateAuthKey();
         $user->created_at = $user->updated_at = time();
-        $user->phone = (string) time();
         $user->status = Constants::USER_STATUS_ACTIVE;
 
         return $user->save() ? $user->getAuthKey() : false;

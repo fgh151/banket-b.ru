@@ -10,7 +10,9 @@ namespace app\api\controllers;
 
 use app\api\models\LoginForm;
 use app\api\models\RegisterForm;
+use app\common\components\Constants;
 use app\common\models\MobileUser;
+use app\common\models\Proposal;
 use yii;
 use yii\base\Exception;
 use yii\helpers\ArrayHelper;
@@ -121,6 +123,49 @@ class AuthController extends Controller
 
         return $user;
 
+    }
+
+    /**
+     * @return array
+     * @throws Exception
+     */
+    public function actionCreate()
+    {
+        $response = [];
+        $request = Json::decode(Yii::$app->getRequest()->getRawBody(), true);
+
+        $email = $request['email'];
+        $phone = $request['phone'];
+        $name = $request['name'];
+        $password = $request['password'];
+        $user = new MobileUser();
+        $user->email = $email;
+        $user->name = $name;
+        $user->phone = $phone;
+        $user->setPassword($password);
+        $user->generateAuthKey();
+        $user->created_at = $user->updated_at = time();
+        $user->phone = time();
+        $user->status = Constants::USER_STATUS_ACTIVE;
+        $user->save();
+        if ($user->errors) {
+            return $user->errors;
+        }
+        Yii::$app->user->login($user, 3600 * 24 * 30);
+        $response['access_token'] = $user->auth_key;
+
+        $request['owner_id'] = Yii::$app->getUser()->getId();
+        $request['City'] = $request['city'];
+        $request['city_id'] = $request['cityId'];
+        $request['region_id'] = $request['regionId'];
+        $request['all_regions'] = $request['allRegions'];
+
+        $proposal = new Proposal();
+        $proposal->load($request, '');
+        $proposal->save();
+        $response = ArrayHelper::merge($response, $proposal->errors);
+
+        return $response;
     }
 
 

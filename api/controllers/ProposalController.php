@@ -31,25 +31,15 @@ class ProposalController extends Controller
     public function behaviors()
     {
         return [
-//            'authenticator' => [
-//                'class' => HttpBearerAuth::class
-//            ],
+            'authenticator' => [
+                'class' => HttpBearerAuth::class
+            ],
             'contentNegotiator' => [
                 'class' => ContentNegotiator::class,
                 'formats' => [
                     'application/json' => Response::FORMAT_JSON,
                 ]
             ],
-            'access' => [
-                'class' => AccessControl::class,
-                'rules' => [
-                    [
-                        'actions' => ['create'],
-                        'allow' => true,
-                        'roles' => ['?'],
-                    ],
-                ],
-            ]
         ];
     }
 
@@ -62,37 +52,11 @@ class ProposalController extends Controller
 
     /**
      * @return array
-     * @throws \yii\base\Exception
      */
     public function actionCreate()
     {
         $response = [];
         $request = Json::decode(Yii::$app->getRequest()->getRawBody(), true);
-
-        $loggedIn = $request['loggedIn'];
-        $email = $request['email'];
-        $phone = $request['phone'];
-        $name = $request['name'];
-        $password = $request['password'];
-
-
-        if (!$loggedIn) {
-            $user = new MobileUser();
-            $user->email = $email;
-            $user->name = $name;
-            $user->phone = $phone;
-            $user->setPassword($password);
-            $user->generateAuthKey();
-            $user->created_at = $user->updated_at = time();
-            $user->phone = time();
-            $user->status = Constants::USER_STATUS_ACTIVE;
-            $user->save();
-            if ($user->errors) {
-                return $user->errors;
-            }
-            Yii::$app->user->login($user, 3600 * 24 * 30);
-            $response['access_token'] = $user->auth_key;
-        }
 
         $request['owner_id'] = Yii::$app->getUser()->getId();
         $request['City'] = $request['city'];
