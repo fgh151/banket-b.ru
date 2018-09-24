@@ -87,7 +87,7 @@ class AuthController extends Controller
 
         if ($user) {
 
-            $user->password_reset_token = Yii::$app->security->generateRandomString(6);
+            $user->password_reset_token = (string) rand(100000, 999999);
             $user->save();
 
             return $this->sendSms(
@@ -117,11 +117,12 @@ class AuthController extends Controller
             $user->password_reset_token = null;
             $user->setPassword($newPassword);
             $user->generateAuthKey();
+            $user->save();
 
             return ['access_token' => $user->getAuthKey()];
         }
 
-        return $user;
+        return ['access_token' => $user->getAuthKey()];
 
     }
 
