@@ -145,7 +145,6 @@ class AuthController extends Controller
         $user->setPassword($password);
         $user->generateAuthKey();
         $user->created_at = $user->updated_at = time();
-        $user->phone = time();
         $user->status = Constants::USER_STATUS_ACTIVE;
         $user->save();
         if ($user->errors) {
