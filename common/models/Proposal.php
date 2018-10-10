@@ -28,6 +28,7 @@ use yii\db\ActiveRecord;
  * @property int        $status
  * @property int        $created_at
  * @property int        $updated_at
+ * @property array  $organizations
  *
  * @property \DateTime  $when
  * @property int        $cuisineString
@@ -121,7 +122,10 @@ class Proposal extends ActiveRecord
 
             [['floristics', 'hall', 'photo', 'stylists', 'cake', 'entertainment', 'transport', 'present'], 'boolean'],
 
-            [['city_id', 'region_id', 'all_regions'], 'integer']
+            [['city_id', 'region_id', 'all_regions'], 'integer'],
+
+            ['organizations', 'safe'],
+            ['organizations', 'default', 'value' => '[]']
         ];
     }
 
@@ -171,7 +175,9 @@ class Proposal extends ActiveRecord
             'event_type', 'metro',
             'cuisine', 'dance',
             'private', 'own_alcohol',
-            'parking', 'comment'
+            'parking', 'comment',
+
+            'organizations'
         ];
     }
 
@@ -226,5 +232,20 @@ class Proposal extends ActiveRecord
     public function getCuisineString()
     {
         return self::cuisineLabels()[$this->cuisine];
+    }
+
+    public function afterSave($insert, $changedAttributes)
+    {
+        if ($insert && !empty($this->organizations)) {
+            foreach ($this->organizations as $organizationId) {
+                $message = new Message();
+                $message->organization_id = $organizationId;
+                $message->author_class = MobileUser::class;
+                $message->proposal_id = $this->id;
+                $message->message = 'Хочу заказать у вас банкет';
+                $message->save();
+            }
+        }
+        parent::afterSave($insert, $changedAttributes);
     }
 }

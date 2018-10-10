@@ -29,6 +29,7 @@ use yii\web\IdentityInterface;
  * @property int $state_promo
  * @property int $state_statistic
  * @property integer $city_id
+ * @property boolean $state_direct
  *
  */
 class Organization extends ActiveRecord implements IdentityInterface
@@ -68,7 +69,7 @@ class Organization extends ActiveRecord implements IdentityInterface
             [['password_hash', 'password_reset_token', 'email', 'name', 'contact', 'phone'], 'string', 'max' => 255],
             [['email'], 'unique'],
             [['password_reset_token'], 'unique'],
-            [['state', 'state_statistic', 'state_promo'],'default', 'value' => Constants::ORGANIZATION_STATE_FREE],
+            [['state', 'state_statistic', 'state_promo', 'state_direct'],'default', 'value' => Constants::ORGANIZATION_STATE_FREE],
             [['password', 'url'], 'safe'],
             ['city_id', ExistValidator::class, 'targetClass' => GeoCity::class, 'targetAttribute' => 'id']
         ];
@@ -100,6 +101,7 @@ class Organization extends ActiveRecord implements IdentityInterface
             'state' => 'Оплата участия в аукционах',
             'state_promo' => 'Оплата возможности размещения рекамы',
             'state_statistic' => 'Оплата работы со статистикой',
+            'state_direct' => 'Оплата возможности получения прямых заявок',
             'password' => 'Пароль',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
@@ -113,5 +115,16 @@ class Organization extends ActiveRecord implements IdentityInterface
     {
         return $this->hasMany(Activity::class, ['id' => 'activity_id'])
             ->viaTable(OrganizationLinkActivity::tableName(), ['organization_id', 'id']);
+    }
+
+
+    public function getHalls()
+    {
+        return $this->hasMany(RestaurantHall::class, ['restaurant_id' => 'id']);
+    }
+
+    public function getParams()
+    {
+        return $this->hasOne(RestaurantParams::class, ['organization_id', 'id']);
     }
 }

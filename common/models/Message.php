@@ -1,4 +1,5 @@
-<?php
+<?php /** @noinspection PhpUndefinedFieldInspection */
+
 /**
  * Created by PhpStorm.
  * User: fgorsky
@@ -9,6 +10,7 @@
 namespace app\common\models;
 
 
+use Kreait\Firebase\Database;
 use Kreait\Firebase\Database\Query;
 use Kreait\Firebase\Database\Reference;
 use Yii;
@@ -36,7 +38,7 @@ class Message extends Model
         $result = [];
 
         $path = 'proposal/' . $proposalId;
-
+        /** @var Database $database */
         $database = Yii::$app->firebase->getDatabase();
         $reference = $database->getReference($path);
 
@@ -78,6 +80,7 @@ class Message extends Model
     {
         $path = 'proposal/' . $proposalId . '/' . $organizationId;
 
+        /** @var Database $database */
         $database = Yii::$app->firebase->getDatabase();
         $reference = $database->getReference($path);
 
@@ -103,7 +106,7 @@ class Message extends Model
     public static function getConversationFromMessage($proposalId, $organizationId, $from)
     {
         $path = 'proposal/' . $proposalId . '/' . $organizationId;
-
+        /** @var Database $database */
         $database = Yii::$app->firebase->getDatabase();
         $reference = $database->getReference($path)
             ->startAt((string)$from)
@@ -151,6 +154,7 @@ class Message extends Model
 
         $path = 'proposal/' . $this->proposal_id . '/' . $this->organization_id . '/' . $this->created_at;
 
+        /** @var Database $database */
         $database = Yii::$app->firebase->getDatabase();
         $reference = $database->getReference($path);
         $reference->set(self::encode($this));

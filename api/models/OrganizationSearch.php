@@ -9,7 +9,9 @@
 namespace app\api\models;
 
 
-
+use app\common\models\RestaurantHall;
+use app\common\models\RestaurantLinkCuisine;
+use app\common\models\RestaurantParams;
 use yii\data\ActiveDataProvider;
 
 class OrganizationSearch extends Organization
@@ -20,15 +22,22 @@ class OrganizationSearch extends Organization
     public $dance;
     public $parking;
 
+    public $size = 0;
+
+    public $cuisine = [];
+
 
     public function rules()
     {
         return [
-            [['ownAlko', 'scene', 'dance', 'parking'], 'boolean']
+            [['ownAlko', 'scene', 'dance', 'parking'], 'boolean'],
+            [['size'], 'integer'],
+            ['cuisine', 'each', 'rule' => ['integer']]
         ];
     }
 
-    public function search($params) {
+    public function search($params)
+    {
         $query = Organization::find();
 
         $dataProvider = new ActiveDataProvider([
@@ -37,13 +46,72 @@ class OrganizationSearch extends Organization
 
         $this->load($params);
 
-        if (!$this->validate()) {
+        $query->where(['state_direct' => true]);
+
+        if ( ! $this->validate()) {
             // uncomment the following line if you do not want to return any records when validation fails
-             $query->where('0=1');
+            $query->where('0=1');
+
             return $dataProvider;
         }
 
 
+        if ($this->ownAlko) {
+            $query->andFilterWhere([
+                'in',
+                'id',
+                RestaurantParams::find()
+                                ->where(['ownAlko' => true])
+                                ->select('organization_id')
+            ]);
+        }
+        if ($this->scene) {
+            $query->andFilterWhere([
+                'in',
+                'id',
+                RestaurantParams::find()
+                                ->where(['scene' => true])
+                                ->select('organization_id')
+            ]);
+        }
+        if ($this->dance) {
+            $query->andFilterWhere([
+                'in',
+                'id',
+                RestaurantParams::find()
+                                ->where(['dance' => true])
+                                ->select('organization_id')
+            ]);
+        }
+        if ($this->parking) {
+            $query->andFilterWhere([
+                'in',
+                'id',
+                RestaurantParams::find()
+                                ->where(['parking' => true])
+                                ->select('organization_id')
+            ]);
+        }
+
+        if ($this->size > 0) {
+            $query->andFilterWhere([
+                'in',
+                'id',
+                RestaurantHall::find()
+                              ->where(['>', 'size', $this->size])
+                              ->select('restaurant_id')
+            ]);
+        }
+
+        if ( ! empty($this->cuisine)) {
+            $query->andFilterWhere([
+                'in',
+                'id',
+                RestaurantLinkCuisine::find()
+                                     ->where(['in', 'cuisine_id', $this->cuisine])
+                                     ->select('restaurant_id')
+            ]);
+        }
 
 
         return $dataProvider;
