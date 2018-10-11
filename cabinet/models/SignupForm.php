@@ -30,6 +30,8 @@ class SignupForm extends Model
 
     public $city_id;
 
+    public $cuisine = [];
+
 
     /**
      * {@inheritdoc}
@@ -38,7 +40,7 @@ class SignupForm extends Model
     {
         return [
             ['name', 'trim'],
-            [['name','address', 'contact', 'phone', 'confirm_password'], 'required'],
+            [['name','address', 'contact', 'phone', 'confirm_password', 'activities'], 'required'],
             ['name', 'unique', 'targetClass' => 'app\common\models\Organization', 'message' => 'This name has already been taken.'],
             ['name', 'string', 'min' => 2, 'max' => 255],
 
@@ -54,7 +56,7 @@ class SignupForm extends Model
 
             ['confirm_password', ConfirmPassword::class, 'second_argument' => 'password'],
 
-            [['activities', 'url'], 'safe'],
+            [['url', 'cuisine'], 'safe'],
             ['city_id', ExistValidator::class, 'targetClass' => GeoCity::class, 'targetAttribute' => 'id']
         ];
     }
@@ -70,7 +72,8 @@ class SignupForm extends Model
             'password' => 'Пароль',
             'activities' => 'Деятельность компании',
             'url' => 'Web сайт',
-            'city_id' => 'Город'
+            'city_id' => 'Город',
+            'cuisine' => 'Кухня'
         ];
     }
 

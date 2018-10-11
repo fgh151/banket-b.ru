@@ -6,8 +6,12 @@ use app\cabinet\models\LoginForm;
 use app\cabinet\models\PasswordResetRequestForm;
 use app\cabinet\models\ResetPasswordForm;
 use app\cabinet\models\SignupForm;
+use app\common\components\Model;
 use app\common\models\Organization;
 use app\common\models\Proposal;
+use app\common\models\RestaurantHall;
+use app\common\models\RestaurantLinkCuisine;
+use app\common\models\RestaurantParams;
 use Yii;
 use yii\base\InvalidArgumentException;
 use yii\filters\AccessControl;
@@ -406,8 +410,36 @@ class SiteController extends Controller
     public function actionSignup()
     {
         $model = new SignupForm();
-        if ($model->load(Yii::$app->request->post())) {
+        $modelParams = new RestaurantParams();
+        $halls = [new RestaurantHall()];
+
+        $post = Yii::$app->request->post();
+
+        if ($model->load($post)) {
             if ($user = $model->signup()) {
+
+                if ($modelParams->load($post)) {
+                    $modelParams->organization_id = $user->id;
+                    $modelParams->save();
+                }
+
+                if (!empty($model->cuisine)) {
+                    foreach ($model->cuisine as $cuisine) {
+                        $link = new RestaurantLinkCuisine();
+                        $link->cuisine_id = $cuisine;
+                        $link->restaurant_id = $user->id;
+                        $link->save();
+                    }
+                }
+
+                /** @var RestaurantHall[] $halls */
+                $halls = Model::createMultiple(RestaurantHall::class);
+                Model::loadMultiple($halls, Yii::$app->request->post());
+                foreach ($halls as $hall) {
+                    $hall->restaurant_id = $user->id;
+                    $hall->save();
+                }
+
                 if (Yii::$app->getUser()->login($user)) {
                     Yii::$app->homeUrl = Url::to('/site/index');
                     return $this->goHome();
@@ -417,6 +449,8 @@ class SiteController extends Controller
 
         return $this->render('signup', [
             'model' => $model,
+            'modelParams' => $modelParams,
+            'halls' => (empty($halls) ? [new RestaurantHall()] : $halls)
         ]);
     }
 

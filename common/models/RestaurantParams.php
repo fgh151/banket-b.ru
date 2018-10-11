@@ -46,11 +46,11 @@ class RestaurantParams extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'organization_id' => 'Organization ID',
-            'ownAlko' => 'Own Alko',
-            'scene' => 'Scene',
-            'dance' => 'Dance',
-            'parking' => 'Parking',
-            'amount' => 'Amount',
+            'ownAlko' => 'Возможность прийти со своим алкоголем',
+            'scene' => 'Наличие сцены',
+            'dance' => 'Наличие танцпола',
+            'parking' => 'Наличие парковки',
+            'amount' => 'Средняя стоимость на человека',
         ];
     }
 }

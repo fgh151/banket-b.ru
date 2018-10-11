@@ -42,8 +42,8 @@ class RestaurantHall extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'restaurant_id' => 'Restaurant ID',
-            'title' => 'Title',
-            'size' => 'Size',
+            'title' => 'Название зала',
+            'size' => 'Вместимость (человек)',
         ];
     }
 }
