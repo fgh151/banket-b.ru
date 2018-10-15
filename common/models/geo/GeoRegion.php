@@ -13,7 +13,7 @@ use yii\helpers\ArrayHelper;
  *
  * @property int    $id
  * @property string $title
- * @property int    $sort
+ * @property int    $order
  */
 class GeoRegion extends ActiveRecord
 {
@@ -33,7 +33,20 @@ class GeoRegion extends ActiveRecord
         return [
             [['title'], 'required'],
             [['title'], 'string', 'max' => 255],
+            ['order', 'integer']
         ];
+    }
+
+    public function fields()
+    {
+        return [
+            'id', 'title', 'cities'
+        ];
+    }
+
+    public function getCities()
+    {
+        return $this->hasMany(GeoCity::class, ['region_id' => 'id'])->with(['metro', 'districts']);
     }
 
     /**

@@ -5,6 +5,7 @@ namespace app\common\models;
 use app\common\components\AuthTrait;
 use app\common\components\Constants;
 use app\common\models\geo\GeoCity;
+use app\models\OrganizaitonLinkMetro;
 use yii\db\ActiveRecord;
 use yii\validators\ExistValidator;
 use yii\web\IdentityInterface;
@@ -12,24 +13,29 @@ use yii\web\IdentityInterface;
 /**
  * This is the model class for table "organization".
  *
- * @property int    $id
- * @property string $auth_key
- * @property string $password_hash
- * @property string $password_reset_token
- * @property string $email
- * @property string $name
- * @property string $address
- * @property string $contact
- * @property string $phone
- * @property int    $status
- * @property int    $created_at
- * @property int    $updated_at
- * @property int    $state
- * @property string $url
- * @property int $state_promo
- * @property int $state_statistic
- * @property integer $city_id
- * @property boolean $state_direct
+ * @property int                                               $id
+ * @property string                                            $auth_key
+ * @property string                                            $password_hash
+ * @property string                                            $password_reset_token
+ * @property string                                            $email
+ * @property string                                            $name
+ * @property string                                            $address
+ * @property string                                            $contact
+ * @property string                                            $phone
+ * @property int                                               $status
+ * @property int                                               $created_at
+ * @property int                                               $updated_at
+ * @property int                                               $state
+ * @property string                                            $url
+ * @property int                                               $state_promo
+ * @property int                                               $state_statistic
+ * @property integer                                           $city_id
+ * @property mixed                                             $halls
+ * @property mixed                                             $params
+ * @property \app\common\models\Metro[]|\yii\db\ActiveQuery    $metro
+ * @property \yii\db\ActiveQuery|\app\common\models\Activity[] $activities
+ * @property boolean                                           $state_direct
+ * @property integer    $district_id
  *
  */
 class Organization extends ActiveRecord implements IdentityInterface
@@ -64,7 +70,7 @@ class Organization extends ActiveRecord implements IdentityInterface
             [['state', 'auth_key', 'password_hash', 'email', 'name', 'address', 'contact', 'phone', 'created_at', 'updated_at'], 'required'],
             [['address'], 'string'],
             [['status', 'created_at', 'updated_at'], 'default', 'value' => null],
-            [['status', 'created_at', 'updated_at', 'city_id'], 'integer'],
+            [['status', 'created_at', 'updated_at', 'city_id', 'district_id'], 'integer'],
             [['auth_key'], 'string', 'max' => 32],
             [['password_hash', 'password_reset_token', 'email', 'name', 'contact', 'phone'], 'string', 'max' => 255],
             [['email'], 'unique'],
@@ -105,6 +111,7 @@ class Organization extends ActiveRecord implements IdentityInterface
             'password' => 'Пароль',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
+            'district_id' => 'Район'
         ];
     }
 
@@ -121,6 +128,15 @@ class Organization extends ActiveRecord implements IdentityInterface
     public function getHalls()
     {
         return $this->hasMany(RestaurantHall::class, ['restaurant_id' => 'id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery|Metro[]
+     */
+    public function getMetro()
+    {
+        return $this->hasMany(Metro::class, ['id' => 'metro_id'])
+            ->viaTable(OrganizaitonLinkMetro::tableName(), ['organization_id' => 'id']);
     }
 
     public function getParams()

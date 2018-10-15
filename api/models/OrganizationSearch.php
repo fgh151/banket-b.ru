@@ -12,6 +12,7 @@ namespace app\api\models;
 use app\common\models\RestaurantHall;
 use app\common\models\RestaurantLinkCuisine;
 use app\common\models\RestaurantParams;
+use app\models\OrganizaitonLinkMetro;
 use yii\data\ActiveDataProvider;
 
 class OrganizationSearch extends Organization
@@ -27,11 +28,17 @@ class OrganizationSearch extends Organization
     public $cuisine = [];
 
 
+    public $districtId;
+    public $cityId;
+    public $metroId;
+
+
+
     public function rules()
     {
         return [
             [['ownAlko', 'scene', 'dance', 'parking'], 'boolean'],
-            [['size'], 'integer'],
+            [['size', 'districtId', 'cityId', 'metroId'], 'integer'],
             ['cuisine', 'each', 'rule' => ['integer']]
         ];
     }
@@ -92,7 +99,6 @@ class OrganizationSearch extends Organization
                                 ->select('organization_id')
             ]);
         }
-
         if ($this->size > 0) {
             $query->andFilterWhere([
                 'in',
@@ -102,7 +108,6 @@ class OrganizationSearch extends Organization
                               ->select('restaurant_id')
             ]);
         }
-
         if ( ! empty($this->cuisine)) {
             $query->andFilterWhere([
                 'in',
@@ -112,6 +117,14 @@ class OrganizationSearch extends Organization
                                      ->select('restaurant_id')
             ]);
         }
+
+        if ($this->metroId) {
+            $query->andFilterWhere(['in', 'id', OrganizaitonLinkMetro::find()->select(['organization_id'])->where(['metro_id' => $this->metroId])]);
+        } elseif ($this->districtId) {
+            $query->andFilterWhere(['district_id' => $this->districtId]);
+        }
+
+        $query->andFilterWhere(['city_id' => $this->city_id]);
 
 
         return $dataProvider;

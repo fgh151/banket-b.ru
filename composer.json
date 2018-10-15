@@ -24,7 +24,8 @@
         "yiisoft/yii2-jui": "^2.0",
         "fgh151/yii2-epochta": "^0.0.2",
         "fgh151/yii2-postgresql-array-field": "^0.0.1",
-        "wbraganca/yii2-dynamicform": "^2.0"
+        "wbraganca/yii2-dynamicform": "^2.0",
+        "yiisoft/yii2-httpclient": "^2.0"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.0.0",

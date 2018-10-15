@@ -5,6 +5,9 @@
 
 namespace app\common\models\geo;
 
+use app\common\models\District;
+use app\common\models\Metro;
+use app\common\models\MetroLine;
 use yii\db\ActiveRecord;
 use yii\helpers\ArrayHelper;
 
@@ -25,6 +28,13 @@ class GeoCity extends ActiveRecord
     public static function tableName()
     {
         return 'geo_city';
+    }
+
+    public function fields()
+    {
+        return [
+            'id', 'title', 'metro', 'districts'
+        ];
     }
 
     /**
@@ -67,6 +77,20 @@ class GeoCity extends ActiveRecord
     public function getRegion()
     {
         return $this->hasOne(GeoRegion::class, ['id' => 'region_id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery | Metro[]
+     */
+    public function getMetro()
+    {
+        return $this->hasMany(Metro::class, ['line_id' => 'id'])
+            ->viaTable(MetroLine::tableName(), ['city_id' => 'id']);
+    }
+
+    public function getDistricts()
+    {
+        return $this->hasMany(District::class, ['city_id' => 'id']);
     }
 
     /**
