@@ -7,7 +7,11 @@ use app\cabinet\models\PasswordResetRequestForm;
 use app\cabinet\models\ResetPasswordForm;
 use app\cabinet\models\SignupForm;
 use app\common\components\Model;
+use app\common\models\District;
+use app\common\models\Metro;
+use app\common\models\MetroLine;
 use app\common\models\Organization;
+use app\common\models\OrganizationLinkMetro;
 use app\common\models\Proposal;
 use app\common\models\RestaurantHall;
 use app\common\models\RestaurantLinkCuisine;
@@ -16,6 +20,7 @@ use Yii;
 use yii\base\InvalidArgumentException;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
+use yii\helpers\Json;
 use yii\helpers\Url;
 use yii\web\BadRequestHttpException;
 use yii\web\Controller;
@@ -46,9 +51,15 @@ class SiteController extends Controller
                         'roles' => ['?'],
                     ],
                     [
-                        'actions' => ['request-password-reset', 'reset-password', 'about'],
-                        'allow' => true,
-                        'roles' => ['?'],
+                        'actions' => [
+                            'request-password-reset',
+                            'reset-password',
+                            'about',
+                            'district',
+                            'metro'
+                        ],
+                        'allow'   => true,
+                        'roles'   => ['?'],
                     ],
                     [
                         'actions' => ['error'],
@@ -409,9 +420,10 @@ class SiteController extends Controller
      */
     public function actionSignup()
     {
-        $model = new SignupForm();
+        $model       = new SignupForm();
         $modelParams = new RestaurantParams();
-        $halls = [new RestaurantHall()];
+        $halls       = [new RestaurantHall()];
+        $metro       = [new OrganizationLinkMetro()];
 
         $post = Yii::$app->request->post();
 
@@ -440,6 +452,14 @@ class SiteController extends Controller
                     $hall->save();
                 }
 
+                /** @var OrganizationLinkMetro[] $metros */
+                $metros = Model::createMultiple(OrganizationLinkMetro::class);
+                Model::loadMultiple($metros, Yii::$app->request->post());
+                foreach ($metros as $station) {
+                    $station->organization_id = $user->id;
+                    $station->save();
+                }
+
                 if (Yii::$app->getUser()->login($user)) {
                     Yii::$app->homeUrl = Url::to('/site/index');
                     return $this->goHome();
@@ -448,10 +468,69 @@ class SiteController extends Controller
         }
 
         return $this->render('signup', [
-            'model' => $model,
+            'model'       => $model,
             'modelParams' => $modelParams,
-            'halls' => (empty($halls) ? [new RestaurantHall()] : $halls)
+            'halls'       => (empty($halls) ? [new RestaurantHall()] : $halls),
+            'metro'       => (empty($metro) ? [new OrganizationLinkMetro()] : $metro),
         ]);
+    }
+
+
+    public function actionDistrict()
+    {
+//        Yii::$app->response->format = Response::FORMAT_JSON;
+        $out = [];
+        if (isset($_POST['depdrop_parents'])) {
+            $parents = $_POST['depdrop_parents'];
+            if ($parents != null) {
+                $city_id = $parents[0];
+                $out     = District::find()
+                                   ->select('id as id, title as name')
+                                   ->where(['city_id' => $city_id])
+                                   ->asArray()
+                                   ->all();
+                // the getSubCatList function will query the database based on the
+                // cat_id and return an array like below:
+                // [
+                //    ['id'=>'<sub-cat-id-1>', 'name'=>'<sub-cat-name1>'],
+                //    ['id'=>'<sub-cat_id_2>', 'name'=>'<sub-cat-name2>']
+                // ]
+                return Json::encode(['output' => $out, 'selected' => '']);
+            }
+        }
+
+        return Json::encode(['output' => '', 'selected' => '']);
+    }
+
+
+    public function actionMetro()
+    {
+//        Yii::$app->response->format = Response::FORMAT_JSON;
+        $out = [];
+        if (isset($_POST['depdrop_parents'])) {
+            $parents = $_POST['depdrop_parents'];
+            if ($parents != null) {
+                $city_id = $parents[0];
+                $out     = Metro::find()
+                                ->select('id as id, title as name')
+                                ->where([
+                                    'in',
+                                    'line_id',
+                                    MetroLine::find()->where(['city_id' => $city_id])->select('id')
+                                ])
+                                ->asArray()
+                                ->all();
+                // the getSubCatList function will query the database based on the
+                // cat_id and return an array like below:
+                // [
+                //    ['id'=>'<sub-cat-id-1>', 'name'=>'<sub-cat-name1>'],
+                //    ['id'=>'<sub-cat_id_2>', 'name'=>'<sub-cat-name2>']
+                // ]
+                return Json::encode(['output' => $out, 'selected' => '']);
+            }
+        }
+
+        return Json::encode(['output' => '', 'selected' => '']);
     }
 
     /**

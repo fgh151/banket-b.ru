@@ -9,10 +9,10 @@
 namespace app\api\models;
 
 
+use app\common\models\OrganizationLinkMetro;
 use app\common\models\RestaurantHall;
 use app\common\models\RestaurantLinkCuisine;
 use app\common\models\RestaurantParams;
-use app\models\OrganizaitonLinkMetro;
 use yii\data\ActiveDataProvider;
 
 class OrganizationSearch extends Organization
@@ -31,7 +31,6 @@ class OrganizationSearch extends Organization
     public $districtId;
     public $cityId;
     public $metroId;
-
 
 
     public function rules()
@@ -119,7 +118,11 @@ class OrganizationSearch extends Organization
         }
 
         if ($this->metroId) {
-            $query->andFilterWhere(['in', 'id', OrganizaitonLinkMetro::find()->select(['organization_id'])->where(['metro_id' => $this->metroId])]);
+            $query->andFilterWhere([
+                'in',
+                'id',
+                OrganizationLinkMetro::find()->select(['organization_id'])->where(['metro_id' => $this->metroId])
+            ]);
         } elseif ($this->districtId) {
             $query->andFilterWhere(['district_id' => $this->districtId]);
         }

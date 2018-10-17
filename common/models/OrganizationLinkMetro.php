@@ -1,6 +1,6 @@
 <?php
 
-namespace app\models;
+namespace app\common\models;
 
 /**
  * This is the model class for table "organization_link_metro".
@@ -9,7 +9,7 @@ namespace app\models;
  * @property int $metro_id
  * @property int $organization_id
  */
-class OrganizaitonLinkMetro extends \yii\db\ActiveRecord
+class OrganizationLinkMetro extends \yii\db\ActiveRecord
 {
     /**
      * {@inheritdoc}
@@ -37,8 +37,8 @@ class OrganizaitonLinkMetro extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => 'ID',
-            'metro_id' => 'Metro ID',
+            'id'              => 'ID',
+            'metro_id'        => 'Станция метро',
             'organization_id' => 'Organization ID',
         ];
     }

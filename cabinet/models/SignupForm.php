@@ -32,6 +32,8 @@ class SignupForm extends Model
 
     public $cuisine = [];
 
+    public $district_id;
+
 
     /**
      * {@inheritdoc}
@@ -57,23 +59,30 @@ class SignupForm extends Model
             ['confirm_password', ConfirmPassword::class, 'second_argument' => 'password'],
 
             [['url', 'cuisine'], 'safe'],
-            ['city_id', ExistValidator::class, 'targetClass' => GeoCity::class, 'targetAttribute' => 'id']
+            [
+                'city_id',
+                ExistValidator::class,
+                'targetClass'     => GeoCity::class,
+                'targetAttribute' => 'id'
+            ],
+            ['district_id', 'integer']
         ];
     }
 
     public function attributeLabels()
     {
         return [
-            'name' => 'Название организации',
-            'address' => 'Адрес',
-            'contact' => 'Контактное лицо',
-            'phone' => 'Контактный телефон',
+            'name'             => 'Название организации',
+            'address'          => 'Адрес',
+            'contact'          => 'Контактное лицо',
+            'phone'            => 'Контактный телефон',
             'confirm_password' => 'Повторите пароль',
-            'password' => 'Пароль',
-            'activities' => 'Деятельность компании',
-            'url' => 'Web сайт',
-            'city_id' => 'Город',
-            'cuisine' => 'Кухня'
+            'password'         => 'Пароль',
+            'activities'       => 'Деятельность компании',
+            'url'              => 'Web сайт',
+            'city_id'          => 'Город',
+            'cuisine'          => 'Кухня',
+            'district_id'      => 'Район'
         ];
     }
 
@@ -97,12 +106,13 @@ class SignupForm extends Model
         $user->contact = $this->contact;
         $user->setPassword($this->password);
         $user->generateAuthKey();
-        $user->created_at = time();
-        $user->updated_at = time();
-        $user->status     = Constants::USER_STATUS_ACTIVE;
-        $user->state = Constants::ORGANIZATION_STATE_FREE;
-        $user->url = $this->url;
-        $user->city_id = $this->city_id;
+        $user->created_at  = time();
+        $user->updated_at  = time();
+        $user->status      = Constants::USER_STATUS_ACTIVE;
+        $user->state       = Constants::ORGANIZATION_STATE_FREE;
+        $user->url         = $this->url;
+        $user->city_id     = $this->city_id;
+        $user->district_id = $this->district_id;
 
         $saved = $user->save();
 

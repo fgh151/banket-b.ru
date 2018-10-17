@@ -5,7 +5,6 @@ namespace app\common\models;
 use app\common\components\AuthTrait;
 use app\common\components\Constants;
 use app\common\models\geo\GeoCity;
-use app\models\OrganizaitonLinkMetro;
 use yii\db\ActiveRecord;
 use yii\validators\ExistValidator;
 use yii\web\IdentityInterface;
@@ -136,7 +135,7 @@ class Organization extends ActiveRecord implements IdentityInterface
     public function getMetro()
     {
         return $this->hasMany(Metro::class, ['id' => 'metro_id'])
-            ->viaTable(OrganizaitonLinkMetro::tableName(), ['organization_id' => 'id']);
+                    ->viaTable(OrganizationLinkMetro::tableName(), ['organization_id' => 'id']);
     }
 
     public function getParams()
