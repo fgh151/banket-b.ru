@@ -78,7 +78,7 @@ class ProposalSearch extends Proposal
         ]);
 
         if ($direct === false) {
-            $query->andFilterWhere(['organization' => '[]']);
+            $query->andFilterWhere(['organizations' => '[]']);
         }
 
         if (is_int($direct)) {
