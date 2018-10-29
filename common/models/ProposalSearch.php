@@ -56,6 +56,8 @@ class ProposalSearch extends Proposal
         if (!$this->validate()) {
             // uncomment the following line if you do not want to return any records when validation fails
             // $query->where('0=1');
+
+
             return $dataProvider;
         }
 
@@ -79,10 +81,9 @@ class ProposalSearch extends Proposal
 
         if ($direct === false) {
             $query->andFilterWhere(['organizations' => '[]']);
-        }
-
-        if (is_int($direct)) {
+        } else {
             $query->andFilterWhere(['not', ['organization->>'.$direct => null]]);
+//            var_dump($direct , $query->createCommand()->getRawSql()); die;
         }
 
         $query->andFilterWhere(['>', 'amount', $this->amount]);
@@ -91,6 +92,7 @@ class ProposalSearch extends Proposal
             ->andFilterWhere(['ilike', 'comment', $this->comment]);
 
         $query->orderBy('date DESC');
+
 
         if ($this->rejected) {
             $query->andWhere([

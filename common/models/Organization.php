@@ -3,6 +3,7 @@
 namespace app\common\models;
 
 use app\common\components\AuthTrait;
+use app\common\components\behaviors\FileUploadBehavior;
 use app\common\components\Constants;
 use app\common\models\geo\GeoCity;
 use yii\db\ActiveRecord;
@@ -30,17 +31,19 @@ use yii\web\IdentityInterface;
  * @property int                                               $state_statistic
  * @property integer                                           $city_id
  * @property mixed                                             $halls
- * @property mixed                                             $params
+ * @property RestaurantParams $params
  * @property \app\common\models\Metro[]|\yii\db\ActiveQuery    $metro
  * @property \yii\db\ActiveQuery|\app\common\models\Activity[] $activities
  * @property boolean                                           $state_direct
  * @property integer    $district_id
+ * @property Upload[] $images
  *
  */
 class Organization extends ActiveRecord implements IdentityInterface
 {
 
     public $password;
+    public $image_field;
 
     use AuthTrait;
 
@@ -63,6 +66,22 @@ class Organization extends ActiveRecord implements IdentityInterface
     /**
      * {@inheritdoc}
      */
+    public function behaviors()
+    {
+        return [
+            [
+                'class' => FileUploadBehavior::class,
+                'attribute' => 'image_field',
+                'storageClass' => OrganizationImage::class,
+                'storageAttribute' => 'organization_id',
+                'folder' => 'organization'
+            ]
+        ];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function rules()
     {
         return [
@@ -75,7 +94,7 @@ class Organization extends ActiveRecord implements IdentityInterface
             [['email'], 'unique'],
             [['password_reset_token'], 'unique'],
             [['state', 'state_statistic', 'state_promo', 'state_direct'],'default', 'value' => Constants::ORGANIZATION_STATE_FREE],
-            [['password', 'url'], 'safe'],
+            [['password', 'url', 'image_field'], 'safe'],
             ['city_id', ExistValidator::class, 'targetClass' => GeoCity::class, 'targetAttribute' => 'id']
         ];
     }
@@ -83,7 +102,17 @@ class Organization extends ActiveRecord implements IdentityInterface
     public function fields()
     {
         return [
-            'id', 'name', 'contact', 'phone', 'email', 'address'
+            'id', 'name', 'contact', 'phone', 'email', 'address',
+            'images' => function (Organization $model) {
+                $img = [];
+                foreach ($model->images as $image) {
+                    $img[] = '/upload/organization/' . $image->fsFileName;
+                }
+                return $img;
+            },
+            'amount' => function (Organization $model) {
+                return $model->params->amount;
+            }
         ];
     }
 
@@ -138,8 +167,20 @@ class Organization extends ActiveRecord implements IdentityInterface
                     ->viaTable(OrganizationLinkMetro::tableName(), ['organization_id' => 'id']);
     }
 
+    /**
+     * @return \yii\db\ActiveQuery|RestaurantParams
+     */
     public function getParams()
     {
-        return $this->hasOne(RestaurantParams::class, ['organization_id', 'id']);
+        return $this->hasOne(RestaurantParams::class, ['organization_id' => 'id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery| Upload[]
+     */
+    public function getImages()
+    {
+        return $this->hasMany(Upload::class, ['id' => 'upload_id'])
+            ->viaTable(OrganizationImage::tableName(), ['organization_id' => 'id']);
     }
 }

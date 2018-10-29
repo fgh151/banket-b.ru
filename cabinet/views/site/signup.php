@@ -82,14 +82,14 @@ $this->params['breadcrumbs'][] = $this->title;
                             <div class="panel-heading">
                                 <h3 class="panel-title pull-left">Добавить станцию метро по
                                     близости</h3>
-                                <!--                                <div class="pull-right">-->
-                                <!--                                    <button type="button"-->
-                                <!--                                            class="add-metro btn btn-success btn-xs"><i-->
-                                <!--                                                class="glyphicon glyphicon-plus"></i></button>-->
-                                <!--                                    <button type="button"-->
-                                <!--                                            class="remove-metro btn btn-danger btn-xs"><i-->
-                                <!--                                                class="glyphicon glyphicon-minus"></i></button>-->
-                                <!--                                </div>-->
+                                <!--                                                                <div class="pull-right">-->
+                                <!--                                                                    <button type="button"-->
+                                <!--                                                                            class="add-metro btn btn-success btn-xs"><i-->
+                                <!--                                                                                class="glyphicon glyphicon-plus"></i></button>-->
+                                <!--                                                                    <button type="button"-->
+                                <!--                                                                            class="remove-metro btn btn-danger btn-xs"><i-->
+                                <!--                                                                                class="glyphicon glyphicon-minus"></i></button>-->
+                                <!--                                                                </div>-->
                                 <div class="clearfix"></div>
                             </div>
                             <div class="panel-body">
@@ -131,6 +131,8 @@ $this->params['breadcrumbs'][] = $this->title;
                 ])->asArray()->all(), 'id', 'title'), ['multiply', 'prompt' => '']); ?>
 
                 <div id="js-more" style="display:none">
+
+                    <?= $form->field($model, 'image_field')->fileInput()->label('Добавить картинку'); ?>
 
                     <?= $form->field($modelParams, 'ownAlko')->checkbox(); ?>
                     <?= $form->field($modelParams, 'scene')->checkbox(); ?>

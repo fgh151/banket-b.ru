@@ -65,6 +65,8 @@ class Promo extends ActiveRecord
     public function rules()
     {
         return [
+            ['start', 'default', 'value' => date('Y-m-d')],
+            ['end', 'default', 'value' => '2020-01-01'],
             [['organization_id', 'title', 'start', 'end'], 'required'],
             [['organization_id'], 'default', 'value' => null],
             [['organization_id'], 'integer'],

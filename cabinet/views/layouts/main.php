@@ -53,6 +53,7 @@ $this->title = 'Банкетный Баттл';
         $menuItems[] = ['label' => 'Главная', 'url' => ['/site/index']];
         $menuItems[] = ['label' => 'Предложения', 'url' => ['/promo/index']];
         $menuItems[] = ['label' => 'Аукционы', 'url' => ['/battle/index']];
+        $menuItems[] = ['label' => 'Прямые заявки', 'url' => ['/battle/direct']];
         $menuItems[] = ['label' => 'Профиль', 'url' => ['/user/edit']];
         $menuItems[] = '<li>'
             . Html::beginForm(['/site/logout'], 'post')

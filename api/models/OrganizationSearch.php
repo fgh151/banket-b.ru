@@ -18,10 +18,10 @@ use yii\data\ActiveDataProvider;
 class OrganizationSearch extends Organization
 {
 
-    public $ownAlko;
-    public $scene;
-    public $dance;
-    public $parking;
+    public $ownAlko = false;
+    public $scene = false;
+    public $dance = false;
+    public $parking = false;
 
     public $size = 0;
 
@@ -36,9 +36,9 @@ class OrganizationSearch extends Organization
     public function rules()
     {
         return [
-            [['ownAlko', 'scene', 'dance', 'parking'], 'boolean'],
-            [['size', 'districtId', 'cityId', 'metroId'], 'integer'],
-            ['cuisine', 'each', 'rule' => ['integer']]
+            [['ownAlko', 'scene', 'dance', 'parking', 'cuisine', 'cityId'], 'safe'],
+            [['size', 'districtId', 'metroId'], 'integer'],
+//            ['cuisine', 'each', 'rule' => ['integer']]
         ];
     }
 
@@ -50,9 +50,11 @@ class OrganizationSearch extends Organization
             'query' => $query,
         ]);
 
-        $this->load($params);
+        $this->load($params, '');
+
 
         $query->where(['state_direct' => true]);
+
 
         if ( ! $this->validate()) {
             // uncomment the following line if you do not want to return any records when validation fails
@@ -62,7 +64,7 @@ class OrganizationSearch extends Organization
         }
 
 
-        if ($this->ownAlko) {
+        if ($this->ownAlko !== 'false') {
             $query->andFilterWhere([
                 'in',
                 'id',
@@ -71,7 +73,7 @@ class OrganizationSearch extends Organization
                                 ->select('organization_id')
             ]);
         }
-        if ($this->scene) {
+        if ($this->scene !== 'false') {
             $query->andFilterWhere([
                 'in',
                 'id',
@@ -80,7 +82,7 @@ class OrganizationSearch extends Organization
                                 ->select('organization_id')
             ]);
         }
-        if ($this->dance) {
+        if ($this->dance !== 'false') {
             $query->andFilterWhere([
                 'in',
                 'id',
@@ -89,7 +91,7 @@ class OrganizationSearch extends Organization
                                 ->select('organization_id')
             ]);
         }
-        if ($this->parking) {
+        if ($this->parking !== 'false') {
             $query->andFilterWhere([
                 'in',
                 'id',
@@ -98,16 +100,16 @@ class OrganizationSearch extends Organization
                                 ->select('organization_id')
             ]);
         }
-        if ($this->size > 0) {
+        if (intval($this->size) > 0) {
             $query->andFilterWhere([
                 'in',
                 'id',
                 RestaurantHall::find()
-                              ->where(['>', 'size', $this->size])
+                    ->where(['>=', 'size', $this->size])
                               ->select('restaurant_id')
             ]);
         }
-        if ( ! empty($this->cuisine)) {
+        if ($this->cuisine && intval($this->cuisine) !== 1) {
             $query->andFilterWhere([
                 'in',
                 'id',
@@ -127,7 +129,10 @@ class OrganizationSearch extends Organization
             $query->andFilterWhere(['district_id' => $this->districtId]);
         }
 
-        $query->andFilterWhere(['city_id' => $this->city_id]);
+        $query->andFilterWhere(['city_id' => $this->cityId]);
+
+
+//        var_dump($this->cityId, $query->createCommand()->getRawSql()); die;
 
 
         return $dataProvider;

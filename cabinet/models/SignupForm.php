@@ -34,6 +34,7 @@ class SignupForm extends Model
 
     public $district_id;
 
+    public $image_field;
 
     /**
      * {@inheritdoc}
@@ -65,7 +66,8 @@ class SignupForm extends Model
                 'targetClass'     => GeoCity::class,
                 'targetAttribute' => 'id'
             ],
-            ['district_id', 'integer']
+            ['district_id', 'integer'],
+            ['image_field', 'safe']
         ];
     }
 
@@ -113,6 +115,7 @@ class SignupForm extends Model
         $user->url         = $this->url;
         $user->city_id     = $this->city_id;
         $user->district_id = $this->district_id;
+        $user->image_field = $this->image_field;
 
         $saved = $user->save();
 

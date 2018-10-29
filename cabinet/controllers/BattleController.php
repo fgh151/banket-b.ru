@@ -77,6 +77,46 @@ class BattleController extends Controller
         ]);
     }
 
+    /**
+     * @return string
+     * @throws \Throwable
+     */
+    public function actionDirect()
+    {
+        $searchModel = new ProposalSearch();
+
+        /** @var Organization $organization */
+        $organization = Yii::$app->getUser()->getIdentity();
+        if ($organization->state == Constants::ORGANIZATION_STATE_PAID) {
+
+
+            $searchParams = [
+                'ProposalSearch[status]' => Constants::PROPOSAL_STATUS_CREATED,
+                'ProposalSearch[rejected]' => OrganizationProposalStatus::find()
+                    ->where([
+                        'organization_id' => $organization->getId(),
+                        'status' => Constants::ORGANIZATION_PROPOSAL_STATUS_REJECT
+                    ])
+                    ->select('proposal_id')->asArray()->all()
+            ];
+
+            $searchParams = ArrayHelper::merge(Yii::$app->request->queryParams, $searchParams);
+            $dataProvider = $searchModel->search($searchParams, Yii::$app->getUser()->getId());
+
+
+        } else {
+            // Формируем запрос, который заведомо ничего не вернет
+            $dataProvider = new ActiveDataProvider();
+            $dataProvider->query = Proposal::find()->where(['id' => 0]);
+        }
+
+        return $this->render('index', [
+            'searchModel' => $searchModel,
+            'organization' => $organization,
+            'dataProvider' => $dataProvider
+        ]);
+    }
+
     public function actionReject($id)
     {
         $model = new OrganizationProposalStatus();

@@ -9,6 +9,8 @@ namespace app\common\models;
  * @property string $external_id
  * @property int $line_id
  * @property string $title
+ *
+ * @property MetroLine $line
  */
 class Metro extends \yii\db\ActiveRecord
 {
@@ -43,6 +45,21 @@ class Metro extends \yii\db\ActiveRecord
             'external_id' => 'External ID',
             'line_id' => 'Line ID',
             'title' => 'Title',
+        ];
+    }
+
+    public function getLine()
+    {
+        return $this->hasOne(MetroLine::class, ['id' => 'line_id']);
+    }
+
+    public function fields()
+    {
+        return [
+            'id', 'title',
+            'color' => function (Metro $model) {
+                return $model->line->color;
+            }
         ];
     }
 }
