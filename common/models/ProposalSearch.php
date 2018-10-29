@@ -79,11 +79,10 @@ class ProposalSearch extends Proposal
             'status' => $this->status
         ]);
 
-        if ($direct === false) {
+        if ($direct == false) {
             $query->andFilterWhere(['organizations' => '[]']);
         } else {
-            $query->andFilterWhere(['not', ['organization->>'.$direct => null]]);
-//            var_dump($direct , $query->createCommand()->getRawSql()); die;
+            $query->andFilterWhere(['@>', 'organizations', '[' . $direct . ']']);
         }
 
         $query->andFilterWhere(['>', 'amount', $this->amount]);
