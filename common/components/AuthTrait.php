@@ -12,6 +12,7 @@ namespace app\common\components;
 use Yii;
 use yii\base\NotSupportedException;
 use yii\behaviors\TimestampBehavior;
+use yii\db\ActiveRecord;
 use yii\web\IdentityInterface;
 
 trait AuthTrait
@@ -96,8 +97,14 @@ trait AuthTrait
      */
     public static function findByUsername($username)
     {
-        return static::findOne(['lower(email)' => mb_strtolower($username), 'status' => Constants::USER_STATUS_ACTIVE]);
+        /** @var ActiveRecord self */
+        $query = self::find()->where(['status' => Constants::USER_STATUS_ACTIVE]);
+        $query->andFilterWhere(['LOWER("email")' => mb_strtolower($username)]);
+
+        return $query->one();
+//        return self::findOne(['LOWER("email")' => mb_strtolower($username), 'status' => Constants::USER_STATUS_ACTIVE]);
     }
+
 
     /**
      * Returns an ID that can uniquely identify a user identity.
