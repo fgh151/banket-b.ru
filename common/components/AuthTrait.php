@@ -96,7 +96,7 @@ trait AuthTrait
      */
     public static function findByUsername($username)
     {
-        return static::findOne(['email' => $username, 'status' => Constants::USER_STATUS_ACTIVE]);
+        return static::findOne(['lower(email)' => mb_strtolower($username), 'status' => Constants::USER_STATUS_ACTIVE]);
     }
 
     /**
