@@ -93,6 +93,10 @@ class PromoController extends Controller
         $model = new Promo();
 
         if ($model->load(Yii::$app->request->post())) {
+
+//            $model->validate();
+//            var_dump($model->errors); die;
+
             $model->save();
 
             return $this->redirect(['view', 'id' => $model->id]);

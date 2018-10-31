@@ -22,6 +22,26 @@ use yii\rest\Controller;
 class AuthController extends Controller
 {
 
+    public function behaviors()
+
+    {
+
+        $behaviors = parent::behaviors();
+
+
+        // all actions with authentication except login
+
+        $behaviors['authenticator']['except'][] = 'index';
+        $behaviors['authenticator']['except'][] = 'register';
+        $behaviors['authenticator']['except'][] = 'recover';
+        $behaviors['authenticator']['except'][] = 'change-password';
+        $behaviors['authenticator']['except'][] = 'create';
+
+
+        return $behaviors;
+
+    }
+
     /**
      * @return \stdClass | array
      */
@@ -54,15 +74,20 @@ class AuthController extends Controller
         $request = Json::decode(Yii::$app->getRequest()->getRawBody(), true);
 
         if ($model->load($request, '')) {
-            if ($key = $model->register()) {
-                return ['access_token' => $key];
+
+            $reg = $model->register();
+
+            if (!is_array($reg)) {
+                return ['access_token' => $reg];
             } else {
 
                 $response = [];
-                foreach ($model->getUser()->errors as $error) {
+                foreach ($reg as $error) {
                     $response['error'] = $error[0];
                 }
                 Yii::$app->response->statusCode = 403;
+
+//                return $model->errors;
 
                 return $response;
             }
@@ -79,11 +104,15 @@ class AuthController extends Controller
         $request = Json::decode(Yii::$app->getRequest()->getRawBody(), true);
         $phone   = $request['phone'];
 
+
         /**
          * Находим человека и отправляем еу СМС
          */
         $user = MobileUser::find()->where(['phone' => $phone])->one();
 
+        Yii::error($user);
+
+        Yii::error('Send SMS to ' . $phone);
 
         if ($user) {
 

@@ -46,4 +46,11 @@ class RestaurantHall extends \yii\db\ActiveRecord
             'size' => 'Вместимость (человек)',
         ];
     }
+
+    public function fields()
+    {
+        return [
+            'title', 'size'
+        ];
+    }
 }

@@ -106,13 +106,15 @@ class Organization extends ActiveRecord implements IdentityInterface
             'images' => function (Organization $model) {
                 $img = [];
                 foreach ($model->images as $image) {
-                    $img[] = '/upload/organization/' . $image->fsFileName;
+                    $img[] = 'https://banket-b.ru/upload/organization/' . $model->id . '/' . $image->fsFileName;
                 }
                 return $img;
             },
             'amount' => function (Organization $model) {
                 return $model->params->amount;
-            }
+            },
+            'halls',
+            'metro'
         ];
     }
 
