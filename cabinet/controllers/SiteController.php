@@ -518,6 +518,7 @@ class SiteController extends Controller
                                     'line_id',
                                     MetroLine::find()->where(['city_id' => $city_id])->select('id')
                                 ])
+                    ->orderBy('title')
                                 ->asArray()
                                 ->all();
                 // the getSubCatList function will query the database based on the
