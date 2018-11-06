@@ -115,7 +115,7 @@ class SignupForm extends Model
         $user->url         = $this->url;
         $user->city_id     = $this->city_id;
         $user->district_id = $this->district_id;
-        $user->image_field = $this->image_field;
+//        $user->image_field = $this->image_field;
 
         $saved = $user->save();
 

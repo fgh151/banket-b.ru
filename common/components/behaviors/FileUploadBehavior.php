@@ -72,7 +72,7 @@ class FileUploadBehavior extends Behavior
         foreach ($files as $file) {
 
             /** @noinspection PhpUndefinedFieldInspection */
-            $path = '@frontend/web/upload' . DIRECTORY_SEPARATOR . $this->folder . DIRECTORY_SEPARATOR . $this->owner->id;
+            $path = '@cabinet/web/upload' . DIRECTORY_SEPARATOR . $this->folder . DIRECTORY_SEPARATOR . $this->owner->id;
 
             $path = \Yii::getAlias($path);
 

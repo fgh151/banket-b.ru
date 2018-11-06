@@ -11,19 +11,23 @@ use app\common\models\District;
 use app\common\models\Metro;
 use app\common\models\MetroLine;
 use app\common\models\Organization;
+use app\common\models\OrganizationImage;
 use app\common\models\OrganizationLinkMetro;
 use app\common\models\Proposal;
 use app\common\models\RestaurantHall;
 use app\common\models\RestaurantLinkCuisine;
 use app\common\models\RestaurantParams;
+use app\common\models\Upload;
 use Yii;
 use yii\base\InvalidArgumentException;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
+use yii\helpers\FileHelper;
 use yii\helpers\Json;
 use yii\helpers\Url;
 use yii\web\BadRequestHttpException;
 use yii\web\Controller;
+use yii\web\UploadedFile;
 
 /**
  * Site controller
@@ -429,6 +433,7 @@ class SiteController extends Controller
 
         if ($model->load($post)) {
             if ($user = $model->signup()) {
+                $this->uploadOrganizationImage($model, $user);
 
                 if ($modelParams->load($post)) {
                     $modelParams->organization_id = $user->id;
@@ -473,6 +478,41 @@ class SiteController extends Controller
             'halls'       => (empty($halls) ? [new RestaurantHall()] : $halls),
             'metro'       => (empty($metro) ? [new OrganizationLinkMetro()] : $metro),
         ]);
+    }
+
+    /**
+     * @param SignupForm $model
+     * @param Organization $organization
+     * @throws \yii\base\Exception
+     */
+    protected function uploadOrganizationImage(SignupForm $model, Organization $organization)
+    {
+        $files = UploadedFile::getInstances($model, 'image_field');
+
+
+        foreach ($files as $file) {
+
+
+            /** @noinspection PhpUndefinedFieldInspection */
+            $path = '/web/upload' . DIRECTORY_SEPARATOR . 'organization' . DIRECTORY_SEPARATOR . $organization->id;
+
+            $path = \Yii::getAlias('@cabinet') . $path;
+
+            FileHelper::createDirectory($path);
+
+            $fileBaseName = substr(md5(microtime() . rand(0, 9999)), 0, 8);
+            $fileName = $fileBaseName . '_' . $this->owner->id . '.' . $file->extension;
+
+            $file->saveAs($path . '/' . $fileName);
+            $upload = new Upload();
+            $upload->fsFileName = $fileName;
+            $upload->save();
+
+            $storage = new OrganizationImage();
+            $storage->organization_id = $organization->id;
+            $storage->upload_id = $upload->id;
+            $storage->save();
+        }
     }
 
 
