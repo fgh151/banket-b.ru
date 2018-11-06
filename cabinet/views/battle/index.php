@@ -3,8 +3,6 @@
 use app\common\components\Constants;
 use app\common\models\Proposal;
 use yii\helpers\Html;
-use yii\helpers\ArrayHelper;
-use app\common\models\geo\GeoCity;
 
 /**
  * @var $this yii\web\View
@@ -84,13 +82,13 @@ $formatter = Yii::$app->formatter;
                                 'attribute' => 'id',
                                 'label'     => '№'
                             ],
-                            [
-                                'attribute' => 'city_id',
-                                'filter' => ArrayHelper::map(GeoCity::find()->select([
-                                    'id',
-                                    'title'
-                                ])->asArray()->all(), 'id', 'title')
-                            ],
+//                            [
+//                                'attribute' => 'city_id',
+//                                'filter' => ArrayHelper::map(GeoCity::find()->select([
+//                                    'id',
+//                                    'title'
+//                                ])->asArray()->all(), 'id', 'title')
+//                            ],
                             [
                                 'attribute' => 'date',
                                 'label'     => 'Дата',
