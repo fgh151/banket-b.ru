@@ -1,55 +1,62 @@
 {
-    "name": "yiisoft/yii2-app-advanced",
-    "description": "Yii 2 Advanced Project Template",
-    "keywords": ["yii2", "framework", "advanced", "project template"],
-    "homepage": "http://www.yiiframework.com/",
-    "type": "project",
-    "license": "BSD-3-Clause",
-    "support": {
-        "issues": "https://github.com/yiisoft/yii2/issues?state=open",
-        "forum": "http://www.yiiframework.com/forum/",
-        "wiki": "http://www.yiiframework.com/wiki/",
-        "irc": "irc://irc.freenode.net/yii",
-        "source": "https://github.com/yiisoft/yii2"
-    },
-    "minimum-stability": "stable",
-    "require": {
-        "php": ">=7.1.0",
-        "yiisoft/yii2": "~2.0.6",
-        "yiisoft/yii2-bootstrap": "~2.0.0",
-      "yiisoft/yii2-swiftmailer": "~2.0.0 || ~2.1.0",
-      "grptx/yii2-firebase": "~0.3.1",
-      "yiisoft/yii2-imagine": "^2.1",
-        "2amigos/yii2-chartjs-widget": "^2.1",
-        "yiisoft/yii2-jui": "^2.0",
-        "fgh151/yii2-epochta": "^0.0.2",
-        "fgh151/yii2-postgresql-array-field": "^0.0.1",
-        "wbraganca/yii2-dynamicform": "^2.0",
-      "yiisoft/yii2-httpclient": "^2.0",
-      "kartik-v/yii2-widget-depdrop": "^1.0"
-    },
-    "require-dev": {
-        "yiisoft/yii2-debug": "~2.0.0",
-        "yiisoft/yii2-gii": "~2.0.0",
-        "yiisoft/yii2-faker": "~2.0.0",
-        "codeception/base": "^2.2.3",
-        "codeception/verify": "~0.3.1"
-    },
-    "config": {
-        "process-timeout": 1800,
-        "fxp-asset": {
-            "enabled": false
-        }
-    },
-    "repositories": [
-        {
-            "type": "composer",
-            "url": "https://asset-packagist.org"
-        }
-    ],
-    "autoload": {
-        "psr-4": {
-            "app\\": ""
-        }
+  "name": "yiisoft/yii2-app-advanced",
+  "description": "Yii 2 Advanced Project Template",
+  "keywords": [
+    "yii2",
+    "framework",
+    "advanced",
+    "project template"
+  ],
+  "homepage": "http://www.yiiframework.com/",
+  "type": "project",
+  "license": "BSD-3-Clause",
+  "support": {
+    "issues": "https://github.com/yiisoft/yii2/issues?state=open",
+    "forum": "http://www.yiiframework.com/forum/",
+    "wiki": "http://www.yiiframework.com/wiki/",
+    "irc": "irc://irc.freenode.net/yii",
+    "source": "https://github.com/yiisoft/yii2"
+  },
+  "minimum-stability": "stable",
+  "require": {
+    "php": ">=7.1.0",
+    "yiisoft/yii2": "~2.0.6",
+    "yiisoft/yii2-bootstrap": "~2.0.0",
+    "yiisoft/yii2-swiftmailer": "~2.0.0 || ~2.1.0",
+    "grptx/yii2-firebase": "~0.3.1",
+    "yiisoft/yii2-imagine": "^2.1",
+    "2amigos/yii2-chartjs-widget": "^2.1",
+    "yiisoft/yii2-jui": "^2.0",
+    "fgh151/yii2-epochta": "^0.0.2",
+    "fgh151/yii2-postgresql-array-field": "^0.0.1",
+    "symfony/dom-crawler": "2.8",
+    "symfony/css-selector": "2.8",
+    "wbraganca/yii2-dynamicform": "2.0.1",
+    "yiisoft/yii2-httpclient": "^2.0",
+    "kartik-v/yii2-widget-depdrop": "^1.0"
+  },
+  "require-dev": {
+    "yiisoft/yii2-debug": "~2.0.0",
+    "yiisoft/yii2-gii": "~2.0.0",
+    "yiisoft/yii2-faker": "~2.0.0",
+    "codeception/base": "^2.2.3",
+    "codeception/verify": "~0.3.1"
+  },
+  "config": {
+    "process-timeout": 1800,
+    "fxp-asset": {
+      "enabled": false
     }
+  },
+  "repositories": [
+    {
+      "type": "composer",
+      "url": "https://asset-packagist.org"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "app\\": ""
+    }
+  }
 }

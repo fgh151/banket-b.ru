@@ -21,7 +21,7 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\widgets\MaskedInput;
 
-$this->title                   = 'Регистрация';
+$this->title = 'Регистрация';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
     <div class="site-signup">
@@ -44,11 +44,14 @@ $this->params['breadcrumbs'][] = $this->title;
                     ['id' => 'city_id', 'prompt' => 'Выбрать...']); ?>
 
                 <?= $form->field($model, 'district_id')->widget(DepDrop::class, [
-                    'options'       => ['id' => 'district_id'],
+                    'options' => ['id' => 'district_id'],
                     'pluginOptions' => [
-                        'depends'     => ['city_id'],
+                        'depends' => ['city_id'],
                         'placeholder' => 'Выбрать...',
-                        'url'         => Url::to(['/site/district'])
+                        'url' => Url::to(['/site/district'])
+                    ],
+                    'pluginEvents' => [
+                        "depdrop:afterChange" => "function(event, id, value) { changeMetroSelector(); }",
                     ]
                 ]); ?>
 
@@ -57,66 +60,66 @@ $this->params['breadcrumbs'][] = $this->title;
                 <?php DynamicFormWidget::begin([
                     'widgetContainer' => 'dynamicform_wrapper',
                     // required: only alphanumeric characters plus "_" [A-Za-z0-9_]
-                    'widgetBody'      => '.metro-items',
+                    'widgetBody' => '.metro-items',
                     // required: css class selector
-                    'widgetItem'      => '.metro',
+                    'widgetItem' => '.metro',
                     // required: css class
-                    'limit'           => 1,
+                    'limit' => 666,
                     // the maximum times, an element can be cloned (default 999)
-                    'min'             => 1,
+                    'min' => 0,
                     // 0 or 1 (default 1)
-                    'insertButton'    => '.add-metro',
+                    'insertButton' => '.add-metro',
                     // css class
-                    'deleteButton'    => '.remove-metro',
+                    'deleteButton' => '.remove-metro',
                     // css class
-                    'model'           => $metro[0],
-                    'formId'          => 'form-signup',
-                    'formFields'      => [
-                        'title',
-                        'size',
+                    'model' => $metro[0],
+                    'formId' => 'form-signup',
+                    'formFields' => [
+                        'metro_id',
                     ],
                 ]); ?>
-                <div class="metro-items"><!-- widgetContainer -->
-                    <?php foreach ($metro as $i => $metroStation): ?>
-                        <div class="metro panel panel-default"><!-- widgetBody -->
-                            <div class="panel-heading">
-                                <h3 class="panel-title pull-left">Добавить станцию метро по
-                                    близости</h3>
-                                <!--                                                                <div class="pull-right">-->
-                                <!--                                                                    <button type="button"-->
-                                <!--                                                                            class="add-metro btn btn-success btn-xs"><i-->
-                                <!--                                                                                class="glyphicon glyphicon-plus"></i></button>-->
-                                <!--                                                                    <button type="button"-->
-                                <!--                                                                            class="remove-metro btn btn-danger btn-xs"><i-->
-                                <!--                                                                                class="glyphicon glyphicon-minus"></i></button>-->
-                                <!--                                                                </div>-->
-                                <div class="clearfix"></div>
-                            </div>
-                            <div class="panel-body">
-                                <?php
-                                // necessary for update action.
-                                if ( ! $metroStation->isNewRecord) {
-                                    echo Html::activeHiddenInput($metroStation, "[{$i}]id");
-                                }
-                                ?>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h4>Ближайшие станции метро
+                            <button type="button" class="add-metro btn btn-success btn-sm pull-right"><i
+                                        class="glyphicon glyphicon-plus"></i></button>
+                        </h4>
+                    </div>
+                    <div class="panel-body">
+                        <div class="metro-items"><!-- widgetContainer -->
+                            <?php foreach ($metro as $i => $metroStation): ?>
+                                <div class="metro panel panel-default"><!-- widgetBody -->
+                                    <div class="panel-heading">
+                                        <h3 class="panel-title pull-left">Добавить станцию метро по
+                                            близости</h3>
+                                        <div class="pull-right">
+                                            <!--                                    <button type="button"-->
+                                            <!--                                            class="add-metro btn btn-success btn-xs"><i-->
+                                            <!--                                                class="glyphicon glyphicon-plus"></i></button>-->
+                                            <button type="button"
+                                                    class="remove-metro btn btn-danger btn-xs"><i
+                                                        class="glyphicon glyphicon-minus"></i></button>
+                                        </div>
+                                        <div class="clearfix"></div>
+                                    </div>
+                                    <div class="panel-body">
+                                        <?php
+                                        // necessary for update action.
+                                        if (!$metroStation->isNewRecord) {
+                                            echo Html::activeHiddenInput($metroStation, "[{$i}]id");
+                                        }
+                                        ?>
 
-                                <?= $form->field($metroStation,
-                                    "[{$i}]metro_id")->widget(DepDrop::class, [
-                                    'options'       => ['id' => 'metro_id' . time()],
-                                    'pluginOptions' => [
-                                        'depends'     => ['city_id'],
-                                        'placeholder' => 'Выбрать...',
-                                        'url'         => Url::to(['/site/metro'])
-                                    ]
-                                ]); ?>
-
-
-                            </div>
+                                        <?= $form->field($metroStation,
+                                            "[{$i}]metro_id")->dropDownList([], ['class' => 'js-metro-select form-control'
+                                        ]); ?>
+                                    </div>
+                                </div>
+                            <?php endforeach; ?>
                         </div>
-                    <?php endforeach; ?>
+                    </div>
                 </div>
                 <?php DynamicFormWidget::end(); ?>
-
 
                 <?= $form->field($model, 'address')->textarea() ?>
 
@@ -145,23 +148,23 @@ $this->params['breadcrumbs'][] = $this->title;
                         ['multiple' => 'multiple',]); ?>
 
                     <?php DynamicFormWidget::begin([
-                        'widgetContainer' => 'dynamicform_wrapper',
+                        'widgetContainer' => 'dynamicform_wrapper_hall',
                         // required: only alphanumeric characters plus "_" [A-Za-z0-9_]
-                        'widgetBody'      => '.container-items',
+                        'widgetBody' => '.container-items',
                         // required: css class selector
-                        'widgetItem'      => '.item',
+                        'widgetItem' => '.item',
                         // required: css class
-                        'limit'           => 40,
+                        'limit' => 40,
                         // the maximum times, an element can be cloned (default 999)
-                        'min'             => 1,
+                        'min' => 1,
                         // 0 or 1 (default 1)
-                        'insertButton'    => '.add-item',
+                        'insertButton' => '.add-item',
                         // css class
-                        'deleteButton'    => '.remove-item',
+                        'deleteButton' => '.remove-item',
                         // css class
-                        'model'           => $halls[0],
-                        'formId'          => 'form-signup',
-                        'formFields'      => [
+                        'model' => $halls[0],
+                        'formId' => 'form-signup',
+                        'formFields' => [
                             'title',
                             'size',
                         ],
@@ -184,7 +187,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 <div class="panel-body">
                                     <?php
                                     // necessary for update action.
-                                    if ( ! $hall->isNewRecord) {
+                                    if (!$hall->isNewRecord) {
                                         echo Html::activeHiddenInput($hall, "[{$i}]id");
                                     }
                                     ?>
@@ -219,7 +222,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
 <?php
 $selectId = Html::getInputId($model, 'activities');
-$js       = <<<JS
+$js = <<<JS
 
 $('#$selectId').change(function(e) {
     const selector = $(this);
@@ -233,6 +236,30 @@ $('#$selectId').change(function(e) {
         $('#js-more').hide();
     }
 });
+
+function changeMetroSelector(){
+   
+    const selectors = $('.js-metro-select');
+    const city = $('#city_id').val();
+    
+    selectors.find('option').remove();
+    
+    $.ajax({
+  method: "POST",
+  dataType: "json",
+  url: '/site/metro',
+  data:{"depdrop_all_params[city_id]": city, "depdrop_parents[0]": city},
+  success:  function(data) {
+            data.output.forEach(function(el) {
+              selectors.append('<option value="'+el.id+'">'+el.name+'</option>')
+            })
+        }
+});
+    
+    $(".dynamicform_wrapper").on("afterInsert", function(e, item) {
+    changeMetroSelector();
+});
+}
 JS;
 
 $this->registerJs($js);
