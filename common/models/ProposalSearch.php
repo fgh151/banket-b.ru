@@ -41,7 +41,7 @@ class ProposalSearch extends Proposal
      *
      * @return ActiveDataProvider
      */
-    public function search($params, $direct = false)
+    public function search($params, $direct = false, $admin = false)
     {
         $query = Proposal::find();
 
@@ -79,10 +79,12 @@ class ProposalSearch extends Proposal
             'status' => $this->status
         ]);
 
-        if ($direct == false) {
-            $query->andFilterWhere(['organizations' => '[]']);
-        } else {
-            $query->andFilterWhere(['@>', 'organizations', '[' . $direct . ']']);
+        if (!$admin) {
+            if ($direct == false) {
+                $query->andFilterWhere(['organizations' => '[]']);
+            } else {
+                $query->andFilterWhere(['@>', 'organizations', '[' . $direct . ']']);
+            }
         }
 
         $query->andFilterWhere(['>', 'amount', $this->amount]);
