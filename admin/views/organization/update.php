@@ -16,6 +16,12 @@ $this->params['breadcrumbs'][] = 'Изменить';
 
     <?= $this->render('_form', [
         'model' => $model,
+        'metro' => $metro,
+        'districts' => $districts,
+        'metros' => $metros,
+        'params' => $params,
+        'halls' => $halls,
+        'cuisine' => $cuisine
     ]) ?>
 
 </div>

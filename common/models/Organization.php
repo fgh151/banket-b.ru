@@ -38,12 +38,18 @@ use yii\web\IdentityInterface;
  * @property integer    $district_id
  * @property Upload[] $images
  *
+ * @property OrganizationLinkMetro[] $linkMetro
+ * @property OrganizationLinkActivity[] $linkActivity
+ * @property RestaurantLinkCuisine[] $cuisines
+ *
  */
 class Organization extends ActiveRecord implements IdentityInterface
 {
 
     public $password;
     public $image_field;
+
+    public $cuisine_field;
 
     use AuthTrait;
 
@@ -94,7 +100,7 @@ class Organization extends ActiveRecord implements IdentityInterface
             [['email'], 'unique'],
             [['password_reset_token'], 'unique'],
             [['state', 'state_statistic', 'state_promo', 'state_direct'],'default', 'value' => Constants::ORGANIZATION_STATE_FREE],
-            [['password', 'url', 'image_field'], 'safe'],
+            [['password', 'url', 'image_field', 'cuisine_field'], 'safe'],
             ['city_id', ExistValidator::class, 'targetClass' => GeoCity::class, 'targetAttribute' => 'id']
         ];
     }
@@ -154,10 +160,30 @@ class Organization extends ActiveRecord implements IdentityInterface
             ->viaTable(OrganizationLinkActivity::tableName(), ['organization_id', 'id']);
     }
 
+    public function getLinkActivity()
+    {
+        return $this->hasMany(OrganizationLinkActivity::class, ['organization_id' => 'id']);
+    }
+
+    public function isRestaurant()
+    {
+        foreach ($this->linkActivity as $activity) {
+            if ($activity->activity_id === 1) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 
     public function getHalls()
     {
         return $this->hasMany(RestaurantHall::class, ['restaurant_id' => 'id']);
+    }
+
+    public function getLinkMetro()
+    {
+        return $this->hasMany(OrganizationLinkMetro::class, ['organization_id' => 'id']);
     }
 
     /**
@@ -184,5 +210,10 @@ class Organization extends ActiveRecord implements IdentityInterface
     {
         return $this->hasMany(Upload::class, ['id' => 'upload_id'])
             ->viaTable(OrganizationImage::tableName(), ['organization_id' => 'id']);
+    }
+
+    public function getCuisines()
+    {
+        return $this->hasMany(RestaurantLinkCuisine::class, ['restaurant_id' => 'id']);
     }
 }
