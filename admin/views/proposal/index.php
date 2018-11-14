@@ -44,7 +44,15 @@ $this->params['breadcrumbs'][] = $this->title;
             //'parking:boolean',
             //'comment:ntext',
 
-            ['class' => 'yii\grid\ActionColumn'],
+            [
+                'class' => 'yii\grid\ActionColumn',
+                'template' => '{view} {update} {delete} {close}',
+                'buttons' => [
+                    'close' => function ($url, $model, $key) {     // render your custom button
+                        return ' ' . Html::a('<span class="glyphicon glyphicon-remove"></span>', ['proposal/close', 'id' => $model->id]);
+                    }
+                ]
+            ],
         ],
     ]); ?>
     <?php Pjax::end(); ?>

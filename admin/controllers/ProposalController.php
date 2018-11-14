@@ -3,6 +3,7 @@
 namespace app\admin\controllers;
 
 use app\admin\components\ProposalFindOneTrait;
+use app\common\components\Constants;
 use app\common\models\Proposal;
 use app\common\models\ProposalSearch;
 use Yii;
@@ -114,5 +115,16 @@ class ProposalController extends Controller
         $this->findModel($id)->delete();
 
         return $this->redirect(['index']);
+    }
+
+
+    /**
+     * @param $id
+     */
+    public function actionClose($id)
+    {
+        $proposal = Proposal::findOne($id);
+        $proposal->status = Constants::PROPOSAL_STATUS_CLOSED;
+        $proposal->save();
     }
 }
