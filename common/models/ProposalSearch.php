@@ -81,7 +81,7 @@ class ProposalSearch extends Proposal
 
         if (!$admin) {
             if ($direct == false) {
-                $query->andFilterWhere(['organizations' => '[]']);
+                $query->andFilterWhere(['organizations' => '"[]"']);
             } else {
                 $query->andFilterWhere(['@>', 'organizations', '[' . $direct . ']']);
             }
@@ -100,6 +100,8 @@ class ProposalSearch extends Proposal
                 'not in',
                 'id', $this->rejected]);
         }
+
+//        var_dump($query->createCommand()->getRawSql()); die;
 
         return $dataProvider;
     }

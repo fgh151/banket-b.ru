@@ -144,8 +144,13 @@ $this->params['breadcrumbs'][] = $this->title;
                     <?= $form->field($modelParams, 'amount')->input('number'); ?>
 
                     <?= $form->field($model,
-                        'cuisine[]')->dropDownList(Proposal::cuisineLabels(),
-                        ['multiple' => 'multiple',]); ?>
+                        'cuisine[]')->widget(\kartik\select2\Select2::class, [
+                        'data' => Proposal::cuisineLabels(),
+                        'options' => [
+                            'placeholder' => 'Выберите кухни',
+                            'multiple' => true
+                        ],
+                    ]); ?>
 
                     <?php DynamicFormWidget::begin([
                         'widgetContainer' => 'dynamicform_wrapper_hall',

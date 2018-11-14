@@ -114,14 +114,26 @@ class SiteController extends Controller
      * @throws \Throwable
      * @throws \yii\db\Exception
      */
-    public function actionIndex($proposals = null)
+    public function actionIndex($proposals = null, $month = null)
     {
         /** @var Organization $organization */
         $organization = Yii::$app->getUser()->getIdentity();
 
+        if ($month) {
+            $firstDay = date('Y-m-d') . ' first day of last month';
+            $lastDay = date('Y-m-d') . ' last day of last month';
+
+            $createdAtCriteria = [
+                'between', 'created_at', date_create($firstDay)->getTimestamp(), date_create($lastDay)->getTimestamp()
+            ];
+        }
+
         $proposalsCount = Proposal::find();
         if ($proposals === 'my') {
             $proposalsCount->where(['city_id' => $organization->city_id]);
+        }
+        if ($month) {
+            $proposalsCount->andFilterWhere($createdAtCriteria);
         }
         $proposalsCount->count();
         $onePercent = $proposalsCount / 10;
@@ -129,6 +141,11 @@ class SiteController extends Controller
         $criteriaSql = '';
         if ($proposals === 'my') {
             $criteriaSql = 'WHERE city_id = '.$organization->city_id;
+        }
+        if ($month) {
+            $criteriaSql .= $proposals === 'my' ? ' AND ' : '';
+
+            $criteriaSql .= 'WHERE  created_at BETWEEN  ' . date_create($firstDay)->getTimestamp() . ' AND ' . date_create($lastDay)->getTimestamp();
         }
 
 
@@ -202,6 +219,9 @@ class SiteController extends Controller
         if ($proposals === 'my') {
             $proposalsByPrice->where(['city_id' => $organization->city_id]);
         }
+        if ($month) {
+            $proposalsByPrice->andFilterWhere($createdAtCriteria);
+        }
         $proposalsByPrice = $proposalsByPrice->asArray()->all();
         foreach ($proposalsByPrice as $p) {
             $amount = $p['amount'];
@@ -214,12 +234,15 @@ class SiteController extends Controller
         });
 
         $byPeoples =[];
-        $proposalsByPrice = Proposal::find()->select(['guests_count']);
+        $proposalsByPeoples = Proposal::find()->select(['guests_count']);
         if ($proposals === 'my') {
-            $proposalsByPrice->where(['city_id' => $organization->city_id]);
+            $proposalsByPeoples->where(['city_id' => $organization->city_id]);
         }
-        $proposalsByPrice = $proposalsByPrice->asArray()->all();
-        foreach ($proposalsByPrice as $p) {
+        if ($month) {
+            $proposalsByPeoples->andFilterWhere($createdAtCriteria);
+        }
+        $proposalsByPeoples = $proposalsByPeoples->asArray()->all();
+        foreach ($proposalsByPeoples as $p) {
             $count = $p['guests_count'];
             $byPeoples[$count] = isset($byPeoples[$count]) ? $byPeoples[$count] +1: 1;
         }
@@ -233,11 +256,17 @@ class SiteController extends Controller
         if ($proposals === 'my') {
             $proposalsCount->where(['city_id' => $organization->city_id]);
         }
+        if ($month) {
+            $proposalsCount->andFilterWhere($createdAtCriteria);
+        }
         $proposalsCount = $proposalsCount->count();
 
         $hall = Proposal::find()->where(['hall' => true]);
         if ($proposals === 'my') {
             $hall->andWhere(['city_id' => $organization->city_id]);
+        }
+        if ($month) {
+            $hall->andFilterWhere($createdAtCriteria);
         }
         $hall = $hall->count();
         $byHall = ['Нужен' => $hall, 'Не нужен' => $proposalsCount-$hall];
@@ -250,6 +279,9 @@ class SiteController extends Controller
         if ($proposals === 'my') {
             $dance->andWhere(['city_id' => $organization->city_id]);
         }
+        if ($month) {
+            $dance->andFilterWhere($createdAtCriteria);
+        }
         $dance = $dance->count();
         $byDance = ['Нужен' => $dance, 'Не нужен' => $proposalsCount-$dance];
         array_walk($byDance, function (&$val, $key) use ($onePercent) {
@@ -259,6 +291,9 @@ class SiteController extends Controller
         $alko = Proposal::find()->where(['own_alcohol' => true]);
         if ($proposals === 'my') {
             $alko->andWhere(['city_id' => $organization->city_id]);
+        }
+        if ($month) {
+            $alko->andFilterWhere($createdAtCriteria);
         }
         $alko = $alko->count();
         $byAlko = ['Нужен' => $alko, 'Не нужен' => $proposalsCount-$alko];
@@ -270,6 +305,9 @@ class SiteController extends Controller
         if ($proposals === 'my') {
             $parking->andWhere(['city_id' => $organization->city_id]);
         }
+        if ($month) {
+            $parking->andFilterWhere($createdAtCriteria);
+        }
         $parking = $parking->count();
         $byParking = ['Нужна' => $parking, 'Не нужна' => $proposalsCount-$parking];
         array_walk($byParking, function (&$val, $key) use ($onePercent) {
@@ -280,6 +318,9 @@ class SiteController extends Controller
         $kitchen = Proposal::find()->select(['cuisine']);
         if ($proposals === 'my') {
             $kitchen->where(['city_id' => $organization->city_id]);
+        }
+        if ($month) {
+            $kitchen->andFilterWhere($createdAtCriteria);
         }
         $kitchen = $kitchen->asArray()->all();
 
@@ -296,6 +337,9 @@ class SiteController extends Controller
         $type = Proposal::find()->select(['event_type']);
         if ($proposals === 'my') {
             $type->where(['city_id' => $organization->city_id]);
+        }
+        if ($month) {
+            $type->andFilterWhere($createdAtCriteria);
         }
         $type = $type->asArray()->all();
         $byTypes =[];

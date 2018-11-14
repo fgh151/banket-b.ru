@@ -39,7 +39,7 @@ class Promo extends ActiveRecord
     {
 
         $organizationQuery = Organization::find()
-                                         ->where(['state' => Constants::ORGANIZATION_STATE_PAID])
+            ->where(['state_promo' => Constants::ORGANIZATION_STATE_PAID])
                                          ->select('id');
         if ($id) {
             $organizationQuery->andFilterWhere([

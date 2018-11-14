@@ -1,11 +1,15 @@
 <?php
 namespace app\admin\controllers;
 
-use Yii;
-use yii\web\Controller;
-use yii\filters\VerbFilter;
-use yii\filters\AccessControl;
+use app\common\models\District;
 use app\common\models\LoginForm;
+use app\common\models\Metro;
+use app\common\models\MetroLine;
+use Yii;
+use yii\filters\AccessControl;
+use yii\filters\VerbFilter;
+use yii\helpers\Json;
+use yii\web\Controller;
 
 /**
  * Site controller
@@ -26,7 +30,7 @@ class SiteController extends Controller
                         'allow' => true,
                     ],
                     [
-                        'actions' => ['logout', 'index'],
+                        'actions' => ['logout', 'index', 'district', 'metro'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -89,6 +93,7 @@ class SiteController extends Controller
         $byHours = $tmp+$hours;
         ksort($byHours);
 
+
         return $this->render('index', [
             'byDay' => $byDay,
             'byHours' => $byHours
@@ -116,6 +121,51 @@ class SiteController extends Controller
                 'model' => $model,
             ]);
         }
+    }
+
+
+    public function actionDistrict()
+    {
+        $out = [];
+        if (isset($_POST['depdrop_parents'])) {
+            $parents = $_POST['depdrop_parents'];
+            if ($parents != null) {
+                $city_id = $parents[0];
+                $out = District::find()
+                    ->select('id as id, title as name')
+                    ->where(['city_id' => $city_id])
+                    ->asArray()
+                    ->all();
+                return Json::encode(['output' => $out, 'selected' => '']);
+            }
+        }
+
+        return Json::encode(['output' => '', 'selected' => '']);
+    }
+
+
+    public function actionMetro()
+    {
+        $out = [];
+        if (isset($_POST['depdrop_parents'])) {
+            $parents = $_POST['depdrop_parents'];
+            if ($parents != null) {
+                $city_id = $parents[0];
+                $out = Metro::find()
+                    ->select('id as id, title as name')
+                    ->where([
+                        'in',
+                        'line_id',
+                        MetroLine::find()->where(['city_id' => $city_id])->select('id')
+                    ])
+                    ->orderBy('title')
+                    ->asArray()
+                    ->all();
+                return Json::encode(['output' => $out, 'selected' => '']);
+            }
+        }
+
+        return Json::encode(['output' => '', 'selected' => '']);
     }
 
     /**
