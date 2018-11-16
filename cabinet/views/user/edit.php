@@ -12,7 +12,7 @@ use yii\widgets\ActiveForm;
 
 ?>
 <div class="profile-edit">
-<?php $form = ActiveForm::begin(); ?>
+    <?php $form = ActiveForm::begin(['id' => 'update']); ?>
 
 <?= $form->field($model, 'name'); ?>
 <?= $form->field($model, 'address')->textarea(); ?>
@@ -33,7 +33,7 @@ use yii\widgets\ActiveForm;
         'deleteButton' => '.remove-metro',
         // css class
         'model' => $metro[0],
-        'formId' => 'form-signup',
+        'formId' => 'update',
         'formFields' => [
             'metro_id',
         ],
@@ -90,6 +90,7 @@ use yii\widgets\ActiveForm;
         <?= $form->field($params, 'dance')->checkbox(); ?>
         <?= $form->field($params, 'parking')->checkbox(); ?>
         <?= $form->field($params, 'amount')->input('number'); ?>
+        <?= $form->field($model, 'image_field')->fileInput()->label('Добавить картинку'); ?>
 
         <?php DynamicFormWidget::begin([
             'widgetContainer' => 'dynamicform_wrapper_hall',
@@ -107,7 +108,7 @@ use yii\widgets\ActiveForm;
             'deleteButton' => '.remove-item',
             // css class
             'model' => $halls[0],
-            'formId' => 'form-signup',
+            'formId' => 'update',
             'formFields' => [
                 'title',
                 'size',

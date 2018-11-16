@@ -128,7 +128,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     ['mask' => '+7 (999) 999-99-99']) ?>
 
                 <?= $form->field($model,
-                    'activities')->dropDownList(ArrayHelper::map(Activity::find()->select([
+                    'activities[]')->dropDownList(ArrayHelper::map(Activity::find()->select([
                     'id',
                     'title'
                 ])->asArray()->all(), 'id', 'title'), ['multiply', 'prompt' => '']); ?>

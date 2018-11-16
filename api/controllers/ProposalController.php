@@ -11,13 +11,10 @@ namespace app\api\controllers;
 
 use app\common\components\Constants;
 use app\common\models\Message;
-use app\common\models\MobileUser;
 use app\common\models\Organization;
 use app\common\models\OrganizationProposalStatus;
 use app\common\models\Proposal;
-use Prophecy\Exception\Doubler\MethodNotExtendableException;
 use Yii;
-use yii\filters\AccessControl;
 use yii\filters\auth\HttpBearerAuth;
 use yii\filters\ContentNegotiator;
 use yii\helpers\ArrayHelper;
@@ -82,6 +79,8 @@ class ProposalController extends Controller
                            'owner_id' => Yii::$app->user->id,
                            'status' => Constants::PROPOSAL_STATUS_CREATED
                        ])
+//            ->andFilterWhere(['>', 'date', date('Y-m-d')])
+            ->orderBy(['date' => SORT_ASC])
                        ->all();
     }
 

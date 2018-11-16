@@ -30,7 +30,7 @@ use yii\web\IdentityInterface;
  * @property int                                               $state_promo
  * @property int                                               $state_statistic
  * @property integer                                           $city_id
- * @property mixed                                             $halls
+ * @property RestaurantHall $halls
  * @property RestaurantParams $params
  * @property \app\common\models\Metro[]|\yii\db\ActiveQuery    $metro
  * @property \yii\db\ActiveQuery|\app\common\models\Activity[] $activities
@@ -41,6 +41,7 @@ use yii\web\IdentityInterface;
  * @property OrganizationLinkMetro[] $linkMetro
  * @property OrganizationLinkActivity[] $linkActivity
  * @property RestaurantLinkCuisine[] $cuisines
+ * @property GeoCity $city
  *
  */
 class Organization extends ActiveRecord implements IdentityInterface
@@ -215,5 +216,10 @@ class Organization extends ActiveRecord implements IdentityInterface
     public function getCuisines()
     {
         return $this->hasMany(RestaurantLinkCuisine::class, ['restaurant_id' => 'id']);
+    }
+
+    public function getCity()
+    {
+        return $this->hasOne(GeoCity::class, ['id' => 'city_id']);
     }
 }

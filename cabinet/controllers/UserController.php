@@ -44,7 +44,9 @@ class UserController extends Controller
                 $params->load(Yii::$app->request->post());
                 $params->save();
 
-                $model->linkActivity[0]->save();
+                if (!empty($model->linkActivity)) {
+                    $model->linkActivity[0]->save();
+                }
 
                 OrganizationLinkMetro::deleteAll(['organization_id' => $model->id]);
                 /** @var OrganizationLinkMetro[] $metros */
@@ -86,18 +88,22 @@ class UserController extends Controller
             ->asArray()
             ->all(), 'id', 'name');
 
-        $metros = ArrayHelper::map(Metro::findBySql('SELECT metro.id, concat(metro.title, \' (\', ml.title, \')\') as name FROM metro 
+        if ($model->city_id) {
+            $metros = ArrayHelper::map(Metro::findBySql('SELECT metro.id, concat(metro.title, \' (\', ml.title, \')\') as name FROM metro 
 LEFT JOIN metro_line ml ON ml.id = metro.line_id
 WHERE ml.city_id = ' . $model->city_id . ' ORDER BY name;')
-            ->asArray()
-            ->all(), 'id', 'name');
+                ->asArray()
+                ->all(), 'id', 'name');
+        } else {
+            $metros = [];
+        }
 
         return $this->render('edit', [
             'model' => $model,
             'metro' => empty($model->linkMetro) ? [new OrganizationLinkMetro()] : $model->linkMetro,
             'districts' => $districts,
             'metros' => $metros,
-            'params' => $params,
+            'params' => $params ? $params : new RestaurantParams(['organization_id' => $model->id]),
             'halls' => empty($model->halls) ? [new RestaurantHall()] : $model->halls,
             'cuisine' => empty($model->cuisines) ? [new RestaurantLinkCuisine()] : $model->cuisines
         ]);

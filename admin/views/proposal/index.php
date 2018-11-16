@@ -29,6 +29,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
             'id',
             'owner.email',
+            'owner.phone',
             'City',
             'date',
             'time',

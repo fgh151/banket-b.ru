@@ -41,8 +41,34 @@ $this->params['breadcrumbs'][] = $this->title;
                     return Organization::stateLabels()[$model->state];
                 }
             ],
+            [
+                'attribute' => 'state_direct',
+                'filter' => Organization::stateLabels(),
+                'value' => function (Organization $model) {
+                    return Organization::stateLabels()[$model->state_direct];
+                }
+            ],
+//            [
+//                'label' => 'hall',
+//                'value' => function (Organization $model) {
+//        $res = '';
+//                    if (!empty($model->halls)) {
+//                        foreach ($model->halls as $hall) {
+//                            $res.= ' '.$hall->size;
+//                        }
+//                    }
+//                    return $res;
+//                }
+//            ],
             //'created_at',
             //'updated_at',
+            [
+                'attribute' => 'citY_id',
+                'label' => 'Город',
+                'value' => function (Organization $model) {
+                    return $model->city->title;
+                }
+            ],
 
             ['class' => 'yii\grid\ActionColumn'],
         ],

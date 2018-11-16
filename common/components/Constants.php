@@ -15,7 +15,7 @@ class Constants
     const USER_STATUS_ACTIVE = 10;
 
     const ORGANIZATION_STATE_PAID = 1;
-    const ORGANIZATION_STATE_FREE = 2;
+    const ORGANIZATION_STATE_FREE = 0;
 
     const PROPOSAL_STATUS_CREATED = 1;
     const PROPOSAL_STATUS_CLOSED = 2;

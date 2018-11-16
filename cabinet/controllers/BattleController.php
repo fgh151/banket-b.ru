@@ -16,7 +16,6 @@ use app\common\models\Proposal;
 use app\common\models\ProposalSearch;
 use Yii;
 use yii\data\ActiveDataProvider;
-use yii\helpers\ArrayHelper;
 use yii\web\Controller;
 
 class BattleController extends Controller
@@ -48,19 +47,19 @@ class BattleController extends Controller
         $organization = Yii::$app->getUser()->getIdentity();
         if ($organization->state == Constants::ORGANIZATION_STATE_PAID) {
 
+            $rejected = OrganizationProposalStatus::find()
+                ->where([
+                    'organization_id' => $organization->getId(),
+                    'status' => Constants::ORGANIZATION_PROPOSAL_STATUS_REJECT
+                ])
+                ->select('proposal_id')->asArray()->all();
 
-            $searchParams = [
-                'ProposalSearch[status]' => Constants::PROPOSAL_STATUS_CREATED,
-                'ProposalSearch[rejected]' => OrganizationProposalStatus::find()
-                    ->where([
-                        'organization_id' => $organization->getId(),
-                        'status' => Constants::ORGANIZATION_PROPOSAL_STATUS_REJECT
-                    ])
-                    ->select('proposal_id')->asArray()->all()
-            ];
+            foreach ($rejected as $record) {
+                $searchModel->rejected[] = $record['proposal_id'];
+            }
+            $searchModel->status = Constants::PROPOSAL_STATUS_CREATED;
 
-            $searchParams = ArrayHelper::merge(Yii::$app->request->queryParams, $searchParams);
-            $dataProvider = $searchModel->search($searchParams);
+            $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
 
 
@@ -90,18 +89,20 @@ class BattleController extends Controller
         if ($organization->state == Constants::ORGANIZATION_STATE_PAID) {
 
 
-            $searchParams = [
-                'ProposalSearch[status]' => Constants::PROPOSAL_STATUS_CREATED,
-                'ProposalSearch[rejected]' => OrganizationProposalStatus::find()
-                    ->where([
-                        'organization_id' => $organization->getId(),
-                        'status' => Constants::ORGANIZATION_PROPOSAL_STATUS_REJECT
-                    ])
-                    ->select('proposal_id')->asArray()->all()
-            ];
+            $rejected = OrganizationProposalStatus::find()
+                ->where([
+                    'organization_id' => $organization->getId(),
+                    'status' => Constants::ORGANIZATION_PROPOSAL_STATUS_REJECT
+                ])
+                ->select('proposal_id')->asArray()->all();
 
-            $searchParams = ArrayHelper::merge(Yii::$app->request->queryParams, $searchParams);
-            $dataProvider = $searchModel->search($searchParams, Yii::$app->getUser()->getId());
+            foreach ($rejected as $record) {
+                $searchModel->rejected[] = $record['proposal_id'];
+            }
+            $searchModel->status = Constants::PROPOSAL_STATUS_CREATED;
+
+            $dataProvider = $searchModel->search(Yii::$app->request->queryParams, Yii::$app->getUser()->getId());
+
 
 
         } else {
@@ -124,6 +125,6 @@ class BattleController extends Controller
         $model->proposal_id = $id;
         $model->status = Constants::ORGANIZATION_PROPOSAL_STATUS_REJECT;
         $model->save();
-        $this->redirect('index');
+        $this->redirect(['index']);
     }
 }

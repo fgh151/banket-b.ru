@@ -16,7 +16,7 @@ class OrganizationSearch extends Organization
     public function rules()
     {
         return [
-            [['id', 'status', 'created_at', 'updated_at', 'state'], 'integer'],
+            [['id', 'status', 'created_at', 'updated_at', 'state', 'state_direct'], 'integer'],
             [['auth_key', 'password_hash', 'password_reset_token', 'email', 'name', 'address', 'contact', 'phone'], 'safe'],
         ];
     }
@@ -62,6 +62,7 @@ class OrganizationSearch extends Organization
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
             'state' => $this->state,
+            'state_direct' => $this->state_direct,
         ]);
 
         $query->andFilterWhere(['ilike', 'auth_key', $this->auth_key])
