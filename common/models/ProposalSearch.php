@@ -67,7 +67,6 @@ class ProposalSearch extends Proposal
             'owner_id' => $this->owner_id,
             'date' => $this->date,
             'time' => $this->time,
-            'guests_count' => $this->guests_count,
             'type' => $this->type,
             'event_type' => $this->event_type,
             'metro' => $this->metro,
@@ -78,6 +77,8 @@ class ProposalSearch extends Proposal
             'parking' => $this->parking,
             'status' => $this->status
         ]);
+
+        $query->andFilterWhere(['>', 'guests_count', $this->guests_count]);
 
         if (!$admin) {
             if ($direct == false) {

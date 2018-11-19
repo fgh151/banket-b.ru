@@ -16,12 +16,14 @@ use app\common\models\Organization;
 use app\common\models\OrganizationLinkMetro;
 use app\common\models\RestaurantHall;
 use app\common\models\RestaurantLinkCuisine;
+use app\common\models\RestaurantParams;
 use Yii;
 use yii\helpers\ArrayHelper;
 use yii\web\Controller;
 
 class UserController extends Controller
 {
+    /** @noinspection PhpUndefinedClassInspection */
 
     /**
      * @return string
@@ -98,6 +100,7 @@ WHERE ml.city_id = ' . $model->city_id . ' ORDER BY name;')
             $metros = [];
         }
 
+        /** @noinspection MissedViewInspection */
         return $this->render('edit', [
             'model' => $model,
             'metro' => empty($model->linkMetro) ? [new OrganizationLinkMetro()] : $model->linkMetro,
@@ -105,7 +108,7 @@ WHERE ml.city_id = ' . $model->city_id . ' ORDER BY name;')
             'metros' => $metros,
             'params' => $params ? $params : new RestaurantParams(['organization_id' => $model->id]),
             'halls' => empty($model->halls) ? [new RestaurantHall()] : $model->halls,
-            'cuisine' => empty($model->cuisines) ? [new RestaurantLinkCuisine()] : $model->cuisines
+            'cuisine' => empty($model->cuisineLinks) ? [new RestaurantLinkCuisine()] : $model->cuisineLinks
         ]);
     }
 

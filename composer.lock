@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-  "content-hash": "36ec17e5d07f46b82226a303b8cc980a",
+  "content-hash": "f0b165d5d5788da4bc2794ac8257134d",
     "packages": [
         {
             "name": "2amigos/yii2-chartjs-widget",
@@ -132,7 +132,7 @@
             "version": "3.2.1",
             "source": {
                 "type": "git",
-                "url": "https://github.com/jquery/jquery-dist.git",
+              "url": "git@github.com:jquery/jquery-dist.git",
                 "reference": "77d2a51d0520d2ee44173afdf4e40a9201f5964e"
             },
             "dist": {
@@ -1358,6 +1358,57 @@
             "time": "2016-12-03T22:08:25+00:00"
         },
         {
+          "name": "nterms/yii2-mailqueue",
+          "version": "0.0.15",
+          "source": {
+            "type": "git",
+            "url": "https://github.com/nterms/yii2-mailqueue.git",
+            "reference": "85a72594437e4e0b1cb25e6d8c7c6b3a6e50119e"
+          },
+          "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/nterms/yii2-mailqueue/zipball/85a72594437e4e0b1cb25e6d8c7c6b3a6e50119e",
+            "reference": "85a72594437e4e0b1cb25e6d8c7c6b3a6e50119e",
+            "shasum": ""
+          },
+          "require": {
+            "yiisoft/yii2": "*",
+            "yiisoft/yii2-swiftmailer": "~2.1.0"
+          },
+          "type": "yii2-extension",
+          "extra": {
+            "bootstrap": "nterms\\mailqueue\\Bootstrap"
+          },
+          "autoload": {
+            "psr-4": {
+              "nterms\\mailqueue\\": ""
+            }
+          },
+          "notification-url": "https://packagist.org/downloads/",
+          "license": [
+            "MIT"
+          ],
+          "authors": [
+            {
+              "name": "Saranga Abeykoon",
+              "email": "amisaranga@gmail.com",
+              "homepage": "http://nterms.com/"
+            }
+          ],
+          "description": "Email queue component for yii2 that works with yii2-swiftmailer.",
+          "homepage": "https://github.com/nterms/yii2-mailqueue",
+          "keywords": [
+            "component",
+            "email",
+            "extension",
+            "queue",
+            "swiftmailer",
+            "yii2",
+            "yii2-swiftmailer"
+          ],
+          "time": "2018-11-01T15:53:38+00:00"
+        },
+      {
             "name": "psr/cache",
             "version": "1.0.1",
             "source": {

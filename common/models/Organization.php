@@ -40,7 +40,7 @@ use yii\web\IdentityInterface;
  *
  * @property OrganizationLinkMetro[] $linkMetro
  * @property OrganizationLinkActivity[] $linkActivity
- * @property RestaurantLinkCuisine[] $cuisines
+ * @property RestaurantLinkCuisine[] $cuisineLinks
  * @property GeoCity $city
  *
  */
@@ -121,7 +121,8 @@ class Organization extends ActiveRecord implements IdentityInterface
                 return $model->params->amount;
             },
             'halls',
-            'metro'
+            'metro',
+            'cuisines'
         ];
     }
 
@@ -213,7 +214,19 @@ class Organization extends ActiveRecord implements IdentityInterface
             ->viaTable(OrganizationImage::tableName(), ['organization_id' => 'id']);
     }
 
+    /**
+     * @return array
+     */
     public function getCuisines()
+    {
+        $result = [];
+        foreach ($this->cuisineLinks as $cuisine) {
+            $result[] = $cuisine->title;
+        }
+        return $result;
+    }
+
+    public function getCuisineLinks()
     {
         return $this->hasMany(RestaurantLinkCuisine::class, ['restaurant_id' => 'id']);
     }

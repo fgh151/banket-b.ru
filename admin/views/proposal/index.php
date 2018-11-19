@@ -1,5 +1,6 @@
 <?php
 
+use app\common\models\Proposal;
 use yii\grid\GridView;
 use yii\helpers\Html;
 use yii\widgets\Pjax;
@@ -44,7 +45,25 @@ $this->params['breadcrumbs'][] = $this->title;
             //'own_alcohol:boolean',
             //'parking:boolean',
             //'comment:ntext',
-
+            [
+                'label' => 'Прямая заявка',
+                'value' => function (Proposal $model) {
+                    return implode('<br />', $model->getDirectOrganizations());
+                },
+                'format' => 'html'
+            ],
+            'created_at:datetime',
+            [
+                'label' => 'Ответы',
+                'value' => function (Proposal $model) {
+                    $result = [];
+                    foreach ($model->getAnswers() as $org => $time) {
+                        $result[] = $org . ' ' . $time;
+                    }
+                    return implode('<br />', $result);
+                },
+                'format' => 'html'
+            ],
             [
                 'class' => 'yii\grid\ActionColumn',
                 'template' => '{view} {update} {delete} {close}',

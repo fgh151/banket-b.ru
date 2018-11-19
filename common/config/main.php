@@ -27,6 +27,12 @@ return [
             //show full url (for example in case of a API)
             'absoluteUrl' => false,
         ],
+        'mailqueue' => [
+            'class' => 'nterms\mailqueue\MailQueue',
+            'table' => '{{%mail_queue}}',
+            'mailsPerRound' => 10,
+            'maxAttempts' => 3,
+        ],
     ],
     'modules'    => [
         'smsGate' => [

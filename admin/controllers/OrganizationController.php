@@ -1,4 +1,4 @@
-<?php
+<?php /** @noinspection MissedViewInspection */
 
 namespace app\admin\controllers;
 
@@ -180,9 +180,9 @@ WHERE ml.city_id = ' . $model->city_id . ' ORDER BY name;')
             'metros' => $metros,
             'params' => $params ? $params : new RestaurantParams(['organization_id' => $model->id]),
             'halls' => empty($model->halls) ? [new RestaurantHall()] : $model->halls,
-            'cuisine' => empty($model->cuisines) ? [new RestaurantLinkCuisine()] : $model->cuisines
+            'cuisine' => empty($model->cuisineLinks) ? [new RestaurantLinkCuisine()] : $model->cuisineLinks
         ]);
-    }
+    }/** @noinspection PhpUndefinedClassInspection */
 
     /**
      * Deletes an existing Organization model.

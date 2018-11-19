@@ -2,13 +2,12 @@
 
 namespace app\common\models;
 
-use Yii;
-
 /**
  * This is the model class for table "restaurant_link_cuisine".
  *
  * @property int $id
  * @property int $restaurant_id
+ * @property string $title
  * @property int $cuisine_id
  */
 class RestaurantLinkCuisine extends \yii\db\ActiveRecord
@@ -43,5 +42,13 @@ class RestaurantLinkCuisine extends \yii\db\ActiveRecord
             'restaurant_id' => 'Restaurant ID',
             'cuisine_id' => 'Cuisine ID',
         ];
+    }
+
+    /**
+     * @return string
+     */
+    public function getTitle()
+    {
+        return Proposal::cuisineLabels()[$this->cuisine_id];
     }
 }

@@ -30,6 +30,18 @@ return [
                 ],
             ],
         ],
+        'mailqueue' => [
+            'class' => 'nterms\mailqueue\MailQueue',
+            'table' => '{{%mail_queue}}',
+            'transport' => [
+                'class' => 'Swift_SmtpTransport',
+                'host' => 'smtp.yandex.ru',
+                'username' => 'fedor@support-pc.org',
+                'password' => 'idr4mvnax',
+                'port' => '465',
+                'encryption' => 'ssl', // у яндекса SSL
+            ],
+        ],
     ],
     'params' => $params,
 ];

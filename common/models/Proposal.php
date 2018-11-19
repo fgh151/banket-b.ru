@@ -3,49 +3,50 @@
 namespace app\common\models;
 
 use app\common\components\Constants;
+use Yii;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
 
 /**
  * This is the model class for table "proposal".
  *
- * @property int        $id
- * @property int        $owner_id
- * @property string     $City
- * @property string     $date
- * @property string     $time
- * @property int        $guests_count
- * @property double     $amount
- * @property int        $type
- * @property int        $event_type
- * @property int        $metro
- * @property int        $cuisine
- * @property bool       $dance
- * @property bool       $private
- * @property bool       $own_alcohol
- * @property bool       $parking
- * @property string     $comment
- * @property int        $status
- * @property int        $created_at
- * @property int        $updated_at
- * @property array  $organizations
+ * @property int $id
+ * @property int $owner_id
+ * @property string $City
+ * @property string $date
+ * @property string $time
+ * @property int $guests_count
+ * @property double $amount
+ * @property int $type
+ * @property int $event_type
+ * @property int $metro
+ * @property int $cuisine
+ * @property bool $dance
+ * @property bool $private
+ * @property bool $own_alcohol
+ * @property bool $parking
+ * @property string $comment
+ * @property int $status
+ * @property int $created_at
+ * @property int $updated_at
+ * @property array $organizations
  *
- * @property \DateTime  $when
- * @property int        $cuisineString
- * @property int        $eventType
- * @property $this      $isConstructor
+ * @property \DateTime $when
+ * @property int $cuisineString
+ * @property int $eventType
+ * @property $this $isConstructor
  * @property MobileUser $owner
- * @property boolean    $floristics
- * @property boolean    $hall
- * @property boolean    $photo
- * @property boolean    $stylists
- * @property boolean    $entertainment
- * @property boolean    $cake
- * @property boolean    $transport
- * @property boolean    $present
- * @property integer    $city_id
- * @property integer    $region_id
- * @property integer    $all_regions
+ * @property boolean $floristics
+ * @property boolean $hall
+ * @property boolean $photo
+ * @property boolean $stylists
+ * @property boolean $entertainment
+ * @property boolean $cake
+ * @property boolean $transport
+ * @property boolean $present
+ * @property integer $city_id
+ * @property integer $region_id
+ * @property integer $all_regions
  */
 class Proposal extends ActiveRecord
 {
@@ -164,6 +165,7 @@ class Proposal extends ActiveRecord
             'entertainment' => 'Развлекательная программа',
             'transport' => 'Транспорт на заказа',
             'present' => 'Подарки',
+            'created_at' => 'Дата создания'
         ];
     }
 
@@ -248,6 +250,54 @@ class Proposal extends ActiveRecord
                 $message->save();
             }
         }
+        if ($insert) {
+            $recipients = Organization::find()->where(['state' => Constants::ORGANIZATION_STATE_PAID])->all();
+            foreach ($recipients as $recipient) {
+                Yii::$app->mailqueue->compose()
+                    ->setFrom(Yii::$app->params['adminEmail'])
+                    ->setTo($recipient->email)
+                    ->setSubject('Новая заявка')
+                    ->setTextBody('В разделе заявок появилась новая заявка')
+                    ->queue();
+            }
+        }
         parent::afterSave($insert, $changedAttributes);
+    }
+
+    public function getAnswers()
+    {
+        $cache = \Yii::$app->cache;
+        $result = $cache->get('proposal-answers-' . $this->id);
+
+        if ($result === false) {
+            $messages = Message::findAll($this->id);
+            $tmp = $result = [];
+            foreach ($messages as $organizationId => $messagesArray) {
+                $tmp[$organizationId] = min(array_keys($messagesArray));
+            }
+
+            foreach ($tmp as $organizationId => $timestamp) {
+                $result[Organization::findOne(intval($organizationId))->name] = \Yii::$app->formatter->asDatetime($timestamp);
+            }
+            $cache->set('proposal-answers-' . $this->id, $result);
+        }
+
+        return $result;
+    }
+
+    public function getDirectOrganizations()
+    {
+        $cache = \Yii::$app->cache;
+        $result = $cache->get('proposal-direct-organizations-' . $this->id);
+        if ($result === false) {
+
+            if (is_array($this->organizations)) {
+                foreach ($this->organizations as $organizationId) {
+                    $result[] = Organization::findOne(intval($organizationId))->name;
+                }
+            }
+            $cache->set('proposal-direct-organizations-' . $this->id, $result);
+        }
+        return $result;
     }
 }

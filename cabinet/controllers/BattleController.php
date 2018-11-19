@@ -58,6 +58,7 @@ class BattleController extends Controller
                 $searchModel->rejected[] = $record['proposal_id'];
             }
             $searchModel->status = Constants::PROPOSAL_STATUS_CREATED;
+            $searchModel->guests_count = 8;
 
             $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 

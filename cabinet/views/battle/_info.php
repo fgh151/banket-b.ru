@@ -7,8 +7,9 @@
  * @var $key \app\common\models\Proposal
  */
 
-use yii\bootstrap\Modal;
 use app\common\models\Proposal;
+use yii\bootstrap\Modal;
+
 ?>
 
 
@@ -36,7 +37,12 @@ echo \yii\widgets\DetailView::widget([
         'private:boolean',
         'own_alcohol:boolean',
         'parking:boolean',
-        'comment',
+        [
+            'attribute' => 'comment',
+            'value' => function (Proposal $model) {
+                return str_replace('бб', '', $model->comment);
+            }
+        ],
         'floristics:boolean',
         'hall:boolean',
         'photo:boolean',

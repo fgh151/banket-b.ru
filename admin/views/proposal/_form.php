@@ -1,5 +1,6 @@
 <?php
 
+use app\common\models\geo\GeoCity;
 use app\common\models\MobileUser;
 use app\common\models\Proposal;
 use yii\helpers\ArrayHelper;
@@ -19,15 +20,22 @@ use yii\widgets\ActiveForm;
         ArrayHelper::map(MobileUser::find()->select(['id', 'email'])->all(), 'id', 'email')
     ) ?>
 
-    <?= $form->field($model, 'City')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'City')->dropDownList(ArrayHelper::map(GeoCity::find()->select([
+        'id',
+        'title'
+    ])->asArray()->all(), 'id', 'title'),
+        ['id' => 'city_id', 'prompt' => 'Выбрать...']); ?>
 
-    <?= $form->field($model, 'date')->textInput() ?>
+    <?= $form->field($model, 'date')->widget(\yii\jui\DatePicker::class, [
+        'language' => 'ru',
+        'dateFormat' => 'yyyy-MM-dd',
+    ]) ?>
 
-    <?= $form->field($model, 'time')->textInput() ?>
+    <?= $form->field($model, 'time')->textInput()->widget(\yii\widgets\MaskedInput::class, ['mask' => '99:99']) ?>
 
-    <?= $form->field($model, 'guests_count')->textInput() ?>
+    <?= $form->field($model, 'guests_count')->input('number') ?>
 
-    <?= $form->field($model, 'amount')->textInput() ?>
+    <?= $form->field($model, 'amount')->input('number') ?>
 
     <?= $form->field($model, 'type')->dropDownList(
         Proposal::types()
@@ -36,8 +44,6 @@ use yii\widgets\ActiveForm;
     <?= $form->field($model, 'event_type')->dropDownList(
         Proposal::typeLabels()
     ) ?>
-
-    <?= $form->field($model, 'metro')->textInput() ?>
 
     <?= $form->field($model, 'cuisine')->dropDownList(Proposal::cuisineLabels()) ?>
 
