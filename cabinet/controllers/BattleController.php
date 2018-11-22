@@ -31,7 +31,7 @@ class BattleController extends Controller
      */
     public function beforeAction($action)
     {
-        $this->throwIfNotPay('state');
+//        $this->throwIfNotPay('state');
         return parent::beforeAction($action);
     }
 
@@ -41,6 +41,7 @@ class BattleController extends Controller
      */
     public function actionIndex()
     {
+        $this->throwIfNotPay('state');
         $searchModel = new ProposalSearch();
 
         /** @var Organization $organization */
@@ -83,6 +84,7 @@ class BattleController extends Controller
      */
     public function actionDirect()
     {
+        $this->throwIfNotPay('state_direct');
         $searchModel = new ProposalSearch();
 
         /** @var Organization $organization */

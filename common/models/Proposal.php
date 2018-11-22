@@ -260,6 +260,12 @@ class Proposal extends ActiveRecord
                     ->setTextBody('В разделе заявок появилась новая заявка')
                     ->queue();
             }
+            Yii::$app->mailqueue->compose()
+                ->setFrom(Yii::$app->params['adminEmail'])
+                ->setTo('zkz@restorate.ru')
+                ->setSubject('Новая заявка')
+                ->setTextBody('В разделе заявок появилась новая заявка')
+                ->queue();
         }
         parent::afterSave($insert, $changedAttributes);
     }

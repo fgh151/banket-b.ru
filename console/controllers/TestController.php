@@ -23,12 +23,12 @@ class TestController extends Controller
     public function actionMail()
     {
         Yii::$app->mailqueue->compose()
-            ->setFrom('fedor@support-pc.org')
+            ->setFrom(Yii::$app->params['adminEmail'])
             ->setTo('fedor@support-pc.org')
-            ->setSubject('test')
-            ->setTextBody('test')
+            ->setSubject('banket-b')
+            ->setTextBody('banket-b')
             ->queue();
-
+//->send();
     }
 
 }

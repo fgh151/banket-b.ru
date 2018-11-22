@@ -32,11 +32,13 @@ class OrganizationSearch extends Organization
     public $cityId;
     public $metroId;
 
+    public $amount;
+
 
     public function rules()
     {
         return [
-            [['ownAlko', 'scene', 'dance', 'parking', 'cuisine', 'cityId'], 'safe'],
+            [['ownAlko', 'scene', 'dance', 'parking', 'cuisine', 'cityId', 'amount'], 'safe'],
             [['size', 'districtId', 'metroId'], 'integer'],
 //            ['cuisine', 'each', 'rule' => ['integer']]
         ];
@@ -100,6 +102,17 @@ class OrganizationSearch extends Organization
                                 ->select('organization_id')
             ]);
         }
+
+        if ($this->amount) {
+            $query->andFilterWhere([
+                'in',
+                'id',
+                RestaurantParams::find()
+                    ->where(['<=', 'amount', $this->amount])
+                    ->select('organization_id')
+            ]);
+        }
+
         if (intval($this->size) > 0) {
             $query->andFilterWhere([
                 'in',

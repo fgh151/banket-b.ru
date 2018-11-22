@@ -36,7 +36,7 @@ $this->title = 'Банкетный Баттл';
 <div class="wrap">
     <?php
     NavBar::begin([
-        'brandLabel' => Yii::$app->name,
+        'brandLabel' => Yii::$app->getUser()->getIsGuest() ? Yii::$app->name : 'Личный кабинет ' . Yii::$app->getUser()->getIdentity()->name,
         'brandUrl' => Yii::$app->homeUrl,
         'options' => [
             'class' => 'navbar-inverse navbar-fixed-top',
@@ -50,9 +50,9 @@ $this->title = 'Банкетный Баттл';
         $menuItems[] = ['label' => 'Регистрация', 'url' => ['/site/signup']];
         $menuItems[] = ['label' => 'Вход', 'url' => ['/site/login']];
     } else {
-        $menuItems[] = ['label' => 'Главная', 'url' => ['/site/index']];
-        $menuItems[] = ['label' => 'Предложения', 'url' => ['/promo/index']];
-        $menuItems[] = ['label' => 'Аукционы', 'url' => ['/battle/index']];
+        $menuItems[] = ['label' => 'Статистика', 'url' => ['/site/index']];
+        $menuItems[] = ['label' => 'Мои предложения', 'url' => ['/promo/index']];
+        $menuItems[] = ['label' => 'Заявки', 'url' => ['/battle/index']];
         $menuItems[] = ['label' => 'Прямые заявки', 'url' => ['/battle/direct']];
         $menuItems[] = ['label' => 'Профиль', 'url' => ['/user/edit']];
         $menuItems[] = '<li>'
