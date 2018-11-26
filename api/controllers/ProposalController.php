@@ -9,6 +9,7 @@
 namespace app\api\controllers;
 
 
+use app\admin\components\ProposalFindOneTrait;
 use app\common\components\Constants;
 use app\common\models\Message;
 use app\common\models\Organization;
@@ -24,6 +25,7 @@ use yii\web\Response;
 
 class ProposalController extends Controller
 {
+    use ProposalFindOneTrait;
 
     public function behaviors()
     {
@@ -75,23 +77,26 @@ class ProposalController extends Controller
     public function actionList()
     {
         return Proposal::find()
-                       ->where([
-                           'owner_id' => Yii::$app->user->id,
-                           'status' => Constants::PROPOSAL_STATUS_CREATED
-                       ])
+            ->where([
+                'owner_id' => Yii::$app->user->id,
+                'status' => Constants::PROPOSAL_STATUS_CREATED
+            ])
 //            ->andFilterWhere(['>', 'date', date('Y-m-d')])
             ->orderBy(['date' => SORT_ASC])
-                       ->all();
+            ->all();
     }
 
     /**
      * @param $proposalId
      *
      * @return array|\yii\db\ActiveRecord[]
+     * @throws \yii\web\NotFoundHttpException
      */
     public function actionDialogs($proposalId)
     {
-        $organizationsFromMessages = array_keys(Message::findAll($proposalId)?:[]);
+        $proposal = $this->findModel($proposalId);
+
+        $organizationsFromMessages = array_keys(Message::findAll($proposal->owner_id, $proposal->id) ?: []);
         /** @var OrganizationProposalStatus[] $rejected */
         $rejected = OrganizationProposalStatus::find()->where(['proposal_id' => $proposalId])
             ->andWhere(['<>', 'status', Constants::ORGANIZATION_PROPOSAL_STATUS_REJECT])

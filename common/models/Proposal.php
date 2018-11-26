@@ -251,7 +251,10 @@ class Proposal extends ActiveRecord
             }
         }
         if ($insert) {
-            $recipients = Organization::find()->where(['state' => Constants::ORGANIZATION_STATE_PAID])->all();
+            $recipients = Organization::find()
+                ->where(['state' => Constants::ORGANIZATION_STATE_PAID])
+                ->andFilterWhere(['NOT ILIKE', 'email', 'banket-b.ru'])
+                ->all();
             foreach ($recipients as $recipient) {
                 Yii::$app->mailqueue->compose()
                     ->setFrom(Yii::$app->params['adminEmail'])
@@ -276,7 +279,7 @@ class Proposal extends ActiveRecord
         $result = $cache->get('proposal-answers-' . $this->id);
 
         if ($result === false) {
-            $messages = Message::findAll($this->id);
+            $messages = Message::findAll($this->owner_id, $this->id);
             $tmp = $result = [];
             foreach ($messages as $organizationId => $messagesArray) {
                 $tmp[$organizationId] = min(array_keys($messagesArray));

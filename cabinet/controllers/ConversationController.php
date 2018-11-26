@@ -61,9 +61,12 @@ class ConversationController extends Controller
     public function actionIndex($proposalId)
     {
         $proposal = $this->findModel($proposalId);
-        $model = new Message(['proposal_id' => $proposalId]);
+        $model = new Message([
+            'proposal_id' => $proposalId,
+            'user_id' => $proposal->owner_id
+        ]);
 
-        $messages = Message::getConversation($proposalId, Yii::$app->getUser()->getId());
+        $messages = Message::getConversation($proposal->owner_id, $proposal->id, Yii::$app->getUser()->getId());
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             Yii::$app->session->setFlash('success', 'saved');
@@ -76,9 +79,18 @@ class ConversationController extends Controller
         ]);
     }
 
+    /**
+     * @param $proposalId
+     * @return array
+     * @throws \yii\web\NotFoundHttpException
+     */
     public function actionValidateMessage($proposalId)
     {
-        $model = new Message(['proposal_id' => $proposalId]);
+        $proposal = $this->findModel($proposalId);
+        $model = new Message([
+            'proposal_id' => $proposalId,
+            'user_id' => $proposal->owner_id
+        ]);
         $request = \Yii::$app->getRequest();
         if ($request->isPost && $model->load($request->post())) {
             \Yii::$app->response->format = Response::FORMAT_JSON;
@@ -87,9 +99,18 @@ class ConversationController extends Controller
         return ['success' => false];
     }
 
+    /**
+     * @param $proposalId
+     * @return array
+     * @throws \yii\web\NotFoundHttpException
+     */
     public function actionSendMessage($proposalId)
     {
-        $model = new Message(['proposal_id' => $proposalId]);
+        $proposal = $this->findModel($proposalId);
+        $model = new Message([
+            'proposal_id' => $proposalId,
+            'user_id' => $proposal->owner_id
+        ]);
         $request = \Yii::$app->getRequest();
         if ($request->isPost && $model->load($request->post()) && $model->save()) {
             \Yii::$app->response->format = Response::FORMAT_JSON;
@@ -107,8 +128,8 @@ class ConversationController extends Controller
         $proposalId = Yii::$app->request->post('proposalId');
         $lastMessage = Yii::$app->request->post('lastMessage');
 
-        $this->findModel($proposalId);
-        $messages = Message::getConversationFromMessage($proposalId, Yii::$app->getUser()->getId(), $lastMessage);
+        $proposal = $this->findModel($proposalId);
+        $messages = Message::getConversationFromMessage($proposal->owner_id, $proposal->id, Yii::$app->getUser()->getId(), $lastMessage);
         if (count($messages) > 1) {
             array_shift($messages);
             return $this->renderAjax('_message_list', ['messages' => $messages]);

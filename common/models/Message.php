@@ -33,11 +33,13 @@ class Message extends Model
 
     public $message;
 
-    public static function findAll($proposalId)
+    public $user_id;
+
+    public static function findAll($user_id, $proposalId)
     {
         $result = [];
 
-        $path = 'proposal/' . $proposalId;
+        $path = 'proposal_2/' . $user_id . '/' . $proposalId;
         /** @var Database $database */
         $database = Yii::$app->firebase->getDatabase();
         $reference = $database->getReference($path);
@@ -70,15 +72,16 @@ class Message extends Model
     }
 
     /**
+     * @param $user_id
      * @param $proposalId
      * @param $organizationId
      * Аналог Message::findAll($proposalId)[$organizationId] Но передает меньше данных
      *
      * @return array|null
      */
-    public static function getConversation($proposalId, $organizationId)
+    public static function getConversation($user_id, $proposalId, $organizationId)
     {
-        $path = 'proposal/' . $proposalId . '/' . $organizationId;
+        $path = 'proposal_2/' . $user_id . '/' . $proposalId . '/' . $organizationId;
 
         /** @var Database $database */
         $database = Yii::$app->firebase->getDatabase();
@@ -103,9 +106,9 @@ class Message extends Model
         return null;
     }
 
-    public static function getConversationFromMessage($proposalId, $organizationId, $from)
+    public static function getConversationFromMessage($user_id, $proposalId, $organizationId, $from)
     {
-        $path = 'proposal/' . $proposalId . '/' . $organizationId;
+        $path = 'proposal_2/' . $user_id . '/' . $proposalId . '/' . $organizationId;
         /** @var Database $database */
         $database = Yii::$app->firebase->getDatabase();
         $reference = $database->getReference($path)
@@ -124,6 +127,7 @@ class Message extends Model
             ['message', 'required'],
             ['author_class', 'ownerClassValidator'],
             [['proposal_id'], 'exist', 'skipOnError' => true, 'targetClass' => Proposal::class, 'targetAttribute' => ['proposal_id' => 'id']],
+            [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => MobileUser::class, 'targetAttribute' => ['user_id' => 'id']],
         ];
     }
 
@@ -152,7 +156,7 @@ class Message extends Model
             return false;
         }
 
-        $path = 'proposal/' . $this->proposal_id . '/' . $this->organization_id . '/' . $this->created_at;
+        $path = 'proposal_2/' . $this->user_id . $this->proposal_id . '/' . $this->organization_id . '/' . $this->created_at;
 
         /** @var Database $database */
         $database = Yii::$app->firebase->getDatabase();

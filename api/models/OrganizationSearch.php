@@ -9,6 +9,8 @@
 namespace app\api\models;
 
 
+use app\common\models\District;
+use app\common\models\Metro;
 use app\common\models\OrganizationLinkMetro;
 use app\common\models\RestaurantHall;
 use app\common\models\RestaurantLinkCuisine;
@@ -34,22 +36,34 @@ class OrganizationSearch extends Organization
 
     public $amount;
 
+    public $districtTitle;
+    public $metroTitle;
+
 
     public function rules()
     {
         return [
             [['ownAlko', 'scene', 'dance', 'parking', 'cuisine', 'cityId', 'amount'], 'safe'],
             [['size', 'districtId', 'metroId'], 'integer'],
+            [['districtTitle', 'metroTitle'], 'string']
 //            ['cuisine', 'each', 'rule' => ['integer']]
         ];
     }
 
+    /**
+     * @param $params
+     * @return ActiveDataProvider
+     * TODO: refactoring JOIN
+     */
     public function search($params)
     {
         $query = Organization::find();
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+            'pagination' => [
+                'pageSize' => 30,
+            ],
         ]);
 
         $this->load($params, '');
@@ -71,8 +85,8 @@ class OrganizationSearch extends Organization
                 'in',
                 'id',
                 RestaurantParams::find()
-                                ->where(['ownAlko' => true])
-                                ->select('organization_id')
+                    ->where(['ownAlko' => true])
+                    ->select('organization_id')
             ]);
         }
         if ($this->scene !== 'false') {
@@ -80,8 +94,8 @@ class OrganizationSearch extends Organization
                 'in',
                 'id',
                 RestaurantParams::find()
-                                ->where(['scene' => true])
-                                ->select('organization_id')
+                    ->where(['scene' => true])
+                    ->select('organization_id')
             ]);
         }
         if ($this->dance !== 'false') {
@@ -89,8 +103,8 @@ class OrganizationSearch extends Organization
                 'in',
                 'id',
                 RestaurantParams::find()
-                                ->where(['dance' => true])
-                                ->select('organization_id')
+                    ->where(['dance' => true])
+                    ->select('organization_id')
             ]);
         }
         if ($this->parking !== 'false') {
@@ -98,8 +112,8 @@ class OrganizationSearch extends Organization
                 'in',
                 'id',
                 RestaurantParams::find()
-                                ->where(['parking' => true])
-                                ->select('organization_id')
+                    ->where(['parking' => true])
+                    ->select('organization_id')
             ]);
         }
 
@@ -119,7 +133,7 @@ class OrganizationSearch extends Organization
                 'id',
                 RestaurantHall::find()
                     ->where(['>=', 'size', $this->size])
-                              ->select('restaurant_id')
+                    ->select('restaurant_id')
             ]);
         }
         if ($this->cuisine && intval($this->cuisine) !== 1) {
@@ -127,8 +141,8 @@ class OrganizationSearch extends Organization
                 'in',
                 'id',
                 RestaurantLinkCuisine::find()
-                                     ->where(['in', 'cuisine_id', $this->cuisine])
-                                     ->select('restaurant_id')
+                    ->where(['in', 'cuisine_id', $this->cuisine])
+                    ->select('restaurant_id')
             ]);
         }
 
@@ -142,7 +156,30 @@ class OrganizationSearch extends Organization
             $query->andFilterWhere(['district_id' => $this->districtId]);
         }
 
+        if ($this->metroTitle) {
+            $query->andFilterWhere([
+                'in',
+                'id',
+                OrganizationLinkMetro::find()
+                    ->select(['organization_id'])
+                    ->where(['in', 'metro_id',
+                            Metro::find()->where(['title' => $this->metroTitle])->select('id')]
+                    )
+            ]);
+        } elseif ($this->districtTitle) {
+            $query->andFilterWhere([
+                'in',
+                'district_id',
+                District::find()
+                    ->select(['id'])
+                    ->where(['ilike', 'title', $this->districtTitle])
+            ]);
+        }
+
         $query->andFilterWhere(['city_id' => $this->cityId]);
+
+        $query->orFilterWhere(['id' => 1]);
+        $query->orderBy(['id' => SORT_ASC]);
 
 
 //        var_dump($this->cityId, $query->createCommand()->getRawSql()); die;
