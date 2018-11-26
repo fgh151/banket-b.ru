@@ -52,7 +52,7 @@ class RegisterForm extends Model
     }
 
     /**
-     * @return bool
+     * @return MobileUser | array
      * @throws yii\base\Exception
      */
     public function register()
@@ -67,7 +67,7 @@ class RegisterForm extends Model
         $user->status = Constants::USER_STATUS_ACTIVE;
 
 
-        return $user->save() ? $user->getAuthKey() : $user->errors;
+        return $user->save() ? $user : $user->errors;
     }
 
     /**

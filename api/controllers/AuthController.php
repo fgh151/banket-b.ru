@@ -50,7 +50,10 @@ class AuthController extends Controller
         $model = new LoginForm();
 
         if ($model->load(Yii::$app->getRequest()->get(), '') && $model->login()) {
-            return ['access_token' => Yii::$app->user->identity->getAuthKey()];
+            return [
+                'access_token' => Yii::$app->getUser()->getIdentity()->getAuthKey(),
+                'id' => Yii::$app->getUser()->getId()
+            ];
         } else {
             $response = null;
             foreach ($model->errors as $error) {
@@ -78,7 +81,10 @@ class AuthController extends Controller
             $reg = $model->register();
 
             if (!is_array($reg)) {
-                return ['access_token' => $reg];
+                return [
+                    'access_token' => $reg->getAuthKey(),
+                    'id' => $reg->id
+                ];
             } else {
 
                 $response = [];
@@ -148,10 +154,16 @@ class AuthController extends Controller
             $user->generateAuthKey();
             $user->save();
 
-            return ['access_token' => $user->getAuthKey()];
+            return [
+                'access_token' => $user->getAuthKey(),
+                'id' => $user->id
+            ];
         }
 
-        return ['access_token' => $user->getAuthKey()];
+        return [
+            'access_token' => $user->getAuthKey(),
+            'id' => $user->id
+        ];
 
     }
 
@@ -182,6 +194,7 @@ class AuthController extends Controller
         }
         Yii::$app->user->login($user, 3600 * 24 * 30);
         $response['access_token'] = $user->auth_key;
+        $response['id'] = $user->id;
 
         $request['owner_id'] = Yii::$app->getUser()->getId();
         $request['City'] = $request['city'];
