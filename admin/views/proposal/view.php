@@ -1,5 +1,6 @@
 <?php
 
+use app\common\models\Proposal;
 use yii\helpers\Html;
 use yii\widgets\DetailView;
 
@@ -12,11 +13,11 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="proposal-view">
 
-    <h1><?= Html::encode($this->title) ?></h1>
+    <h1>Заявка №<?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a('Delete', ['delete', 'id' => $model->id], [
+        <?= Html::a('Изменить', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
+        <?= Html::a('Удалить', ['delete', 'id' => $model->id], [
             'class' => 'btn btn-danger',
             'data' => [
                 'confirm' => 'Are you sure you want to delete this item?',
@@ -28,23 +29,35 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
-            'id',
-            'owner_id',
-            'City',
-            'date',
-            'time',
-            'guests_count',
+            'City', 'date', 'time', 'guests_count',
             'amount',
-            'type',
-            'event_type',
-            'metro',
-            'cuisine',
+            [
+                'attribute' => 'type',
+                'value' => function (Proposal $model) {
+                    return Proposal::types()[$model->type];
+                }
+            ],
+            'eventType',
+            'cuisineString',
             'dance:boolean',
             'private:boolean',
             'own_alcohol:boolean',
             'parking:boolean',
-            'comment:ntext',
-        ],
-    ]) ?>
+            [
+                'attribute' => 'comment',
+                'value' => function (Proposal $model) {
+                    return Yii::$app->getUser()->getId() === 1 ? $model->comment : str_replace('бб', '', $model->comment);
+                }
+            ],
+            'floristics:boolean',
+            'hall:boolean',
+            'photo:boolean',
+            'stylists:boolean',
+            'entertainment:boolean',
+            'cake:boolean',
+            'transport:boolean',
+            'present:boolean'
+        ]
+    ]); ?>
 
 </div>
