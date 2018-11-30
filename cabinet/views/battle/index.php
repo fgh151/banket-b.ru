@@ -133,13 +133,20 @@ $formatter = Yii::$app->formatter;
                                         return null;
                                     },
                                     'view'   => function ($model, $key, $index) {
-                                        return Html::a('Перейти',
-                                            ['conversation/index', 'proposalId' => $key->id],
-                                            ['class' => 'btn btn-primary']);
+                                        if ($key->status === Constants::PROPOSAL_STATUS_CREATED && $key->date >= date('Y-m-d')) {
+                                            return Html::a('Перейти',
+                                                ['conversation/index', 'proposalId' => $key->id],
+                                                ['class' => 'btn btn-primary']);
+                                        }
                                     },
                                     'info'   => function ($model, $key, $index) {
-                                        return $this->render('_info',
-                                            ['model' => $model, 'key' => $key, 'index' => $index]);
+                                        /** @var Proposal $model */
+                                        if ($key->status === Constants::PROPOSAL_STATUS_CREATED && $key->date >= date('Y-m-d')) {
+                                            return $this->render('_info',
+                                                ['model' => $model, 'key' => $key, 'index' => $index]);
+                                        } else {
+                                            return 'Заявка закрыта, стоимость заявки ' . $key->guests_count * $key->amount . ' ₽';
+                                        }
                                     }
                                 ]
                             ],
