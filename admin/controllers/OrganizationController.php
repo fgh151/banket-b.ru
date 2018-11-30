@@ -66,31 +66,6 @@ class OrganizationController extends Controller
     }
 
     /**
-     * Creates a new Organization model.
-     * If creation is successful, the browser will be redirected to the 'view' page.
-     * @return mixed
-     * @throws \yii\base\Exception
-     */
-    public function actionCreate()
-    {
-        $model = new Organization();
-
-        if ($model->load(Yii::$app->request->post())) {
-            $model->generateAuthKey();
-            $model->created_at = time();
-            $model->updated_at = time();
-            $model->setPassword($model->password);
-            $model->save();
-
-            return $this->redirect(['view', 'id' => $model->id]);
-        }
-
-        return $this->render('create', [
-            'model' => $model,
-        ]);
-    }
-
-    /**
      * Updates an existing Organization model.
      * If update is successful, the browser will be redirected to the 'view' page.
      *
