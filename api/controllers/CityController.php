@@ -19,7 +19,12 @@ class CityController extends Controller
 
     public function actionIndex()
     {
-        return GeoRegion::find()->orderBy(['order' => SORT_ASC])->with('cities')->all();
+        return GeoRegion::find()
+            ->where(['in', 'id', GeoCity::find()->select('region_id')->where(['in', 'id', Organization::find()->select(['city_id'])])])
+            ->orderBy(['order' => SORT_ASC])
+            ->with('cities')
+            ->all();
+//        return GeoRegion::find()->orderBy(['order' => SORT_ASC])->with('cities')->all();
     }
 
     public function actionOrganizations()

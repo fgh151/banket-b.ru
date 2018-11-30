@@ -40,7 +40,7 @@ echo \yii\widgets\DetailView::widget([
         [
             'attribute' => 'comment',
             'value' => function (Proposal $model) {
-                return str_replace('бб', '', $model->comment);
+                return Yii::$app->getUser()->getId() === 1 ? $model->comment : str_replace('бб', '', $model->comment);
             }
         ],
         'floristics:boolean',

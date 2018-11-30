@@ -39,6 +39,8 @@ $this->params['breadcrumbs'][] = $this->title;
 //                'format'    => 'image'
             ],
             'link:url',
+            'browsingCount:integer:Просмотры',
+            'redirectCount:integer:переходы',
             //'sort',
 
             ['class' => 'yii\grid\ActionColumn'],

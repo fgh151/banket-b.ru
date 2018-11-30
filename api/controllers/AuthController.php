@@ -52,7 +52,7 @@ class AuthController extends Controller
         if ($model->load(Yii::$app->getRequest()->get(), '') && $model->login()) {
             return [
                 'access_token' => Yii::$app->getUser()->getIdentity()->getAuthKey(),
-                'id' => Yii::$app->getUser()->getId()
+                'id' => (string)Yii::$app->getUser()->getId()
             ];
         } else {
             $response = null;

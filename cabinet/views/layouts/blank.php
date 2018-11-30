@@ -4,9 +4,6 @@
 /* @var $content string */
 
 use app\cabinet\assets\AppAsset;
-use app\common\widgets\Alert;
-use yii\bootstrap\Nav;
-use yii\bootstrap\NavBar;
 use yii\helpers\Html;
 
 AppAsset::register($this);
@@ -36,6 +33,18 @@ $this->title = 'Банкетный Баттл';
     <div class="container">
         <?= $content ?>
     </div>
+
+<footer class="footer">
+    <div class="container">
+        <p class="pull-left">&copy; Банкет Батл <?= date('Y') ?></p>
+
+        <p class="pull-right">
+            Свидетельство о регистрации программного обеспечения 2016617962 от 19.07.2016<br>
+            парент 2641237 от 16.01.2018<br>
+            <a href="https://www.restorate.ru/about/?ELEMENT_ID=12672">Заявление о соблюдении конфиденциальности</a>
+        </p>
+    </div>
+</footer>
 
 <?php $this->endBody() ?>
 </body>

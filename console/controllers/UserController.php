@@ -9,7 +9,8 @@
 namespace app\console\controllers;
 
 
-use app\common\models\User;
+use app\api\models\Organization;
+use app\common\components\Constants;
 use yii\console\Controller;
 
 class UserController extends Controller
@@ -17,10 +18,17 @@ class UserController extends Controller
 
     public function actionTestAdmin()
     {
-        $admin = new User();
+        $admin = new Organization();
         $admin->email = 'test@example.com';
         $admin->setPassword('test');
         $admin->generateAuthKey();
+
+        $admin->state = Constants::ORGANIZATION_STATE_PAID;
+        $admin->status = Constants::USER_STATUS_ACTIVE;
+        $admin->name = 'test';
+        $admin->address = 'addr';
+        $admin->contact = 'dd';
+        $admin->phone = '11';
 
         $admin->created_at = time();
 

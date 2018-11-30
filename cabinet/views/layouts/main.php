@@ -50,10 +50,10 @@ $this->title = 'Банкетный Баттл';
         $menuItems[] = ['label' => 'Регистрация', 'url' => ['/site/signup']];
         $menuItems[] = ['label' => 'Вход', 'url' => ['/site/login']];
     } else {
-        $menuItems[] = ['label' => 'Статистика', 'url' => ['/site/index']];
-        $menuItems[] = ['label' => 'Мои предложения', 'url' => ['/promo/index']];
         $menuItems[] = ['label' => 'Заявки', 'url' => ['/battle/index']];
         $menuItems[] = ['label' => 'Прямые заявки', 'url' => ['/battle/direct']];
+        $menuItems[] = ['label' => 'Статистика', 'url' => ['/site/index']];
+        $menuItems[] = ['label' => 'Мои предложения', 'url' => ['/promo/index']];
         $menuItems[] = ['label' => 'Профиль', 'url' => ['/user/edit']];
         $menuItems[] = '<li>'
             . Html::beginForm(['/site/logout'], 'post')

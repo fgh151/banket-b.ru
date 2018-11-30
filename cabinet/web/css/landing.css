@@ -7,3 +7,18 @@ h1 {
 p, li {
     color: #fff;
 }
+
+.footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    height: auto !important;
+}
+
+.footer p {
+    color: #000;
+}
+
+body > .container {
+    margin-bottom: 200px;
+}

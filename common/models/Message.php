@@ -39,7 +39,7 @@ class Message extends Model
     {
         $result = [];
 
-        $path = 'proposal_2/' . $user_id . '/' . $proposalId;
+        $path = 'proposal_2/u_' . $user_id . '/p_' . $proposalId;
         /** @var Database $database */
         $database = Yii::$app->firebase->getDatabase();
         $reference = $database->getReference($path);
@@ -52,11 +52,11 @@ class Message extends Model
                     foreach ($messages as $message) {
                         /** @var self $decodedMessage */
                         $decodedMessage = self::decode($message);
-                        $result[$organizationId][$decodedMessage->created_at] = $decodedMessage;
+                        $result[str_replace('o_', '', $organizationId)][$decodedMessage->created_at] = $decodedMessage;
                     }
                 } else {
                     $decodedMessage = self::decode($messages);
-                    $result[$organizationId][$decodedMessage->created_at] = $decodedMessage;
+                    $result[str_replace('o_', '', $organizationId)][$decodedMessage->created_at] = $decodedMessage;
                 }
             }
             return $result;
@@ -81,7 +81,7 @@ class Message extends Model
      */
     public static function getConversation($user_id, $proposalId, $organizationId)
     {
-        $path = 'proposal_2/' . $user_id . '/' . $proposalId . '/' . $organizationId;
+        $path = 'proposal_2/u_' . $user_id . '/p_' . $proposalId . '/o_' . $organizationId;
 
         /** @var Database $database */
         $database = Yii::$app->firebase->getDatabase();
@@ -108,7 +108,7 @@ class Message extends Model
 
     public static function getConversationFromMessage($user_id, $proposalId, $organizationId, $from)
     {
-        $path = 'proposal_2/' . $user_id . '/' . $proposalId . '/' . $organizationId;
+        $path = 'proposal_2/u_' . $user_id . '/p_' . $proposalId . '/o_' . $organizationId;
         /** @var Database $database */
         $database = Yii::$app->firebase->getDatabase();
         $reference = $database->getReference($path)
@@ -156,7 +156,7 @@ class Message extends Model
             return false;
         }
 
-        $path = 'proposal_2/' . $this->user_id . $this->proposal_id . '/' . $this->organization_id . '/' . $this->created_at;
+        $path = 'proposal_2/u_' . $this->user_id . '/p_' . $this->proposal_id . '/o_' . $this->organization_id . '/' . $this->created_at;
 
         /** @var Database $database */
         $database = Yii::$app->firebase->getDatabase();

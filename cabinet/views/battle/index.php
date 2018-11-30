@@ -11,7 +11,7 @@ use yii\helpers\Html;
  * @var $searchModel app\common\models\ProposalSearch
  */
 
-$this->title = 'Аукционы';
+$this->title = 'Заявки';
 
 $ru_month = [
     'Января',
@@ -50,7 +50,7 @@ $formatter = Yii::$app->formatter;
         <div class="panel-heading">
             <div class="row">
                 <div class="col-xs-12 col-md-6">
-                    <h1>Аукционы</h1>
+                    <h1>Заявки</h1>
                 </div>
                 <div class="col-xs-12 col-md-6">
 

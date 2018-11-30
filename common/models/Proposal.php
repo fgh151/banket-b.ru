@@ -260,15 +260,22 @@ class Proposal extends ActiveRecord
                     ->setFrom(Yii::$app->params['adminEmail'])
                     ->setTo($recipient->email)
                     ->setSubject('Новая заявка')
-                    ->setTextBody('В разделе заявок появилась новая заявка')
+                    ->setHtmlBody('В разделе заявок появилась новая заявка <a href"https://banket-b.ru/conversation/index/' . $this->id . '">посмотреть</a>')
                     ->queue();
             }
             Yii::$app->mailqueue->compose()
                 ->setFrom(Yii::$app->params['adminEmail'])
-                ->setTo('zkz@restorate.ru')
+                ->setTo('zkzrr@yandex.ru')
+//                ->setTo('zkz@restorate.ru')
                 ->setSubject('Новая заявка')
-                ->setTextBody('В разделе заявок появилась новая заявка')
+                ->setHtmlBody('В разделе заявок появилась новая заявка <a href"https://admin.banket-b.ru/proposal/update/' . $this->id . '">посмотреть</a>')
                 ->queue();
+//            Yii::$app->mailqueue->compose()
+//                ->setFrom(Yii::$app->params['adminEmail'])
+//                ->setTo('fedor@support-pc.org')
+//                ->setSubject('Новая заявка')
+//                ->setTextBody('В разделе заявок появилась новая заявка')
+//                ->queue();
         }
         parent::afterSave($insert, $changedAttributes);
     }
