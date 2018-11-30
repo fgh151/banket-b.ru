@@ -52,6 +52,8 @@ class Organization extends ActiveRecord implements IdentityInterface
 
     public $cuisine_field;
 
+    public $activity_field;
+
     use AuthTrait;
 
     /**
@@ -95,7 +97,7 @@ class Organization extends ActiveRecord implements IdentityInterface
             [['state', 'auth_key', 'password_hash', 'email', 'name', 'address', 'contact', 'phone', 'created_at', 'updated_at'], 'required'],
             [['address'], 'string'],
             [['status', 'created_at', 'updated_at'], 'default', 'value' => null],
-            [['status', 'created_at', 'updated_at', 'city_id', 'district_id'], 'integer'],
+            [['status', 'created_at', 'updated_at', 'city_id', 'district_id', 'activity_field'], 'integer'],
             [['auth_key'], 'string', 'max' => 32],
             [['password_hash', 'password_reset_token', 'email', 'name', 'contact', 'phone'], 'string', 'max' => 255],
             [['email'], 'unique'],
@@ -153,6 +155,18 @@ class Organization extends ActiveRecord implements IdentityInterface
         ];
     }
 
+    public function afterFind()
+    {
+        parent::afterFind();
+        $activity = OrganizationLinkActivity::find()->where(['organization_id' => $this->id])->one();
+        $this->activity_field = $activity ? $activity->activity_id : null;
+
+        $cuisines = RestaurantLinkCuisine::find()->where(['restaurant_id' => $this->id])->all();
+        foreach ($cuisines as $cuisine) {
+            $this->cuisine_field[] = $cuisine->cuisine_id;
+        }
+    }
+
     /**
      * @return \yii\db\ActiveQuery | Activity[]
      */
@@ -167,14 +181,14 @@ class Organization extends ActiveRecord implements IdentityInterface
         return $this->hasMany(OrganizationLinkActivity::class, ['organization_id' => 'id']);
     }
 
+    /**
+     * @return bool
+     */
     public function isRestaurant()
     {
-        foreach ($this->linkActivity as $activity) {
-            if ($activity->activity_id === 1) {
-                return true;
-            }
-        }
-        return false;
+        return OrganizationLinkActivity::find()
+            ->where(['activity_id' => 1, 'organization_id' => $this->id])
+            ->exists();
     }
 
 

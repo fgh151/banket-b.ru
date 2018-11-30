@@ -6,6 +6,8 @@ use app\common\components\Model;
 use app\common\models\District;
 use app\common\models\Metro;
 use app\common\models\Organization;
+use app\common\models\OrganizationImage;
+use app\common\models\OrganizationLinkActivity;
 use app\common\models\OrganizationLinkMetro;
 use app\common\models\OrganizationSearch;
 use app\common\models\RestaurantHall;
@@ -83,6 +85,7 @@ class OrganizationController extends Controller
 
         if ($model->load(Yii::$app->request->post())) {
 
+
             if ($model->password !== '') {
                 $model->setPassword($model->password);
             }
@@ -124,6 +127,12 @@ class OrganizationController extends Controller
                     $link->restaurant_id = $model->id;
                     $link->save();
                 }
+
+                OrganizationLinkActivity::deleteAll(['organization_id' => $model->id]);
+                $link = new OrganizationLinkActivity();
+                $link->organization_id = $model->id;
+                $link->activity_id = $model->activity_field;
+                $link->save();
 
             }
 
@@ -175,6 +184,13 @@ WHERE ml.city_id = ' . $model->city_id . ' ORDER BY name;')
         $this->findModel($id)->delete();
 
         return $this->redirect(['index']);
+    }
+
+    public function actionImgDelete($id)
+    {
+        $model = OrganizationImage::findOne($id);
+        OrganizationImage::deleteAll(['id' => $id]);
+        return $this->redirect(['organization/update', 'id' => $model->organization_id]);
     }
 
     /**

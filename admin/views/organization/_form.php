@@ -10,9 +10,16 @@ use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
-/* @var $this yii\web\View */
-/* @var $model app\common\models\Organization */
-/* @var $form yii\widgets\ActiveForm */
+/**
+ * @var $this yii\web\View
+ * @var $model app\common\models\Organization
+ * @var $params \app\common\models\RestaurantParams
+ * @var $form yii\widgets\ActiveForm
+ * @var $districts array
+ * @var $metro array
+ * @var $metros array
+ * @var $halls array
+ */
 ?>
 
 <div class="organization-form">
@@ -108,8 +115,10 @@ use yii\widgets\ActiveForm;
     </div>
     <?php DynamicFormWidget::end(); ?>
 
+    <!--    --><?php //var_dump($model->activity_field);?>
+
     <?= $form->field($model,
-        'linkActivity[0]')->dropDownList(ArrayHelper::map(Activity::find()->select([
+        'activity_field')->dropDownList(ArrayHelper::map(Activity::find()->select([
         'id',
         'title'
     ])->asArray()->all(), 'id', 'title'), ['multiply', 'prompt' => ''])->label('Вид деятельности'); ?>
@@ -119,7 +128,21 @@ use yii\widgets\ActiveForm;
     <?= $form->field($params, 'dance')->checkbox(); ?>
     <?= $form->field($params, 'parking')->checkbox(); ?>
     <?= $form->field($params, 'amount')->input('number'); ?>
-    <?= $form->field($model, 'image_field')->fileInput()->label('Добавить картинку'); ?>
+
+    <?php if ($model->images) : ?>
+        <div class="row">
+            <?php foreach ($model->images as $image) : ?>
+                <div class="panel panel-default col-xs-12 col-md-2">
+                    <div class="panel-body">
+                        <?= Html::img('https://banket-b.ru/upload/organization/' . $model->id . '/' . $image->fsFileName, ['class' => 'img-responsive']); ?>
+                        <?= Html::a('Удалить', ['organization/img-delete', 'id' => $image->id]); ?>
+                    </div>
+                </div>
+            <?php endforeach; ?>
+        </div>
+    <?php endif; ?>
+
+    <?= $form->field($model, 'image_field')->fileInput()->label('Добавить новую картинку'); ?>
 
     <?php DynamicFormWidget::begin([
         'widgetContainer' => 'dynamicform_wrapper_hall',
@@ -177,15 +200,13 @@ use yii\widgets\ActiveForm;
     <?php DynamicFormWidget::end(); ?>
 
     <?= $form->field($model,
-        'cuisine_field[]')->widget(\kartik\select2\Select2::class, [
+        'cuisine_field')->widget(\kartik\select2\Select2::class, [
         'data' => Proposal::cuisineLabels(),
         'options' => [
             'placeholder' => 'Выберите кухни',
             'multiple' => true
         ],
     ])->label('Кухня'); ?>
-
-    <?= $form->field($model, 'image_field')->fileInput()->label('Добавить картинку'); ?>
 
 
     <?= $form->field($model, 'state')->dropDownList(Organization::stateLabels()) ?>
@@ -199,7 +220,7 @@ use yii\widgets\ActiveForm;
     <?= $form->field($model, 'password')->passwordInput() ?>
 
     <div class="form-group">
-        <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
+        <?= Html::submitButton('Сохранит', ['class' => 'btn btn-success']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>
