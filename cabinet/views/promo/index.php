@@ -4,9 +4,7 @@
  * @var $datProvider \yii\data\ActiveDataProvider
  */
 
-use app\common\models\Promo;
-use yii\grid\GridView;
-use yii\helpers\Html;
+use yii\widgets\ListView;
 
 ?>
 <div class="row">
@@ -15,7 +13,19 @@ use yii\helpers\Html;
 
             <?= \yii\helpers\Html::a('Добавить', ['create'], ['class' => 'btn btn-success']) ?>
 
-            <?= GridView::widget([
+            <?= ListView::widget([
+                'dataProvider' => $dataProvider,
+                'itemView' => '_promo_item',
+                'options' => [
+
+                    'class' => 'row',
+                ],
+                'itemOptions' => [
+                    'class' => 'col-xs-12'
+                ]
+            ]) ?>
+
+            <?php /*= GridView::widget([
                 'dataProvider' => $dataProvider,
                 'columns'      => [
                     ['class' => 'yii\grid\SerialColumn'],
@@ -40,7 +50,7 @@ use yii\helpers\Html;
                     'redirectCount:integer:переходы'
 //            ['class' => 'yii\grid\ActionColumn'],
                 ]
-            ]); ?>
+            ]); */ ?>
         </div>
     </div>
 

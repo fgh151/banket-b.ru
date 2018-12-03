@@ -19,6 +19,7 @@ use yii\db\ActiveRecord;
  * @property int               $sort
  * @property string            $start [date]
  * @property string            $end [date]
+ * @property integer $redirectCount
  */
 class Promo extends ActiveRecord
 {

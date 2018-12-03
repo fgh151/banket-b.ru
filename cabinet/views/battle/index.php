@@ -1,8 +1,8 @@
 <?php
 
-use app\common\components\Constants;
 use app\common\models\Proposal;
-use yii\helpers\Html;
+use yii\bootstrap\ActiveForm;
+use yii\widgets\ListView;
 
 /**
  * @var $this yii\web\View
@@ -60,9 +60,57 @@ $formatter = Yii::$app->formatter;
         <div class="panel-body">
             <div class="row">
                 <div class="col-xs-12">
+                    <?php $form = ActiveForm::begin(['method' => 'get', 'id' => 'proposal-search']); ?>
+                    <div class="col-xs-1 col-md-1">
+                        <?= $form->field($searchModel, 'date'); ?>
+                    </div>
+                    <div class="col-xs-1 col-md-1">
+                        <?= $form->field($searchModel, 'event_type')
+                            ->dropDownList(Proposal::typeLabels(), ['prompt' => 'Выбрать'])
+                            ->label('Тип'); ?>
+                    </div>
+                    <div class="col-xs-1 col-md-2">
+                        <?= $form->field($searchModel, 'amount'); ?>
+                    </div>
+                    <div class="col-xs-1 col-md-2">
+                        <?= $form->field($searchModel, 'guests_count'); ?>
+                    </div>
+                    <div class="col-xs-1 col-md-1">
+                        <?= $form->field($searchModel, 'dance')->dropDownList([0 => 'Нет', 1 => 'Да'], ['prompt' => 'Выбрать']); ?>
+                    </div>
+                    <div class="col-xs-1 col-md-2">
+                        <?= $form->field($searchModel, 'private')->dropDownList([0 => 'Нет', 1 => 'Да'], ['prompt' => 'Выбрать']); ?>
+                    </div>
+                    <div class="col-xs-1 col-md-2">
+                        <?= $form->field($searchModel, 'own_alcohol')->dropDownList([0 => 'Нет', 1 => 'Да'], ['prompt' => 'Выбрать']); ?>
+                    </div>
+                    <div class="col-xs-1 col-md-1">
+                        <?= $form->field($searchModel, 'parking')->dropDownList([0 => 'Нет', 1 => 'Да'], ['prompt' => 'Выбрать']); ?>
+                    </div>
+
+                    <?php ActiveForm::end(); ?>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-xs-12">
+                    <?= ListView::widget([
+                        'dataProvider' => $dataProvider,
+                        'itemView' => '_proposal_item',
+                        'options' => [
+
+                            'class' => 'row',
+                        ],
+                        'itemOptions' => [
+                            'class' => 'col-xs-12'
+                        ]
+                    ]) ?>
+                </div>
+                <?php /*
+                <div class="col-xs-12">
 
 
-                    <?= /** @noinspection PhpUnhandledExceptionInspection */
+                    <?= /** @noinspection PhpUnhandledExceptionInspection
                     \yii\grid\GridView::widget([
                         'dataProvider' => $dataProvider,
                         'filterModel'  => $searchModel,
@@ -140,7 +188,7 @@ $formatter = Yii::$app->formatter;
                                         }
                                     },
                                     'info'   => function ($model, $key, $index) {
-                                        /** @var Proposal $model */
+                                        /** @var Proposal $model
                                         if ($key->status === Constants::PROPOSAL_STATUS_CREATED && $key->date >= date('Y-m-d')) {
                                             return $this->render('_info',
                                                 ['model' => $model, 'key' => $key, 'index' => $index]);
@@ -152,9 +200,17 @@ $formatter = Yii::$app->formatter;
                             ],
                         ],
                     ]) ?>
-                </div>
+                </div> */ ?>
             </div>
         </div>
     </div>
-
 </div>
+
+<?php
+$js = <<<JS
+$("#proposal-search :input").change(function() {
+  $('#proposal-search').submit();
+});
+JS;
+
+$this->registerJs($js);
