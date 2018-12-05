@@ -63,9 +63,10 @@ $this->params['breadcrumbs'][] = $this->title;
                 'label' => 'Город',
                 'value' => function (Organization $model) {
                     return $model->city->title;
-                }
+                },
             ],
 
+            'created_at:date:Дата регистрации',
             ['class' => 'yii\grid\ActionColumn'],
         ],
     ]); ?>

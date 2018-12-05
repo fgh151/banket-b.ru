@@ -41,7 +41,7 @@ class BattleController extends Controller
      */
     public function actionIndex()
     {
-        $this->throwIfNotPay('state');
+//        $this->throwIfNotPay('state');
         $searchModel = new ProposalSearch();
 
         /** @var Organization $organization */

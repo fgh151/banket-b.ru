@@ -260,7 +260,7 @@ class Proposal extends ActiveRecord
                     ->setFrom(Yii::$app->params['adminEmail'])
                     ->setTo($recipient->email)
                     ->setSubject('Новая заявка')
-                    ->setHtmlBody('В разделе заявок появилась новая заявка <a href"https://banket-b.ru/conversation/index/' . $this->id . '">посмотреть</a>')
+                    ->setHtmlBody('В разделе заявок появилась новая заявка <a href="https://banket-b.ru/conversation/index/' . $this->id . '">посмотреть</a>')
                     ->queue();
             }
             Yii::$app->mailqueue->compose()
@@ -268,7 +268,7 @@ class Proposal extends ActiveRecord
                 ->setTo('zkzrr@yandex.ru')
 //                ->setTo('zkz@restorate.ru')
                 ->setSubject('Новая заявка')
-                ->setHtmlBody('В разделе заявок появилась новая заявка <a href"https://admin.banket-b.ru/proposal/update/' . $this->id . '">посмотреть</a>')
+                ->setHtmlBody('В разделе заявок появилась новая заявка <a href="https://admin.banket-b.ru/proposal/update/' . $this->id . '">посмотреть</a>')
                 ->queue();
 //            Yii::$app->mailqueue->compose()
 //                ->setFrom(Yii::$app->params['adminEmail'])
@@ -315,5 +315,19 @@ class Proposal extends ActiveRecord
             $cache->set('proposal-direct-organizations-' . $this->id, $result);
         }
         return $result;
+    }
+
+    /**
+     * @param $organizationId
+     * @return int
+     */
+    public function getReadMessagesCount($organizationId)
+    {
+        $message = ReadMessage::find()->where(['proposal_id' => $this->id, 'organization_id' => $organizationId])->one();
+        if ($message) {
+            return $message->count;
+        }
+
+        return count(Message::getConversation($this->owner_id, $this->id, $organizationId));
     }
 }

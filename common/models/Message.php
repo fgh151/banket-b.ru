@@ -77,7 +77,7 @@ class Message extends Model
      * @param $organizationId
      * Аналог Message::findAll($proposalId)[$organizationId] Но передает меньше данных
      *
-     * @return array|null
+     * @return Message[]|null
      */
     public static function getConversation($user_id, $proposalId, $organizationId)
     {
@@ -90,6 +90,10 @@ class Message extends Model
         return self::getReferenceValues($reference);
     }
 
+    /**
+     * @param $reference
+     * @return null|Message[]
+     */
     private static function getReferenceValues($reference)
     {
         /** @var Reference | Query $reference */

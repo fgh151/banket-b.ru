@@ -11,7 +11,6 @@
 
 use app\common\components\Constants;
 use app\common\models\Proposal;
-use yii\helpers\Html;
 
 $ru_month = [
     'Января',
@@ -75,17 +74,12 @@ $en_month = [
             <div class="col-xs-12 col-md-2">
 
                 <?php
-                if ($model->status === Constants::PROPOSAL_STATUS_CREATED && $model->date >= date('Y-m-d')) :
-                    echo Html::a('Отклонить',
-                        ['battle/reject', 'id' => $model->id],
-                        ['class' => 'btn btn-danger']);
-                    echo Html::a('Перейти',
-                        ['conversation/index', 'proposalId' => $model->id],
-                        ['class' => 'btn btn-primary']);
-                    echo $this->render('_info',
-                        ['key' => $model]);
-                else:
-                    echo 'Заявка закрыта, стоимость заявки ' . $model->guests_count * $model->amount . ' ₽';
+                if (Yii::$app->getUser()->getIdentity()->state == Constants::ORGANIZATION_STATE_PAID) :
+                    if ($model->status === Constants::PROPOSAL_STATUS_CREATED && $model->date >= date('Y-m-d')) :
+                        echo $this->render('_controls', ['model' => $model]);
+                    else:
+                        echo 'Заявка закрыта, стоимость заявки ' . $model->guests_count * $model->amount . ' ₽';
+                    endif;
                 endif; ?>
             </div>
         </div>

@@ -11,7 +11,9 @@ namespace app\cabinet\controllers;
 
 use app\admin\components\ProposalFindOneTrait;
 use app\common\models\Message;
+use app\common\models\ReadMessage;
 use Yii;
+use yii\db\Expression;
 use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\Response;
@@ -122,6 +124,7 @@ class ConversationController extends Controller
     /**
      * @return string
      * @throws \yii\web\NotFoundHttpException
+     * @throws \yii\db\Exception
      */
     public function actionNewMessages()
     {
@@ -131,6 +134,17 @@ class ConversationController extends Controller
         $proposal = $this->findModel($proposalId);
         $messages = Message::getConversationFromMessage($proposal->owner_id, $proposal->id, Yii::$app->getUser()->getId(), $lastMessage);
         if (count($messages) > 1) {
+
+
+            Yii::$app->db->createCommand()->upsert(ReadMessage::tableName(), [
+                'proposal_id' => $proposalId,
+                'organization_id' => Yii::$app->getUser()->getId(),
+                'count' => 0
+            ], [
+                'count' => new Expression('count + 1')
+            ])->execute();
+
+
             array_shift($messages);
             return $this->renderAjax('_message_list', ['messages' => $messages]);
         }

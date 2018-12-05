@@ -61,30 +61,30 @@ $formatter = Yii::$app->formatter;
             <div class="row">
                 <div class="col-xs-12">
                     <?php $form = ActiveForm::begin(['method' => 'get', 'id' => 'proposal-search']); ?>
-                    <div class="col-xs-1 col-md-1">
+                    <div class="col-xs-12 col-md-1">
                         <?= $form->field($searchModel, 'date'); ?>
                     </div>
-                    <div class="col-xs-1 col-md-1">
+                    <div class="col-xs-12 col-md-1">
                         <?= $form->field($searchModel, 'event_type')
                             ->dropDownList(Proposal::typeLabels(), ['prompt' => 'Выбрать'])
                             ->label('Тип'); ?>
                     </div>
-                    <div class="col-xs-1 col-md-2">
+                    <div class="col-xs-12 col-md-2">
                         <?= $form->field($searchModel, 'amount'); ?>
                     </div>
-                    <div class="col-xs-1 col-md-2">
+                    <div class="col-xs-12 col-md-2">
                         <?= $form->field($searchModel, 'guests_count'); ?>
                     </div>
-                    <div class="col-xs-1 col-md-1">
+                    <div class="col-xs-12 col-md-1">
                         <?= $form->field($searchModel, 'dance')->dropDownList([0 => 'Нет', 1 => 'Да'], ['prompt' => 'Выбрать']); ?>
                     </div>
-                    <div class="col-xs-1 col-md-2">
+                    <div class="col-xs-12 col-md-2">
                         <?= $form->field($searchModel, 'private')->dropDownList([0 => 'Нет', 1 => 'Да'], ['prompt' => 'Выбрать']); ?>
                     </div>
-                    <div class="col-xs-1 col-md-2">
+                    <div class="col-xs-12 col-md-2">
                         <?= $form->field($searchModel, 'own_alcohol')->dropDownList([0 => 'Нет', 1 => 'Да'], ['prompt' => 'Выбрать']); ?>
                     </div>
-                    <div class="col-xs-1 col-md-1">
+                    <div class="col-xs-12 col-md-1">
                         <?= $form->field($searchModel, 'parking')->dropDownList([0 => 'Нет', 1 => 'Да'], ['prompt' => 'Выбрать']); ?>
                     </div>
 
