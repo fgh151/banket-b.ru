@@ -49,6 +49,7 @@ class ProposalSearch extends Proposal
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+            'sort' => ['defaultOrder' => ['date' => SORT_DESC]]
         ]);
 
         $this->load($params);
@@ -93,7 +94,7 @@ class ProposalSearch extends Proposal
         $query->andFilterWhere(['ilike', 'City', $this->City])
             ->andFilterWhere(['ilike', 'comment', $this->comment]);
 
-        $query->orderBy('date DESC');
+//        $query->orderBy('id DESC');
 
 
         if ($this->rejected) {

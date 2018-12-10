@@ -6,6 +6,9 @@ return [
         '@bower' => '@vendor/bower-asset',
         '@npm'   => '@vendor/npm-asset',
     ],
+    'bootstrap' => [
+        'queue', // The component registers its own console commands
+    ],
     'vendorPath' => dirname(dirname(__DIR__)) . '/vendor',
     'components' => [
         'cache' => [
@@ -32,6 +35,13 @@ return [
             'table' => '{{%mail_queue}}',
             'mailsPerRound' => 10,
             'maxAttempts' => 3,
+        ],
+        'queue' => [
+            'class' => \yii\queue\db\Queue::class,
+            'db' => 'db', // DB connection component or its config
+            'tableName' => '{{%queue}}', // Table name
+            'channel' => 'default', // Queue channel key
+            'mutex' => \yii\mutex\FileMutex::class
         ],
     ],
     'modules'    => [

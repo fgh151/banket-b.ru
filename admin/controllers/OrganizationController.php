@@ -95,15 +95,17 @@ class OrganizationController extends Controller
 
         if ($model->load(Yii::$app->request->post())) {
 
-
             if ($model->password !== '') {
                 $model->setPassword($model->password);
             }
             if ($model->save()) {
 
+                if ($params === null) {
+                    $params = new RestaurantParams(['organization_id' => $model->id]);
+                }
+
                 $params->load(Yii::$app->request->post());
                 $params->save();
-
 
                 if (!empty($model->linkActivity)) {
                     $model->linkActivity[0]->save();
@@ -118,7 +120,6 @@ class OrganizationController extends Controller
                     $station->save();
                 }
 
-
                 RestaurantHall::deleteAll(['restaurant_id' => $model->id]);
 
                 /** @var RestaurantHall[] $halls */
@@ -128,7 +129,6 @@ class OrganizationController extends Controller
                     $hall->restaurant_id = $model->id;
                     $hall->save();
                 }
-
 
                 RestaurantLinkCuisine::deleteAll(['restaurant_id' => $model->id]);
                 foreach ($model->cuisine_field as $cuisine) {
@@ -143,13 +143,10 @@ class OrganizationController extends Controller
                 $link->organization_id = $model->id;
                 $link->activity_id = $model->activity_field;
                 $link->save();
-
             }
-
 
             return $this->redirect(['view', 'id' => $model->id]);
         }
-
 
         $districts = ArrayHelper::map(District::find()
             ->select('id as id, title as name')

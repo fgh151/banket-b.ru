@@ -37,7 +37,8 @@
     "kartik-v/yii2-widget-select2": "^2.1",
     "nterms/yii2-mailqueue": "^0.0.15",
     "sentry/sentry": "^1.10",
-    "ext-curl": "*"
+    "ext-curl": "*",
+    "yiisoft/yii2-queue": "^2.1"
   },
   "require-dev": {
     "yiisoft/yii2-debug": "~2.0.0",

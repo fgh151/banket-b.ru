@@ -70,7 +70,9 @@ $en_month = [
             <div class="col-xs-12 col-md-1">
                 Парковка <?= $model->parking ? 'да' : 'нет' ?>
             </div>
-            <div class="col-xs-12 col-md-1"></div>
+            <div class="col-xs-12 col-md-1">
+                Заявка поступила <?= Yii::$app->formatter->asDatetime($model->created_at) ?>
+            </div>
             <div class="col-xs-12 col-md-2">
 
                 <?php

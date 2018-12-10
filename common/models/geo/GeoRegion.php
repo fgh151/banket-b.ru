@@ -11,9 +11,10 @@ use yii\helpers\ArrayHelper;
 /**
  * Модель хранения регионов
  *
- * @property int    $id
+ * @property int $id
  * @property string $title
- * @property int    $order
+ * @property mixed $cities
+ * @property int $order
  */
 class GeoRegion extends ActiveRecord
 {

@@ -26,4 +26,9 @@ class Formatter extends \yii\i18n\Formatter
         return $value ? $this->trueFormat[1] : $this->trueFormat[0];
     }
 
+    public static function make_links_clickable($text)
+    {
+        return preg_replace('!(((f|ht)tp(s)?://)[-a-zA-Zа-яА-Я()0-9@:%_+.~#?&;//=]+)!i', '<a href="$1">$1</a>', $text);
+    }
+
 }

@@ -7,7 +7,7 @@
 use yii\helpers\Html;
 
 $goBtn = 'Перейти';
-$messagesCount = $model->getReadMessagesCount(Yii::$app->getUser()->getId());
+$messagesCount = count($model->getAnswers()) - $model->getReadMessagesCount(Yii::$app->getUser()->getId());
 if ($messagesCount > 0) {
     $goBtn .= ' <span class="badge">' . $messagesCount . '</span>';
 }

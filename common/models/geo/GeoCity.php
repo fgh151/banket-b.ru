@@ -14,10 +14,12 @@ use yii\helpers\ArrayHelper;
 /**
  * Модель хранения городов
  *
- * @property int       $id
- * @property string    $title
- * @property int       $region_id
+ * @property int $id
+ * @property string $title
+ * @property int $region_id
  *
+ * @property mixed $districts
+ * @property \app\common\models\Metro[]|\yii\db\ActiveQuery $metro
  * @property GeoRegion $region
  */
 class GeoCity extends ActiveRecord

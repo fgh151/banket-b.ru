@@ -130,11 +130,13 @@ class ProposalController extends Controller
 
     /**
      * @param $id
+     * @return \yii\web\Response
      */
     public function actionClose($id)
     {
         $proposal = Proposal::findOne($id);
         $proposal->status = Constants::PROPOSAL_STATUS_CLOSED;
         $proposal->save();
+        return $this->redirect(['proposal/index']);
     }
 }

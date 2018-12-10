@@ -1,5 +1,6 @@
 <?php
 
+use app\common\components\Constants;
 use app\common\models\Proposal;
 use yii\grid\GridView;
 use yii\helpers\Html;
@@ -63,6 +64,23 @@ $this->params['breadcrumbs'][] = $this->title;
                     return implode('<br />', $result);
                 },
                 'format' => 'html'
+            ],
+            [
+                'attribute' => 'status',
+                'value' => function (Proposal $model) {
+
+                    switch ($model->status) {
+                        case Constants::PROPOSAL_STATUS_CLOSED:
+                            {
+                                return 'Закрыта';
+                                break;
+                            }
+                        default :
+                            {
+                                return 'Открыта';
+                            }
+                    }
+                }
             ],
             [
                 'class' => 'yii\grid\ActionColumn',

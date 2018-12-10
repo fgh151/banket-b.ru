@@ -2,6 +2,11 @@
 /**
  * @var                                 $this \yii\web\View
  * @var \app\common\models\Organization $model
+ * @var \app\common\models\District[] $districts
+ * @var \app\common\models\Metro $metro
+ * @var \app\common\models\Metro[] $metros
+ * @var \app\common\models\RestaurantParams $params
+ * @var \app\common\models\RestaurantHall[] $halls
  */
 
 use app\common\models\Proposal;
@@ -81,8 +86,8 @@ use yii\widgets\ActiveForm;
     <?php DynamicFormWidget::end(); ?>
 <?= $form->field($model, 'contact'); ?>
 <?= $form->field($model, 'phone'); ?>
-<?= $form->field($model, 'email'); ?>
-    <?= $form->field($model, 'password')->label('Изменить пароль'); ?>
+    <?php /*= $form->field($model, 'email');*/ ?>
+    <?php /*= $form->field($model, 'password')->label('Изменить пароль'); */ ?>
 
     <?php if ($model->isRestaurant()) : ?>
         <?= $form->field($params, 'ownAlko')->checkbox(); ?>

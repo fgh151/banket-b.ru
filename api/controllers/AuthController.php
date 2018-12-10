@@ -132,6 +132,7 @@ class AuthController extends Controller
                 'ac2ea781ced8dd8a479849addcd758a6'
             );
         }
+        return false;
     }
 
     /**

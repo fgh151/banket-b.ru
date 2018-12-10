@@ -1,11 +1,14 @@
 <?php
+/** @noinspection PhpUndefinedFieldInspection */
 
 namespace app\common\models;
 
 use app\common\components\Constants;
+use app\jobs\RRMessageJob;
 use Yii;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
+use yii\queue\Queue;
 
 /**
  * This is the model class for table "proposal".
@@ -46,6 +49,8 @@ use yii\db\ActiveRecord;
  * @property boolean $present
  * @property integer $city_id
  * @property integer $region_id
+ * @property bool|array|mixed $answers
+ * @property bool|array $directOrganizations
  * @property integer $all_regions
  */
 class Proposal extends ActiveRecord
@@ -60,6 +65,9 @@ class Proposal extends ActiveRecord
         return 'proposal';
     }
 
+    /**
+     * @return array
+     */
     public static function cuisineLabels()
     {
         return [
@@ -74,6 +82,9 @@ class Proposal extends ActiveRecord
         ];
     }
 
+    /**
+     * @return array
+     */
     public static function typeLabels()
     {
         return [
@@ -86,6 +97,9 @@ class Proposal extends ActiveRecord
         ];
     }
 
+    /**
+     * @return array
+     */
     public static function types()
     {
         return [
@@ -165,10 +179,14 @@ class Proposal extends ActiveRecord
             'entertainment' => 'Развлекательная программа',
             'transport' => 'Транспорт на заказа',
             'present' => 'Подарки',
-            'created_at' => 'Дата создания'
+            'created_at' => 'Дата создания',
+            'status' => 'Статус'
         ];
     }
 
+    /**
+     * @return array
+     */
     public function fields()
     {
         return [
@@ -201,6 +219,9 @@ class Proposal extends ActiveRecord
         return new \DateTime($this->date . ' ' . $this->time);
     }
 
+    /**
+     * @return bool
+     */
     public function beforeValidate()
     {
         $this->comment .= $this->constructorComment;
@@ -238,6 +259,10 @@ class Proposal extends ActiveRecord
         return self::cuisineLabels()[$this->cuisine];
     }
 
+    /**
+     * @param bool $insert
+     * @param array $changedAttributes
+     */
     public function afterSave($insert, $changedAttributes)
     {
         if ($insert && !empty($this->organizations)) {
@@ -266,20 +291,22 @@ class Proposal extends ActiveRecord
             Yii::$app->mailqueue->compose()
                 ->setFrom(Yii::$app->params['adminEmail'])
                 ->setTo('zkzrr@yandex.ru')
-//                ->setTo('zkz@restorate.ru')
                 ->setSubject('Новая заявка')
                 ->setHtmlBody('В разделе заявок появилась новая заявка <a href="https://admin.banket-b.ru/proposal/update/' . $this->id . '">посмотреть</a>')
                 ->queue();
-//            Yii::$app->mailqueue->compose()
-//                ->setFrom(Yii::$app->params['adminEmail'])
-//                ->setTo('fedor@support-pc.org')
-//                ->setSubject('Новая заявка')
-//                ->setTextBody('В разделе заявок появилась новая заявка')
-//                ->queue();
+
+            /** @var Queue $queue */
+            $queue = Yii::$app->queue;
+            $queue->delay(Yii::$app->params['autoAnswerDelay'])->push(new RRMessageJob(['proposal' => $this]));
+
         }
         parent::afterSave($insert, $changedAttributes);
     }
 
+    /**
+     * @return array|bool|mixed
+     * @throws \yii\base\InvalidConfigException
+     */
     public function getAnswers()
     {
         $cache = \Yii::$app->cache;
@@ -301,6 +328,9 @@ class Proposal extends ActiveRecord
         return $result;
     }
 
+    /**
+     * @return array|bool|mixed
+     */
     public function getDirectOrganizations()
     {
         $cache = \Yii::$app->cache;
