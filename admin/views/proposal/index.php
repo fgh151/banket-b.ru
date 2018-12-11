@@ -21,6 +21,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <p>
         <?= Html::a('Добавить заявку', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Добавить заявку от имени Ресторанного рейтинга', ['create-rr'], ['class' => 'btn btn-success']) ?>
     </p>
 
     <?= GridView::widget([
@@ -75,10 +76,27 @@ $this->params['breadcrumbs'][] = $this->title;
                                 return 'Закрыта';
                                 break;
                             }
+                        case Constants::PROPOSAL_STATUS_REJECT :
+                            {
+                                return 'Закрыта';
+                                break;
+                            }
                         default :
                             {
                                 return 'Открыта';
                             }
+                    }
+                },
+                'filter' => [
+                    Constants::PROPOSAL_STATUS_CLOSED => 'Закрыта',
+                    Constants::PROPOSAL_STATUS_CREATED => 'Открыта'
+                ]
+            ],
+            [
+                'label' => 'Ответы для РР',
+                'value' => function (Proposal $model) {
+                    if ($model->owner_id == Yii::$app->params['restorateUserId']) {
+                        return Html::a('Ответы', ['proposal/answers', 'id' => $model->id]);
                     }
                 }
             ],

@@ -16,9 +16,11 @@ use yii\widgets\ActiveForm;
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'owner_id')->dropDownList(
-        ArrayHelper::map(MobileUser::find()->select(['id', 'email'])->all(), 'id', 'email')
-    ) ?>
+    <?php if ($model->owner_id !== Yii::$app->params['restorateUserId']) : ?>
+        <?= $form->field($model, 'owner_id')->dropDownList(
+            ArrayHelper::map(MobileUser::find()->select(['id', 'email'])->all(), 'id', 'email')
+        ) ?>
+    <?php endif; ?>
 
     <?= $form->field($model, 'City')->dropDownList(ArrayHelper::map(GeoCity::find()->select([
         'id',

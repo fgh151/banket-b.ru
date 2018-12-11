@@ -2,6 +2,7 @@
 
 namespace app\common\models;
 
+use app\common\components\Constants;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 
@@ -76,7 +77,7 @@ class ProposalSearch extends Proposal
             'private' => $this->private,
             'own_alcohol' => $this->own_alcohol,
             'parking' => $this->parking,
-            'status' => $this->status
+//            'status' => $this->status
         ]);
 
         $query->andFilterWhere(['>', 'guests_count', $this->guests_count]);
@@ -86,6 +87,14 @@ class ProposalSearch extends Proposal
                 $query->andFilterWhere(['organizations' => '"[]"']);
             } else {
                 $query->andFilterWhere(['@>', 'organizations', '[' . $direct . ']']);
+            }
+        }
+
+        if ($this->status !== null) {
+            if ($this->status == Constants::PROPOSAL_STATUS_CREATED) {
+                $query->andFilterWhere(['status' => Constants::PROPOSAL_STATUS_CREATED]);
+            } else {
+                $query->andFilterWhere(['in', 'status', [Constants::PROPOSAL_STATUS_CLOSED, Constants::PROPOSAL_STATUS_REJECT]]);
             }
         }
 

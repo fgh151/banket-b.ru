@@ -35,6 +35,11 @@ class Message extends Model
 
     public $user_id;
 
+    /**
+     * @param $user_id
+     * @param $proposalId
+     * @return array
+     */
     public static function findAll($user_id, $proposalId)
     {
         $result = [];
@@ -59,15 +64,16 @@ class Message extends Model
                     $result[str_replace('o_', '', $organizationId)][$decodedMessage->created_at] = $decodedMessage;
                 }
             }
-            return $result;
         }
-        return null;
+        return $result;
     }
 
     public function attributeLabels()
     {
         return [
-            'message' => 'Сообщение'
+            'message' => 'Сообщение',
+            'organization_id' => 'Организация',
+            'created_at' => 'Дата'
         ];
     }
 
@@ -187,7 +193,7 @@ class Message extends Model
         return Json::encode($message);
     }
 
-    private static function decode($json)
+    public static function decode($json)
     {
         return new Message(Json::decode($json, true));
     }
