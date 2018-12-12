@@ -10,6 +10,7 @@ use yii\bootstrap\NavBar;
 use yii\helpers\Html;
 use yii\widgets\Breadcrumbs;
 
+$this->title = Yii::$app->name;
 AppAsset::register($this);
 ?>
 <?php $this->beginPage() ?>
@@ -36,7 +37,7 @@ AppAsset::register($this);
 <div class="wrap">
     <?php
     NavBar::begin([
-        'brandLabel' => Yii::$app->name,
+        'brandLabel' => Yii::$app->name . ' сборка ' . file_get_contents(Yii::getAlias('@app/../') . '/buildId'),
         'brandUrl' => Yii::$app->homeUrl,
         'options' => [
             'class' => 'navbar-inverse navbar-fixed-top',
