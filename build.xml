@@ -8,7 +8,7 @@
     <!-- <property name="toolsdir" value="${basedir}/vendor/bin/"/> -->
 
     <target name="build"
-            depends="prepare"
+            depends="prepare, composer"
             description=""/>
 
     <target name="clean"
@@ -111,12 +111,6 @@
         <echo>Updating dependencies</echo>
         <exec executable="composer" failonerror="true">
             <arg value="update"/>
-        </exec>
-    </target>
-
-    <target name="design">
-        <exec executable="/bin/bash">
-            <arg value="build-design.sh"/>
         </exec>
     </target>
 
