@@ -8,7 +8,7 @@
     <!-- <property name="toolsdir" value="${basedir}/vendor/bin/"/> -->
 
     <target name="build"
-            depends="prepare, composer"
+            depends="prepare, phpcs-ci"
             description=""/>
 
     <target name="clean"
