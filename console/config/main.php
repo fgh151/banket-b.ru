@@ -46,7 +46,7 @@ return [
                 'host' => 'smtp.banket-b.ru',
                 'username' => 'Web@banket-b.ru',
                 'password' => 'p3uDxGzQ',
-                'port' => '465',
+                'port' => '25',
 //                'encryption' => 'ssl', // у яндекса SSL
             ],
         ],
