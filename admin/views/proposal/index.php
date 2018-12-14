@@ -93,12 +93,14 @@ $this->params['breadcrumbs'][] = $this->title;
                 ]
             ],
             [
+                'attribute' => null,
                 'label' => 'Ответы для РР',
                 'value' => function (Proposal $model) {
                     if ($model->owner_id == Yii::$app->params['restorateUserId']) {
                         return Html::a('Ответы', ['proposal/answers', 'id' => $model->id]);
                     }
-                }
+                },
+                'format' => 'html'
             ],
             [
                 'class' => 'yii\grid\ActionColumn',

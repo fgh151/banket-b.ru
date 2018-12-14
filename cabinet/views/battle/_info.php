@@ -56,6 +56,7 @@ $columns = [
 if ($key->owner_id === Yii::$app->params['restorateUserId']) {
     array_unshift($columns, [
         [
+            'attribute' => null,
             'label' => 'Заявка пришда через Ресторанный рейтинг',
             'value' => null
         ],
