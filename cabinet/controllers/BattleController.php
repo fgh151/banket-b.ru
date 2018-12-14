@@ -16,12 +16,33 @@ use app\common\models\Proposal;
 use app\common\models\ProposalSearch;
 use Yii;
 use yii\data\ActiveDataProvider;
+use yii\filters\AccessControl;
 use yii\web\Controller;
 
 class BattleController extends Controller
 {
 
     use CheckPayTrait;
+
+
+    /**
+     * {@inheritdoc}
+     */
+    public function behaviors()
+    {
+        return [
+            'access' => [
+                'class' => AccessControl::class,
+                'rules' => [
+                    [
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ]
+                ],
+            ],
+        ];
+    }
+
     /**
      * @param $action
      *

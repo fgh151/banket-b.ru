@@ -18,12 +18,31 @@ use app\common\models\RestaurantHall;
 use app\common\models\RestaurantLinkCuisine;
 use app\common\models\RestaurantParams;
 use Yii;
+use yii\filters\AccessControl;
 use yii\helpers\ArrayHelper;
 use yii\web\Controller;
 
 class UserController extends Controller
 {
     /** @noinspection PhpUndefinedClassInspection */
+
+    /**
+     * {@inheritdoc}
+     */
+    public function behaviors()
+    {
+        return [
+            'access' => [
+                'class' => AccessControl::class,
+                'rules' => [
+                    [
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ]
+                ],
+            ],
+        ];
+    }
 
     /**
      * @return string

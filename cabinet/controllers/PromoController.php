@@ -11,6 +11,7 @@ namespace app\cabinet\controllers;
 
 use app\common\models\Promo;
 use yii\data\ActiveDataProvider;
+use yii\filters\AccessControl;
 use yii\helpers\FileHelper;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -19,6 +20,24 @@ use yii\web\UploadedFile;
 class PromoController extends Controller
 {
     use CheckPayTrait;
+
+    /**
+     * {@inheritdoc}
+     */
+    public function behaviors()
+    {
+        return [
+            'access' => [
+                'class' => AccessControl::class,
+                'rules' => [
+                    [
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ]
+                ],
+            ],
+        ];
+    }
 
     /**
      * @param $action
