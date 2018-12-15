@@ -25,9 +25,11 @@ $this->params['breadcrumbs'][] = 'Ответы';
             'attribute' => 'organization_id',
             'value' => function (Message $model) {
                 return Organization::findOne($model->organization_id)->name;
-            }
+            },
+            'label' => 'Организация'
         ],
-        'message',
-        'created_at:datetime'
-    ]
+        'message:ntext:Ответ',
+        'created_at:datetime:Дата'
+    ],
+    'emptyText' => 'На данную заявку ответов не поступало'
 ]);
