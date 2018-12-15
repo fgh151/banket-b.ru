@@ -54,13 +54,13 @@ $columns = [
 ];
 
 if ($key->owner_id === Yii::$app->params['restorateUserId']) {
-    array_unshift($columns, [
+    array_unshift($columns,
         [
             'attribute' => 'id',
             'label' => 'Заявка пришда через Ресторанный рейтинг',
-            'value' => null
-        ],
-    ]);
+            'value' => ''
+        ]
+    );
 }
 
 echo \yii\widgets\DetailView::widget([
