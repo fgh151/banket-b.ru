@@ -22,7 +22,7 @@ use yii\widgets\ActiveForm;
         ) ?>
     <?php endif; ?>
 
-    <?= $form->field($model, 'City')->dropDownList(ArrayHelper::map(GeoCity::find()->select([
+    <?= $form->field($model, 'city_id')->dropDownList(ArrayHelper::map(GeoCity::find()->select([
         'id',
         'title'
     ])->asArray()->all(), 'id', 'title'),

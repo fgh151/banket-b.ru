@@ -4,6 +4,7 @@
 namespace app\common\models;
 
 use app\common\components\Constants;
+use app\common\models\geo\GeoCity;
 use app\jobs\RRMessageJob;
 use Yii;
 use yii\behaviors\TimestampBehavior;
@@ -155,8 +156,8 @@ class Proposal extends ActiveRecord
             'id' => 'ID',
             'owner_id' => 'Заявитель',
             'City' => 'Город',
-            'date' => 'Дата',
-            'time' => 'Время',
+            'date' => 'Дата банкета',
+            'time' => 'Время начала банкета',
             'guests_count' => 'Количество гостей',
             'type' => 'Мероприятие',
             'event_type' => 'Тип мероприятия',
@@ -180,7 +181,8 @@ class Proposal extends ActiveRecord
             'transport' => 'Транспорт на заказа',
             'present' => 'Подарки',
             'created_at' => 'Дата создания',
-            'status' => 'Статус'
+            'status' => 'Статус заявки"',
+            'city_id' => 'Город'
         ];
     }
 
@@ -225,6 +227,12 @@ class Proposal extends ActiveRecord
     public function beforeValidate()
     {
         $this->comment .= $this->constructorComment;
+        if ($this->city_id && !$this->City) {
+            $city = GeoCity::findOne($this->city_id);
+            if ($city) {
+                $this->City = $city->title;
+            }
+        }
         return parent::beforeValidate();
     }
 

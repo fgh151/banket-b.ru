@@ -50,7 +50,7 @@ class ProposalSearch extends Proposal
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
-            'sort' => ['defaultOrder' => ['date' => SORT_DESC]]
+            'sort' => ['defaultOrder' => ['date' => SORT_ASC]]
         ]);
 
         $this->load($params);

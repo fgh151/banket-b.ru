@@ -36,6 +36,21 @@ $this->params['breadcrumbs'][] = $this->title;
             'City',
             'date',
             'time',
+            'created_at:datetime',
+            [
+                'label' => 'Прямая заявка',
+                'value' => function (Proposal $model) {
+                    if (is_array($model->getDirectOrganizations())) {
+                        return implode('<br />', $model->getDirectOrganizations());
+                    }
+                    return '';
+                },
+                'format' => 'html'
+            ],
+
+
+
+
             //'guests_count',
             //'amount',
             //'type',
@@ -48,21 +63,24 @@ $this->params['breadcrumbs'][] = $this->title;
             //'parking:boolean',
             //'comment:ntext',
             [
-                'label' => 'Прямая заявка',
-                'value' => function (Proposal $model) {
-                    return implode('<br />', $model->getDirectOrganizations());
-                },
-                'format' => 'html'
-            ],
-            'created_at:datetime',
-            [
-                'label' => 'Ответы',
+                'label' => 'Ответы ресторанов',
                 'value' => function (Proposal $model) {
                     $result = [];
                     foreach ($model->getAnswers() as $org => $time) {
-                        $result[] = $org . ' ' . $time;
+                        $result[] = $org . '<br />(' . $time . ')';
                     }
                     return implode('<br />', $result);
+                },
+                'format' => 'html'
+            ],
+            [
+                'attribute' => null,
+                'label' => 'Ответы ресторанов для RR',
+                'value' => function (Proposal $model) {
+                    if ($model->owner_id == Yii::$app->params['restorateUserId']) {
+                        return Html::a('Ответы', ['proposal/answers', 'id' => $model->id]);
+                    }
+                    return '';
                 },
                 'format' => 'html'
             ],
@@ -91,16 +109,6 @@ $this->params['breadcrumbs'][] = $this->title;
                     Constants::PROPOSAL_STATUS_CLOSED => 'Закрыта',
                     Constants::PROPOSAL_STATUS_CREATED => 'Открыта'
                 ]
-            ],
-            [
-                'attribute' => null,
-                'label' => 'Ответы для РР',
-                'value' => function (Proposal $model) {
-                    if ($model->owner_id == Yii::$app->params['restorateUserId']) {
-                        return Html::a('Ответы', ['proposal/answers', 'id' => $model->id]);
-                    }
-                },
-                'format' => 'html'
             ],
             [
                 'class' => 'yii\grid\ActionColumn',
