@@ -33,7 +33,7 @@ class RRMessageJob extends BaseObject implements JobInterface
         $message->user_id = $this->proposal->owner_id;
         $message->author_class = Organization::class;
         $message->message = $this->proposal->owner->name . ', спасибо за оставленную заявку. 
-        В ближайшее время мы подберем для Вас предложение. Ваш персональный менеджер Римма. Телефон +7 495 788 0600';
+        В ближайшее время мы подберем для Вас предложение. Ваш персональный менеджер по телефону +7 495 788 0600';
 
         $message->save();
     }

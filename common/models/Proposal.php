@@ -320,7 +320,7 @@ class Proposal extends ActiveRecord
         $cache = \Yii::$app->cache;
         $result = $cache->get('proposal-answers-' . $this->id);
 
-        if ($result === false) {
+        if ($result == false) {
             $messages = Message::findAll($this->owner_id, $this->id);
             $tmp = $result = [];
             foreach ($messages as $organizationId => $messagesArray) {

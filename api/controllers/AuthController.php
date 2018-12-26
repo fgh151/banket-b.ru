@@ -23,13 +23,8 @@ class AuthController extends Controller
 {
 
     public function behaviors()
-
     {
-
         $behaviors = parent::behaviors();
-
-
-        // all actions with authentication except login
 
         $behaviors['authenticator']['except'][] = 'index';
         $behaviors['authenticator']['except'][] = 'register';
@@ -37,13 +32,12 @@ class AuthController extends Controller
         $behaviors['authenticator']['except'][] = 'change-password';
         $behaviors['authenticator']['except'][] = 'create';
 
-
         return $behaviors;
-
     }
 
     /**
      * @return \stdClass | array
+     * @throws \Throwable
      */
     public function actionIndex()
     {
@@ -93,8 +87,6 @@ class AuthController extends Controller
                 }
                 Yii::$app->response->statusCode = 403;
 
-//                return $model->errors;
-
                 return $response;
             }
         }
@@ -110,15 +102,10 @@ class AuthController extends Controller
         $request = Json::decode(Yii::$app->getRequest()->getRawBody(), true);
         $phone   = $request['phone'];
 
-
         /**
          * Находим человека и отправляем еу СМС
          */
         $user = MobileUser::find()->where(['phone' => $phone])->one();
-
-        Yii::error($user);
-
-        Yii::error('Send SMS to ' . $phone);
 
         if ($user) {
 

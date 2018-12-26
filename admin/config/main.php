@@ -13,6 +13,7 @@ return [
     'controllerNamespace' => 'app\admin\controllers',
     'bootstrap' => ['log'],
     'modules' => [],
+    'homeUrl' => ['proposal/index'],
     'components' => [
         'request' => [
             'csrfParam' => '_csrf-admin',

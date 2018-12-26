@@ -131,8 +131,9 @@ class Message extends Model
     public function rules()
     {
         return [
+            ['organization_id', 'integer'],
             ['created_at', 'default', 'value' => time()],
-            ['organization_id', 'default', 'value' => Yii::$app->getUser()->getId()],
+//            ['organization_id', 'default', 'value' => Yii::$app->getUser()->getId()],
             ['message', 'string'],
             ['message', 'required'],
             ['author_class', 'ownerClassValidator'],
@@ -160,7 +161,7 @@ class Message extends Model
      */
     public function save($runValidation = true, $attributeNames = null)
     {
-
+        $this->beforeSave();
         if ($runValidation && !$this->validate()) {
             Yii::info('Model not inserted due to validation error.', __METHOD__);
             return false;
@@ -172,7 +173,7 @@ class Message extends Model
         $database = Yii::$app->firebase->getDatabase();
         $reference = $database->getReference($path);
         $reference->set(self::encode($this));
-
+        $this->afterSave();
         return $this;
     }
 
@@ -196,6 +197,26 @@ class Message extends Model
     public static function decode($json)
     {
         return new Message(Json::decode($json, true));
+    }
+
+    public function beforeSave()
+    {
+        if ($this->organization_id == null) {
+            $this->organization_id = Yii::$app->getUser()->getId();
+        }
+    }
+
+    public function afterSave()
+    {
+        if ($this->user_id == Yii::$app->params['restorateUserId']) {
+            Yii::$app->mailer->compose()
+                ->setFrom(Yii::$app->params['adminEmail'])
+                ->setTo('RR@restorate.ru')
+//                ->setTo('fedor@support-pc.org')
+                ->setSubject('Новый ответ на заявку')
+                ->setHtmlBody('На заявку ' . $this->proposal_id . ' поступил ответ от ресторана ' . $this->author->name . ' <a href="https://admin.banket-b.ru/proposal/answers/' . $this->proposal_id . '">посмотреть</a>')
+                ->send();
+        }
     }
 
 }

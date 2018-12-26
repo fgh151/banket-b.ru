@@ -143,7 +143,6 @@ class SiteController extends Controller
         return Json::encode(['output' => '', 'selected' => '']);
     }
 
-
     public function actionMetro()
     {
         $out = [];
