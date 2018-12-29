@@ -80,7 +80,7 @@ $en_month = [
                     if ($model->status === Constants::PROPOSAL_STATUS_CREATED && $model->date >= date('Y-m-d')) :
                         echo $this->render('_controls', ['model' => $model]);
                     else:
-                        echo 'Заявка не актуальная, стоимость заявки ' . $model->guests_count * $model->amount . ' ₽';
+                        echo '<span style="color: #843534">Заявка не актуальная, стоимость заявки ' . $model->guests_count * $model->amount . ' ₽</span>';
                     endif;
                 endif; ?>
             </div>

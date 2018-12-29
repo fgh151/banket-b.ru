@@ -318,9 +318,9 @@ class Proposal extends ActiveRecord
     public function getAnswers()
     {
         $cache = \Yii::$app->cache;
-        $result = $cache->get('proposal-answers-' . $this->id);
+//        $result = $cache->get('proposal-answers-' . $this->id);
 
-        if ($result == false) {
+//        if ($result == false) {
             $messages = Message::findAll($this->owner_id, $this->id);
             $tmp = $result = [];
             foreach ($messages as $organizationId => $messagesArray) {
@@ -330,8 +330,8 @@ class Proposal extends ActiveRecord
             foreach ($tmp as $organizationId => $timestamp) {
                 $result[Organization::findOne(intval($organizationId))->name] = \Yii::$app->formatter->asDatetime($timestamp);
             }
-            $cache->set('proposal-answers-' . $this->id, $result);
-        }
+//            $cache->set('proposal-answers-' . $this->id, $result);
+//        }
 
         return $result;
     }
