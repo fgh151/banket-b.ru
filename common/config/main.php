@@ -43,6 +43,9 @@ return [
             'channel' => 'default', // Queue channel key
             'mutex' => \yii\mutex\FileMutex::class
         ],
+        'sms' => [
+            'class' => \app\common\components\Sms::class
+        ]
     ],
     'modules'    => [
         'smsGate' => [

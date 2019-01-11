@@ -11,8 +11,12 @@ return [
     'name' => 'BB - api',
     'basePath' => dirname(__DIR__),
     'controllerNamespace' => 'app\api\controllers',
-    'bootstrap' => ['log'],
-    'modules' => [],
+    'bootstrap' => ['log',],
+    'modules' => [
+        'v2' => \app\api\versions\v2\Version::class
+//        'gii' => 'yii\gii\Module',
+//        'allowedIPs' => ['*']
+    ],
     'components' => [
         'request' => [
             'csrfParam' => '_csrf-admin',

@@ -3,6 +3,7 @@
 namespace app\common\models;
 
 use app\common\components\AuthTrait;
+use app\common\components\Constants;
 use yii\db\ActiveRecord;
 use yii\web\IdentityInterface;
 
@@ -70,6 +71,22 @@ class MobileUser extends ActiveRecord implements IdentityInterface
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
         ];
+    }
+
+
+    /**
+     * Finds user by username
+     *
+     * @param string $username
+     *
+     * @return MobileUser|null
+     */
+    public static function findByPhone($phone)
+    {
+        /** @var ActiveRecord self */
+        $query = self::find()->where(['status' => Constants::USER_STATUS_ACTIVE]);
+        $query->andFilterWhere(['phone' => mb_strtolower($phone)]);
+        return $query->one();
     }
 
 }
