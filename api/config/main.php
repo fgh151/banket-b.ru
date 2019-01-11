@@ -21,7 +21,7 @@ return [
         'user' => [
             'identityClass' => 'app\common\models\MobileUser',
             'enableAutoLogin' => true,
-            'identityCookie' => ['name' => '_identity-api', 'httpOnly' => true],
+//            'identityCookie' => ['name' => '_identity-api', 'httpOnly' => true],
         ],
         'session' => [
             // this is the name of the session cookie used for login on the admin

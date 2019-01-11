@@ -22,7 +22,7 @@ return [
         'user' => [
             'identityClass' => 'app\common\models\Organization',
             'enableAutoLogin' => true,
-            'identityCookie' => ['name' => '_identity-cabinet', 'httpOnly' => true],
+//            'identityCookie' => ['name' => '_identity-cabinet', 'httpOnly' => true],
         ],
         'session' => [
             // this is the name of the session cookie used for login on the cabinet

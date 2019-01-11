@@ -22,7 +22,7 @@ return [
         'user' => [
             'identityClass' => 'app\common\models\User',
             'enableAutoLogin' => true,
-            'identityCookie' => ['name' => '_identity-admin', 'httpOnly' => true],
+//            'identityCookie' => ['name' => '_identity-admin', 'httpOnly' => true],
         ],
         'session' => [
             // this is the name of the session cookie used for login on the admin

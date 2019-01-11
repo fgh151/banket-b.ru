@@ -85,4 +85,16 @@ class LoginForm extends Model
 
         return $this->_user;
     }
+
+    /**
+     * Из админки на выбор авторизовать какого либо пользователя
+     * @param int $userId
+     */
+    public function authAdmin($userId)
+    {
+        Yii::$app->user->login(
+            Organization::findOne(['id' => $userId]),
+            $this->rememberMe ? Yii::$app->params['durationAuth'] : 0
+        );
+    }
 }

@@ -102,7 +102,7 @@ class Organization extends ActiveRecord implements IdentityInterface
             [['status', 'created_at', 'updated_at'], 'default', 'value' => null],
             [['status', 'created_at', 'updated_at', 'city_id', 'district_id', 'activity_field'], 'integer'],
             [['auth_key'], 'string', 'max' => 32],
-            [['password_hash', 'password_reset_token', 'email', 'name', 'contact', 'phone', 'restogram_id'], 'string', 'max' => 255],
+            [['password_hash', 'password_reset_token', 'email', 'name', 'contact', 'phone', /*'restogram_id' */], 'string', 'max' => 255],
             [['email'], 'unique'],
             [['password_reset_token'], 'unique'],
             [['state', 'state_statistic', 'state_promo', 'state_direct'],'default', 'value' => Constants::ORGANIZATION_STATE_FREE],

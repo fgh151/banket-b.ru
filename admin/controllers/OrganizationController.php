@@ -4,6 +4,7 @@ namespace app\admin\controllers;
 
 use app\common\components\Model;
 use app\common\models\District;
+use app\common\models\LoginForm;
 use app\common\models\Metro;
 use app\common\models\Organization;
 use app\common\models\OrganizationImage;
@@ -214,5 +215,13 @@ WHERE ml.city_id = ' . $model->city_id . ' ORDER BY name;')
         }
 
         throw new NotFoundHttpException('The requested page does not exist.');
+    }
+
+
+    public function actionAuth($userId)
+    {
+
+        (new LoginForm)->authAdmin($userId);
+        return $this->goHome();
     }
 }
