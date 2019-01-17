@@ -286,7 +286,7 @@ class Proposal extends ActiveRecord
         if ($insert) {
             $recipients = Organization::find()
 //                ->where(['state' => Constants::ORGANIZATION_STATE_PAID])
-                ->andFilterWhere(['NOT ILIKE', 'email', 'banket-b.ru'])
+                ->Where(['NOT ILIKE', 'email', 'banket-b.ru'])
                 ->all();
             foreach ($recipients as $recipient) {
                 Yii::$app->mailqueue->compose()
