@@ -153,8 +153,9 @@ use yii\widgets\ActiveForm;
         <?php DynamicFormWidget::end(); ?>
 
         <?= $form->field($model,
-            'cuisine_field[]')->widget(\kartik\select2\Select2::class, [
+            'cuisine_field')->widget(\kartik\select2\Select2::class, [
             'data' => Proposal::cuisineLabels(),
+            'name' => 'cuisine_field[]',
             'options' => [
                 'placeholder' => 'Выберите кухни',
                 'multiple' => true
