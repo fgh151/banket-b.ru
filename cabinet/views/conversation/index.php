@@ -132,7 +132,6 @@ function getNewMessages() {
             scrollMessages();
         },
         error: function () {
-            alert("Something went wrong");
         }
     });
 }

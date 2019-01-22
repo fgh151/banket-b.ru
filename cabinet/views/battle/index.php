@@ -45,7 +45,8 @@ $en_month = [
 /** @var \app\common\components\Formatter $formatter */
 $formatter = Yii::$app->formatter;
 ?>
-<div class="battle-index">
+
+    <div class="battle-index">
     <div class="panel panel-default">
         <div class="panel-heading">
             <div class="row">
