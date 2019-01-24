@@ -196,8 +196,8 @@ WHERE ml.city_id = ' . $model->city_id . ' ORDER BY name;')
 
     public function actionImgDelete($id)
     {
-        $model = OrganizationImage::findOne($id);
-        OrganizationImage::deleteAll(['id' => $id]);
+        $model = OrganizationImage::findOne(['upload_id' => $id]);
+        OrganizationImage::deleteAll(['upload_id' => $id]);
         return $this->redirect(['organization/update', 'id' => $model->organization_id]);
     }
 
