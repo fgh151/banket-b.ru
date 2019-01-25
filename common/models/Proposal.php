@@ -52,6 +52,7 @@ use yii\queue\Queue;
  * @property integer $region_id
  * @property bool|array|mixed $answers
  * @property bool|array $directOrganizations
+ * @property \yii\db\ActiveQuery|\app\common\models\geo\GeoCity $geoCity
  * @property integer $all_regions
  */
 class Proposal extends ActiveRecord
@@ -233,7 +234,21 @@ class Proposal extends ActiveRecord
                 $this->City = $city->title;
             }
         }
+
+        //TODO: Поправить ошибку приходящую из приложения
+        if ($this->city_id !== 1 && $this->City === 'Москва') {
+            $this->city_id = 1;
+        }
+
         return parent::beforeValidate();
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery|GeoCity
+     */
+    public function getGeoCity()
+    {
+        return $this->hasOne(GeoCity::class, ['id' => 'city_id']);
     }
 
     /**
