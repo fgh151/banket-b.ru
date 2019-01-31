@@ -135,7 +135,7 @@ class SiteController extends Controller
         if ($month) {
             $proposalsCount->andFilterWhere($createdAtCriteria);
         }
-        $proposalsCount->count();
+        $proposalsCount = $proposalsCount->count();
         $onePercent = $proposalsCount / 10;
 
         $criteriaSql = '';
