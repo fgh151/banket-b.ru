@@ -40,8 +40,6 @@ use yii\web\IdentityInterface;
  *
  * @property OrganizationLinkMetro[] $linkMetro
  * @property OrganizationLinkActivity[] $linkActivity
- * @property RestaurantLinkCuisine[] $cuisineLinks
- * @property array $cuisines
  * @property GeoCity $city
  *
  * @property string $restogram_id
@@ -52,8 +50,6 @@ class Organization extends ActiveRecord implements IdentityInterface
 
     public $password;
     public $image_field;
-
-    public $cuisine_field;
 
     public $activity_field;
 
@@ -106,7 +102,7 @@ class Organization extends ActiveRecord implements IdentityInterface
             [['email'], 'unique'],
             [['password_reset_token'], 'unique'],
             [['state', 'state_statistic', 'state_promo', 'state_direct'],'default', 'value' => Constants::ORGANIZATION_STATE_FREE],
-            [['password', 'url', 'image_field', 'cuisine_field'], 'safe'],
+            [['password', 'url', 'image_field'], 'safe'],
             ['city_id', ExistValidator::class, 'targetClass' => GeoCity::class, 'targetAttribute' => 'id']
         ];
     }
@@ -127,7 +123,6 @@ class Organization extends ActiveRecord implements IdentityInterface
             },
             'halls',
             'metro',
-            'cuisines'
         ];
     }
 
@@ -163,11 +158,6 @@ class Organization extends ActiveRecord implements IdentityInterface
         parent::afterFind();
         $activity = OrganizationLinkActivity::find()->where(['organization_id' => $this->id])->one();
         $this->activity_field = $activity ? $activity->activity_id : null;
-
-        $cuisines = RestaurantLinkCuisine::find()->where(['restaurant_id' => $this->id])->all();
-        foreach ($cuisines as $cuisine) {
-            $this->cuisine_field[] = $cuisine->cuisine_id;
-        }
     }
 
     /**
@@ -229,23 +219,6 @@ class Organization extends ActiveRecord implements IdentityInterface
     {
         return $this->hasMany(Upload::class, ['id' => 'upload_id'])
             ->viaTable(OrganizationImage::tableName(), ['organization_id' => 'id']);
-    }
-
-    /**
-     * @return array
-     */
-    public function getCuisines()
-    {
-        $result = [];
-        foreach ($this->cuisineLinks as $cuisine) {
-            $result[] = $cuisine->title;
-        }
-        return $result;
-    }
-
-    public function getCuisineLinks()
-    {
-        return $this->hasMany(RestaurantLinkCuisine::class, ['restaurant_id' => 'id']);
     }
 
     public function getCity()

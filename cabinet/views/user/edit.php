@@ -9,7 +9,6 @@
  * @var \app\common\models\RestaurantHall[] $halls
  */
 
-use app\common\models\Proposal;
 use wbraganca\dynamicform\DynamicFormWidget;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
@@ -151,16 +150,6 @@ use yii\widgets\ActiveForm;
             <?php endforeach; ?>
         </div>
         <?php DynamicFormWidget::end(); ?>
-
-        <?= $form->field($model,
-            'cuisine_field')->widget(\kartik\select2\Select2::class, [
-            'data' => Proposal::cuisineLabels(),
-            'name' => 'cuisine_field[]',
-            'options' => [
-                'placeholder' => 'Выберите кухни',
-                'multiple' => true
-            ],
-        ])->label('Кухня'); ?>
     <?php endif; ?>
 
 <?= \yii\helpers\Html::submitButton('Сохранить', ['class' => 'btn btn-success']); ?>

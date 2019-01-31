@@ -13,7 +13,6 @@ use app\common\models\District;
 use app\common\models\Metro;
 use app\common\models\OrganizationLinkMetro;
 use app\common\models\RestaurantHall;
-use app\common\models\RestaurantLinkCuisine;
 use app\common\models\RestaurantParams;
 use yii\data\ActiveDataProvider;
 
@@ -26,9 +25,6 @@ class OrganizationSearch extends Organization
     public $parking = false;
 
     public $size = 0;
-
-    public $cuisine = [];
-
 
     public $districtId;
     public $cityId;
@@ -43,10 +39,9 @@ class OrganizationSearch extends Organization
     public function rules()
     {
         return [
-            [['ownAlko', 'scene', 'dance', 'parking', 'cuisine', 'cityId', 'amount'], 'safe'],
+            [['ownAlko', 'scene', 'dance', 'parking', 'cityId', 'amount'], 'safe'],
             [['size', 'districtId', 'metroId'], 'integer'],
             [['districtTitle', 'metroTitle'], 'string']
-//            ['cuisine', 'each', 'rule' => ['integer']]
         ];
     }
 
@@ -133,15 +128,6 @@ class OrganizationSearch extends Organization
                 'id',
                 RestaurantHall::find()
                     ->where(['>=', 'size', $this->size])
-                    ->select('restaurant_id')
-            ]);
-        }
-        if ($this->cuisine && intval($this->cuisine) !== 1) {
-            $query->andFilterWhere([
-                'in',
-                'id',
-                RestaurantLinkCuisine::find()
-                    ->where(['in', 'cuisine_id', $this->cuisine])
                     ->select('restaurant_id')
             ]);
         }

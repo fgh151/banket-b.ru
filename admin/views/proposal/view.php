@@ -22,7 +22,6 @@ $columns = [
         }
     ],
     'eventType',
-    'cuisineString',
     'dance:boolean',
     'private:boolean',
     'own_alcohol:boolean',

@@ -1,7 +1,5 @@
 <?php
 return [
-    'adminEmail' => 'admin@example.com',
-
     'chart'=> [
         'byDay' => [
             'Понедельник' => '200',

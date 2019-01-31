@@ -4,7 +4,6 @@ use app\common\components\Constants;
 use app\common\models\Activity;
 use app\common\models\geo\GeoCity;
 use app\common\models\Organization;
-use app\common\models\Proposal;
 use wbraganca\dynamicform\DynamicFormWidget;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
@@ -198,15 +197,6 @@ use yii\widgets\ActiveForm;
         <?php endforeach; ?>
     </div>
     <?php DynamicFormWidget::end(); ?>
-
-    <?= $form->field($model,
-        'cuisine_field')->widget(\kartik\select2\Select2::class, [
-        'data' => Proposal::cuisineLabels(),
-        'options' => [
-            'placeholder' => 'Выберите кухни',
-            'multiple' => true
-        ],
-    ])->label('Кухня'); ?>
 
 
     <?= $form->field($model, 'state')->dropDownList(Organization::stateLabels()) ?>

@@ -15,7 +15,6 @@ use app\common\models\Metro;
 use app\common\models\Organization;
 use app\common\models\OrganizationLinkMetro;
 use app\common\models\RestaurantHall;
-use app\common\models\RestaurantLinkCuisine;
 use app\common\models\RestaurantParams;
 use Yii;
 use yii\filters\AccessControl;
@@ -89,16 +88,6 @@ class UserController extends Controller
                     $hall->save();
                 }
 
-
-                RestaurantLinkCuisine::deleteAll(['restaurant_id' => $model->id]);
-                foreach ($model->cuisine_field as $cuisine) {
-                    $link = new RestaurantLinkCuisine();
-                    $link->cuisine_id = $cuisine;
-                    $link->restaurant_id = $model->id;
-                    $link->save();
-                }
-
-
                 \Yii::$app->session->setFlash('success', 'Данные успешно сохранены');
             }
         }
@@ -127,7 +116,6 @@ WHERE ml.city_id = ' . $model->city_id . ' ORDER BY name;')
             'metros' => $metros,
             'params' => $params ? $params : new RestaurantParams(['organization_id' => $model->id]),
             'halls' => empty($model->halls) ? [new RestaurantHall()] : $model->halls,
-            'cuisine' => empty($model->cuisineLinks) ? [new RestaurantLinkCuisine()] : $model->cuisineLinks
         ]);
     }
 

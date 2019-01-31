@@ -15,9 +15,7 @@ use app\common\models\Metro;
 use app\common\models\Organization;
 use app\common\models\OrganizationImage;
 use app\common\models\OrganizationLinkMetro;
-use app\common\models\Proposal;
 use app\common\models\RestaurantHall;
-use app\common\models\RestaurantLinkCuisine;
 use app\common\models\RestaurantParams;
 use app\common\models\Upload;
 use yii\console\Controller;
@@ -159,9 +157,6 @@ class ImportController extends Controller
             $this->addMetro($restaurant->id, $import[44]);
 
 
-            $cuisine = new RestaurantLinkCuisine(['restaurant_id' => $restaurant->id, 'cuisine_id' => array_search($import[51], Proposal::cuisineLabels())]);
-            $cuisine->save();
-
 
             $img = $import[53];
             $dir = '/var/www/html/cabinet/web/upload/organization/' . $restaurant->id;
@@ -231,21 +226,4 @@ class ImportController extends Controller
             ->send());
     }
 
-
-    public function actionCuisine()
-    {
-
-
-        $ar = json_decode(file_get_contents(__DIR__ . '/cuisine.json'), true);
-
-        $result = [];
-
-        foreach ($ar as $item) {
-
-            $result[$item['_id']['$oid']] = $item['name'];
-        }
-
-        print_r($result);
-
-    }
 }

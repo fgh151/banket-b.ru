@@ -71,10 +71,6 @@ $this->title = 'My Yii Application';
             <h3>Распределение заявок по часам</h3>
             <?= ChartJs::widget([
                 'type'    => 'bar',
-                'options' => [
-                    'height' => 400,
-                    'width'  => 500
-                ],
                 'data'    => [
                     'labels'   => array_keys($byHours),
                     'datasets' => [
@@ -100,6 +96,8 @@ $this->title = 'My Yii Application';
 
                 ],
                 'options' => [
+                    'height' => 400,
+                    'width' => 500,
                     'scales' => [
                         'yAxes' => [
                             'ticks'      => [
@@ -350,40 +348,6 @@ $this->title = 'My Yii Application';
                             'pointHoverBackgroundColor' => "#fff",
                             'pointHoverBorderColor'     => "rgba(179,181,198,1)",
                             'data'                      => array_values($byParking)
-                        ],
-                    ]
-                ]
-            ]);
-            ?>
-        </div>
-        <div class="col-xs-12 col-md-4" style="background-color: #fff">
-            <h3>Распределение заявок по кухне</h3>
-            <?= ChartJs::widget([
-                'type'    => 'bar',
-                'options' => [
-                    'height' => 400,
-                    'width'  => 500
-                ],
-                'data'    => [
-                    'labels'   => array_values(\app\common\models\Proposal::cuisineLabels()),
-                    'datasets' => [
-                        [
-                            'label'                     => "Распределение заявок по кухне",
-                            'backgroundColor'           => [
-                                "rgba(179,181,198,0.2)",
-                                'red',
-                                'blue',
-                                'white',
-                                'green',
-                                'brown',
-                                'yellow'
-                            ],
-                            'borderColor'               => "rgba(179,181,198,1)",
-                            'pointBackgroundColor'      => "rgba(179,181,198,1)",
-                            'pointBorderColor'          => "#fff",
-                            'pointHoverBackgroundColor' => "#fff",
-                            'pointHoverBorderColor'     => "rgba(179,181,198,1)",
-                            'data'                      => array_values($byCuisine)
                         ],
                     ]
                 ]

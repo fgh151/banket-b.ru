@@ -15,7 +15,6 @@ use app\common\models\OrganizationImage;
 use app\common\models\OrganizationLinkMetro;
 use app\common\models\Proposal;
 use app\common\models\RestaurantHall;
-use app\common\models\RestaurantLinkCuisine;
 use app\common\models\RestaurantParams;
 use app\common\models\Upload;
 use Yii;
@@ -315,7 +314,7 @@ class SiteController extends Controller
         });
 
 
-        $kitchen = Proposal::find()->select(['cuisine']);
+        $kitchen = Proposal::find()->select(['types']);
         if ($proposals === 'my') {
             $kitchen->where(['city_id' => $organization->city_id]);
         }
@@ -323,16 +322,6 @@ class SiteController extends Controller
             $kitchen->andFilterWhere($createdAtCriteria);
         }
         $kitchen = $kitchen->asArray()->all();
-
-        $byCuisine =[];
-        foreach ($kitchen as $item) {
-            $cuisine = $item['cuisine'];
-            $byCuisine[$cuisine] = isset($byCuisine[$cuisine]) ? $byCuisine[$cuisine]+1:1;
-        }
-        ksort($byCuisine);
-        array_walk($byCuisine, function (&$val, $key) use ($onePercent) {
-            $val = round($val * $onePercent, 2);
-        });
 
         $type = Proposal::find()->select(['event_type']);
         if ($proposals === 'my') {
@@ -344,8 +333,8 @@ class SiteController extends Controller
         $type = $type->asArray()->all();
         $byTypes =[];
         foreach ($type as $item) {
-            $cuisine = $item['event_type'];
-            $byTypes[$cuisine] = isset($byTypes[$cuisine]) ? $byTypes[$cuisine]+1:1;
+            $types = $item['event_type'];
+            $byTypes[$types] = isset($byTypes[$types]) ? $byTypes[$types] + 1 : 1;
         }
         ksort($byTypes);
         array_walk($byTypes, function (&$val, $key) use ($onePercent) {
@@ -362,7 +351,6 @@ class SiteController extends Controller
             'byDance' => $byDance,
             'byAlko' => $byAlko,
             'byParking' => $byParking,
-            'byCuisine' => $byCuisine,
             'byTypes' => $byTypes,
             'byMonth' => $byMonth
         ]);
@@ -482,15 +470,6 @@ class SiteController extends Controller
                 if ($modelParams->load($post)) {
                     $modelParams->organization_id = $user->id;
                     $modelParams->save();
-                }
-
-                if (!empty($model->cuisine)) {
-                    foreach ($model->cuisine as $cuisine) {
-                        $link = new RestaurantLinkCuisine();
-                        $link->cuisine_id = $cuisine;
-                        $link->restaurant_id = $user->id;
-                        $link->save();
-                    }
                 }
 
                 /** @var RestaurantHall[] $halls */

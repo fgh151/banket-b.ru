@@ -7,9 +7,9 @@
  */
 
 use app\common\components\Constants;
+use yii\bootstrap\ActiveForm;
 use yii\helpers\Html;
 use yii\helpers\Url;
-use yii\widgets\ActiveForm;
 
 ?>
 
@@ -26,12 +26,6 @@ use yii\widgets\ActiveForm;
                 'date',
                 'time',
                 'comment',
-                [
-                    'attribute' => 'cuisine',
-                    'value'     => function ($model) {
-                        return \app\common\models\Proposal::cuisineLabels()[$model->cuisine];
-                    }
-                ],
                 'guests_count'
             ]
         ]); ?>
@@ -58,9 +52,10 @@ use yii\widgets\ActiveForm;
             ]); ?>
 
             <?= $form->field($model, 'message'); ?>
+            <?= $form->field($model, 'cost'); ?>
 
 
-            <?= Html::submitButton('Отправить') ?>
+            <?= Html::submitButton('Отправить', ['class' => 'btn btn-success']) ?>
 
             <?php ActiveForm::end(); ?>
         <?php endif; ?>
@@ -73,8 +68,8 @@ use yii\widgets\ActiveForm;
 $js = <<<JS
 $(document).on("beforeSubmit", "#message-form", function () {
     
-     var form = $(this);
-    var formData = form.serialize();
+     const form = $(this);
+    const formData = form.serialize();
     
     
     console.log(form.attr("action"));

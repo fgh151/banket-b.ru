@@ -4,7 +4,7 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
 /* @var $this yii\web\View */
-/* @var $model common\models\Proposal */
+/* @var $model app\common\models\Proposal */
 /* @var $form yii\widgets\ActiveForm */
 ?>
 
@@ -37,8 +37,6 @@ use yii\widgets\ActiveForm;
     <?php // echo $form->field($model, 'event_type') ?>
 
     <?php // echo $form->field($model, 'metro') ?>
-
-    <?php // echo $form->field($model, 'cuisine') ?>
 
     <?php // echo $form->field($model, 'dance')->checkbox() ?>
 

@@ -12,7 +12,6 @@ use app\common\models\OrganizationLinkActivity;
 use app\common\models\OrganizationLinkMetro;
 use app\common\models\OrganizationSearch;
 use app\common\models\RestaurantHall;
-use app\common\models\RestaurantLinkCuisine;
 use app\common\models\RestaurantParams;
 use Yii;
 use yii\filters\AccessControl;
@@ -131,14 +130,6 @@ class OrganizationController extends Controller
                     $hall->save();
                 }
 
-                RestaurantLinkCuisine::deleteAll(['restaurant_id' => $model->id]);
-                foreach ($model->cuisine_field as $cuisine) {
-                    $link = new RestaurantLinkCuisine();
-                    $link->cuisine_id = $cuisine;
-                    $link->restaurant_id = $model->id;
-                    $link->save();
-                }
-
                 OrganizationLinkActivity::deleteAll(['organization_id' => $model->id]);
                 $link = new OrganizationLinkActivity();
                 $link->organization_id = $model->id;
@@ -172,7 +163,6 @@ WHERE ml.city_id = ' . $model->city_id . ' ORDER BY name;')
             'metros' => $metros,
             'params' => $params ? $params : new RestaurantParams(['organization_id' => $model->id]),
             'halls' => empty($model->halls) ? [new RestaurantHall()] : $model->halls,
-            'cuisine' => empty($model->cuisineLinks) ? [new RestaurantLinkCuisine()] : $model->cuisineLinks
         ]);
     }/** @noinspection PhpUndefinedClassInspection */
 

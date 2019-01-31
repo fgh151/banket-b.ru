@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-  "content-hash": "7345a9af03e8be5f1d40f60f68e0ec7a",
+    "content-hash": "0ba7ddccc51483fd032cdb05c7e99369",
     "packages": [
         {
             "name": "2amigos/yii2-chartjs-widget",
@@ -1409,6 +1409,64 @@
           "time": "2018-11-01T15:53:38+00:00"
         },
       {
+          "name": "paragraph1/php-fcm",
+          "version": "0.7",
+          "source": {
+              "type": "git",
+              "url": "https://github.com/Paragraph1/php-fcm.git",
+              "reference": "17d32dc982ab2d1cfba64a62afd3e5b5c9a41639"
+          },
+          "dist": {
+              "type": "zip",
+              "url": "https://api.github.com/repos/Paragraph1/php-fcm/zipball/17d32dc982ab2d1cfba64a62afd3e5b5c9a41639",
+              "reference": "17d32dc982ab2d1cfba64a62afd3e5b5c9a41639",
+              "shasum": ""
+          },
+          "require": {
+              "guzzlehttp/guzzle": "^6.2",
+              "php": ">=5.5"
+          },
+          "require-dev": {
+              "mockery/mockery": "0.9.5",
+              "phpunit/phpunit": "4.8.*",
+              "satooshi/php-coveralls": "dev-master"
+          },
+          "type": "library",
+          "autoload": {
+              "psr-4": {
+                  "paragraph1\\phpFCM\\": "src/"
+              }
+          },
+          "notification-url": "https://packagist.org/downloads/",
+          "license": [
+              "MIT"
+          ],
+          "authors": [
+              {
+                  "name": "Patrick Albertini",
+                  "email": "pa@paragraph1.de"
+              },
+              {
+                  "name": "Kai Bielenberg",
+                  "email": "kb@paragraph1.de"
+              }
+          ],
+          "description": "PHP application server for google firebase cloud messaging (FCM)",
+          "homepage": "https://github.com/Paragraph1/phpFCM",
+          "keywords": [
+              "FCM",
+              "Firebase Cloud Messaging",
+              "android",
+              "firebase",
+              "gcm",
+              "google",
+              "ios",
+              "notifications",
+              "php"
+          ],
+          "time": "2016-08-18T11:47:56+00:00"
+      },
+        {
             "name": "psr/cache",
             "version": "1.0.1",
             "source": {
@@ -4113,8 +4171,59 @@
             "time": "2016-10-03T07:35:21+00:00"
         },
         {
+            "name": "squizlabs/php_codesniffer",
+            "version": "3.4.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/squizlabs/PHP_CodeSniffer.git",
+                "reference": "379deb987e26c7cd103a7b387aea178baec96e48"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/squizlabs/PHP_CodeSniffer/zipball/379deb987e26c7cd103a7b387aea178baec96e48",
+                "reference": "379deb987e26c7cd103a7b387aea178baec96e48",
+                "shasum": ""
+            },
+            "require": {
+                "ext-simplexml": "*",
+                "ext-tokenizer": "*",
+                "ext-xmlwriter": "*",
+                "php": ">=5.4.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^4.0 || ^5.0 || ^6.0 || ^7.0"
+            },
+            "bin": [
+                "bin/phpcs",
+                "bin/phpcbf"
+            ],
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "3.x-dev"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Greg Sherwood",
+                    "role": "lead"
+                }
+            ],
+            "description": "PHP_CodeSniffer tokenizes PHP, JavaScript and CSS files and detects violations of a defined set of coding standards.",
+            "homepage": "http://www.squizlabs.com/php-codesniffer",
+            "keywords": [
+                "phpcs",
+                "standards"
+            ],
+            "time": "2018-12-19T23:57:18+00:00"
+        },
+        {
             "name": "symfony/browser-kit",
-          "version": "v3.4.18",
+            "version": "v3.4.18",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/browser-kit.git",
@@ -4167,7 +4276,7 @@
             ],
             "description": "Symfony BrowserKit Component",
             "homepage": "https://symfony.com",
-          "time": "2018-07-26T09:06:28+00:00"
+            "time": "2018-07-26T09:06:28+00:00"
         },
         {
             "name": "symfony/console",
@@ -4557,6 +4666,74 @@
             "time": "2018-01-29T19:49:41+00:00"
         },
         {
+            "name": "yiisoft/yii2-coding-standards",
+            "version": "2.0.4",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/yiisoft/yii2-coding-standards.git",
+                "reference": "b76c3f58b54c37624f4b17582971e71981b71122"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/yiisoft/yii2-coding-standards/zipball/b76c3f58b54c37624f4b17582971e71981b71122",
+                "reference": "b76c3f58b54c37624f4b17582971e71981b71122",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.4.0",
+                "squizlabs/php_codesniffer": ">=3.2"
+            },
+            "type": "phpcodesniffer-standard",
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Qiang Xue",
+                    "email": "qiang.xue@gmail.com",
+                    "homepage": "http://www.yiiframework.com/",
+                    "role": "Founder and project lead"
+                },
+                {
+                    "name": "Alexander Makarov",
+                    "email": "sam@rmcreative.ru",
+                    "homepage": "http://rmcreative.ru/",
+                    "role": "Core framework development"
+                },
+                {
+                    "name": "Maurizio Domba",
+                    "homepage": "http://mdomba.info/",
+                    "role": "Core framework development"
+                },
+                {
+                    "name": "Carsten Brandt",
+                    "email": "mail@cebe.cc",
+                    "homepage": "http://cebe.cc/",
+                    "role": "Core framework development"
+                },
+                {
+                    "name": "Timur Ruziev",
+                    "email": "resurtm@gmail.com",
+                    "homepage": "http://resurtm.com/",
+                    "role": "Core framework development"
+                },
+                {
+                    "name": "Paul Klimov",
+                    "email": "klimov.paul@gmail.com",
+                    "role": "Core framework development"
+                }
+            ],
+            "description": "Yii PHP Framework Version 2 - Coding standard tools",
+            "homepage": "http://www.yiiframework.com/",
+            "keywords": [
+                "codesniffer",
+                "framework",
+                "yii"
+            ],
+            "time": "2018-09-04T23:10:55+00:00"
+        },
+        {
             "name": "yiisoft/yii2-debug",
             "version": "2.0.14",
             "source": {
@@ -4711,6 +4888,7 @@
     "prefer-lowest": false,
     "platform": {
       "php": ">=7.1.0",
+        "ext-json": "*",
       "ext-curl": "*"
     },
     "platform-dev": []

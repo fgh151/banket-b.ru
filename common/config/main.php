@@ -16,8 +16,8 @@ return [
         ],
         'firebase' => [
             'class' => 'grptx\Firebase\Firebase',
-            'credential_file' => __DIR__ . DIRECTORY_SEPARATOR . 'restorate-battle-firebase-adminsdk-43mis-e1f2d3084a.json', // (see https://firebase.google.com/docs/admin/setup#add_firebase_to_your_app)
-            'database_uri' => 'https://restorate-battle.firebaseio.com/', // (optional)
+            'credential_file' => __DIR__ . DIRECTORY_SEPARATOR . 'banket-b-firebase-adminsdk-6k90k-61ed2acee9.json', // (see https://firebase.google.com/docs/admin/setup#add_firebase_to_your_app)
+            'database_uri' => 'https://banket-b.firebaseio.com/', // (optional)
         ],
         'imageresize' => [
             'class' => 'app\common\components\ImageResize',
@@ -33,8 +33,14 @@ return [
         'mailqueue' => [
             'class' => 'nterms\mailqueue\MailQueue',
             'table' => '{{%mail_queue}}',
-            'mailsPerRound' => 10,
-            'maxAttempts' => 3,
+            'transport' => [
+                'class' => 'Swift_SmtpTransport',
+                'host' => '178.170.244.27',
+                'username' => 'web@restorate.ru',
+                'password' => 'p3uDxGzQ',
+                'port' => '25',
+//                'encryption' => 'ssl', // у яндекса SSL
+            ],
         ],
         'queue' => [
             'class' => \yii\queue\db\Queue::class,

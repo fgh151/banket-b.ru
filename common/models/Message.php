@@ -23,17 +23,26 @@ use yii\helpers\Json;
  */
 class Message extends Model
 {
+    /** @var string */
     public $author_class = 'app\common\models\Organization';
 
+    /** @var integer */
     public $organization_id;
 
+    /** @var integer */
     public $proposal_id;
 
+    /** @var string */
     public $created_at;
 
+    /** @var string */
     public $message;
 
+    /** @var integer */
     public $user_id;
+
+    /** @var integer */
+    public $cost = 0;
 
     /**
      * @param $user_id
@@ -73,7 +82,8 @@ class Message extends Model
         return [
             'message' => 'Сообщение',
             'organization_id' => 'Организация',
-            'created_at' => 'Дата'
+            'created_at' => 'Дата',
+            'cost' => 'Стоимость банкета'
         ];
     }
 
@@ -106,12 +116,13 @@ class Message extends Model
         $response = $reference->getValue();
 
         if (is_array($response)) {
+            $result = [];
             foreach ($response as $message) {
                 /** @var self $decodedMessage */
                 $decodedMessage = self::decode($message);
                 $result[$decodedMessage->created_at] = $decodedMessage;
             }
-            return $result;
+            return $result ?? null;
         }
         return null;
     }
@@ -128,17 +139,20 @@ class Message extends Model
         return self::getReferenceValues($reference);
     }
 
+    /**
+     * @return array
+     */
     public function rules()
     {
         return [
             ['organization_id', 'integer'],
             ['created_at', 'default', 'value' => time()],
-//            ['organization_id', 'default', 'value' => Yii::$app->getUser()->getId()],
             ['message', 'string'],
             ['message', 'required'],
             ['author_class', 'ownerClassValidator'],
             [['proposal_id'], 'exist', 'skipOnError' => true, 'targetClass' => Proposal::class, 'targetAttribute' => ['proposal_id' => 'id']],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => MobileUser::class, 'targetAttribute' => ['user_id' => 'id']],
+            ['cost', 'integer', 'min' => 0, 'max' => $this->cost, 'tooSmall' => 'Стоимость не может быть меньше 0', 'tooBig' => 'Стоимость не может быть больше ' . $this->cost]
         ];
     }
 
@@ -212,7 +226,6 @@ class Message extends Model
             Yii::$app->mailer->compose()
                 ->setFrom(Yii::$app->params['adminEmail'])
                 ->setTo('RR@restorate.ru')
-//                ->setTo('fedor@support-pc.org')
                 ->setSubject('Новый ответ на заявку')
                 ->setHtmlBody('На заявку ' . $this->proposal_id . ' поступил ответ от ресторана ' . $this->author->name . ' <a href="https://admin.banket-b.ru/proposal/answers/' . $this->proposal_id . '">посмотреть</a>')
                 ->send();

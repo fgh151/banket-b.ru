@@ -2,8 +2,15 @@
 
 use yii\helpers\Html;
 
-/* @var $this yii\web\View */
-/* @var $model app\common\models\Organization */
+/**
+ * @var $this yii\web\View
+ *
+ * @var $model app\common\models\Organization
+ * @var $metro \app\common\models\OrganizationLinkMetro[]
+ * @var $districts array
+ * @var $metros \app\common\models\OrganizationLinkMetro[]
+ * @var $halls \app\common\models\RestaurantHall[]
+ */
 
 $this->title = 'Изменить организацию: ' . $model->name;
 $this->params['breadcrumbs'][] = ['label' => 'Организации', 'url' => ['index']];
@@ -20,8 +27,7 @@ $this->params['breadcrumbs'][] = 'Изменить';
         'districts' => $districts,
         'metros' => $metros,
         'params' => $params,
-        'halls' => $halls,
-        'cuisine' => $cuisine
+        'halls' => $halls
     ]) ?>
 
 </div>

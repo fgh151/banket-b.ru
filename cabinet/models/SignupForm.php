@@ -30,8 +30,6 @@ class SignupForm extends Model
 
     public $city_id;
 
-    public $cuisine = [];
-
     public $district_id;
 
     public $image_field;
@@ -59,7 +57,7 @@ class SignupForm extends Model
 
             ['confirm_password', ConfirmPassword::class, 'second_argument' => 'password'],
 
-            [['url', 'cuisine'], 'safe'],
+            [['url'], 'safe'],
             [
                 'city_id',
                 ExistValidator::class,
@@ -83,7 +81,6 @@ class SignupForm extends Model
             'activities'       => 'Деятельность компании',
             'url'              => 'Web сайт',
             'city_id'          => 'Город',
-            'cuisine'          => 'Кухня',
             'district_id'      => 'Район'
         ];
     }

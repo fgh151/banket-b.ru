@@ -19,7 +19,7 @@ class ProposalSearch extends Proposal
     public function rules()
     {
         return [
-            [['id', 'owner_id', 'guests_count', 'type', 'event_type', 'metro', 'cuisine'], 'integer'],
+            [['id', 'owner_id', 'guests_count', 'type', 'event_type', 'metro'], 'integer'],
             [['City', 'date', 'time', 'comment', 'status', 'rejected'], 'safe'],
             [['amount'], 'number'],
             [['dance', 'private', 'own_alcohol', 'parking'], 'boolean'],
@@ -72,7 +72,6 @@ class ProposalSearch extends Proposal
             'type' => $this->type,
             'event_type' => $this->event_type,
             'metro' => $this->metro,
-            'cuisine' => $this->cuisine,
             'dance' => $this->dance,
             'private' => $this->private,
             'own_alcohol' => $this->own_alcohol,

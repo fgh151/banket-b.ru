@@ -12,7 +12,6 @@
 
 use app\common\models\Activity;
 use app\common\models\geo\GeoCity;
-use app\common\models\Proposal;
 use kartik\depdrop\DepDrop;
 use wbraganca\dynamicform\DynamicFormWidget;
 use yii\bootstrap\ActiveForm;
@@ -142,15 +141,6 @@ $this->params['breadcrumbs'][] = $this->title;
                     <?= $form->field($modelParams, 'dance')->checkbox(); ?>
                     <?= $form->field($modelParams, 'parking')->checkbox(); ?>
                     <?= $form->field($modelParams, 'amount')->input('number'); ?>
-
-                    <?= $form->field($model,
-                        'cuisine[]')->widget(\kartik\select2\Select2::class, [
-                        'data' => Proposal::cuisineLabels(),
-                        'options' => [
-                            'placeholder' => 'Выберите кухни',
-                            'multiple' => true
-                        ],
-                    ]); ?>
 
                     <?php DynamicFormWidget::begin([
                         'widgetContainer' => 'dynamicform_wrapper_hall',

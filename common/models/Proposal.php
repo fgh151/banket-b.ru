@@ -24,7 +24,6 @@ use yii\queue\Queue;
  * @property int $type
  * @property int $event_type
  * @property int $metro
- * @property int $cuisine
  * @property bool $dance
  * @property bool $private
  * @property bool $own_alcohol
@@ -36,7 +35,6 @@ use yii\queue\Queue;
  * @property array $organizations
  *
  * @property \DateTime $when
- * @property int $cuisineString
  * @property int $eventType
  * @property $this $isConstructor
  * @property MobileUser $owner
@@ -65,23 +63,6 @@ class Proposal extends ActiveRecord
     public static function tableName()
     {
         return 'proposal';
-    }
-
-    /**
-     * @return array
-     */
-    public static function cuisineLabels()
-    {
-        return [
-            1 => 'Нет предпочтений',
-            2 => 'Русская',
-            3 => 'Европейская',
-            4 => 'Паназиатская',
-            5 => 'Восточная',
-            6 => 'Итальянская',
-            7 => 'Японская',
-            8 => 'Китайская'
-        ];
     }
 
     /**
@@ -127,9 +108,9 @@ class Proposal extends ActiveRecord
     {
         return [
             ['status', 'default', 'value' => Constants::PROPOSAL_STATUS_CREATED],
-            [['status', 'owner_id', 'date', 'time', 'guests_count', 'amount', 'type', 'event_type', 'cuisine'], 'required'],
-            [['owner_id', 'guests_count', 'type', 'event_type', 'metro', 'cuisine'], 'default', 'value' => null],
-            [['owner_id', 'guests_count', 'type', 'event_type', 'metro', 'cuisine'], 'integer'],
+            [['status', 'owner_id', 'date', 'time', 'guests_count', 'amount', 'type', 'event_type'], 'required'],
+            [['owner_id', 'guests_count', 'type', 'event_type', 'metro'], 'default', 'value' => null],
+            [['owner_id', 'guests_count', 'type', 'event_type', 'metro'], 'integer'],
             [['date', 'time', 'constructorComment'], 'safe'],
             [['amount'], 'number'],
             [['dance', 'private', 'own_alcohol', 'parking'], 'boolean'],
@@ -164,8 +145,6 @@ class Proposal extends ActiveRecord
             'event_type' => 'Тип мероприятия',
             'eventType' => 'Тип мероприятия',
             'metro' => 'Метро',
-            'cuisine' => 'Кухня',
-            'cuisineString' => 'Кухня',
             'dance' => 'Танцпол',
             'private' => 'Отдельный зал',
             'own_alcohol' => 'Свой алкоголь',
@@ -198,7 +177,7 @@ class Proposal extends ActiveRecord
             'time', 'guests_count',
             'amount', 'type',
             'event_type', 'metro',
-            'cuisine', 'dance',
+            'dance',
             'private', 'own_alcohol',
             'parking', 'comment',
 
@@ -272,14 +251,6 @@ class Proposal extends ActiveRecord
     public function getEventType()
     {
         return self::typeLabels()[$this->event_type];
-    }
-
-    /**
-     * @return int
-     */
-    public function getCuisineString()
-    {
-        return self::cuisineLabels()[$this->cuisine];
     }
 
     /**

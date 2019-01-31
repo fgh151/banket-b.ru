@@ -11,6 +11,7 @@ namespace app\cabinet\controllers;
 
 use app\admin\components\ProposalFindOneTrait;
 use app\common\models\Message;
+use app\common\models\Proposal;
 use app\common\models\ReadMessage;
 use Yii;
 use yii\filters\AccessControl;
@@ -62,10 +63,7 @@ class ConversationController extends Controller
     public function actionIndex($proposalId)
     {
         $proposal = $this->findModel($proposalId);
-        $model = new Message([
-            'proposal_id' => $proposalId,
-            'user_id' => $proposal->owner_id
-        ]);
+        $model = $this->createBlankMessage($proposal);
 
         $messages = Message::getConversation($proposal->owner_id, $proposal->id, Yii::$app->getUser()->getId());
 
@@ -88,10 +86,7 @@ class ConversationController extends Controller
     public function actionValidateMessage($proposalId)
     {
         $proposal = $this->findModel($proposalId);
-        $model = new Message([
-            'proposal_id' => $proposalId,
-            'user_id' => $proposal->owner_id
-        ]);
+        $model = $this->createBlankMessage($proposal);
         $request = \Yii::$app->getRequest();
         if ($request->isPost && $model->load($request->post())) {
             \Yii::$app->response->format = Response::FORMAT_JSON;
@@ -108,16 +103,26 @@ class ConversationController extends Controller
     public function actionSendMessage($proposalId)
     {
         $proposal = $this->findModel($proposalId);
-        $model = new Message([
-            'proposal_id' => $proposalId,
-            'user_id' => $proposal->owner_id
-        ]);
+        $model = $this->createBlankMessage($proposal);
         $request = \Yii::$app->getRequest();
         if ($request->isPost && $model->load($request->post()) && $model->save()) {
             \Yii::$app->response->format = Response::FORMAT_JSON;
             return ['success' => true, 'element' => $this->renderAjax('_message', ['message' => $model])];
         }
         return ['success' => false];
+    }
+
+    /**
+     * @param Proposal $proposal
+     * @return Message
+     */
+    private function createBlankMessage(Proposal $proposal)
+    {
+        return new Message([
+            'proposal_id' => $proposal->id,
+            'user_id' => $proposal->owner_id,
+            'cost' => $proposal->amount * $proposal->guests_count
+        ]);
     }
 
     /**

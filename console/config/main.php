@@ -40,18 +40,6 @@ return [
                 ],
             ],
         ],
-        'mailqueue' => [
-            'class' => 'nterms\mailqueue\MailQueue',
-            'table' => '{{%mail_queue}}',
-            'transport' => [
-                'class' => 'Swift_SmtpTransport',
-                'host' => 'smtp.banket-b.ru',
-                'username' => 'Web@banket-b.ru',
-                'password' => 'p3uDxGzQ',
-                'port' => '25',
-//                'encryption' => 'ssl', // у яндекса SSL
-            ],
-        ],
     ],
     'params' => $params,
 ];

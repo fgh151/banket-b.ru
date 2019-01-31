@@ -47,8 +47,6 @@ use yii\widgets\ActiveForm;
         Proposal::typeLabels()
     ) ?>
 
-    <?= $form->field($model, 'cuisine')->dropDownList(Proposal::cuisineLabels()) ?>
-
     <?= $form->field($model, 'dance')->checkbox() ?>
 
     <?= $form->field($model, 'private')->checkbox() ?>
