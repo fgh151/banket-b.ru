@@ -103,44 +103,44 @@ class BattleController extends Controller
      * @return string
      * @throws \Throwable
      */
-    public function actionDirect()
-    {
-        $this->throwIfNotPay('state_direct');
-        $searchModel = new ProposalSearch();
-
-        /** @var Organization $organization */
-        $organization = Yii::$app->getUser()->getIdentity();
-        if ($organization->state == Constants::ORGANIZATION_STATE_PAID) {
-
-
-            $rejected = OrganizationProposalStatus::find()
-                ->where([
-                    'organization_id' => $organization->getId(),
-                    'status' => Constants::ORGANIZATION_PROPOSAL_STATUS_REJECT
-                ])
-                ->select('proposal_id')->asArray()->all();
-
-            foreach ($rejected as $record) {
-                $searchModel->rejected[] = $record['proposal_id'];
-            }
-            $searchModel->status = Constants::PROPOSAL_STATUS_CREATED;
-
-            $dataProvider = $searchModel->search(Yii::$app->request->queryParams, Yii::$app->getUser()->getId());
-
-
-
-        } else {
-            // Формируем запрос, который заведомо ничего не вернет
-            $dataProvider = new ActiveDataProvider();
-            $dataProvider->query = Proposal::find()->where(['id' => 0]);
-        }
-
-        return $this->render('index', [
-            'searchModel' => $searchModel,
-            'organization' => $organization,
-            'dataProvider' => $dataProvider
-        ]);
-    }
+//    public function actionDirect()
+//    {
+//        $this->throwIfNotPay('state_direct');
+//        $searchModel = new ProposalSearch();
+//
+//        /** @var Organization $organization */
+//        $organization = Yii::$app->getUser()->getIdentity();
+//        if ($organization->state == Constants::ORGANIZATION_STATE_PAID) {
+//
+//
+//            $rejected = OrganizationProposalStatus::find()
+//                ->where([
+//                    'organization_id' => $organization->getId(),
+//                    'status' => Constants::ORGANIZATION_PROPOSAL_STATUS_REJECT
+//                ])
+//                ->select('proposal_id')->asArray()->all();
+//
+//            foreach ($rejected as $record) {
+//                $searchModel->rejected[] = $record['proposal_id'];
+//            }
+//            $searchModel->status = Constants::PROPOSAL_STATUS_CREATED;
+//
+//            $dataProvider = $searchModel->search(Yii::$app->request->queryParams, Yii::$app->getUser()->getId());
+//
+//
+//
+//        } else {
+//            // Формируем запрос, который заведомо ничего не вернет
+//            $dataProvider = new ActiveDataProvider();
+//            $dataProvider->query = Proposal::find()->where(['id' => 0]);
+//        }
+//
+//        return $this->render('index', [
+//            'searchModel' => $searchModel,
+//            'organization' => $organization,
+//            'dataProvider' => $dataProvider
+//        ]);
+//    }
 
     public function actionReject($id)
     {

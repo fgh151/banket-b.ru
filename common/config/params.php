@@ -1,7 +1,7 @@
 <?php
 return [
-    'adminEmail' => 'web@restorate.ru',
-    'supportEmail' => 'web@restorate.ru',
+    'adminEmail' => 'restorateru@yandex.ru',
+    'supportEmail' => 'restorateru@yandex.ru',
     'user.passwordResetTokenExpire' => 3600,
     'restorateUserId' => 45,
     'autoAnswerDelay' => 5 * 60, // 5 minutes,

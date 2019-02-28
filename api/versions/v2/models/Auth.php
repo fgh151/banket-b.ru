@@ -81,6 +81,7 @@ class Auth extends Model
     public function getCode()
     {
         $user = $this->getUser();
+
         return $user ? $user->password_reset_token : null;
     }
 
@@ -110,12 +111,16 @@ class Auth extends Model
     private function createUser()
     {
         $user = new MobileUser();
+        //TODO: remove it!
+        $user->email = time() . '@restorate.ru';
+
         $user->name = $this->name;
         $user->phone = $this->phone;
         $user->setPassword(Yii::$app->security->generateRandomString());
         $user->generateAuthKey();
         $user->created_at = $user->updated_at = time();
         $user->status = Constants::USER_STATUS_ACTIVE;
+        $user->generatePasswordResetToken();
 
         return $user->save() ? $user : $user->errors;
     }

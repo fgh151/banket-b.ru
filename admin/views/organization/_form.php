@@ -26,6 +26,7 @@ use yii\widgets\ActiveForm;
     <?php $form = ActiveForm::begin(['id' => 'update']); ?>
 
 
+    <?= $form->field($model, 'rating')->textInput(['maxlength' => true]) ?>
     <?= $form->field($model, 'email')->textInput(['maxlength' => true]) ?>
 
     <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>

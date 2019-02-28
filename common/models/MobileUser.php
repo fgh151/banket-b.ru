@@ -4,6 +4,7 @@ namespace app\common\models;
 
 use app\common\components\AuthTrait;
 use app\common\components\Constants;
+use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
 use yii\web\IdentityInterface;
 
@@ -20,6 +21,8 @@ use yii\web\IdentityInterface;
  * @property int $created_at
  * @property int $updated_at
  * @property string $name
+ *
+ * @property PushToken[] $pushTokens
  */
 class MobileUser extends ActiveRecord implements IdentityInterface
 {
@@ -38,12 +41,13 @@ class MobileUser extends ActiveRecord implements IdentityInterface
     }
 
     /**
+     * TODO: drop email not null
      * {@inheritdoc}
      */
     public function rules()
     {
         return [
-            [['auth_key', 'password_hash', 'email', 'phone', 'created_at', 'updated_at'], 'required'],
+            [['auth_key', 'password_hash', 'phone', 'created_at', 'updated_at'], 'required'],
             [['status', 'created_at', 'updated_at'], 'default', 'value' => null],
             [['status', 'created_at', 'updated_at'], 'integer'],
             [['auth_key', 'name'], 'string', 'max' => 32],
@@ -87,6 +91,24 @@ class MobileUser extends ActiveRecord implements IdentityInterface
         $query = self::find()->where(['status' => Constants::USER_STATUS_ACTIVE]);
         $query->andFilterWhere(['phone' => mb_strtolower($phone)]);
         return $query->one();
+    }
+
+
+    /**
+     * Generates new password reset token
+     * @throws \yii\base\Exception
+     */
+    public function generatePasswordResetToken()
+    {
+        $this->password_reset_token = (string)rand(100000, 999999);
+    }
+
+    /**
+     * @return PushToken[]|ActiveQuery|null
+     */
+    public function getPushTokens()
+    {
+        return $this->hasMany(PushToken::class, ['user_id' => 'id']);
     }
 
 }

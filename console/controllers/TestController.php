@@ -83,9 +83,9 @@ class TestController extends Controller
     private function getToken()
     {
         //Android
-        $t = 'drhSJB5Fq1Q:APA91bGk0Nx30hR7sz0Ujbv-87u22RP6_ejwMzTmdOoqT-QBhMP8sPCekz0Zap79p_1wUDPFnoUijU1lzkNZP4SyGj0Mfz3-7OGHhuzpsUV1mqQ-4Qt2IPLxtMIP6BUvwapadKstVvWD';
+        $t = 'cqyZsf5GjZQ:APA91bFgtJSyiMmFHaL7lucyhpFIXsYXWvRC_vQgtU9ZTU44RpQDfrTRP1gizsWH6DTkqnW2Mmbs_Zn4TzgfxLAGzWAXwjvAg-upOZBPSpc_RVr5l1tW1aCnvL3h_Dg-mskcm0EuqoCu';
         //IOS
-//        $t = 'fQ8n05Ph6Nk:APA91bGO5BNiW8ooVgQ3XCyY3-QPwIWcO_CXmOwGykvABESLPVwAF27HQd2MSC9NgIyzq137Ot4X5jBhGaXJiQNfBh0ythwIWtO8DphDGYnKQqhFOrgkRU3c60HPtb03wTv-asJkEhwD';
+//        $t = 'f5uiSdYpngA:APA91bGYbuX_SNaFnc2wTHfpS5oXgMU26Kp3-uOvVKThZauynK7icRR9zRqPseGNdvVpeL2AgNAKRog_ewJDciK6lUfzIm3pIO-L8asdCNG9WlteMXxEdJbZdhHvW_sAkxOFdw6t2NqT';
         //IOS APNS
 //        $t = 'F3642A5F86D3CBD3D0A80DE1EA3FE459CCE284355AD679C0C1881C20BE841D19';
         return $t;

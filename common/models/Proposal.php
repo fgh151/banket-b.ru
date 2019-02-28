@@ -5,7 +5,7 @@ namespace app\common\models;
 
 use app\common\components\Constants;
 use app\common\models\geo\GeoCity;
-use app\jobs\RRMessageJob;
+use Kreait\Firebase\Database;
 use Yii;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
@@ -35,6 +35,7 @@ use yii\queue\Queue;
  * @property array $organizations
  *
  * @property \DateTime $when
+ * @property int $cuisineString
  * @property int $eventType
  * @property $this $isConstructor
  * @property MobileUser $owner
@@ -52,10 +53,19 @@ use yii\queue\Queue;
  * @property bool|array $directOrganizations
  * @property \yii\db\ActiveQuery|\app\common\models\geo\GeoCity $geoCity
  * @property integer $all_regions
+ *
+ *
+ *
+ * @property integer $minCost
+ * @property double $profit
+ *
+ * @property boolean $send15
+ * @property boolean $send120
  */
 class Proposal extends ActiveRecord
 {
-    public $constructorComment;
+
+    public $_minCost;
 
     /**
      * {@inheritdoc}
@@ -63,6 +73,23 @@ class Proposal extends ActiveRecord
     public static function tableName()
     {
         return 'proposal';
+    }
+
+    /**
+     * @return array
+     */
+    public static function cuisineLabels()
+    {
+        return [
+            1 => 'Нет предпочтений',
+            2 => 'Русская',
+            3 => 'Европейская',
+            4 => 'Паназиатская',
+            5 => 'Восточная',
+            6 => 'Итальянская',
+            7 => 'Японская',
+            8 => 'Китайская'
+        ];
     }
 
     /**
@@ -77,6 +104,7 @@ class Proposal extends ActiveRecord
             4 => 'День Рождения',
             5 => 'Презентация',
             6 => 'Поминки',
+            7 => 'Другое'
         ];
     }
 
@@ -107,11 +135,12 @@ class Proposal extends ActiveRecord
     public function rules()
     {
         return [
+//            ['cuisine', 'default', 'value' => 1],
             ['status', 'default', 'value' => Constants::PROPOSAL_STATUS_CREATED],
             [['status', 'owner_id', 'date', 'time', 'guests_count', 'amount', 'type', 'event_type'], 'required'],
             [['owner_id', 'guests_count', 'type', 'event_type', 'metro'], 'default', 'value' => null],
             [['owner_id', 'guests_count', 'type', 'event_type', 'metro'], 'integer'],
-            [['date', 'time', 'constructorComment'], 'safe'],
+            [['date', 'time', 'send15', 'send120'], 'safe'],
             [['amount'], 'number'],
             [['dance', 'private', 'own_alcohol', 'parking'], 'boolean'],
             [['comment'], 'string'],
@@ -180,8 +209,7 @@ class Proposal extends ActiveRecord
             'dance',
             'private', 'own_alcohol',
             'parking', 'comment',
-
-            'organizations'
+            'organizations',
         ];
     }
 
@@ -206,7 +234,6 @@ class Proposal extends ActiveRecord
      */
     public function beforeValidate()
     {
-        $this->comment .= $this->constructorComment;
         if ($this->city_id && !$this->City) {
             $city = GeoCity::findOne($this->city_id);
             if ($city) {
@@ -228,6 +255,15 @@ class Proposal extends ActiveRecord
     public function getGeoCity()
     {
         return $this->hasOne(GeoCity::class, ['id' => 'city_id']);
+    }
+
+
+    /**
+     * @return int
+     */
+    public function getCuisineString()
+    {
+        return self::cuisineLabels()[$this->cuisine];
     }
 
     /**
@@ -259,29 +295,29 @@ class Proposal extends ActiveRecord
      */
     public function afterSave($insert, $changedAttributes)
     {
-        if ($insert && !empty($this->organizations)) {
-            foreach ($this->organizations as $organizationId) {
-                $message = new Message();
-                $message->organization_id = $organizationId;
-                $message->author_class = MobileUser::class;
-                $message->proposal_id = $this->id;
-                $message->message = 'Хочу заказать у вас банкет';
-                $message->save();
-            }
-        }
+//        if ($insert && !empty($this->organizations)) {
+//            foreach ($this->organizations as $organizationId) {
+//                $message = new Message();
+//                $message->organization_id = $organizationId;
+//                $message->author_class = MobileUser::class;
+//                $message->proposal_id = $this->id;
+//                $message->message = 'Хочу заказать у вас банкет';
+//                $message->save();
+//            }
+//        }
         if ($insert) {
             $recipients = Organization::find()
 //                ->where(['state' => Constants::ORGANIZATION_STATE_PAID])
                 ->Where(['NOT ILIKE', 'email', 'banket-b.ru'])
                 ->all();
-            foreach ($recipients as $recipient) {
-                Yii::$app->mailqueue->compose()
-                    ->setFrom(Yii::$app->params['adminEmail'])
-                    ->setTo($recipient->email)
-                    ->setSubject('Новая заявка')
-                    ->setHtmlBody('В разделе заявок появилась новая заявка <a href="https://banket-b.ru/conversation/index/' . $this->id . '">посмотреть</a>')
-                    ->queue();
-            }
+//            foreach ($recipients as $recipient) {
+//                Yii::$app->mailqueue->compose()
+//                    ->setFrom(Yii::$app->params['adminEmail'])
+//                    ->setTo($recipient->email)
+//                    ->setSubject('Новая заявка')
+//                    ->setHtmlBody('В разделе заявок появилась новая заявка <a href="https://banket-b.ru/conversation/index/' . $this->id . '">посмотреть</a>')
+//                    ->queue();
+//            }
             Yii::$app->mailqueue->compose()
                 ->setFrom(Yii::$app->params['adminEmail'])
                 ->setTo('zkzrr@yandex.ru')
@@ -291,7 +327,7 @@ class Proposal extends ActiveRecord
 
             /** @var Queue $queue */
             $queue = Yii::$app->queue;
-            $queue->delay(Yii::$app->params['autoAnswerDelay'])->push(new RRMessageJob(['proposal' => $this]));
+//            $queue->delay(Yii::$app->params['autoAnswerDelay'])->push(new RRMessageJob(['proposal' => $this]));
 
         }
         parent::afterSave($insert, $changedAttributes);
@@ -360,5 +396,52 @@ class Proposal extends ActiveRecord
         }
 
         return count(Message::getConversation($this->owner_id, $this->id, $organizationId));
+    }
+
+    public function getMinCost()
+    {
+        if ($this->_minCost === null) {
+            /** @var Database $database */
+            $database = Yii::$app->firebase->getDatabase();
+            $m = $database
+                ->getReference('proposal_2/u_' . $this->owner_id . '/p_' . $this->id . '/')
+                ->getSnapshot()
+                ->getValue();
+            $a = end($m);
+
+            $end = end($a);
+            if (isset($end['cost'])) {
+                $this->_minCost = $end['cost'];
+            }
+
+            array_walk($m, [$this, 'searchMin']);
+        }
+
+        return $this->_minCost;
+    }
+
+    /**
+     * @param $item array
+     */
+    private function searchMin($item)
+    {
+        array_walk($item,
+
+            function ($item) {
+                if ($this->_minCost > $item['cost']) {
+                    $this->_minCost = $item['cost'];
+                }
+            }
+        );
+    }
+
+    /**
+     * @return float|int
+     */
+    public function getProfit()
+    {
+        $cost = $this->amount * $this->guests_count;
+        $one = $cost / 100;
+        return ($cost - $this->minCost) * $one;
     }
 }

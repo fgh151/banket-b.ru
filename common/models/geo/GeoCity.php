@@ -35,7 +35,10 @@ class GeoCity extends ActiveRecord
     public function fields()
     {
         return [
-            'id', 'title', 'metro', 'districts'
+            'id', 'title',
+            'key' => function ($model) {
+                return (string)$model->id;
+            }
         ];
     }
 

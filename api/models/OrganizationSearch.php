@@ -168,7 +168,7 @@ class OrganizationSearch extends Organization
         $query->orderBy(['id' => SORT_ASC]);
 
 
-//        var_dump($this->cityId, $query->createCommand()->getRawSql()); die;
+//        Yii::error($query->createCommand()->getRawSql());
 
 
         return $dataProvider;

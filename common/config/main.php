@@ -19,6 +19,9 @@ return [
             'credential_file' => __DIR__ . DIRECTORY_SEPARATOR . 'banket-b-firebase-adminsdk-6k90k-61ed2acee9.json', // (see https://firebase.google.com/docs/admin/setup#add_firebase_to_your_app)
             'database_uri' => 'https://banket-b.firebaseio.com/', // (optional)
         ],
+        'push' => [
+            'class' => \app\common\components\Push::class
+        ],
         'imageresize' => [
             'class' => 'app\common\components\ImageResize',
             //path web root
@@ -35,10 +38,11 @@ return [
             'table' => '{{%mail_queue}}',
             'transport' => [
                 'class' => 'Swift_SmtpTransport',
-                'host' => '178.170.244.27',
-                'username' => 'web@restorate.ru',
-                'password' => 'p3uDxGzQ',
-                'port' => '25',
+                'host' => 'smtp.yandex.ru',
+                'username' => 'restorateru',
+                'password' => 'Aeph3paw',
+                'port' => '465',
+                'encryption' => 'ssl', // у яндекса SSL
 //                'encryption' => 'ssl', // у яндекса SSL
             ],
         ],

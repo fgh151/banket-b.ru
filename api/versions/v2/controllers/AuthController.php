@@ -51,17 +51,29 @@ class AuthController extends Controller
         $model = new Auth();
         $model->scenario = $scenario;
         $request = Json::decode(Yii::$app->getRequest()->getRawBody(), true);
-        return $model->load($request, '') ? $model : false;
+
+
+//        Yii::error($request);
+//        die;
+        $load = $model->load($request, '');
+
+        return $load ? $model : false;
     }
 
     public function actionSendcode()
     {
         $model = $this->loadModel();
-        $code = $model->getCode();
-        if ($code) {
-            /** @var SmsInterface $smsService */
-            $smsService = Yii::$app->sms;
-            $smsService->sendSms('Код подтверждения ' . $code, $model->phone);
+
+        if ($model !== false) {
+            $code = $model->getCode();
+
+//            var_dump($code); die;
+
+            if ($code) {
+                /** @var SmsInterface $smsService */
+                $smsService = Yii::$app->sms;
+                return $smsService->sendSms('Код подтверждения ' . $code, $model->phone);
+            }
         }
     }
 }

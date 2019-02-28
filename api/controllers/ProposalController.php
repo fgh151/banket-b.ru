@@ -10,11 +10,11 @@ namespace app\api\controllers;
 
 
 use app\admin\components\ProposalFindOneTrait;
+use app\api\models\Organization;
+use app\api\models\Proposal;
 use app\common\components\Constants;
 use app\common\models\Message;
-use app\common\models\Organization;
 use app\common\models\OrganizationProposalStatus;
-use app\common\models\Proposal;
 use Yii;
 use yii\filters\auth\HttpBearerAuth;
 use yii\filters\ContentNegotiator;
@@ -58,10 +58,8 @@ class ProposalController extends Controller
         $request = Json::decode(Yii::$app->getRequest()->getRawBody(), true);
 
         $request['owner_id'] = Yii::$app->getUser()->getId();
-        $request['City'] = $request['city'];
+//        $request['City'] = $request['city'];
         $request['city_id'] = $request['cityId'];
-        $request['region_id'] = $request['regionId'];
-        $request['all_regions'] = $request['allRegions'];
 
         $proposal = new Proposal();
         $proposal->load($request, '');
@@ -76,12 +74,13 @@ class ProposalController extends Controller
      */
     public function actionList()
     {
+
         return Proposal::find()
             ->where([
                 'owner_id' => Yii::$app->user->id,
                 'status' => Constants::PROPOSAL_STATUS_CREATED
             ])
-//            ->andFilterWhere(['>', 'date', date('Y-m-d')])
+            ->andFilterWhere(['>=', 'date', date('Y-m-d')])
             ->orderBy(['date' => SORT_ASC])
             ->all();
     }
@@ -105,10 +104,15 @@ class ProposalController extends Controller
             unset($organizationsFromMessages[$item->organization_id]);
         }
 
-        return Organization::find()
+        $organizations = Organization::find()
             ->where(['in', 'id', $organizationsFromMessages])
             ->andFilterWhere(['state' => Constants::ORGANIZATION_STATE_PAID])
             ->all();
+        foreach ($organizations as $record) {
+            $record->proposal = $proposal;
+        }
+
+        return $organizations;
     }
 
     public function actionDelete($proposalId, $organizationId) {
@@ -125,7 +129,7 @@ class ProposalController extends Controller
     public function actionClose($id) {
         $proposal = Proposal::findOne($id);
         $proposal->status = Constants::PROPOSAL_STATUS_CLOSED;
-        $proposal->save();
+        $proposal->save(false);
     }
 
 }

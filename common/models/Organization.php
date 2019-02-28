@@ -44,6 +44,8 @@ use yii\web\IdentityInterface;
  *
  * @property string $restogram_id
  *
+ * @property double $rating
+ *
  */
 class Organization extends ActiveRecord implements IdentityInterface
 {
@@ -52,6 +54,12 @@ class Organization extends ActiveRecord implements IdentityInterface
     public $image_field;
 
     public $activity_field;
+
+//public $rating = 0;
+//public $profit = 0;
+
+    public $cuisine_field;
+
 
     use AuthTrait;
 
@@ -103,7 +111,8 @@ class Organization extends ActiveRecord implements IdentityInterface
             [['password_reset_token'], 'unique'],
             [['state', 'state_statistic', 'state_promo', 'state_direct'],'default', 'value' => Constants::ORGANIZATION_STATE_FREE],
             [['password', 'url', 'image_field'], 'safe'],
-            ['city_id', ExistValidator::class, 'targetClass' => GeoCity::class, 'targetAttribute' => 'id']
+            ['city_id', ExistValidator::class, 'targetClass' => GeoCity::class, 'targetAttribute' => 'id'],
+            ['rating', 'number', 'max' => 10, 'min' => 0]
         ];
     }
 
@@ -118,11 +127,14 @@ class Organization extends ActiveRecord implements IdentityInterface
                 }
                 return $img;
             },
-            'amount' => function (Organization $model) {
-                return $model->params->amount;
-            },
+//            'amount' => function (Organization $model) {
+//                return $model->params->amount;
+//            },
             'halls',
             'metro',
+            'key' => function ($model) {
+                return (string)$model->id;
+            },
         ];
     }
 

@@ -13,6 +13,7 @@ use app\admin\components\ProposalFindOneTrait;
 use app\common\models\Message;
 use app\common\models\Proposal;
 use app\common\models\ReadMessage;
+use GuzzleHttp\Exception\ClientException;
 use Yii;
 use yii\filters\AccessControl;
 use yii\web\Controller;
@@ -107,6 +108,13 @@ class ConversationController extends Controller
         $request = \Yii::$app->getRequest();
         if ($request->isPost && $model->load($request->post()) && $model->save()) {
             \Yii::$app->response->format = Response::FORMAT_JSON;
+
+            try {
+
+                $sendResult = Yii::$app->push->send($proposal->owner, 'У Вас новое сообщение', $model->message);
+            } catch (ClientException $e) {
+                Yii::error($e->getMessage());
+            }
             return ['success' => true, 'element' => $this->renderAjax('_message', ['message' => $model])];
         }
         return ['success' => false];

@@ -65,6 +65,7 @@ class PromoController extends Controller
         return $this->render('index', [
             'dataProvider' => $dataProvider
         ]);
+
     }
 
     /**

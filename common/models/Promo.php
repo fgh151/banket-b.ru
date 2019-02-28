@@ -87,6 +87,9 @@ class Promo extends ActiveRecord
                 return '/' . $model->image;
             },
             'organizationName',
+            'key' => function ($model) {
+                return (string)$model->id;
+            }
         ];
     }
 

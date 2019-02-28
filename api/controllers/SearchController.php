@@ -17,6 +17,7 @@ class SearchController extends Controller
 {
     public function actionIndex()
     {
+
         $searchModel = new OrganizationSearch();
         return $searchModel->search(Yii::$app->request->queryParams);
 

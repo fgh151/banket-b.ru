@@ -15,7 +15,6 @@ use Kreait\Firebase\Database\Query;
 use Kreait\Firebase\Database\Reference;
 use Yii;
 use yii\base\Model;
-use yii\helpers\Json;
 
 /**
  *
@@ -120,6 +119,9 @@ class Message extends Model
             foreach ($response as $message) {
                 /** @var self $decodedMessage */
                 $decodedMessage = self::decode($message);
+
+//                var_dump($message); die;
+
                 $result[$decodedMessage->created_at] = $decodedMessage;
             }
             return $result ?? null;
@@ -205,12 +207,19 @@ class Message extends Model
 
     private static function encode(Message $message)
     {
-        return Json::encode($message);
+        return $message;// Json::encode($message);
     }
 
-    public static function decode($json)
+    public static function decode($message)
     {
-        return new Message(Json::decode($json, true));
+
+
+        $object = new Message();
+
+        foreach ($message as $key => $value) {
+            $object->$key = $value;
+        }
+        return $object;// new Message(Json::decode($json, true));
     }
 
     public function beforeSave()

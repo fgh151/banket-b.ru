@@ -321,7 +321,7 @@ class SiteController extends Controller
         if ($month) {
             $kitchen->andFilterWhere($createdAtCriteria);
         }
-        $kitchen = $kitchen->asArray()->all();
+//        $kitchen = $kitchen->asArray()->all();
 
         $type = Proposal::find()->select(['event_type']);
         if ($proposals === 'my') {

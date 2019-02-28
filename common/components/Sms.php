@@ -34,7 +34,7 @@ class Sms extends Component
      * @param $key
      * @param $secret
      *
-     * @return mixed
+     * @return boolean
      * @throws Exception
      */
     private function sendIntenal($text, $phone, $key, $secret)
