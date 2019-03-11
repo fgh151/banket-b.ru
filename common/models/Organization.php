@@ -46,6 +46,10 @@ use yii\web\IdentityInterface;
  *
  * @property double $rating
  *
+ *
+ * @property double $latitude
+ * @property double $longitude
+ *
  */
 class Organization extends ActiveRecord implements IdentityInterface
 {

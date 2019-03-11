@@ -21,7 +21,6 @@ use yii\queue\Queue;
  * @property string $time
  * @property int $guests_count
  * @property double $amount
- * @property int $type
  * @property int $event_type
  * @property int $metro
  * @property bool $dance
@@ -62,6 +61,7 @@ use yii\queue\Queue;
  * @property boolean $send15
  * @property boolean $send120
  */
+//TODO: remove type
 class Proposal extends ActiveRecord
 {
 
@@ -98,24 +98,13 @@ class Proposal extends ActiveRecord
     public static function typeLabels()
     {
         return [
-            1 => 'Встреча друзей',
-            2 => 'Корпоратив',
-            3 => 'Свадьба',
-            4 => 'День Рождения',
-            5 => 'Презентация',
-            6 => 'Поминки',
-            7 => 'Другое'
-        ];
-    }
-
-    /**
-     * @return array
-     */
-    public static function types()
-    {
-        return [
             1 => 'Банкет',
-            2 => 'Фукршет'
+            2 => 'Корпоратив',
+            3 => 'Детский праздник',
+            4 => 'День Рождения',
+            5 => 'Юбилей',
+            6 => 'Свадьба',
+            7 => 'Другое'
         ];
     }
 
@@ -137,9 +126,9 @@ class Proposal extends ActiveRecord
         return [
 //            ['cuisine', 'default', 'value' => 1],
             ['status', 'default', 'value' => Constants::PROPOSAL_STATUS_CREATED],
-            [['status', 'owner_id', 'date', 'time', 'guests_count', 'amount', 'type', 'event_type'], 'required'],
-            [['owner_id', 'guests_count', 'type', 'event_type', 'metro'], 'default', 'value' => null],
-            [['owner_id', 'guests_count', 'type', 'event_type', 'metro'], 'integer'],
+            [['status', 'owner_id', 'date', 'time', 'guests_count', 'amount', 'event_type'], 'required'],
+            [['owner_id', 'guests_count', 'event_type', 'metro'], 'default', 'value' => null],
+            [['owner_id', 'guests_count', 'event_type', 'metro'], 'integer'],
             [['date', 'time', 'send15', 'send120'], 'safe'],
             [['amount'], 'number'],
             [['dance', 'private', 'own_alcohol', 'parking'], 'boolean'],
@@ -168,9 +157,8 @@ class Proposal extends ActiveRecord
             'owner_id' => 'Заявитель',
             'City' => 'Город',
             'date' => 'Дата банкета',
-            'time' => 'Время начала банкета',
+            'time' => 'Время банкета',
             'guests_count' => 'Количество гостей',
-            'type' => 'Мероприятие',
             'event_type' => 'Тип мероприятия',
             'eventType' => 'Тип мероприятия',
             'metro' => 'Метро',
@@ -204,7 +192,7 @@ class Proposal extends ActiveRecord
             'id',
             'City', 'date',
             'time', 'guests_count',
-            'amount', 'type',
+            'amount',
             'event_type', 'metro',
             'dance',
             'private', 'own_alcohol',

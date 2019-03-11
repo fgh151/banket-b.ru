@@ -39,9 +39,7 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'amount')->input('number') ?>
 
-    <?= $form->field($model, 'type')->dropDownList(
-        Proposal::types()
-    ) ?>
+
 
     <?= $form->field($model, 'event_type')->dropDownList(
         Proposal::typeLabels()

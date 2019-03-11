@@ -41,7 +41,7 @@ $this->registerCssFile('@web/css/landing.css');
             <div class="col-xs-12 col-md-6 text-center">
                 <?= Html::a('Вход для ресторатора', ['login'], ['class' => 'btn btn-lg btn-success']) ?>
             </div>
-            <div class="col-xs-12"><p> Загрузить приложение:</p></div>
+            <!--            <div class="col-xs-12"><p> Загрузить приложение:</p></div>-->
             <?php /*<div class="col-xs-6">
 
                 <img src="/img/ru_google-play.png" class="img-responsive" style="height: 60px">

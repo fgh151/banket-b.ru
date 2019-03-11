@@ -25,12 +25,6 @@ Modal::begin([
 $columns = [
     'City', 'date', 'time', 'guests_count',
     'amount',
-    [
-        'attribute' => 'type',
-        'value' => function (Proposal $model) {
-            return Proposal::types()[$model->type];
-        }
-    ],
     'eventType',
     'dance:boolean',
     'private:boolean',
