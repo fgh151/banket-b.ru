@@ -40,7 +40,7 @@ return [
                 'class' => 'Swift_SmtpTransport',
                 'host' => 'smtp.yandex.ru',
                 'username' => 'restorateru',
-                'password' => 'Aeph3paw',
+                'password' => 'Oc5aecee',
                 'port' => '465',
                 'encryption' => 'ssl', // у яндекса SSL
 //                'encryption' => 'ssl', // у яндекса SSL

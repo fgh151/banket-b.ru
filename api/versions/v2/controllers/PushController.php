@@ -31,12 +31,23 @@ class PushController extends Controller
         $device = $request['device'];
         $apns = $request['apns'] ?? '';
 
-        $token = new PushToken();
-        $token->user_id = $userId;
-        $token->token = $pushToken;
-        $token->device = $device;
-        $token->apns = $apns;
-        $token->save();
+        $existToken = PushToken::find()->where(['token' => $pushToken])->one();
+
+        if ($existToken) {
+            $existToken->user_id = $userId;
+
+            return ['success' => $existToken->save()];
+
+        } else {
+            $token = new PushToken();
+            $token->user_id = $userId;
+            $token->token = $pushToken;
+            $token->device = $device;
+            $token->apns = $apns;
+            return ['success' => $token->save()];
+        }
+
+
     }
 
 

@@ -32,52 +32,86 @@ class Organization extends \app\common\models\Organization
 
         return ArrayHelper::merge($parent, [
             'minPrice' => function ($model) {
-                return $this->getMinPrice();
+                return Organization::getMinPrice($this);
             },
             'profit' => function ($model) {
-                $start = $this->proposal->amount * $this->proposal->guests_count;  //Стоимость заявки
+                if ($this->proposal) {
+                    $start = $this->proposal->amount * $this->proposal->guests_count;  //Стоимость заявки
 
-                $r = 100 - ($this->getMinPrice() / $start * 100);
+                    $r = 100 - (Organization::getMinPrice($this) / $start * 100);
 
-                return round($r) ?? 0;
+                    return round($r) ?? 0;
+                }
+                return null;
             },
             'amount' => function () {
-                return $this->proposal->amount;
+                if ($this->proposal) {
+                    return $this->proposal->amount;
+                }
+                return null;
             },
             'guests' => function () {
-                return $this->proposal->guests_count;
+                if ($this->proposal) {
+                    return $this->proposal->guests_count;
+                }
+                return null;
             },
             'rating',
             'lastMessage' => function ($model) {
-                return $this->getLastMessageTime();
+                if ($this->proposal) {
+                    return $this->getLastMessageTime();
+                }
+                return null;
             }
         ]);
 
     }
 
     /**
+     * @param Organization $organization
+     * @return int
+     */
+    public static function getMinPrice(Organization $organization)
+    {
+        $_minPrice = null;
+        if ($organization->proposal) {
+            $_minPrice = PHP_INT_MAX;
+            $messages = $organization->getConversation();
+            foreach ($messages as $message) {
+                if ($_minPrice > $message->cost && $message->cost !== 0 && $message->cost !== null) {
+                    $_minPrice = $message->cost;
+                }
+            }
+        }
+        return $_minPrice;
+    }
+
+
+
+    /**
      * @return int
      * @throws NotFoundHttpException
      */
-    private function getMinPrice()
-    {
-//        if ($this->_minPrice === null) {
+//    public function getMinPrice()
+//    {
+//        if ($this->_minPrice === null && $this->proposal) {
 //            $this->_minPrice = PHP_INT_MAX;
 //            $messages = $this->getConversation();
-//            foreach ($messages as $organizationId => $messagesArray) {
-//                foreach ($messagesArray as $message) {
 //
-//                    var_dump($message);
+////            var_dump($messages); die;
 //
-//                    if ($this->_minPrice > $message->cost && $message->cost !== 0 && $message->cost !== null) {
-//                        $this->_minPrice = $message->cost;
-//                    }
+//
+//            foreach ($messages as $message) {
+//
+//
+//                if ($this->_minPrice > $message->cost && $message->cost !== 0 && $message->cost !== null) {
+//                    $this->_minPrice = $message->cost;
 //                }
 //            }
 //        }
-//        die;
-        return 15000; // $this->_minPrice;
-    }
+////        die;
+//        return $this->_minPrice;
+//    }
 
     private function getLastMessageTime()
     {

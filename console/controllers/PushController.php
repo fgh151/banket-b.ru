@@ -39,6 +39,8 @@ class PushController extends Controller
 
         echo ($maxTime + $minTime) / 2 . "\n";
 
+        var_dump($proposals);
+
         foreach ($proposals as $proposal) {
             $proposal->{$field} = false;
             $proposal->save(false);

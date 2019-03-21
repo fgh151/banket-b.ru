@@ -214,7 +214,7 @@ class Proposal extends ActiveRecord
      */
     public function getWhen()
     {
-        return new \DateTime($this->date . ' ' . $this->time);
+        return new \DateTime($this->date);
     }
 
     /**

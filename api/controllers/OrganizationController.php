@@ -9,7 +9,7 @@
 namespace app\api\controllers;
 
 
-use app\common\models\Organization;
+use app\api\models\Organization;
 use yii\rest\Controller;
 use yii\web\NotFoundHttpException;
 

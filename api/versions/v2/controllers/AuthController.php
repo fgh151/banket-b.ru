@@ -52,9 +52,6 @@ class AuthController extends Controller
         $model->scenario = $scenario;
         $request = Json::decode(Yii::$app->getRequest()->getRawBody(), true);
 
-
-//        Yii::error($request);
-//        die;
         $load = $model->load($request, '');
 
         return $load ? $model : false;
@@ -63,12 +60,8 @@ class AuthController extends Controller
     public function actionSendcode()
     {
         $model = $this->loadModel();
-
         if ($model !== false) {
             $code = $model->getCode();
-
-//            var_dump($code); die;
-
             if ($code) {
                 /** @var SmsInterface $smsService */
                 $smsService = Yii::$app->sms;

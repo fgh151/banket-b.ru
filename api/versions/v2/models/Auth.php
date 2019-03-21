@@ -77,12 +77,21 @@ class Auth extends Model
 
     /**
      * @return string
+     * @throws \yii\base\Exception
      */
     public function getCode()
     {
         $user = $this->getUser();
+        if ($user instanceof MobileUser) {
+            if ($user->password_reset_token === null) {
+                $user->generatePasswordResetToken();
+                $user->save();
+            }
+            return $user->password_reset_token;
 
-        return $user ? $user->password_reset_token : null;
+        }
+
+        return null;
     }
 
     /**
@@ -91,7 +100,7 @@ class Auth extends Model
      * @return MobileUser|null
      * @throws \yii\base\Exception
      */
-    protected function getUser()
+    public function getUser()
     {
         if ($this->_user === null) {
             $this->_user = MobileUser::findByPhone($this->phone);

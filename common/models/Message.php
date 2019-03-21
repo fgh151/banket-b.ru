@@ -43,6 +43,9 @@ class Message extends Model
     /** @var integer */
     public $cost = 0;
 
+    public $btnDisabled;
+    public $btnStyle;
+
     /**
      * @param $user_id
      * @param $proposalId

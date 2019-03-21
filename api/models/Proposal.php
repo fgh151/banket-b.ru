@@ -29,7 +29,7 @@ class Proposal extends \app\common\models\Proposal
                 return $this->getMinPrice();
             },
             'profit' => function ($model) {
-                $start = $this->amount * $this->guests_count;  //Стоимость заявки
+                $start = $this->amount * $this->guests_count;  //Стоимость заявки 12221
 
                 $r = 100 - ($this->getMinPrice() / $start * 100);
 
@@ -53,16 +53,20 @@ class Proposal extends \app\common\models\Proposal
         if ($this->_minPrice === null) {
             $this->_minPrice = PHP_INT_MAX;
             $messages = $this->getMessages();
-            foreach ($messages as $message) {
-                if (@isset($message['cost'])) {
-                    if ($this->_minPrice > $message['cost'] && $message['cost'] !== 0) {
-                        $this->_minPrice = $message['cost'];
-                    }
-                }
+            $min = [];
+            foreach ($messages as $organizationId => $messagesByTime) {
+                $organization = Organization::findOne($organizationId);
+                $organization->proposal = $this;
+                $min[] = Organization::getMinPrice($organization);
+            }
+
+            if (!empty($min)) {
+                $this->_minPrice = min($min);
+            } else {
+                $this->_minPrice = null;
             }
         }
-        return 15000;
-//        return $this->_minPrice;
+        return $this->_minPrice;
     }
 
     private function getMessages()

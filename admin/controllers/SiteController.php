@@ -83,20 +83,9 @@ class SiteController extends Controller
         $byDay['Суббота'] = isset($tmp['Saturday   ']) ? $tmp['Saturday   ']: 0;
         $byDay['Воскресенье'] = isset($tmp['Sunday   ']) ? $tmp['Sunday   ']: 0;
 
-        $sql = 'SELECT date_part(\'hour\', time) AS hour, * FROM proposal ORDER BY hour';
-        $proposals = $db->createCommand($sql)->queryAll();
-        foreach ($proposals as $proposal) {
-            $tmp[] = $proposal['hour'];
-        }
-        $tmp = array_count_values($tmp);
-        $hours = array_fill(1, 24, 0);
-        $byHours = $tmp+$hours;
-        ksort($byHours);
-
 
         return $this->render('index', [
             'byDay' => $byDay,
-            'byHours' => $byHours
         ]);
     }
 

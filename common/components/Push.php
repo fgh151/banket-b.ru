@@ -52,6 +52,9 @@ class Push extends Component
 
     private function sendToUser($title, $message, $token)
     {
+
+
+        Yii::info('send push to ' . $token);
         $client = new Client();
         $client->setApiKey(Yii::$app->params['firebaseServerKey']);
         $client->injectHttpClient(new \GuzzleHttp\Client());

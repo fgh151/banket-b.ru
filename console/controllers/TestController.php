@@ -31,13 +31,18 @@ class TestController extends Controller
 
     public function actionMail()
     {
-        print_r(Yii::$app->mailer->compose()
+
+        print_r(Yii::$app->mailqueue);
+        die;
+
+
+        print_r(Yii::$app->mailqueue->compose()
             ->setFrom(Yii::$app->params['adminEmail'])
             ->setTo('fedor@support-pc.org')
             ->setSubject('banket-b')
             ->setTextBody('banket-b')
-//            ->queue();
-            ->send());
+            ->queue());
+//            ->send());
     }
 
     public function actionQeue()
