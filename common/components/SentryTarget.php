@@ -41,8 +41,14 @@ class SentryTarget extends Target
      */
     public function collect($messages, $final)
     {
+        $composer = file_get_contents('../../composer.json');
+        $composer = json_decode($composer, true);
+
         if (!isset($this->client)) {
             $this->client = new \Raven_Client($this->dsn, $this->clientOptions);
+            $this->client->extra_context([
+                'version' => $composer['version']
+            ]);
         }
         parent::collect($messages, $final);
     }

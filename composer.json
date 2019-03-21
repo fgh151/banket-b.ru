@@ -1,20 +1,11 @@
 {
-  "name": "yiisoft/yii2-app-advanced",
-  "description": "Yii 2 Advanced Project Template",
-  "keywords": [
-    "yii2",
-    "framework",
-    "advanced",
-    "project template"
-  ],
+  "name": "banket-b",
+  "description": "banket-b server",
+  "version": "2.0.0",
   "homepage": "http://www.yiiframework.com/",
   "type": "project",
   "license": "BSD-3-Clause",
   "support": {
-    "issues": "https://github.com/yiisoft/yii2/issues?state=open",
-    "forum": "http://www.yiiframework.com/forum/",
-    "wiki": "http://www.yiiframework.com/wiki/",
-    "irc": "irc://irc.freenode.net/yii",
     "source": "https://github.com/yiisoft/yii2"
   },
   "minimum-stability": "stable",
