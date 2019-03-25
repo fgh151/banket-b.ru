@@ -56,9 +56,9 @@ class UserController extends Controller
         $params = $model->params;
 
         if ($model->load(\Yii::$app->request->post())) {
-            if ($model->password !== '') {
-                $model->setPassword($model->password);
-            }
+//            if ($model->password !== '') {
+//                $model->setPassword($model->password);
+//            }
             if ($model->save()) {
 
                 $params->load(Yii::$app->request->post());
