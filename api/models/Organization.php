@@ -36,7 +36,7 @@ class Organization extends \app\common\models\Organization
             },
             'profit' => function ($model) {
                 if ($this->proposal) {
-                    Organization::calcProfit($this->proposal, Organization::getMinPrice($this));
+                    return Organization::calcProfit($this->proposal, Organization::getMinPrice($this));
                 }
                 return null;
             },
