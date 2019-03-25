@@ -36,11 +36,7 @@ class Organization extends \app\common\models\Organization
             },
             'profit' => function ($model) {
                 if ($this->proposal) {
-                    $start = $this->proposal->amount * $this->proposal->guests_count;  //Стоимость заявки
-
-                    $r = 100 - (Organization::getMinPrice($this) / $start * 100);
-
-                    return round($r) ?? 0;
+                    Organization::calcProfit($this->proposal, Organization::getMinPrice($this));
                 }
                 return null;
             },
@@ -65,6 +61,15 @@ class Organization extends \app\common\models\Organization
             }
         ]);
 
+    }
+
+    public static function calcProfit(Proposal $proposal, $minPrice)
+    {
+        $start = $proposal->amount * $proposal->guests_count;  //Стоимость заявки
+
+        $r = 100 - ($minPrice / $start * 100);
+
+        return round($r) ?? 0;
     }
 
     /**

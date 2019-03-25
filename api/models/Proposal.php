@@ -29,11 +29,7 @@ class Proposal extends \app\common\models\Proposal
                 return $this->getMinPrice();
             },
             'profit' => function ($model) {
-                $start = $this->amount * $this->guests_count;  //Стоимость заявки 12221
-
-                $r = 100 - ($this->getMinPrice() / $start * 100);
-
-                return round($r);
+                return Organization::calcProfit($model, $this->getMinPrice());
             },
             'answers' => function ($model) {
                 return count($this->getMessages());
