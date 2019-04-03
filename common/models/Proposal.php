@@ -60,6 +60,8 @@ use yii\queue\Queue;
  *
  * @property boolean $send15
  * @property boolean $send120
+ * @property string $type [integer]
+ * @property string $cuisine [integer]
  */
 //TODO: remove type
 class Proposal extends ActiveRecord
@@ -197,7 +199,7 @@ class Proposal extends ActiveRecord
             'dance',
             'private', 'own_alcohol',
             'parking', 'comment',
-            'organizations',
+            'organizations', 'floristics', 'hall', 'photo', 'stylists', 'cake', 'transport', 'entertainment', 'present'
         ];
     }
 
@@ -306,12 +308,12 @@ class Proposal extends ActiveRecord
 //                    ->setHtmlBody('В разделе заявок появилась новая заявка <a href="https://banket-b.ru/conversation/index/' . $this->id . '">посмотреть</a>')
 //                    ->queue();
 //            }
-            Yii::$app->mailqueue->compose()
-                ->setFrom(Yii::$app->params['adminEmail'])
-                ->setTo('zkzrr@yandex.ru')
-                ->setSubject('Новая заявка')
-                ->setHtmlBody('В разделе заявок появилась новая заявка <a href="https://admin.banket-b.ru/proposal/update/' . $this->id . '">посмотреть</a>')
-                ->queue();
+//            Yii::$app->mailqueue->compose()
+//                ->setFrom(Yii::$app->params['adminEmail'])
+//                ->setTo('zkzrr@yandex.ru')
+//                ->setSubject('Новая заявка')
+//                ->setHtmlBody('В разделе заявок появилась новая заявка <a href="https://admin.banket-b.ru/proposal/update/' . $this->id . '">посмотреть</a>')
+//                ->queue();
 
             /** @var Queue $queue */
             $queue = Yii::$app->queue;
