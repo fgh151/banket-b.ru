@@ -18,7 +18,6 @@ use app\common\models\RestaurantHall;
 use app\common\models\RestaurantParams;
 use app\common\models\Upload;
 use Yii;
-use yii\base\InvalidArgumentException;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use yii\helpers\FileHelper;
@@ -625,21 +624,15 @@ class SiteController extends Controller
      * @param string $token
      *
      * @return mixed
-     * @throws BadRequestHttpException
      * @throws \yii\base\Exception
      */
     public function actionResetPassword($token)
     {
-        try {
-            $model = new ResetPasswordForm($token);
-        } catch (InvalidArgumentException $e) {
-            throw new BadRequestHttpException($e->getMessage());
-        }
-
+        $model = new ResetPasswordForm($token);
         if ($model->load(Yii::$app->request->post()) && $model->validate() && $model->resetPassword()) {
-            Yii::$app->session->setFlash('success', 'New password saved.');
+            Yii::$app->session->setFlash('success', 'Новый пароль сохранен');
 
-            return $this->goHome();
+            return $this->redirect(['site/index']);
         }
 
         return $this->render('resetPassword', [

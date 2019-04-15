@@ -100,7 +100,7 @@ class MobileUser extends ActiveRecord implements IdentityInterface
      */
     public function generatePasswordResetToken()
     {
-        $this->password_reset_token = (string)rand(100000, 999999);
+        $this->password_reset_token = (string)rand(1000, 9999);
     }
 
     /**

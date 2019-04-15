@@ -38,7 +38,7 @@ $this->title = 'Банкетный Баттл';
     <div class="container">
         <p class="pull-left">&copy; Банкет Батл <?= date('Y') ?></p>
 
-        <p class="pull-right">
+        <p class="pull-right hidden-xs">
             Свидетельство о регистрации программного обеспечения 2016617962 от 19.07.2016<br>
             Патент 2641237 от 16.01.2018<br>
             <a href="https://www.restorate.ru/about/?ELEMENT_ID=12672" target="_blank">Заявление о соблюдении

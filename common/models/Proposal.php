@@ -69,6 +69,8 @@ class Proposal extends ActiveRecord
 
     public $_minCost;
 
+    public $type = 2;
+
     /**
      * {@inheritdoc}
      */
@@ -126,7 +128,7 @@ class Proposal extends ActiveRecord
     public function rules()
     {
         return [
-//            ['cuisine', 'default', 'value' => 1],
+            ['type', 'default', 'value' => 2],
             ['status', 'default', 'value' => Constants::PROPOSAL_STATUS_CREATED],
             [['status', 'owner_id', 'date', 'time', 'guests_count', 'amount', 'event_type'], 'required'],
             [['owner_id', 'guests_count', 'event_type', 'metro'], 'default', 'value' => null],
@@ -224,6 +226,7 @@ class Proposal extends ActiveRecord
      */
     public function beforeValidate()
     {
+
         if ($this->city_id && !$this->City) {
             $city = GeoCity::findOne($this->city_id);
             if ($city) {

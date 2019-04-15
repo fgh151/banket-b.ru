@@ -99,7 +99,7 @@ class ProposalController extends Controller
      */
     public function actionCreateRr()
     {
-        $model = new Proposal(['owner_id' => 45]);
+        $model = new Proposal(['owner_id' => 45, 'type' => 2]);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
