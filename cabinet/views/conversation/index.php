@@ -85,7 +85,7 @@ $(document).on("beforeSubmit", "#message-form", function () {
             scrollMessages(true);
         },
         error: function () {
-            alert("Something went wrong");
+            // alert("Something went wrong");
         }
     });
     

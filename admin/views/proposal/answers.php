@@ -28,8 +28,19 @@ $this->params['breadcrumbs'][] = 'Ответы';
             },
             'label' => 'Организация'
         ],
-        'message:ntext:Ответ',
-        'created_at:datetime:Дата'
+        [
+            'format' => 'raw',
+            'attribute' => 'message',
+            'header' => 'Ответ'
+        ],
+        'created_at:datetime:Дата',
+        [
+            'header' => 'Ответить',
+            'value' => function (Message $model) {
+                return \yii\helpers\Html::a('Ответить', ['proposal/answer', 'userId' => $model->user_id, 'organizationId' => $model->organization_id, 'proposalId' => $model->proposal_id]);
+            },
+            'format' => 'html'
+        ]
     ],
     'emptyText' => 'На данную заявку ответов не поступало'
 ]);

@@ -190,4 +190,20 @@ class ProposalController extends Controller
             'answers' => $answers
         ]);
     }
+
+    public function actionAnswer($proposalId, $organizationId, $userId)
+    {
+        $message = new Message();
+        $message->proposal_id = $proposalId;
+        $message->organization_id = $organizationId;
+        $message->user_id = $userId;
+        if ($message->load(Yii::$app->request->post())) {
+            $message->save();
+        }
+
+        return $this->render('answer_form', [
+            'model' => $message
+        ]);
+
+    }
 }

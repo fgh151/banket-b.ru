@@ -1,4 +1,5 @@
-<?php
+<?php /** @noinspection MissedViewInspection */
+
 namespace app\cabinet\controllers;
 
 use app\cabinet\models\ContactForm;
@@ -33,6 +34,7 @@ use yii\web\UploadedFile;
 class SiteController extends Controller
 {
     use CheckPayTrait;
+
     /**
      * {@inheritdoc}
      */
@@ -60,8 +62,8 @@ class SiteController extends Controller
                             'district',
                             'metro'
                         ],
-                        'allow'   => true,
-                        'roles'   => ['?'],
+                        'allow' => true,
+                        'roles' => ['?'],
                     ],
                     [
                         'actions' => ['error'],
@@ -93,11 +95,11 @@ class SiteController extends Controller
     public function actions()
     {
         return [
-            'error'   => [
+            'error' => [
                 'class' => 'yii\web\ErrorAction',
             ],
             'captcha' => [
-                'class'           => 'yii\captcha\CaptchaAction',
+                'class' => 'yii\captcha\CaptchaAction',
                 'fixedVerifyCode' => YII_ENV_TEST ? 'testme' : null,
             ],
         ];
@@ -108,6 +110,7 @@ class SiteController extends Controller
      *
      * @param null $proposals
      *
+     * @param null $month
      * @return mixed
      * @throws \Throwable
      * @throws \yii\db\Exception
@@ -138,7 +141,7 @@ class SiteController extends Controller
 
         $criteriaSql = '';
         if ($proposals === 'my') {
-            $criteriaSql = 'WHERE city_id = '.$organization->city_id;
+            $criteriaSql = 'WHERE city_id = ' . $organization->city_id;
         }
         if ($month) {
             $criteriaSql .= $proposals === 'my' ? ' AND ' : '';
@@ -150,7 +153,7 @@ class SiteController extends Controller
         $this->throwIfNotPay('state_statistic');
 
         $db = Yii::$app->getDb();
-        $sql = 'SELECT to_char(date, \'Day\') AS day, * FROM proposal '.$criteriaSql.' ORDER BY day';
+        $sql = 'SELECT to_char(date, \'Day\') AS day, * FROM proposal ' . $criteriaSql . ' ORDER BY day';
         $proposalsAr = $db->createCommand($sql)->queryAll();
 
         $tmp = [];
@@ -159,13 +162,13 @@ class SiteController extends Controller
         }
         $tmp = array_count_values($tmp);
 
-        $byDay['Понедельник'] = (isset($tmp['Monday   ']) ? $tmp['Monday   ']: 0) + Yii::$app->params['chart']['byDay']['Понедельник'];
-        $byDay['Вторник'] = (isset($tmp['Tuesday   ']) ? $tmp['Tuesday   ']: 0) + Yii::$app->params['chart']['byDay']['Вторник'];
-        $byDay['Среда'] = (isset($tmp['Wednesday   ']) ? $tmp['Wednesday   ']: 0) + Yii::$app->params['chart']['byDay']['Среда'];
-        $byDay['Четверг'] = (isset($tmp['Thursday   ']) ? $tmp['Thursday   ']: 0) + Yii::$app->params['chart']['byDay']['Четверг'];
-        $byDay['Пятница'] = (isset($tmp['Friday   ']) ? $tmp['Friday   ']: 0) + Yii::$app->params['chart']['byDay']['Пятница'];
-        $byDay['Суббота'] = (isset($tmp['Saturday   ']) ? $tmp['Saturday   ']: 0) + Yii::$app->params['chart']['byDay']['Суббота'];
-        $byDay['Воскресенье'] = (isset($tmp['Sunday   ']) ? $tmp['Sunday   ']: 0) + Yii::$app->params['chart']['byDay']['Воскресенье'];
+        $byDay['Понедельник'] = (isset($tmp['Monday   ']) ? $tmp['Monday   '] : 0) + Yii::$app->params['chart']['byDay']['Понедельник'];
+        $byDay['Вторник'] = (isset($tmp['Tuesday   ']) ? $tmp['Tuesday   '] : 0) + Yii::$app->params['chart']['byDay']['Вторник'];
+        $byDay['Среда'] = (isset($tmp['Wednesday   ']) ? $tmp['Wednesday   '] : 0) + Yii::$app->params['chart']['byDay']['Среда'];
+        $byDay['Четверг'] = (isset($tmp['Thursday   ']) ? $tmp['Thursday   '] : 0) + Yii::$app->params['chart']['byDay']['Четверг'];
+        $byDay['Пятница'] = (isset($tmp['Friday   ']) ? $tmp['Friday   '] : 0) + Yii::$app->params['chart']['byDay']['Пятница'];
+        $byDay['Суббота'] = (isset($tmp['Saturday   ']) ? $tmp['Saturday   '] : 0) + Yii::$app->params['chart']['byDay']['Суббота'];
+        $byDay['Воскресенье'] = (isset($tmp['Sunday   ']) ? $tmp['Sunday   '] : 0) + Yii::$app->params['chart']['byDay']['Воскресенье'];
 
 
         array_walk($byDay, function (&$val, $key) use ($onePercent) {
@@ -188,25 +191,22 @@ class SiteController extends Controller
 //        });
 
 
-        $sql = 'SELECT to_char(date, \'Month\') AS month, * FROM proposal '.$criteriaSql.' ORDER BY month';
+        $sql = 'SELECT to_char(date, \'Month\') AS month, * FROM proposal ' . $criteriaSql . ' ORDER BY month';
         $proposalsAr = $db->createCommand($sql)->queryAll();
 
         $tmp = [];
         foreach ($proposalsAr as $proposal) {
             $tmp[] = str_replace(
-                ['January','February','March','April','May','June','July','August','September','October','November', 'December'],
-                ['Январь','Февраль','Март','Апрель','Май','Июнь','Июль','Август','Сентябрь','Октябрь','Ноябрь', 'Декабрь'],
+                ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+                ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'],
                 trim($proposal['month'])
             );
         }
         $byMonth = array_count_values($tmp);
-        $byMonth =  Yii::$app->params['chart']['byMonth'] + $byMonth;
+        $byMonth = Yii::$app->params['chart']['byMonth'] + $byMonth;
         array_walk($byMonth, function (&$val, $key) use ($onePercent) {
             $val = round($val * $onePercent, 2);
         });
-
-
-
 
 
         $byPrice = [];
@@ -221,7 +221,7 @@ class SiteController extends Controller
         $proposalsByPrice = $proposalsByPrice->asArray()->all();
         foreach ($proposalsByPrice as $p) {
             $amount = $p['amount'];
-            $byPrice[$amount] = isset($byPrice[$amount]) ? $byPrice[$amount] +1: 1;
+            $byPrice[$amount] = isset($byPrice[$amount]) ? $byPrice[$amount] + 1 : 1;
         }
         $byPrice = Yii::$app->params['chart']['byPrice'] + $byPrice;
         ksort($byPrice);
@@ -229,7 +229,7 @@ class SiteController extends Controller
             $val = round($val * $onePercent, 2);
         });
 
-        $byPeoples =[];
+        $byPeoples = [];
         $proposalsByPeoples = Proposal::find()->select(['guests_count']);
         if ($proposals === 'my') {
             $proposalsByPeoples->where(['city_id' => $organization->city_id]);
@@ -240,9 +240,9 @@ class SiteController extends Controller
         $proposalsByPeoples = $proposalsByPeoples->asArray()->all();
         foreach ($proposalsByPeoples as $p) {
             $count = $p['guests_count'];
-            $byPeoples[$count] = isset($byPeoples[$count]) ? $byPeoples[$count] +1: 1;
+            $byPeoples[$count] = isset($byPeoples[$count]) ? $byPeoples[$count] + 1 : 1;
         }
-        $byPeoples =  Yii::$app->params['chart']['byPeoples'] + $byPeoples;
+        $byPeoples = Yii::$app->params['chart']['byPeoples'] + $byPeoples;
         ksort($byPeoples);
         array_walk($byPrice, function (&$val, $key) use ($onePercent) {
             $val = round($val * $onePercent, 2);
@@ -265,7 +265,7 @@ class SiteController extends Controller
             $hall->andFilterWhere($createdAtCriteria);
         }
         $hall = $hall->count();
-        $byHall = ['Нужен' => $hall, 'Не нужен' => $proposalsCount-$hall];
+        $byHall = ['Нужен' => $hall, 'Не нужен' => $proposalsCount - $hall];
 
         array_walk($byHall, function (&$val, $key) use ($onePercent) {
             $val = round($val * $onePercent, 2);
@@ -279,7 +279,7 @@ class SiteController extends Controller
             $dance->andFilterWhere($createdAtCriteria);
         }
         $dance = $dance->count();
-        $byDance = ['Нужен' => $dance, 'Не нужен' => $proposalsCount-$dance];
+        $byDance = ['Нужен' => $dance, 'Не нужен' => $proposalsCount - $dance];
         array_walk($byDance, function (&$val, $key) use ($onePercent) {
             $val = round($val * $onePercent, 2);
         });
@@ -292,7 +292,7 @@ class SiteController extends Controller
             $alko->andFilterWhere($createdAtCriteria);
         }
         $alko = $alko->count();
-        $byAlko = ['Нужен' => $alko, 'Не нужен' => $proposalsCount-$alko];
+        $byAlko = ['Нужен' => $alko, 'Не нужен' => $proposalsCount - $alko];
         array_walk($byAlko, function (&$val, $key) use ($onePercent) {
             $val = round($val * $onePercent, 2);
         });
@@ -305,7 +305,7 @@ class SiteController extends Controller
             $parking->andFilterWhere($createdAtCriteria);
         }
         $parking = $parking->count();
-        $byParking = ['Нужна' => $parking, 'Не нужна' => $proposalsCount-$parking];
+        $byParking = ['Нужна' => $parking, 'Не нужна' => $proposalsCount - $parking];
         array_walk($byParking, function (&$val, $key) use ($onePercent) {
             $val = round($val * $onePercent, 2);
         });
@@ -328,7 +328,7 @@ class SiteController extends Controller
             $type->andFilterWhere($createdAtCriteria);
         }
         $type = $type->asArray()->all();
-        $byTypes =[];
+        $byTypes = [];
         foreach ($type as $item) {
             $types = $item['event_type'];
             $byTypes[$types] = isset($byTypes[$types]) ? $byTypes[$types] + 1 : 1;
@@ -453,10 +453,10 @@ class SiteController extends Controller
      */
     public function actionSignup()
     {
-        $model       = new SignupForm();
+        $model = new SignupForm();
         $modelParams = new RestaurantParams();
-        $halls       = [new RestaurantHall()];
-        $metro       = [new OrganizationLinkMetro()];
+        $halls = [new RestaurantHall()];
+        $metro = [new OrganizationLinkMetro()];
 
         $post = Yii::$app->request->post();
 
@@ -493,10 +493,10 @@ class SiteController extends Controller
         }
 
         return $this->render('signup', [
-            'model'       => $model,
+            'model' => $model,
             'modelParams' => $modelParams,
-            'halls'       => (empty($halls) ? [new RestaurantHall()] : $halls),
-            'metro'       => (empty($metro) ? [new OrganizationLinkMetro()] : $metro),
+            'halls' => (empty($halls) ? [new RestaurantHall()] : $halls),
+            'metro' => (empty($metro) ? [new OrganizationLinkMetro()] : $metro),
         ]);
     }
 
@@ -538,23 +538,15 @@ class SiteController extends Controller
 
     public function actionDistrict()
     {
-//        Yii::$app->response->format = Response::FORMAT_JSON;
-        $out = [];
         if (isset($_POST['depdrop_parents'])) {
             $parents = $_POST['depdrop_parents'];
             if ($parents != null) {
                 $city_id = $parents[0];
-                $out     = District::find()
-                                   ->select('id as id, title as name')
-                                   ->where(['city_id' => $city_id])
-                                   ->asArray()
-                                   ->all();
-                // the getSubCatList function will query the database based on the
-                // cat_id and return an array like below:
-                // [
-                //    ['id'=>'<sub-cat-id-1>', 'name'=>'<sub-cat-name1>'],
-                //    ['id'=>'<sub-cat_id_2>', 'name'=>'<sub-cat-name2>']
-                // ]
+                $out = District::find()
+                    ->select('id as id, title as name')
+                    ->where(['city_id' => $city_id])
+                    ->asArray()
+                    ->all();
                 return Json::encode(['output' => $out, 'selected' => '']);
             }
         }
@@ -565,28 +557,20 @@ class SiteController extends Controller
 
     public function actionMetro()
     {
-//        Yii::$app->response->format = Response::FORMAT_JSON;
-        $out = [];
         if (isset($_POST['depdrop_parents'])) {
             $parents = $_POST['depdrop_parents'];
             if ($parents != null) {
                 $city_id = $parents[0];
-                $out     = Metro::find()
-                                ->select('id as id, title as name')
-                                ->where([
-                                    'in',
-                                    'line_id',
-                                    MetroLine::find()->where(['city_id' => $city_id])->select('id')
-                                ])
+                $out = Metro::find()
+                    ->select('id as id, title as name')
+                    ->where([
+                        'in',
+                        'line_id',
+                        MetroLine::find()->where(['city_id' => $city_id])->select('id')
+                    ])
                     ->orderBy('title')
-                                ->asArray()
-                                ->all();
-                // the getSubCatList function will query the database based on the
-                // cat_id and return an array like below:
-                // [
-                //    ['id'=>'<sub-cat-id-1>', 'name'=>'<sub-cat-name1>'],
-                //    ['id'=>'<sub-cat_id_2>', 'name'=>'<sub-cat-name2>']
-                // ]
+                    ->asArray()
+                    ->all();
                 return Json::encode(['output' => $out, 'selected' => '']);
             }
         }
