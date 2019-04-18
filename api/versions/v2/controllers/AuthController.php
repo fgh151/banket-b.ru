@@ -65,7 +65,9 @@ class AuthController extends Controller
             if ($code) {
                 /** @var SmsInterface $smsService */
                 $smsService = Yii::$app->sms;
-                return $smsService->sendSms('Код подтверждения ' . $code, $model->phone);
+                if ($smsService->sendSms('Код подтверждения ' . $code, $model->phone)) {
+                    return ['code' => $code];
+                }
             }
         }
     }
