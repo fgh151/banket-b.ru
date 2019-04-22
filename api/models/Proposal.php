@@ -44,18 +44,20 @@ class Proposal extends \app\common\models\Proposal
     /**
      * @return int
      */
-    private function getMinPrice()
+    public function getMinPrice()
     {
         if ($this->_minPrice === null) {
             $this->_minPrice = PHP_INT_MAX;
             $messages = $this->getMessages();
             $min = [];
             foreach ($messages as $organizationId => $messagesByTime) {
-                $organization = Organization::findOne($organizationId);
-                $organization->proposal = $this;
-                $min[] = Organization::getMinPrice($organization);
-            }
 
+                foreach ($messagesByTime as $message) {
+                    if ($message->cost > 0) {
+                        $min[] = $message->cost;
+                    }
+                }
+            }
             if (!empty($min)) {
                 $this->_minPrice = min($min);
             } else {

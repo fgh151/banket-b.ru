@@ -95,4 +95,19 @@ class TestController extends Controller
 //        $t = 'F3642A5F86D3CBD3D0A80DE1EA3FE459CCE284355AD679C0C1881C20BE841D19';
         return $t;
     }
+
+
+    public function actionCost()
+    {
+        $p = \app\api\models\Proposal::findOne(218); /* find()
+            ->where([
+                'owner_id' => 64,
+                'status' => Constants::PROPOSAL_STATUS_CREATED
+            ])
+            ->andFilterWhere(['>=', 'date', date('Y-m-d')])
+            ->orderBy(['date' => SORT_ASC])
+            ->all();*/
+
+        var_dump($p->getMinPrice());
+    }
 }
