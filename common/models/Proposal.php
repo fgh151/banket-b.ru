@@ -215,6 +215,7 @@ class Proposal extends ActiveRecord
 
     /**
      * @return \DateTime
+     * @throws \Exception
      */
     public function getWhen()
     {
@@ -436,5 +437,13 @@ class Proposal extends ActiveRecord
         $cost = $this->amount * $this->guests_count;
         $one = $cost / 100;
         return ($cost - $this->minCost) * $one;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isActual()
+    {
+        return $this->status === Constants::PROPOSAL_STATUS_CREATED && $this->date >= date('Y-m-d');
     }
 }
