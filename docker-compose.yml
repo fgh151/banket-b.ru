@@ -20,7 +20,7 @@ services:
   nginx:
     image: nginx
     ports:
-      - '8090:8090'
+      - '80:80'
     links:
       - app
     volumes:
