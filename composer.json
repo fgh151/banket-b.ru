@@ -34,7 +34,8 @@
     "sentry/sentry": "^1.10",
     "ext-curl": "*",
     "yiisoft/yii2-queue": "^2.1",
-    "paragraph1/php-fcm": "^0.7.0"
+    "paragraph1/php-fcm": "^0.7.0",
+    "bower-asset/react": "^16.1"
   },
   "require-dev": {
     "yiisoft/yii2-debug": "~2.0.0",

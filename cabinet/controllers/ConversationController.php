@@ -65,16 +65,12 @@ class ConversationController extends Controller
     {
         $proposal = $this->findModel($proposalId);
         $model = $this->createBlankMessage($proposal);
-
-        $messages = Message::getConversation($proposal->owner_id, $proposal->id, Yii::$app->getUser()->getId());
-
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             Yii::$app->session->setFlash('success', 'saved');
         }
 
         return $this->render('index', [
             'model' => $model,
-            'messages' => $messages,
             'proposal' => $proposal
         ]);
     }

@@ -2,7 +2,6 @@
 /**
  * @var $this yii\web\View
  * @var $model \app\common\models\Message
- * @var $messages \app\common\models\Message[]
  * @var $proposal \app\common\models\Proposal
  */
 
@@ -11,30 +10,14 @@ use yii\bootstrap\ActiveForm;
 use yii\helpers\Html;
 use yii\helpers\Url;
 
+\app\cabinet\assets\ConversationAsset::register($this);
+
+
+$this->registerJsVar('ref', 'proposal_2/u_' . $model->user_id . '/p_' . $model->proposal_id . '/o_' . Yii::$app->getUser()->getId());
 ?>
 
     <div class="conversation">
-        <a onclick="$('#proposal-info').toggle();">
-            <h1>Заявка №<?= $proposal->id ?></h1>
-        </a>
-        <div id="proposal-info" style="display: none">
-        <?= \yii\widgets\DetailView::widget([
-            'model'      => $proposal,
-            'attributes' => [
-                'City',
-                'amount',
-                'date',
-                'time',
-                'comment',
-                'guests_count'
-            ]
-        ]); ?>
-        </div>
-
         <div id="messages-area">
-
-            <?= $this->render('_message_list', ['messages' => $messages]); ?>
-
         </div>
         <?php if ($proposal->status === Constants::PROPOSAL_STATUS_CREATED): ?>
 
@@ -59,10 +42,7 @@ use yii\helpers\Url;
 
             <?php ActiveForm::end(); ?>
         <?php endif; ?>
-
-
     </div>
-
 <?php
 
 $js = <<<JS
@@ -96,45 +76,3 @@ JS;
 
 $this->registerJs($js);
 
-$newMessagesUrl = Url::to(['conversation/new-messages']);
-$proposalId     = $proposal->id;
-$csrfParam      = Yii::$app->request->csrfParam;
-$csrfToken      = Yii::$app->request->getCsrfToken();
-$js             = <<<JS
-
-function scrollMessages(force = false) {
-    
-    if ($('#messages-area > div').last().offset() > 500 || force) {
-    
-      var scroll = $('#messages-area');
-      var height = scroll[0].scrollHeight;
-      scroll.scrollTop(height);
-  }
-}
-scrollMessages(true);
-function getNewMessages() {
-    
-    var lastMessage = $('#messages-area>div').last().data('id');
-    
-    
-    
-  $.ajax({
-        url: '$newMessagesUrl',
-        type: 'post',
-        data: {proposalId: '$proposalId', lastMessage: lastMessage, '$csrfParam': '$csrfToken'},
-        success: function (data) {
-            $('#messages-area').append(data);
-            scrollMessages();
-        },
-        error: function () {
-        }
-    });
-}
-
-setInterval(getNewMessages, 10000);
-
-
-JS;
-
-
-$this->registerJs($js, \yii\web\View::POS_END);

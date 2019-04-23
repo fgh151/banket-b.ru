@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "0ba7ddccc51483fd032cdb05c7e99369",
+  "content-hash": "90c3c66a3a763808eda7ab952bcfded4",
     "packages": [
         {
             "name": "2amigos/yii2-chartjs-widget",
@@ -151,7 +151,7 @@
             "version": "1.12.1",
             "source": {
                 "type": "git",
-                "url": "https://github.com/components/jqueryui.git",
+              "url": "git@github.com:components/jqueryui.git",
                 "reference": "44ecf3794cc56b65954cc19737234a3119d036cc"
             },
             "dist": {
@@ -181,6 +181,22 @@
                 "url": "https://api.github.com/repos/bestiejs/punycode.js/zipball/38c8d3131a82567bfef18da09f7f4db68c84f8a3",
                 "reference": "38c8d3131a82567bfef18da09f7f4db68c84f8a3",
                 "shasum": null
+            },
+          "type": "bower-asset"
+        },
+      {
+        "name": "bower-asset/react",
+        "version": "v16.1.0",
+        "source": {
+          "type": "git",
+          "url": "git@github.com:facebook/react-bower.git",
+          "reference": "0a2fda23ec873d50bafde1f7ae6d396ab32a490a"
+        },
+        "dist": {
+          "type": "zip",
+          "url": "https://api.github.com/repos/facebook/react-bower/zipball/0a2fda23ec873d50bafde1f7ae6d396ab32a490a",
+          "reference": "0a2fda23ec873d50bafde1f7ae6d396ab32a490a",
+          "shasum": null
             },
             "type": "bower-asset"
         },
@@ -1409,62 +1425,62 @@
           "time": "2018-11-01T15:53:38+00:00"
         },
       {
-          "name": "paragraph1/php-fcm",
-          "version": "0.7",
-          "source": {
-              "type": "git",
-              "url": "https://github.com/Paragraph1/php-fcm.git",
-              "reference": "17d32dc982ab2d1cfba64a62afd3e5b5c9a41639"
+        "name": "paragraph1/php-fcm",
+        "version": "0.7",
+        "source": {
+          "type": "git",
+          "url": "https://github.com/Paragraph1/php-fcm.git",
+          "reference": "17d32dc982ab2d1cfba64a62afd3e5b5c9a41639"
+        },
+        "dist": {
+          "type": "zip",
+          "url": "https://api.github.com/repos/Paragraph1/php-fcm/zipball/17d32dc982ab2d1cfba64a62afd3e5b5c9a41639",
+          "reference": "17d32dc982ab2d1cfba64a62afd3e5b5c9a41639",
+          "shasum": ""
+        },
+        "require": {
+          "guzzlehttp/guzzle": "^6.2",
+          "php": ">=5.5"
+        },
+        "require-dev": {
+          "mockery/mockery": "0.9.5",
+          "phpunit/phpunit": "4.8.*",
+          "satooshi/php-coveralls": "dev-master"
+        },
+        "type": "library",
+        "autoload": {
+          "psr-4": {
+            "paragraph1\\phpFCM\\": "src/"
+          }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+          "MIT"
+        ],
+        "authors": [
+          {
+            "name": "Patrick Albertini",
+            "email": "pa@paragraph1.de"
           },
-          "dist": {
-              "type": "zip",
-              "url": "https://api.github.com/repos/Paragraph1/php-fcm/zipball/17d32dc982ab2d1cfba64a62afd3e5b5c9a41639",
-              "reference": "17d32dc982ab2d1cfba64a62afd3e5b5c9a41639",
-              "shasum": ""
-          },
-          "require": {
-              "guzzlehttp/guzzle": "^6.2",
-              "php": ">=5.5"
-          },
-          "require-dev": {
-              "mockery/mockery": "0.9.5",
-              "phpunit/phpunit": "4.8.*",
-              "satooshi/php-coveralls": "dev-master"
-          },
-          "type": "library",
-          "autoload": {
-              "psr-4": {
-                  "paragraph1\\phpFCM\\": "src/"
-              }
-          },
-          "notification-url": "https://packagist.org/downloads/",
-          "license": [
-              "MIT"
-          ],
-          "authors": [
-              {
-                  "name": "Patrick Albertini",
-                  "email": "pa@paragraph1.de"
-              },
-              {
-                  "name": "Kai Bielenberg",
-                  "email": "kb@paragraph1.de"
-              }
-          ],
-          "description": "PHP application server for google firebase cloud messaging (FCM)",
-          "homepage": "https://github.com/Paragraph1/phpFCM",
-          "keywords": [
-              "FCM",
-              "Firebase Cloud Messaging",
-              "android",
-              "firebase",
-              "gcm",
-              "google",
-              "ios",
-              "notifications",
-              "php"
-          ],
-          "time": "2016-08-18T11:47:56+00:00"
+          {
+            "name": "Kai Bielenberg",
+            "email": "kb@paragraph1.de"
+          }
+        ],
+        "description": "PHP application server for google firebase cloud messaging (FCM)",
+        "homepage": "https://github.com/Paragraph1/phpFCM",
+        "keywords": [
+          "FCM",
+          "Firebase Cloud Messaging",
+          "android",
+          "firebase",
+          "gcm",
+          "google",
+          "ios",
+          "notifications",
+          "php"
+        ],
+        "time": "2016-08-18T11:47:56+00:00"
       },
         {
             "name": "psr/cache",
@@ -4889,6 +4905,9 @@
     "platform": {
       "php": ">=7.1.0",
         "ext-json": "*",
+      "ext-pgsql": "*",
+      "ext-gd": "*",
+      "ext-http": "*",
       "ext-curl": "*"
     },
     "platform-dev": []
