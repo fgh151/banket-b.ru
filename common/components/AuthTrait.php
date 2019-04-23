@@ -25,13 +25,15 @@ trait AuthTrait
      *
      * @param string|int $id the ID to be looked for
      *
-     * @return IdentityInterface the identity object that matches the given ID.
+     * @return array|ActiveRecord|IdentityInterface
      * Null should be returned if such an identity cannot be found
      * or the identity is not in an active state (disabled, deleted, etc.)
      */
     public static function findIdentity($id)
     {
-        return static::findOne(['id' => $id, 'status' => Constants::USER_STATUS_ACTIVE]);
+        /** @var ActiveRecord $class */
+        $class = get_called_class();
+        return $class::find()->where(['id' => $id, 'status' => Constants::USER_STATUS_ACTIVE])->one();
     }
 
     /**
