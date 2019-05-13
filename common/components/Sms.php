@@ -13,7 +13,7 @@ use yii\base\Component;
 use yii\base\Exception;
 use yii\helpers\ArrayHelper;
 
-class Sms extends Component
+class Sms extends Component implements SmsInterface
 {
 
 
@@ -42,7 +42,7 @@ class Sms extends Component
         $smsParams = [
             'datetime' => '',
             'key' => $key,
-            'sender' => 'restorate',
+            'sender' => 'banket-b',
             'sms_lifetime' => 1,
             'type' => 2,
 

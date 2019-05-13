@@ -9,6 +9,7 @@
 namespace app\console\controllers;
 
 
+use app\common\components\Smsc;
 use Exception;
 use yii\console\Controller;
 use yii\helpers\ArrayHelper;
@@ -95,4 +96,12 @@ class SmsController extends Controller
         return md5($resultString);
     }
 
+
+    public function actionSmsc()
+    {
+        $sms = new Smsc();
+        var_dump(
+            $sms->sendSms('test', '***REMOVED***')
+        );
+    }
 }
