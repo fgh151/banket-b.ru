@@ -21,12 +21,9 @@ use yii\helpers\Url;
 use yii\widgets\MaskedInput;
 
 $this->title = 'Регистрация';
-$this->params['breadcrumbs'][] = $this->title;
 ?>
     <div class="site-signup">
         <h1><?= Html::encode($this->title) ?></h1>
-
-        <p>Для регистрации заполните форму ниже:</p>
 
         <div class="row">
             <div class="col-lg-5">
@@ -201,8 +198,15 @@ $this->params['breadcrumbs'][] = $this->title;
                 <?= $form->field($model, 'email') ?>
                 <?= $form->field($model, 'url') ?>
 
-                <?= $form->field($model, 'password')->passwordInput() ?>
-                <?= $form->field($model, 'confirm_password')->passwordInput() ?>
+                <div class="row">
+                    <div class="col-xs-6">
+                        <?= $form->field($model, 'password')->passwordInput() ?>
+                    </div>
+                    <div class="col-xs-6">
+                        <?= $form->field($model, 'confirm_password')->passwordInput() ?>
+                    </div>
+                </div>
+
 
                 <div class="form-group">
                     <?= Html::submitButton('Зарегистрироваться',

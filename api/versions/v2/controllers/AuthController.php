@@ -34,9 +34,10 @@ class AuthController extends Controller
                 return $response;
             }
 
+
             $model->login();
             return [
-                'access_token' => Yii::$app->getUser()->getIdentity()->getAuthKey(),
+                'access_token' => $model->getUser()->getAuthKey(),
                 'id' => (string)Yii::$app->getUser()->getId()
             ];
         }

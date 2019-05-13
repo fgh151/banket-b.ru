@@ -1,57 +1,58 @@
 <?php
 /**
  * @var $this \yii\web\View
- * @var $datProvider \yii\data\ActiveDataProvider
+ * @var $dataProvider \yii\data\ActiveDataProvider
  */
 
+use yii\helpers\Html;
 use yii\widgets\ListView;
 
 ?>
+
 <div class="row">
     <div class="col-xs-12">
-        <div class="panel">
+        <?= Html::a('Добавить', ['create'], ['class' => 'btn btn-success']) ?>
+    </div>
+</div>
 
-            <?= \yii\helpers\Html::a('Добавить', ['create'], ['class' => 'btn btn-success']) ?>
-
-            <?= ListView::widget([
-                'dataProvider' => $dataProvider,
-                'itemView' => '_promo_item',
-                'options' => [
-
-                    'class' => 'row',
-                ],
-                'itemOptions' => [
-                    'class' => 'col-xs-12'
-                ]
-            ]) ?>
-
-            <?php /*= GridView::widget([
-                'dataProvider' => $dataProvider,
-                'columns'      => [
-                    ['class' => 'yii\grid\SerialColumn'],
-                    [
-                        'attribute' => 'title',
-                        'value'     => function (Promo $model) {
-                            return Html::a($model->title,
-                                ['promo/update', 'id' => $model->id]);
-                        },
-                        'format'    => 'raw'
-                    ],
-                    [
-                        'attribute' => 'image',
-                        'value'     => function (Promo $model) {
-                            return '/' . \Yii::$app->imageresize->getUrl('@app/web/' . $model->image,
-                                    200, 200);
-                        },
-                        'format'    => 'image'
-                    ],
-                    'link:url',
-                    'browsingCount:integer:Просмотры',
-                    'redirectCount:integer:переходы'
-//            ['class' => 'yii\grid\ActionColumn'],
-                ]
-            ]); */ ?>
+<div class="panel-header hidden-xs proposal-columns">
+    <div class="panel-heading">
+        <div class="row">
+            <div class="col-sm-2">
+                Текст
+            </div>
+            <div class="col-sm-2">
+                Изображение
+            </div>
+            <div class="col-sm-4">
+                Ссылка
+            </div>
+            <div class="col-sm-2">
+                Просмотры
+            </div>
+            <div class="col-sm-2">
+                Переходы
+            </div>
         </div>
     </div>
+</div>
+<div class="row">
+    <div class="col-xs-12">
 
+
+        <?= ListView::widget([
+
+            'layout' => "{items}\n<div class='col-xs-12 text-center'>{pager}</div>",
+            'dataProvider' => $dataProvider,
+
+            'itemView' => '_promo_item',
+            'options' => [
+
+                'class' => 'row',
+            ],
+            'itemOptions' => [
+                'class' => 'col-xs-12'
+            ]
+        ]) ?>
+    </div>
 </div>

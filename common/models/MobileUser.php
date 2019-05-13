@@ -30,8 +30,6 @@ class MobileUser extends ActiveRecord implements IdentityInterface
 
     public $password;
 
-    public $name;
-
     /**
      * {@inheritdoc}
      */

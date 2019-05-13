@@ -9,12 +9,23 @@
 
 namespace app\common\components;
 
-include_once "smsc_api.php";
 
+use integready\smsc\SMSCenter;
+use Yii;
 use yii\base\Component;
 
 class Smsc extends Component implements SmsInterface
 {
+    /**
+     * @var SMSCenter
+     */
+    private $gateway;
+
+    public function init()
+    {
+        $this->gateway = Yii::$app->SMSCenter;
+        parent::init();
+    }
 
     /**
      * @param $text string
@@ -23,7 +34,6 @@ class Smsc extends Component implements SmsInterface
      */
     public function sendSms($text, $phone)
     {
-        return send_sms($phone, $text);
-
+        $this->gateway->send($phone, $text);
     }
 }

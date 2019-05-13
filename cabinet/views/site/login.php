@@ -9,7 +9,6 @@ use yii\bootstrap\ActiveForm;
 use yii\helpers\Html;
 
 $this->title = 'Вход';
-$this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="site-login">
     <h1><?= Html::encode($this->title) ?></h1>
@@ -24,10 +23,10 @@ $this->params['breadcrumbs'][] = $this->title;
 
                 <?= $form->field($model, 'rememberMe')->checkbox() ?>
 
-                <div style="color:#999;margin:1em 0">
+            <?php /*<div style="color:#999;margin:1em 0">
                     Если вы забыли пароль, вы
                     можете <?= Html::a('восстановить его', ['site/request-password-reset']) ?>.
-                </div>
+                </div> */ ?>
 
                 <div class="form-group">
                     <?= Html::submitButton('Войти', ['class' => 'btn btn-primary', 'name' => 'login-button']) ?>

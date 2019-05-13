@@ -1,206 +1,457 @@
-html,
-body {
-    height: 100%;
-
-    background: #69f;
-    background-image: -webkit-gradient(linear, left top, left bottom, from(#69f), to(#03c));
-    background-image: linear-gradient(to bottom, #69f, #03c);
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#6699ff', endColorstr='#0033cc', GradientType=0);
-    background-attachment: fixed;
+:root {
+    --white: #ffffff;
+    --red: #D0021B;
+    --green: #7ED321;
+    --light-black: rgba(0, 0, 0, .5);
+    --blue: #0C21E2
 }
 
-html {
+body {
+    font-family: "LatoWeb";
+    font-style: normal;
+    font-weight: normal;
+    font-size: 15px;
+    line-height: 18px;
+    color: #333;
+    background-color: #fff;
 
+    padding-bottom: 50px;
+}
+
+h1 {
+    font-style: normal;
+    font-weight: bold;
+    font-size: 36px;
+    line-height: 44px;
+}
+
+.navbar {
+    background-color: var(--white);
+
+    border-bottom: 1px solid #dddddd;
+}
+
+.navbar-brand img {
+    display: inline-block;
+}
+
+.navbar-brand {
+    color: #000000;
+    font-size: 20px;
+    line-height: 24px;
+}
+
+.navbar-brand .app-description {
+    color: rgba(0, 0, 0, .5);
+}
+
+.navbar-nav > li.active {
+    background-color: var(--blue);
+}
+
+
+.navbar-nav > li.active a {
+    color: #ffffff;
+}
+
+.navbar-nav a {
+    color: #000000;
+}
+
+.logout-form {
+    padding-top: 9px;
+}
+
+.logout {
+    color: #000000;
+}
+
+.nav > li > a:hover, .nav > li > a:focus {
+    color: var(--blue);
 }
 
 .wrap {
-    min-height: 100%;
-    height: auto;
-    margin: 0 auto -60px;
-    padding: 0 0 60px;
+    padding-top: 88px;
 }
 
-.wrap > .container {
-    padding: 70px 15px 20px;
-    background: #fff;
+.breadcrumb > li + li:before {
+    padding: 0;
+    color: inherit;
+    content: "";
 }
 
-.footer {
-    height: 60px;
-    background-color: #f5f5f5;
-    border-top: 1px solid #ddd;
-    padding-top: 20px;
+.breadcrumb a {
+    color: #000000;
+    font-size: 20px;
+    line-height: 24px;
 }
 
-.jumbotron {
-    text-align: center;
-    background-color: transparent;
+.breadcrumb > .active {
+    color: #000000;
 }
 
-.jumbotron .btn {
-    font-size: 21px;
-    padding: 14px 24px;
+.breadcrumb {
+    background-color: inherit;
 }
 
-.not-set {
-    color: #c55;
-    font-style: italic;
+.page-title {
+    margin-top: -36px;
 }
 
-/* add sorting icons to gridview sort links */
-a.asc:after, a.desc:after {
-    position: relative;
-    top: 1px;
-    display: inline-block;
-    font-family: 'Glyphicons Halflings';
-    font-style: normal;
-    font-weight: normal;
-    line-height: 1;
-    padding-left: 5px;
-}
-
-a.asc:after {
-    content: "\e151";
-}
-
-a.desc:after {
-    content: "\e152";
-}
-
-.sort-numerical a.asc:after {
-    content: "\e153";
-}
-
-.sort-numerical a.desc:after {
-    content: "\e154";
-}
-
-.sort-ordinal a.asc:after {
-    content: "\e155";
-}
-
-.sort-ordinal a.desc:after {
-    content: "\e156";
-}
-
-.grid-view td {
-    /*white-space: nowrap;*/
-}
-
-.grid-view .filters input,
-.grid-view .filters select {
-    min-width: 50px;
-}
-
-.hint-block {
+.page-title h1, .page-title .form-inline {
     display: block;
-    margin-top: 5px;
-    color: #999;
+    float: left;
 }
 
-.error-summary {
-    color: #a94442;
-    background: #fdf7f7;
-    border-left: 3px solid #eed3d7;
-    padding: 10px 20px;
-    margin: 0 0 15px 0;
+#proposal-search {
+    padding-top: 30px;
 }
 
-/* align the logout "link" (button in form) of the navbar */
-.nav li > form > button.logout {
-    padding: 15px;
-    border: none;
+.panel-header {
+    margin-bottom: 10px;
+    background: #F5F5F5;
+    border-radius: 5px;
 }
 
-@media(max-width:767px) {
-    .nav li > form > button.logout {
-        display:block;
-        text-align: left;
-        width: 100%;
-        padding: 10px 15px;
-    }
-}
+.proposal-columns {
+    font-size: 13px;
+    line-height: 16px; /* identical to box height, or 123% */
 
-.nav > li > form > button.logout:focus,
-.nav > li > form > button.logout:hover {
-    text-decoration: none;
-}
+    color: #000000;
 
-.nav > li > form > button.logout:focus {
-    outline: none;
-}
+    mix-blend-mode: normal;
+    opacity: 0.5;
 
-.site-login {
-    background: #fff;
-
-    padding: 15px;
-}
-
-.navbar-inverse {
-    background-color: #036;
-    border-color: #a4b7c1;
+    padding: 15px 0;
 }
 
 .proposal-item {
-    border: 1px solid #c2cfd6;
+    background: #FFFFFF;
+    border: 1px solid #DDDDDD;
+    box-sizing: border-box;
+    border-radius: 5px;
+    margin: 10px auto;
+    display: block;
+    padding: 28px;
+    color: #000000;
 }
 
-.proposal-item > header:after, .proposal-item > footer:after {
-    display: table;
+.proposal-item:hover {
+    background-color: #f8f8f8;
+}
+
+.proposal-item-time {
+    font-size: 16px;
+    line-height: 19px;
+
+    margin: 10px 0 0 0;
+
+}
+
+.proposal-item-type {
+    font-size: 13px;
+    line-height: 16px; /* identical to box height, or 123% */
+    color: #000000;
+    mix-blend-mode: normal;
+    opacity: 0.5;
+}
+
+.waiting-cost {
+    font-size: 16px;
+    line-height: 19px; /* identical to box height, or 119% */
+    color: var(--light-black);
+}
+
+.best-cost {
+    font-size: 16px;
+    line-height: 19px; /* identical to box height, or 119% */
+    color: var(--green);
+}
+
+.not-best-cost {
+    font-size: 16px;
+    line-height: 19px; /* identical to box height, or 119% */
+    color: var(--red);
+}
+
+.waiting-cost:before {
+    background-color: var(--light-black);
+}
+
+.best-cost:before {
+
+    background-color: var(--green);
+}
+
+.not-best-cost:before {
+
+    background-color: var(--red);
+}
+
+.cost-description:before {
     content: '';
-    clear: both;
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border-radius: 5px;
+    margin-right: 10px;
 }
 
-.proposal-item > footer {
-    background-color: #f0f3f5;
-    margin-left: -15px;
-    margin-right: -15px;
+.proposal-id {
+    color: var(--light-black);
+    font-size: 13px;
+    line-height: 16px;
+    padding-left: 20px;
 }
 
-.proposal-item footer.extendet {
-    display: none;
+.dialog-element {
+    border: 1px solid #DDDDDD;
+    box-sizing: border-box;
+    border-radius: 5px;
+
+    padding: 27px 23px 31px 31px;
+    margin-bottom: 10px;
 }
 
-.proposal-footer {
-    cursor: pointer;
+.service-items {
+    margin: 0 -10px;
 }
 
-.conversation {
-    background: #ffffff;
-
-    padding: 15px;
+.service {
+    display: inline-block;
+    margin: 10px;
+    background: #C2C2C2;
+    border-radius: 20px;
+    padding: 5px 10px;
+    color: var(--white);
+    font-size: 15px;
+    line-height: 18px;
 }
 
-.grid-view td {
-    white-space: normal;
+@media (min-width: 768px) {
+    .mobile-btn-chat {
+        display: none !important;
+    }
+
+    .cost-column {
+        padding-top: 0 !important;
+    }
+
+
+    .show-mobile {
+        display: none;
+    }
+
+    .list-guests-count {
+        padding-top: 0 !important;
+    }
+
+    .proposal-item-time {
+        margin-top: 0 !important;
+    }
 }
 
-.proposal-inactive {
+@media (max-width: 768px) {
+    #chart-aside {
+        position: absolute;
+        top: 60px;
+        left: 0;
 
-    background-color: rgba(102, 153, 255, .5) !important;
+        display: none;
+    }
+
+
+    .panel-default > .panel-heading {
+        background-color: var(--white);
+    }
+
+    #chart-aside {
+        padding-left: 0;
+        padding-right: 0;
+    }
+
+    #chart-aside > .panel {
+        margin-bottom: 0;
+    }
+
+    .messages-area {
+        height: calc(100vh - 200px);
+    }
+
+    .navbar-brand {
+        font-size: 19px;
+        line-height: 23px;
+    }
+
+    .proposal-owner > span, .proposal-owner > svg {
+        display: block;
+        float: left;
+
+
+        margin-top: 25px !important;
+        margin-left: -38px !important;
+    }
+
+    .proposal-owner > span {
+        margin-top: 37px;
+        /*12px;*/
+        margin-left: 10px;
+    }
+
+
+    .proposal-mobile-header {
+        width: calc(100% + 57px);
+        margin-left: -29px;
+        border-bottom: 1px solid #DDDDDD;
+        padding-left: 43px;
+
+        padding-bottom: 15px;
+        margin-bottom: 15px;
+    }
+
+    .my-price-description {
+        margin-bottom: 0;
+    }
+
+    .proposal-item-cost-form {
+        margin-top: 10px;
+    }
 }
 
-.conversation a h1 {
-    cursor: pointer;
+.proposal-info button.mobile-btn-chat {
+    background-color: var(--blue);
+    color: var(--white);
+    border-radius: 5px;
+    border: none;
+    outline: none;
+    margin-bottom: 10px;
+    width: 100%;
+    font-size: 18px;
+    line-height: 22px;
+    padding: 10px;
 }
 
-/*@media screen and (max-width:  500px){*/
-/*.battle-index tr th:nth-child(2),*/
-/*.battle-index tr th:nth-child(4),*/
-/*.battle-index tr th:nth-child(7),*/
-/*.battle-index tr th:nth-child(8),*/
-/*.battle-index tr th:nth-child(9),*/
-/*.battle-index tr th:nth-child(10) {*/
-/*display: none;*/
-/*}*/
+.navbar-toggle .icon-bar {
+    background-color: #000000;
+}
 
-/*.battle-index tr td:nth-child(2),*/
-/*.battle-index tr td:nth-child(4),*/
-/*.battle-index tr td:nth-child(7),*/
-/*.battle-index tr td:nth-child(8),*/
-/*.battle-index tr td:nth-child(9),*/
-/*.battle-index tr td:nth-child(10) {*/
-/*display: none;*/
-/*}*/
+.cost-btn {
+    background: #0C21E2;
+    border-radius: 20.5px;
+    color: var(--white);
+    font-size: 16px;
+    line-height: 19px;
+    padding: 5px 10px;
+}
 
-/*}*/
+.p-t-20 {
+    padding-top: 20px;
+}
+
+.my-price {
+    font-size: 16px;
+    line-height: 19px; /* or 119% */
+    color: #7A00FF;
+}
+
+.my-price-description {
+    font-size: 13px;
+    line-height: 16px;
+    color: var(--light-black);
+}
+
+h2.closed-proposals {
+    font-style: normal;
+    font-weight: bold;
+    font-size: 20px;
+    line-height: 24px; /* identical to box height, or 120% */
+    color: #000000;
+    mix-blend-mode: normal;
+    opacity: 0.3;
+}
+
+.closed-proposals {
+    opacity: .3;
+}
+
+#proposal-search {
+    margin-left: 20px;
+}
+
+.pagination > .active > a, .pagination > .active > span, .pagination > .active > a:hover, .pagination > .active > span:hover, .pagination > .active > a:focus, .pagination > .active > span:focus {
+    background-color: var(--blue);
+    border-color: var(--blue);
+}
+
+.pagination > li > a, .pagination > li > span {
+    color: var(--blue);
+}
+
+.btn-success {
+    color: #fff;
+    background-color: var(--blue);
+    border-color: var(--blue);
+}
+
+.btn-primary {
+    color: #fff;
+    background-color: var(--blue);
+    border-color: var(--blue);
+}
+
+
+.btn-success:hover {
+    color: #fff;
+    background-color: var(--blue);
+    border-color: var(--blue);
+}
+
+.btn-danger {
+    color: #fff;
+    background-color: var(--red);
+    border-color: #d43f3a;
+}
+
+.proposal-info .control-label {
+    font-size: 13px;
+    line-height: 16px;
+    color: var(--light-black);
+}
+
+.proposal-info button {
+    font-size: 16px;
+    line-height: 19px; /* identical to box height, or 119% */
+
+    color: #4D00FB;
+    background: inherit;
+    border: none;
+}
+
+.p-t-30 {
+    padding-top: 30px;
+}
+
+.proposal-owner-name {
+    left: 87px;
+    position: absolute;
+    top: 23px;
+}
+
+.mobile-cost-form {
+    margin-top: 15px;
+}
+
+.my-cost + .cost-btn {
+    margin-left: 10px;
+}
+
+.p-t-5 {
+    padding-top: 5px;
+}
+
+.m-b-0 {
+    margin-bottom: 0;
+}
+
+.mobile-breadcrumbs {
+}

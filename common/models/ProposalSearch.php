@@ -13,6 +13,8 @@ class ProposalSearch extends Proposal
 {
     public $rejected;
 
+    public $order;
+
     /**
      * {@inheritdoc}
      */
@@ -23,6 +25,7 @@ class ProposalSearch extends Proposal
             [['City', 'date', 'time', 'comment', 'status', 'rejected'], 'safe'],
             [['amount'], 'number'],
             [['dance', 'private', 'own_alcohol', 'parking'], 'boolean'],
+            ['order', 'in', 'range' => ['date']]
         ];
     }
 
@@ -52,6 +55,11 @@ class ProposalSearch extends Proposal
             'query' => $query,
             'sort' => ['defaultOrder' => ['date' => SORT_DESC]]
         ]);
+
+        if ($this->order) {
+            $dataProvider->sort = ['defaultOrder' => [$this->order => SORT_DESC]];
+        }
+
 
         $this->load($params);
 
@@ -110,7 +118,6 @@ class ProposalSearch extends Proposal
                 'id', $this->rejected]);
         }
 
-//        var_dump($query->createCommand()->getRawSql()); die;
 
         return $dataProvider;
     }

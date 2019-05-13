@@ -1,11 +1,14 @@
 <?php
 
+use AprSoft\Dropify\DropifyAsset;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
 /* @var $this yii\web\View */
 /* @var $model app\common\models\Promo */
 /* @var $form yii\widgets\ActiveForm */
+
+DropifyAsset::register($this);
 ?>
 
 <div class="promo-form">
@@ -17,7 +20,7 @@ use yii\widgets\ActiveForm;
 
     <p>Оптимальный размер изображения 255 х 130 пикселей</p>
     <?= $form->field($model,
-        'file_input')->fileInput(['maxlength' => true])->label('Поставить картинку') ?>
+        'file_input')->fileInput(['class' => 'dropify'])->label('Поставить картинку') ?>
 
     <?= $form->field($model,
         'link')->textInput(['maxlength' => true])->label('Разместить ссылку') ?>
@@ -38,3 +41,15 @@ use yii\widgets\ActiveForm;
     <?php ActiveForm::end(); ?>
 
 </div>
+
+<?php
+$js = <<<JS
+$('.dropify').dropify({messages: {
+        'default': 'Перетащите файл или нажмите для добавления',
+        'replace': 'Перетащите файл или нажмите для изменения',
+        'remove':  'Удалить',
+        'error':   'Что то пошло не так.'
+    }});
+JS;
+
+$this->registerJs($js);

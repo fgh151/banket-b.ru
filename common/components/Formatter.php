@@ -31,4 +31,9 @@ class Formatter extends \yii\i18n\Formatter
         return preg_replace('!(((f|ht)tp(s)?://)[-a-zA-Zа-яА-Я()0-9@:%_+.~#?&;//=]+)!i', '<a href="$1">$1</a>', $text);
     }
 
+    public static function asRubles($value)
+    {
+        return number_format($value, 0, '.', ' ');
+    }
+
 }

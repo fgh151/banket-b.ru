@@ -15,6 +15,8 @@ use yii\widgets\ListView;
 
 <?php if ($currentProposal->isActual() !== ($nextProposal && $nextProposal->isActual())) : ?>
     <div class="col-xs-12">
-        Закрытые заявки
+        <h2 class="closed-proposals">
+            Закрытые заявки
+        </h2>
     </div>
 <?php endif; ?>

@@ -76,12 +76,13 @@ class SignupForm extends Model
             'address'          => 'Адрес',
             'contact'          => 'Контактное лицо',
             'phone'            => 'Контактный телефон',
-            'confirm_password' => 'Повторите пароль',
+            'confirm_password' => 'Пароль еще раз',
             'password'         => 'Пароль',
             'activities'       => 'Деятельность компании',
-            'url'              => 'Web сайт',
+            'url' => 'Веб - сайт',
             'city_id'          => 'Город',
-            'district_id'      => 'Район'
+            'district_id' => 'Район',
+            'email' => 'Электронная почта'
         ];
     }
 

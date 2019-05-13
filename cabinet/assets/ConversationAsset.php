@@ -27,6 +27,7 @@ class ConversationAsset extends AssetBundle
     ];
 
     public $depends = [
+        MomentJsAsset::class,
         FirebaseAsset::class,
         ReactAsset::class
     ];

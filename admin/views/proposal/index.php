@@ -37,20 +37,6 @@ $this->params['breadcrumbs'][] = $this->title;
             'date',
             'time',
             'created_at:datetime',
-            [
-                'label' => 'Прямая заявка',
-                'value' => function (Proposal $model) {
-                    if (is_array($model->getDirectOrganizations())) {
-                        return implode('<br />', $model->getDirectOrganizations());
-                    }
-                    return '';
-                },
-                'format' => 'html'
-            ],
-
-
-
-
             //'guests_count',
             //'amount',
             //'type',

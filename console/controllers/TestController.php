@@ -13,6 +13,8 @@ use app\common\components\Constants;
 use app\common\models\Message;
 use app\common\models\Organization;
 use app\common\models\Proposal;
+use GuzzleHttp\Psr7\Uri;
+use Kreait\Firebase\Database;
 use paragraph1\phpFCM\Client;
 use paragraph1\phpFCM\Message as FCMMessage;
 use paragraph1\phpFCM\Notification;
@@ -32,8 +34,8 @@ class TestController extends Controller
     public function actionMail()
     {
 
-        print_r(Yii::$app->mailqueue);
-        die;
+//        print_r(Yii::$app->mailqueue);
+//        die;
 
 
         print_r(Yii::$app->mailqueue->compose()
@@ -109,5 +111,36 @@ class TestController extends Controller
             ->all();*/
 
         var_dump($p->getMinPrice());
+    }
+
+
+    public function actionFirebase()
+    {
+        /** @var Database $database */
+        $database = Yii::$app->firebase->getDatabase();
+
+        $ref = $database
+            ->getReference('/proposal_2/u_64/p_218/o_1')
+            ->orderByChild('author_class')
+            ->equalTo('app\common\models\Organization');
+
+        $uri = $ref->getUri();
+        $filter = new Uri('https://banket-b.firebaseio.com/' . $uri->getPath() . '?' . $uri->getQuery());
+
+//        var_dump($filter);
+
+        $ref1 = $database->getReferenceFromUrl($filter);
+
+//            ->getUri();
+//            ->orderByChild('cost')
+//            ->limitToLast(2);
+        ;
+
+//        $ref = $database->getReferenceFromUrl($firstFilterUri);
+//        $ref->orderByChild('cost')
+//            ->limitToLast(1)
+//        ->getSnapshot();
+
+        var_dump($ref->getValue());
     }
 }
