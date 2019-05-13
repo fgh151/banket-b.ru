@@ -8,6 +8,7 @@
 
 namespace app\cabinet\controllers;
 
+use app\cabinet\components\CabinetController;
 use app\common\components\Constants;
 use app\common\models\Organization;
 use app\common\models\OrganizationProposalStatus;
@@ -16,9 +17,8 @@ use app\common\models\ProposalSearch;
 use Yii;
 use yii\data\ActiveDataProvider;
 use yii\filters\AccessControl;
-use yii\web\Controller;
 
-class BattleController extends Controller
+class BattleController extends CabinetController
 {
     use CheckPayTrait;
 
@@ -78,7 +78,6 @@ class BattleController extends Controller
             $searchModel->guests_count = 8;
 
             $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-
 
 
         } else {

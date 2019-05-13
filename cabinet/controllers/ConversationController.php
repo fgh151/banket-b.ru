@@ -9,12 +9,12 @@
 namespace app\cabinet\controllers;
 
 use app\admin\components\ProposalFindOneTrait;
+use app\cabinet\components\CabinetController;
 use app\common\models\Cost;
 use Yii;
 use yii\filters\AccessControl;
-use yii\web\Controller;
 
-class ConversationController extends Controller
+class ConversationController extends CabinetController
 {
     use ProposalFindOneTrait, CheckPayTrait;
 

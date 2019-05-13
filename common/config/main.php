@@ -46,6 +46,23 @@ return [
 //                'encryption' => 'ssl', // у яндекса SSL
             ],
         ],
+        'testmailer' => [
+            'class' => 'yii\swiftmailer\Mailer',
+            'viewPath' => '@common/mail',
+            // send all mails to a file by default. You have to set
+            // 'useFileTransport' to false and configure a transport
+            // for the mailer to send real emails.
+            'useFileTransport' => false,
+            'transport' => [
+                'class' => 'Swift_SmtpTransport',
+                'host' => 'smtp.yandex.ru',
+                'username' => 'fedor@support-pc.org',
+                'password' => 'idr4mvnax',
+                'port' => '587',
+                'encryption' => 'tls', // у яндекса SSL
+
+            ],
+        ],
         'queue' => [
             'class' => \yii\queue\db\Queue::class,
             'db' => 'db', // DB connection component or its config

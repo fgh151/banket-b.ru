@@ -2,6 +2,7 @@
 
 namespace app\cabinet\controllers;
 
+use app\cabinet\components\CabinetController;
 use app\cabinet\models\ContactForm;
 use app\cabinet\models\LoginForm;
 use app\cabinet\models\PasswordResetRequestForm;
@@ -25,13 +26,12 @@ use yii\helpers\FileHelper;
 use yii\helpers\Json;
 use yii\helpers\Url;
 use yii\web\BadRequestHttpException;
-use yii\web\Controller;
 use yii\web\UploadedFile;
 
 /**
  * Site controller
  */
-class SiteController extends Controller
+class SiteController extends CabinetController
 {
     use CheckPayTrait;
 
@@ -622,5 +622,11 @@ class SiteController extends Controller
         return $this->render('resetPassword', [
             'model' => $model,
         ]);
+    }
+
+    public function actionUnsubscribe()
+    {
+
+        return $this->render('unsubscribe');
     }
 }

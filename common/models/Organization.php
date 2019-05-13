@@ -7,6 +7,7 @@ use app\common\components\behaviors\FileUploadBehavior;
 use app\common\components\Constants;
 use app\common\models\geo\GeoCity;
 use yii\db\ActiveRecord;
+use yii\helpers\Url;
 use yii\validators\ExistValidator;
 use yii\web\IdentityInterface;
 
@@ -49,6 +50,8 @@ use yii\web\IdentityInterface;
  *
  * @property double $latitude
  * @property double $longitude
+ *
+ * @property boolean unsubscribe
  *
  */
 class Organization extends ActiveRecord implements IdentityInterface
@@ -116,7 +119,8 @@ class Organization extends ActiveRecord implements IdentityInterface
             [['state', 'state_statistic', 'state_promo', 'state_direct'],'default', 'value' => Constants::ORGANIZATION_STATE_FREE],
             [['password', 'url', 'image_field'], 'safe'],
             ['city_id', ExistValidator::class, 'targetClass' => GeoCity::class, 'targetAttribute' => 'id'],
-            ['rating', 'number', 'max' => 10, 'min' => 0]
+            ['rating', 'number', 'max' => 10, 'min' => 0],
+            ['unsubscribe', 'boolean']
         ];
     }
 
@@ -165,7 +169,8 @@ class Organization extends ActiveRecord implements IdentityInterface
             'password' => 'Пароль',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
-            'district_id' => 'Район'
+            'district_id' => 'Район',
+            'unsubscribe' => 'Получать уведомления'
         ];
     }
 
@@ -240,5 +245,19 @@ class Organization extends ActiveRecord implements IdentityInterface
     public function getCity()
     {
         return $this->hasOne(GeoCity::class, ['id' => 'city_id']);
+    }
+
+    public function getUnsubscribeUrl()
+    {
+        return Url::to(['site/unsubscribe', 'uid' => $this->id, 'hash' => $this->getHash()], true);
+    }
+
+    /**
+     * @return string
+     */
+    public function getHash()
+    {
+        $salt = '10tit9Waey8ffMo1quae7Halichu4e2OoZoo0Ah14d4';
+        return substr(md5($salt . $this->id), 0, 40);
     }
 }

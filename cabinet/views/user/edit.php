@@ -18,7 +18,8 @@ use yii\widgets\ActiveForm;
 <div class="profile-edit">
     <?php $form = ActiveForm::begin(['id' => 'update']); ?>
 
-<?= $form->field($model, 'name'); ?>
+    <?= $form->field($model, 'unsubscribe')->checkbox(); ?>
+    <?= $form->field($model, 'name'); ?>
 <?= $form->field($model, 'address')->textarea(); ?>
     <?= $form->field($model, 'district_id')->dropDownList($districts); ?>
     <?php DynamicFormWidget::begin([

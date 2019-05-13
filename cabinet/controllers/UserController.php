@@ -9,6 +9,7 @@
 namespace app\cabinet\controllers;
 
 
+use app\cabinet\components\CabinetController;
 use app\common\components\Model;
 use app\common\models\District;
 use app\common\models\Metro;
@@ -19,9 +20,8 @@ use app\common\models\RestaurantParams;
 use Yii;
 use yii\filters\AccessControl;
 use yii\helpers\ArrayHelper;
-use yii\web\Controller;
 
-class UserController extends Controller
+class UserController extends CabinetController
 {
     /** @noinspection PhpUndefinedClassInspection */
 

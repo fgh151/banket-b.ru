@@ -9,15 +9,15 @@
 namespace app\cabinet\controllers;
 
 
+use app\cabinet\components\CabinetController;
 use app\common\models\Promo;
 use yii\data\ActiveDataProvider;
 use yii\filters\AccessControl;
 use yii\helpers\FileHelper;
-use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\web\UploadedFile;
 
-class PromoController extends Controller
+class PromoController extends CabinetController
 {
     use CheckPayTrait;
 

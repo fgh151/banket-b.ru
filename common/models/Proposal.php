@@ -5,6 +5,7 @@ namespace app\common\models;
 
 use app\common\components\Constants;
 use app\common\models\geo\GeoCity;
+use nterms\mailqueue\MailQueue;
 use Yii;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
@@ -289,22 +290,22 @@ class Proposal extends ActiveRecord
 
             $recipients = Organization::find()
 //                ->where(['state' => Constants::ORGANIZATION_STATE_PAID])
+                ->where(['unsubscribe' => true])
                 ->Where(['NOT ILIKE', 'email', 'banket-b.ru'])
                 ->all();
             foreach ($recipients as $recipient) {
+                /** @var MailQueue $m */
+                $m = Yii::$app->mailqueue;
 
+                $m->getView()->params['recipient'] = $recipient;
 
-                $text = "Здравствуйте, в ваш ресторан $recipient->name поступила новая заявка №$this->id на проведение банкета. 
-            Для просмотра заявки зайдите в личный кабинет <a href=\"https://banket-b.ru/conversation/index/' . $this->id . '\">ссылка</a>.
-            С уважение, команда Банкет Батл.
-            ";
-
-
-                Yii::$app->mailqueue->compose()
+                $m->compose('proposal-html', [
+                    'proposal' => $this,
+                    'recipient' => $recipient
+                ])
                     ->setFrom(Yii::$app->params['adminEmail'])
                     ->setTo($recipient->email)
                     ->setSubject('Новая заявка')
-                    ->setHtmlBody($text)
                     ->queue();
             }
             Yii::$app->mailqueue->compose()

@@ -22,6 +22,7 @@ use paragraph1\phpFCM\Recipient\Device;
 use Yii;
 use yii\console\Controller;
 use yii\queue\db\Queue;
+use yii\swiftmailer\Mailer;
 
 class TestController extends Controller
 {
@@ -37,14 +38,19 @@ class TestController extends Controller
 //        print_r(Yii::$app->mailqueue);
 //        die;
 
+        /** @var Mailer $m */
+        $m = Yii::$app->testmailer;
 
-        print_r(Yii::$app->mailqueue->compose()
-            ->setFrom(Yii::$app->params['adminEmail'])
+        $m->getView()->params['recipient'] = Organization::findOne(1);
+
+        $m->compose('proposal-html', [
+            'proposal' => Proposal::findOne(74),
+            'recipient' => Organization::findOne(1)
+        ])
+            ->setFrom('fedor@support-pc.org')
             ->setTo('fedor@support-pc.org')
-            ->setSubject('banket-b')
-            ->setTextBody('banket-b')
-            ->queue());
-//            ->send());
+            ->setSubject('banket-b test message')
+            ->send();
     }
 
     public function actionQeue()

@@ -40,6 +40,13 @@ return [
                 ],
             ],
         ],
+        'urlManager' => [
+            'class' => 'yii\web\UrlManager',
+            'scriptUrl' => 'https://banket-b.ru', // Setup your domain
+            'baseUrl' => 'https://banket-b.ru', // Setup your domain
+            'enablePrettyUrl' => true,
+            'showScriptName' => false,
+        ],
     ],
     'params' => $params,
 ];
