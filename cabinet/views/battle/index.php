@@ -1,7 +1,6 @@
 <?php
 
 use app\common\models\Proposal;
-use yii\bootstrap\ActiveForm;
 use yii\widgets\ListView;
 
 /**
@@ -18,7 +17,7 @@ $this->title = 'Заявки';
     <div class="page-title clearfix">
         <h1><?= $this->title ?></h1>
 
-        <?php $form = ActiveForm::begin([
+        <?php /* $form = ActiveForm::begin([
             'layout' => 'inline',
             'method' => 'get',
             'id' => 'proposal-search'
@@ -26,7 +25,7 @@ $this->title = 'Заявки';
         <?= $form->field($searchModel, 'order')
             ->dropDownList(['date' => 'Самые новые'], ['prompt' => 'Сортировка'])
             ->label(false); ?>
-        <?php ActiveForm::end(); ?>
+        <?php ActiveForm::end(); */ ?>
 
     </div>
 

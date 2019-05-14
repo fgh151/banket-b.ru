@@ -366,13 +366,12 @@ class SiteController extends CabinetController
 
 
         if (!Yii::$app->user->isGuest) {
-            return $this->redirect('index');
+            return $this->redirect(['battle/index']);
         }
 
         $model = new LoginForm();
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
-            Yii::$app->homeUrl = Url::to('index');
-            return $this->goBack();
+            return $this->redirect(['battle/index']);
         } else {
             $model->password = '';
 
@@ -425,7 +424,7 @@ class SiteController extends CabinetController
     public function actionAbout()
     {
         if (!Yii::$app->getUser()->getIsGuest()) {
-            return $this->redirect('site/index');
+            return $this->redirect(['battle/index']);
         }
         $this->layout = 'blank';
         return $this->render('about');
@@ -486,7 +485,7 @@ class SiteController extends CabinetController
                 }
 
                 if (Yii::$app->getUser()->login($user)) {
-                    Yii::$app->homeUrl = Url::to('/site/index');
+                    Yii::$app->homeUrl = Url::to(['/battle/index']);
                     return $this->goHome();
                 }
             }

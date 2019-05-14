@@ -44,9 +44,10 @@ $this->registerJs($js);
 ?>
 
 <div class="row">
-    <div class="col-xs-12 col-sm-4 proposal-info">
+    <div class="col-xs-12 col-sm-4 proposal-info" id="chart-info">
 
-        <button class="mobile-btn-chat" onclick="$('#chart-aside').toggle();">
+        <button class="mobile-btn-chat"
+                onclick="$('#chart-aside').toggle(); $('#chart-info').toggle(); Messenger.scroll()">
             <svg width="24" height="23" viewBox="0 0 24 23" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path fill-rule="evenodd" clip-rule="evenodd"
                       d="M20.4 15.8C22 14.2 23 12.2 23 10C23 5 18.1 1 12 1C5.9 1 1 5 1 10C1 15 5.9 19 12 19C13.1 19 14.1 18.9 15.1 18.6L21 21L20.4 15.8Z"
@@ -200,7 +201,7 @@ $this->registerJs($js);
 
         <div class="panel panel-default">
             <div class="panel-heading show-mobile mobile-breadcrumbs">
-                <span onclick="$('#chart-aside').toggle();">
+                <span onclick="$('#chart-aside').toggle(); $('#chart-info').toggle();">
                     <svg width="22" height="14" viewBox="0 0 22 14" fill="none" xmlns="http://www.w3.org/2000/svg">
 <path d="M22 7H2" stroke="black" stroke-width="1.5"/>
 <path d="M7.03656 12.0364L2 6.99988L6.96912 2.03076" stroke="black" stroke-width="1.5" stroke-linecap="square"/>

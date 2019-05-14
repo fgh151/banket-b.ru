@@ -28,18 +28,18 @@ class Messenger extends React.PureComponent {
         })
     }
 
+    static scroll() {
+        var scroll = $('#messages');
+        var height = scroll[0].scrollHeight;
+        scroll.scrollTop(height);
+    }
+
     updateList(items) {
         let state = {loaded: true};
         if (items !== null) {
             state.items = Object.values(items);
         }
-        this.setState(state, () => this.scroll());
-    }
-
-    scroll() {
-        var scroll = $('#messages');
-        var height = scroll[0].scrollHeight;
-        scroll.scrollTop(height);
+        this.setState(state, () => Messenger.scroll());
     }
 
     render() {

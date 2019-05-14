@@ -60,15 +60,15 @@ class ConversationController extends CabinetController
     {
         $proposal = $this->findModel($proposalId);
         $cost = new Cost();
-
-        $cost->cost = Yii::$app->formatter->asRubles($proposal->getMyMinCost() ?: $proposal->amount);
+        $cost->cost = Yii::$app->formatter->asRubles($proposal->getMyMinCost());
         $cost->restaurant_id = \Yii::$app->getUser()->getId();
         $cost->proposal_id = $proposalId;
 
-        if ($cost->load(\Yii::$app->request->post()) && $cost->save()) {
+        if ($cost->load(\Yii::$app->request->post())) {
             if (\Yii::$app->request->isAjax) {
-                return $this->asJson(['success' => true]);
+                return $this->asJson(['success' => $cost->save()]);
             }
+            $cost->save();
         }
 
         return $this->render('index', [

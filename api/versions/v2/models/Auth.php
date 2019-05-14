@@ -69,6 +69,7 @@ class Auth extends Model
 
     /**
      * @return bool
+     * @throws \yii\base\Exception
      */
     public function validateCode()
     {
@@ -81,16 +82,19 @@ class Auth extends Model
      */
     public function getCode()
     {
-        $user = $this->getUser();
-        if ($user instanceof MobileUser) {
-            if ($user->password_reset_token === null) {
-                $user->generatePasswordResetToken();
-                $user->save();
-            }
-            return $user->password_reset_token;
-
+        /**
+         * Фильтруем мой телефон в качестве тестового аккаунта для Apple
+         */
+        if ($this->phone === '+7 (977) 806 94 28') {
+            return '7548';
         }
 
+        $user = $this->getUser();
+        if ($user instanceof MobileUser) {
+            $user->generatePasswordResetToken();
+            $user->save();
+            return $user->password_reset_token;
+        }
         return null;
     }
 
