@@ -17,9 +17,8 @@ $recipient = $this->params['recipient'];
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <meta name="viewport" content="width=400"/>
     <title><?= Html::encode($this->title) ?></title>
-    <link rel="shortcut icon" href="https://banket-b.ru/favicon.ico"/>
-    <style type="text/css">
-        .ExternalClass {
+    <link rel="shortcut icon" href="https://tilda.ws/img/tildafavicon.ico"/>
+    <style type="text/css">    .ExternalClass {
             width: 100%;
         }
 
@@ -91,13 +90,11 @@ $recipient = $this->params['recipient'];
                 margin-left: auto !important;
                 margin-right: auto !important;
             }
-        }</style>
-    <?php $this->head() ?>
+        }
+    </style>
 </head>
 <body cellpadding="0" cellspacing="0"
       style="padding: 0; margin: 0; border: 0; width:100%; -webkit-text-size-adjust:100%; -ms-text-size-adjust:100%; background-color: #efefef;">
-
-<?php $this->beginBody() ?>
 <!--allrecords-->
 <table id="allrecords" data-tilda-email="yes" data-tilda-project-id="1308859" data-tilda-page-id="5839398"
        data-tilda-page-alias="" cellpadding="0" cellspacing="0"
@@ -176,6 +173,35 @@ $recipient = $this->params['recipient'];
                     </td>
                 </tr>
             </table><!--/record--><!--record_mail-->
+            <table id="rec104492982" style="width:100%; border-collapse:collapse; border-spacing:0; margin:0; border:0;"
+                   cellpadding="0" cellspacing="0" data-record-type="618">
+                <tr>
+                    <td style="padding-left:15px; padding-right:15px; ">
+                        <table id="recin104492982" class="r"
+                               style="margin: 0 auto;background-color:#ffffff;border-spacing: 0;width:600px;"
+                               align="center">
+                            <tr>
+                                <td style="padding-top:30px;padding-bottom:30px;padding-left:30px;padding-right:30px;">
+                                    <table border="0" cellpadding="0" cellspacing="0" width="100%" style="width:100%;">
+                                        <tr>
+                                            <td>
+                                                <table border="0" cellpadding="0" cellspacing="0"
+                                                       style="margin: 0 auto;">
+                                                    <tr>
+                                                        <td>
+                                                            <a style="display: table-cell; text-decoration: none; padding: 15px 30px; font-size: 15px; text-align: center; font-weight: bold; font-family:Helvetica Neue, Helvetica, Arial, sans-serif; width: 100%;color:#ffffff; border:0px solid ; background-color:#0c21e2; border-radius: 3px;"
+                                                               href=""> Посмотреть заявку </a></td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </table><!--/record--><!--record_mail-->
             <table id="rec104339810" style="width:100%; border-collapse:collapse; border-spacing:0; margin:0; border:0;"
                    cellpadding="0" cellspacing="0" data-record-type="637">
                 <tr>
@@ -217,12 +243,13 @@ $recipient = $this->params['recipient'];
                                             <td style="text-align: center; padding: 0 0 0;">
                                                 <div style="margin: 0 auto; font-weight: normal; font-family: Helvetica Neue, Helvetica, Arial, sans-serif; color:#8c8c8c;max-width:350px;">
                                                     Вы получили это письмо, поскольку зарегистрированы на <a
-                                                            href="http://www.banket-b.ru">www.banket-b.ru<br/></a> <a
-                                                            href="<?= $recipient->getUnsubscribeUrl() ?>">Отписаться
-                                                        от рассылки</a><br/>Если у вас есть какие-либо вопросы, команда
-                                                    Банкет
-                                                    Батл всегда рада помочь: <br/>+7 495 788 06 00<br/>e-mail:
-                                                    support@banket-b.ru
+                                                            href="https://banket-b.ru"><span
+                                                                style="color: rgb(12, 33, 226);">banket-b.ru</span><br/></a>Если
+                                                    у вас есть какие-либо вопросы,<br/>команда Банкет Батл всегда рада
+                                                    помочь:<br/>+7 495 788 06 00<br/>support@banket-b.ru<br/><br/>
+                                                    <a style="color:#8c8c8c;"
+                                                       href="<?= $recipient->getUnsubscribeUrl() ?>">Отписаться
+                                                        от рассылки</a>
                                                 </div>
                                             </td>
                                         </tr>
@@ -254,7 +281,6 @@ $recipient = $this->params['recipient'];
             </table><!--/record--> </td>
     </tr>
 </table><!--/allrecords-->
-
 <?php $this->endBody() ?>
 </body>
 </html>
