@@ -69,7 +69,7 @@ use yii\helpers\Url;
         </span>
     </div>
     <div class="col-xs-12 col-md-1 hidden-xs">
-        <?= count($model->uniqueCosts) ?>
+        <?= $model->costsCount ?>
     </div>
     <div class="col-xs-12 col-md-2 hidden-xs">
 
@@ -77,10 +77,10 @@ use yii\helpers\Url;
         <?php if ($model->getMinCost() === null) : ?>
 
             <p>
-                <?= Yii::$app->formatter->asRubles($model->amount); ?>
+                <?= Yii::$app->formatter->asRubles($model->amount * $model->guests_count); ?>
             </p>
             <p class="my-price-description hidden-xs">
-                <?= Yii::$app->formatter->asRubles(round($model->amount / $model->guests_count)); ?> ₽ /чел.
+                <?= Yii::$app->formatter->asRubles(round($model->amount)); ?> ₽ /чел.
             </p>
         <?php else: ?>
             <p>

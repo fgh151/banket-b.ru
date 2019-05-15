@@ -56,7 +56,7 @@ class Messenger extends React.PureComponent {
             )
         }
         return (
-            <img src={'/img/preloader.gif'} className={'preloader'}/>
+            <img src={'/img/preloader.gif'} className={'preloader'} alt={'preloader'}/>
         )
     }
 }
@@ -112,6 +112,7 @@ class Form extends React.PureComponent {
                 <div className={'row'}>
                     <div className={'col-xs-10 col-md-11'}>
                         <input type="text" value={this.state.message} onChange={this.handleChange}
+                               placeholder={'Сообщение'}
                                className={'message-input'}/>
                     </div>
                     <div className={'col-xs-2 col-md-1'}>

@@ -36,7 +36,6 @@ use yii\queue\Queue;
  * @property \DateTime $when
  * @property int $cuisineString
  * @property int $eventType
- * @property $this $isConstructor
  * @property MobileUser $owner
  * @property boolean $floristics
  * @property boolean $hall
@@ -49,14 +48,12 @@ use yii\queue\Queue;
  * @property integer $city_id
  * @property integer $region_id
  * @property bool|array|mixed $answers
- * @property bool|array $directOrganizations
  * @property \yii\db\ActiveQuery|\app\common\models\geo\GeoCity $geoCity
  * @property integer $all_regions
  *
  *
  *
  * @property integer $minCost
- * @property double $profit
  *
  * @property boolean $send15
  * @property boolean $send120
@@ -79,6 +76,61 @@ class Proposal extends ActiveRecord
     public static function tableName()
     {
         return 'proposal';
+    }
+
+    /**
+     * @param Proposal $proposal
+     * @return float|int
+     * @throws \yii\db\Exception
+     */
+    public static function getProfit(Proposal $proposal)
+    {
+        $cost = $proposal->amount * $proposal->guests_count; ///стоимость заявки
+        $restaurantCost = $proposal->getMinCost(); // мин ставка
+        return round(100 - ($restaurantCost * 100 / $cost));
+    }
+
+    /**
+     * @return false|string|null
+     * @throws \yii\db\Exception
+     */
+    public function getMinCost()
+    {
+        return self::getMinCostForRestaurant($this->id, false);
+    }
+
+    /**
+     * @param $proposalId
+     * @param null $restaurantId
+     * @return false|int|null
+     * @throws \yii\db\Exception
+     */
+    public static function getMinCostForRestaurant($proposalId, $restaurantId = null)
+    {
+        if ($restaurantId === false) {
+            return Yii::$app
+                ->getDb()
+                ->createCommand(
+                    'SELECT min(cost) FROM cost WHERE proposal_id = :pid;', [
+                        ':pid' => $proposalId
+                    ]
+                )
+                ->queryScalar();
+        }
+
+        if ($restaurantId === null) {
+            $restaurantId = Yii::$app->getUser()->getId();
+        }
+
+        return Yii::$app
+            ->getDb()
+            ->createCommand(
+                'SELECT min(cost) FROM cost WHERE restaurant_id = :rid AND proposal_id = :pid;', [
+                    ':rid' => $restaurantId,
+                    ':pid' => $proposalId
+                ]
+            )
+            ->queryScalar();
     }
 
     /**
@@ -295,18 +347,33 @@ class Proposal extends ActiveRecord
                 ->all();
             foreach ($recipients as $recipient) {
                 /** @var MailQueue $m */
-                $m = Yii::$app->mailqueue;
+//                $m = Yii::$app->mailqueue;
+//
+//                $m->getView()->params['recipient'] = $recipient;
+//
+//                $m->compose('proposal-html', [
+//                    'proposal' => $this,
+//                    'recipient' => $recipient
+//                ])
+//                    ->setFrom(Yii::$app->params['adminEmail'])
+//                    ->setTo($recipient->email)
+//                    ->setSubject('Новая заявка')
+//                    ->queue();
 
-                $m->getView()->params['recipient'] = $recipient;
 
-                $m->compose('proposal-html', [
-                    'proposal' => $this,
-                    'recipient' => $recipient
-                ])
+                $text = "Здравствуйте, в ваш ресторан $recipient->name поступила новая заявка №$this->id на проведение банкета. 
+            Для просмотра заявки зайдите в личный кабинет <a href=\"https://banket-b.ru/conversation/index/' . $this->id . '\">ссылка</a>.
+            С уважение, команда Банкет Батл.
+            ";
+
+
+                Yii::$app->mailqueue->compose()
                     ->setFrom(Yii::$app->params['adminEmail'])
                     ->setTo($recipient->email)
                     ->setSubject('Новая заявка')
+                    ->setHtmlBody($text)
                     ->queue();
+
             }
             Yii::$app->mailqueue->compose()
                 ->setFrom(Yii::$app->params['adminEmail'])
@@ -316,7 +383,7 @@ class Proposal extends ActiveRecord
                 ->queue();
 
             /** @var Queue $queue */
-            $queue = Yii::$app->queue;
+//            $queue = Yii::$app->queue;
 //            $queue->delay(Yii::$app->params['autoAnswerDelay'])->push(new RRMessageJob(['proposal' => $this]));
 
         }
@@ -329,8 +396,8 @@ class Proposal extends ActiveRecord
      */
     public function getAnswers()
     {
-        $result = [];
-        $cache = \Yii::$app->cache;
+//        $result = [];
+//        $cache = \Yii::$app->cache;
 //        $result = $cache->get('proposal-answers-' . $this->id);
 
 //        if ($result == false) {
@@ -349,47 +416,12 @@ class Proposal extends ActiveRecord
     }
 
     /**
-     * @return float|int
-     * @throws \yii\db\Exception
-     */
-    public function getProfit()
-    {
-        $cost = $this->amount * $this->guests_count;
-        $one = $cost / 100;
-        return ($cost - $this->getMinCost()) * $one;
-    }
-
-    /**
-     * @return false|string|null
-     * @throws \yii\db\Exception
-     */
-    public function getMinCost()
-    {
-        return Yii::$app
-            ->getDb()
-            ->createCommand(
-                'SELECT min(cost) FROM cost WHERE proposal_id = :pid;', [
-                    ':pid' => $this->id
-                ]
-            )
-            ->queryScalar();
-    }
-
-    /**
      * @return false|string|null
      * @throws \yii\db\Exception
      */
     public function getMyMinCost()
     {
-        return Yii::$app
-            ->getDb()
-            ->createCommand(
-                'SELECT min(cost) FROM cost WHERE restaurant_id = :rid AND proposal_id = :pid;', [
-                    ':rid' => Yii::$app->getUser()->getId(),
-                    ':pid' => $this->id
-                ]
-            )
-            ->queryScalar();
+        return self::getMinCostForRestaurant($this->id);
     }
 
     /**
@@ -429,16 +461,15 @@ class Proposal extends ActiveRecord
         return $this->hasOne(Cost::class, ['proposal_id' => 'id'])->orderBy('cost');
     }
 
-    public function getCosts()
-    {
-        return $this->hasMany(Cost::class, ['proposal_id' => 'id']);
-    }
-
     public function getCostsCount()
     {
         return $this->getCosts()->count();
     }
 
+    public function getCosts()
+    {
+        return $this->hasMany(Cost::class, ['proposal_id' => 'id']);
+    }
 
     public function getUniqueCosts()
     {

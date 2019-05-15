@@ -104,22 +104,6 @@ class TestController extends Controller
         return $t;
     }
 
-
-    public function actionCost()
-    {
-        $p = \app\api\models\Proposal::findOne(218); /* find()
-            ->where([
-                'owner_id' => 64,
-                'status' => Constants::PROPOSAL_STATUS_CREATED
-            ])
-            ->andFilterWhere(['>=', 'date', date('Y-m-d')])
-            ->orderBy(['date' => SORT_ASC])
-            ->all();*/
-
-        var_dump($p->getMinPrice());
-    }
-
-
     public function actionFirebase()
     {
         /** @var Database $database */
@@ -135,7 +119,7 @@ class TestController extends Controller
 
 //        var_dump($filter);
 
-        $ref1 = $database->getReferenceFromUrl($filter);
+//        $ref1 = $database->getReferenceFromUrl($filter);
 
 //            ->getUri();
 //            ->orderByChild('cost')
@@ -149,4 +133,5 @@ class TestController extends Controller
 
         var_dump($ref->getValue());
     }
+
 }

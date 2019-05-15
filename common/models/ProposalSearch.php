@@ -53,7 +53,7 @@ class ProposalSearch extends Proposal
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
-            'sort' => ['defaultOrder' => ['date' => SORT_DESC]]
+            'sort' => ['defaultOrder' => ['id' => SORT_DESC]]
         ]);
 
         if ($this->order) {
@@ -117,6 +117,8 @@ class ProposalSearch extends Proposal
                 'not in',
                 'id', $this->rejected]);
         }
+
+//        var_dump($query->createCommand()->getRawSql()); die;
 
 
         return $dataProvider;

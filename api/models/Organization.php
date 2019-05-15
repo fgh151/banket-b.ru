@@ -12,7 +12,6 @@ namespace app\api\models;
 use app\common\models\Message;
 use app\common\models\Proposal;
 use yii\helpers\ArrayHelper;
-use yii\web\NotFoundHttpException;
 
 class Organization extends \app\common\models\Organization
 {
@@ -21,9 +20,7 @@ class Organization extends \app\common\models\Organization
      * @var Proposal
      */
     public $proposal;
-
-    private $_minPrice;
-
+    /** @var Message[]|null */
     private $_conversation;
 
     public function fields()
@@ -31,12 +28,12 @@ class Organization extends \app\common\models\Organization
         $parent = parent::fields();
 
         return ArrayHelper::merge($parent, [
-            'minPrice' => function ($model) {
+            'minPrice' => function () {
                 return Organization::getMinPrice($this);
             },
-            'profit' => function ($model) {
+            'profit' => function () {
                 if ($this->proposal) {
-                    return Organization::calcProfit($this->proposal, Organization::getMinPrice($this));
+                    return Proposal::getProfit($this->proposal);
                 }
                 return null;
             },
@@ -53,7 +50,7 @@ class Organization extends \app\common\models\Organization
                 return null;
             },
             'rating',
-            'lastMessage' => function ($model) {
+            'lastMessage' => function () {
                 if ($this->proposal) {
                     return $this->getLastMessageTime();
                 }
@@ -63,61 +60,19 @@ class Organization extends \app\common\models\Organization
 
     }
 
-    public static function calcProfit(Proposal $proposal, $minPrice)
-    {
-        $start = $proposal->amount * $proposal->guests_count;  //Стоимость заявки
-
-        $r = 100 - ($minPrice / $start * 100);
-
-        return round($r) ?? 0;
-    }
-
     /**
      * @param Organization $organization
      * @return int
+     * @throws \yii\db\Exception
      */
     public static function getMinPrice(Organization $organization)
     {
-        $_minPrice = null;
-        if ($organization->proposal) {
-            $_minPrice = PHP_INT_MAX;
-            $messages = $organization->getConversation();
-            foreach ($messages as $message) {
-                if ($_minPrice > $message->cost && $message->cost !== 0 && $message->cost !== null) {
-                    $_minPrice = $message->cost;
-                }
-            }
-        }
-        return $_minPrice;
+        return Proposal::getMinCostForRestaurant($organization->proposal->id, $organization->id);
     }
-
-
 
     /**
      * @return int
-     * @throws NotFoundHttpException
      */
-//    public function getMinPrice()
-//    {
-//        if ($this->_minPrice === null && $this->proposal) {
-//            $this->_minPrice = PHP_INT_MAX;
-//            $messages = $this->getConversation();
-//
-////            var_dump($messages); die;
-//
-//
-//            foreach ($messages as $message) {
-//
-//
-//                if ($this->_minPrice > $message->cost && $message->cost !== 0 && $message->cost !== null) {
-//                    $this->_minPrice = $message->cost;
-//                }
-//            }
-//        }
-////        die;
-//        return $this->_minPrice;
-//    }
-
     private function getLastMessageTime()
     {
         return min(array_keys($this->getConversation()));

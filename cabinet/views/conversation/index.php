@@ -70,10 +70,11 @@ $this->registerJs($js);
                     <?= Yii::t('app', '{n, plural, one{ставка} few{ставкок} other{ставок}}', ['n' => $proposal->costsCount]); ?>
                 </p>
                 <p class="m-b-0">
-                    <?= Yii::$app->formatter->asRubles($proposal->getMinCost() ?: $proposal->amount) ?> Лучшая ставка
+                    <?= Yii::$app->formatter->asRubles($proposal->getMinCost() ?: $proposal->amount * $proposal->guests_count) ?>
+                    Лучшая ставка
                 </p>
                 <p class="my-price-description">
-                    <?= Yii::$app->formatter->asRubles(round($proposal->getMinCost() ?: $proposal->amount / $proposal->guests_count)); ?>
+                    <?= Yii::$app->formatter->asRubles(round($proposal->getMinCost() ?: $proposal->amount)); ?>
                     ₽ /чел.
                 </p>
 

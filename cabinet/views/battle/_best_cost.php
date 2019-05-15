@@ -10,9 +10,9 @@ $isBest = $model->getIsRestaurantBest(Yii::$app->getUser()->getId());
         <span class="waiting-cost cost-description">Ожидает Ставки</span>
     <?php elseif ($isBest === true): ?>
         <span class="best-cost cost-description">Лучшая ставка</span>
-    <? else: ?>
+    <?php else: ?>
         <span class="not-best-cost cost-description">Есть ставка лучше</span>
-    <? endif; ?>
+    <?php endif; ?>
 </p>
 <p class="proposal-id hidden-xs">
     # <?= $model->id ?>
