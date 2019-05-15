@@ -56,8 +56,8 @@ return [
             'transport' => [
                 'class' => 'Swift_SmtpTransport',
                 'host' => 'smtp.yandex.ru',
-                'username' => 'restorateru',
-                'password' => 'Oc5aecee',
+                'username' => 'fedor@support-pc.org',
+                'password' => 'idr4mvnax',
                 'port' => '587',
                 'encryption' => 'tls', // у яндекса SSL
 

@@ -74,7 +74,7 @@ $this->registerJs($js);
                     Лучшая ставка
                 </p>
                 <p class="my-price-description">
-                    <?= Yii::$app->formatter->asRubles(round($proposal->getMinCost() ?: $proposal->amount)); ?>
+                    <?= Yii::$app->formatter->asRubles(round($proposal->getMinCost() ? $proposal->getMinCost() / $proposal->guests_count : $proposal->amount)); ?>
                     ₽ /чел.
                 </p>
 

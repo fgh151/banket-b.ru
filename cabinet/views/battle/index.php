@@ -1,6 +1,5 @@
 <?php
 
-use app\common\models\Proposal;
 use yii\widgets\ListView;
 
 /**
@@ -66,21 +65,21 @@ $this->title = 'Заявки';
                 'itemOptions' => [
                     'class' => 'col-xs-12'
                 ],
-                'afterItem' => function (Proposal $model, $key, $index, ListView $list) {
-                    $nextProposal = null;
-                    if (isset($list->dataProvider->getModels()[$index + 1])) {
-                        $nextProposal = $list->dataProvider->getModels()[$index + 1];
-                    }
-
-                    /** @var \yii\web\View $this */
-                    return $this->render('_after_item', [
-                        'currentProposal' => $model,
-                        'nextProposal' => $nextProposal,
-                        'key' => $key,
-                        'index' => $index,
-                        'list' => $list
-                    ]);
-                }
+//                'afterItem' => function (Proposal $model, $key, $index, ListView $list) {
+//                    $nextProposal = null;
+//                    if (isset($list->dataProvider->getModels()[$index + 1])) {
+//                        $nextProposal = $list->dataProvider->getModels()[$index + 1];
+//                    }
+//
+//                    /** @var \yii\web\View $this */
+//                    return $this->render('_after_item', [
+//                        'currentProposal' => $model,
+//                        'nextProposal' => $nextProposal,
+//                        'key' => $key,
+//                        'index' => $index,
+//                        'list' => $list
+//                    ]);
+//                }
             ]) ?>
         </div>
     </div>

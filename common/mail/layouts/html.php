@@ -242,7 +242,8 @@ $recipient = $this->params['recipient'];
                                         <tr>
                                             <td style="text-align: center; padding: 0 0 0;">
                                                 <div style="margin: 0 auto; font-weight: normal; font-family: Helvetica Neue, Helvetica, Arial, sans-serif; color:#8c8c8c;max-width:350px;">
-                                                    Вы получили это письмо, поскольку зарегистрированы на <a
+                                                    <?= $recipient->email ?>, Вы получили это письмо, поскольку
+                                                    зарегистрированы на <a
                                                             href="https://banket-b.ru"><span
                                                                 style="color: rgb(12, 33, 226);">banket-b.ru</span><br/></a>Если
                                                     у вас есть какие-либо вопросы,<br/>команда Банкет Батл всегда рада

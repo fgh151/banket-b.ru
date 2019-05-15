@@ -75,6 +75,7 @@ class BattleController extends CabinetController
                 $searchModel->rejected[] = $record['proposal_id'];
             }
             $searchModel->status = Constants::PROPOSAL_STATUS_CREATED;
+            $searchModel->date = date('Y-m-d');
 //            $searchModel->guests_count = 8;
 
             $dataProvider = $searchModel->search(Yii::$app->request->queryParams);

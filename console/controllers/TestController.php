@@ -38,19 +38,31 @@ class TestController extends Controller
 //        print_r(Yii::$app->mailqueue);
 //        die;
 
-        /** @var Mailer $m */
-        $m = Yii::$app->testmailer;
+        /** @var Mailer $mailer */
+        $mailer = Yii::$app->testmailer;
+        $recipient = Organization::findOne(1);
 
-        $m->getView()->params['recipient'] = Organization::findOne(1);
 
-        $m->compose('proposal-html', [
-            'proposal' => Proposal::findOne(74),
-            'recipient' => Organization::findOne(1)
-        ])
-            ->setFrom('fedor@support-pc.org')
+        $mailer->getView()->params['recipient'] = $recipient;
+
+        /** @var \Swift_Message $message */
+        $message = $mailer->compose('proposal-html', [
+            'proposal' => Proposal::findOne(291),
+            'recipient' => $recipient
+        ]);
+
+
+        $message->setFrom('fedor@support-pc.org')
             ->setTo('fedor@support-pc.org')
-            ->setSubject('banket-b test message')
-            ->send();
+            ->setSubject('Новая заявка');
+
+
+        $message->addHeader('Precedence', 'bulk');
+        $message->addHeader('List-Unsubscribe', '<' . $recipient->getUnsubscribeUrl() . '>');
+
+
+        $message->send();
+
     }
 
     public function actionQeue()
