@@ -347,25 +347,25 @@ class Proposal extends ActiveRecord
                 ->all();
             foreach ($recipients as $recipient) {
                 /** @var MailQueue $m */
-                $mailer = Yii::$app->mailqueue;
-
-                $mailer->getView()->params['recipient'] = $recipient;
-
-                /** @var \Swift_Message $message */
-                $message = $mailer->compose('proposal-html', [
-                    'proposal' => $this,
-                    'recipient' => $recipient
-                ]);
-                $message->setFrom(Yii::$app->params['adminEmail'])
-                    ->setTo($recipient->email)
-                    ->setSubject('Новая заявка');
-
-                $headers = $message->getHeaders();
-                $headers->addTextHeader('Precedence', 'bulk');
-                $headers->addTextHeader('List-Unsubscribe', '<' . $recipient->getUnsubscribeUrl() . '>');
-
-
-                $message->queue();
+//                $mailer = Yii::$app->mailqueue;
+//
+//                $mailer->getView()->params['recipient'] = $recipient;
+//
+//                /** @var \Swift_Message $message */
+//                $message = $mailer->compose('proposal-html', [
+//                    'proposal' => $this,
+//                    'recipient' => $recipient
+//                ]);
+//                $message->setFrom(Yii::$app->params['adminEmail'])
+//                    ->setTo($recipient->email)
+//                    ->setSubject('Новая заявка');
+//
+//                $headers = $message->getHeaders();
+//                $headers->addTextHeader('Precedence', 'bulk');
+//                $headers->addTextHeader('List-Unsubscribe', '<' . $recipient->getUnsubscribeUrl() . '>');
+//
+//
+//                $message->queue();
 
 
                 $text = "Здравствуйте, в ваш ресторан $recipient->name поступила новая заявка №$this->id на проведение банкета. 
