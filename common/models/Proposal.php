@@ -341,7 +341,7 @@ class Proposal extends ActiveRecord
 
 
             $recipients = Organization::find()
-//                ->where(['state' => Constants::ORGANIZATION_STATE_PAID])
+                ->where(['state' => Constants::ORGANIZATION_STATE_PAID])
                 ->where(['unsubscribe' => true])
                 ->Where(['NOT ILIKE', 'email', 'banket-b.ru'])
                 ->all();
@@ -374,12 +374,12 @@ class Proposal extends ActiveRecord
             ";
 
 
-                Yii::$app->mailqueue->compose()
-                    ->setFrom(Yii::$app->params['adminEmail'])
-                    ->setTo($recipient->email)
-                    ->setSubject('Новая заявка')
-                    ->setHtmlBody($text)
-                    ->queue();
+//                Yii::$app->mailqueue->compose()
+//                    ->setFrom(Yii::$app->params['adminEmail'])
+//                    ->setTo($recipient->email)
+//                    ->setSubject('Новая заявка')
+//                    ->setHtmlBody($text)
+//                    ->queue();
 
             }
             Yii::$app->mailqueue->compose()
