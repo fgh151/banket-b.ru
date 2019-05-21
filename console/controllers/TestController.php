@@ -24,7 +24,6 @@ use Yii;
 use yii\console\Controller;
 use yii\db\Expression;
 use yii\queue\db\Queue;
-use yii\swiftmailer\Mailer;
 
 class TestController extends Controller
 {
@@ -40,30 +39,21 @@ class TestController extends Controller
 //        print_r(Yii::$app->mailqueue);
 //        die;
 
-        /** @var Mailer $mailer */
-        $mailer = Yii::$app->testmailer;
+        /** @var \app\common\components\sendpulse\Mailer $mailer */
+        $mailer = Yii::$app->pulsemailer;
         $recipient = Organization::findOne(1);
 
 
         $mailer->getView()->params['recipient'] = $recipient;
 
         /** @var \Swift_Message $message */
-        $message = $mailer->compose('proposal-html', [
+        $mailer->compose('proposal-html', [
             'proposal' => Proposal::findOne(291),
             'recipient' => $recipient
-        ]);
-
-
-        $message->setFrom('fedor@support-pc.org')
+        ])->setFrom('fedor@support-pc.org')
             ->setTo('fedor@support-pc.org')
-            ->setSubject('Новая заявка');
-
-
-        $message->addHeader('Precedence', 'bulk');
-        $message->addHeader('List-Unsubscribe', '<' . $recipient->getUnsubscribeUrl() . '>');
-
-
-        $message->send();
+            ->setSubject('Новая заявка')
+            ->send();
 
     }
 

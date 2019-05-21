@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-  "content-hash": "9deccc61a324c14861ba037f71c07f2e",
+  "content-hash": "4d5001c559e59be5f270aee99b9a68ea",
     "packages": [
         {
             "name": "2amigos/yii2-chartjs-widget",
@@ -1767,68 +1767,113 @@
             "time": "2017-10-23T01:57:42+00:00"
         },
         {
-          "name": "sentry/sentry",
-          "version": "1.10.0",
+          "name": "sendpulse/rest-api",
+          "version": "1.0.10",
           "source": {
             "type": "git",
-            "url": "https://github.com/getsentry/sentry-php.git",
-            "reference": "b2b8ffe1560b9fb0110b02993594a4b04a511959"
+            "url": "https://github.com/sendpulse/sendpulse-rest-api-php.git",
+            "reference": "01932257cb99f06cb05b5baaf13d2b5f7ec174cf"
           },
           "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/getsentry/sentry-php/zipball/b2b8ffe1560b9fb0110b02993594a4b04a511959",
-            "reference": "b2b8ffe1560b9fb0110b02993594a4b04a511959",
+            "url": "https://api.github.com/repos/sendpulse/sendpulse-rest-api-php/zipball/01932257cb99f06cb05b5baaf13d2b5f7ec174cf",
+            "reference": "01932257cb99f06cb05b5baaf13d2b5f7ec174cf",
             "shasum": ""
           },
           "require": {
-            "ext-curl": "*",
-            "php": "^5.3|^7.0"
+            "php": ">=5.4.0"
           },
-          "conflict": {
-            "raven/raven": "*"
-          },
-          "require-dev": {
-            "friendsofphp/php-cs-fixer": "^1.8.0",
-            "monolog/monolog": "*",
-            "phpunit/phpunit": "^4.8.35 || ^5.7"
-          },
-          "suggest": {
-            "ext-hash": "*",
-            "ext-json": "*",
-            "ext-mbstring": "*",
-            "monolog/monolog": "Automatically capture Monolog events as breadcrumbs"
-          },
-          "bin": [
-            "bin/sentry"
-          ],
           "type": "library",
-          "extra": {
-            "branch-alias": {
-              "dev-master": "1.10.x-dev"
-            }
-          },
           "autoload": {
-            "psr-0": {
-              "Raven_": "lib/"
+            "psr-4": {
+              "Sendpulse\\RestApi\\": "src/"
             }
           },
           "notification-url": "https://packagist.org/downloads/",
           "license": [
-            "BSD-3-Clause"
+            "MIT"
           ],
           "authors": [
             {
-              "name": "David Cramer",
-              "email": "dcramer@gmail.com"
+              "name": "Maksym Ustymenko",
+              "email": "m.ustymenko@sendpulse.com"
+            },
+            {
+              "name": "Alexey Moroz",
+              "email": "a.moroz@sendpulse.com"
             }
           ],
-          "description": "A PHP client for Sentry (http://getsentry.com)",
-          "homepage": "http://getsentry.com",
+          "description": "Sendpulse REST API client library",
           "keywords": [
-            "log",
-            "logging"
+            "api",
+            "rest",
+            "sendpulse"
           ],
-          "time": "2018-11-09T12:27:19+00:00"
+          "time": "2019-04-09T13:01:27+00:00"
+        },
+      {
+        "name": "sentry/sentry",
+        "version": "1.10.0",
+        "source": {
+          "type": "git",
+          "url": "https://github.com/getsentry/sentry-php.git",
+          "reference": "b2b8ffe1560b9fb0110b02993594a4b04a511959"
+        },
+        "dist": {
+          "type": "zip",
+          "url": "https://api.github.com/repos/getsentry/sentry-php/zipball/b2b8ffe1560b9fb0110b02993594a4b04a511959",
+          "reference": "b2b8ffe1560b9fb0110b02993594a4b04a511959",
+          "shasum": ""
+        },
+        "require": {
+          "ext-curl": "*",
+          "php": "^5.3|^7.0"
+        },
+        "conflict": {
+          "raven/raven": "*"
+        },
+        "require-dev": {
+          "friendsofphp/php-cs-fixer": "^1.8.0",
+          "monolog/monolog": "*",
+          "phpunit/phpunit": "^4.8.35 || ^5.7"
+        },
+        "suggest": {
+          "ext-hash": "*",
+          "ext-json": "*",
+          "ext-mbstring": "*",
+          "monolog/monolog": "Automatically capture Monolog events as breadcrumbs"
+        },
+        "bin": [
+          "bin/sentry"
+        ],
+        "type": "library",
+        "extra": {
+          "branch-alias": {
+            "dev-master": "1.10.x-dev"
+          }
+        },
+        "autoload": {
+          "psr-0": {
+            "Raven_": "lib/"
+          }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+          "BSD-3-Clause"
+        ],
+        "authors": [
+          {
+            "name": "David Cramer",
+            "email": "dcramer@gmail.com"
+          }
+        ],
+        "description": "A PHP client for Sentry (http://getsentry.com)",
+        "homepage": "http://getsentry.com",
+        "keywords": [
+          "log",
+          "logging"
+        ],
+        "time": "2018-11-09T12:27:19+00:00"
         },
       {
             "name": "swiftmailer/swiftmailer",

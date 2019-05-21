@@ -63,6 +63,20 @@ return [
 
             ],
         ],
+
+
+        'pulsemailer' => [
+            'class' => \app\common\components\sendpulse\Mailer::class,
+            'viewPath' => '@common/mail',
+            // send all mails to a file by default. You have to set
+            // 'useFileTransport' to false and configure a transport
+            // for the mailer to send real emails.
+            'useFileTransport' => false,
+            'api_secret' => '0ddd68fdee59c75829462da7f2a26c26',
+            'api_user' => 'e0cedb31c08e3bbaff55bd25a8e603d8'
+        ],
+
+
         'queue' => [
             'class' => \yii\queue\db\Queue::class,
             'db' => 'db', // DB connection component or its config
