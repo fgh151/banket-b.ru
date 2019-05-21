@@ -140,9 +140,7 @@ class Form extends React.PureComponent {
         this.setState({
             message: "",
             btnDisabled: true,
-            btnStyle: style.buttonWrapperInactive,
-        })
-
+        });
     }
 
     handleChange() {
