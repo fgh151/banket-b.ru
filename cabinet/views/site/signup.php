@@ -207,10 +207,21 @@ $this->title = 'Регистрация';
                     </div>
                 </div>
 
+                <div class="row">
+                    <div class="col-xs-12">
+                        <!--                        <script src='https://www.google.com/recaptcha/api.js'></script>-->
+                        <!--                        <div class="g-recaptcha" data-sitekey="6LcFr6QUAAAAAJVeTBa8Oj9XAcbQsGcGKCLxNvfi"></div>-->
+                    </div>
+                </div>
 
-                <div class="form-group">
-                    <?= Html::submitButton('Зарегистрироваться',
-                        ['class' => 'btn btn-primary', 'name' => 'signup-button']) ?>
+
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div class="form-group">
+                            <?= Html::submitButton('Зарегистрироваться',
+                                ['class' => 'btn btn-primary', 'name' => 'signup-button']) ?>
+                        </div>
+                    </div>
                 </div>
 
                 <?php ActiveForm::end(); ?>
@@ -259,6 +270,19 @@ function changeMetroSelector(){
     changeMetroSelector();
 });
 }
+
+
+
+
+$('#form-signup').on('beforeValidate', function (event, messages, deferreds) {
+   
+    
+    if (!grecaptcha.getResponse()) {
+         alert('Вы не заполнили поле Я не робот!');
+         return false; 
+    }
+    
+});
 JS;
 
 $this->registerJs($js);
