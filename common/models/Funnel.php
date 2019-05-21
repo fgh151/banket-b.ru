@@ -15,12 +15,32 @@ use yii\db\ActiveRecord;
  */
 class Funnel extends ActiveRecord
 {
+
+    const OPEN_APP_EVENT = 'open-app';
+    const CREATE_BTN_CLICK = 'create-btn-click';
+    const GOTO_SERVICES = 'go-to-services';
+    const GOFROM_SERVICE = 'go-from-service';
+    const GOFROM_REGISTER = 'go-from-register';
+    const CONFIRM_REGISTER = 'confirm-register';
+    const BATTLE_CREATED = 'battle-created';
+    const CHAT_ENTER = 'chat-enter';
+    const CHAT_ANSWER = 'chan-answer';
+
+    const NEW_COST = 'new_cost';
+
     /**
      * {@inheritdoc}
      */
     public static function tableName()
     {
         return 'funnel';
+    }
+
+    public function fields()
+    {
+        return [
+            'id', 'event'
+        ];
     }
 
     /**

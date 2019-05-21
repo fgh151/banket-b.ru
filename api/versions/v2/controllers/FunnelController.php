@@ -27,8 +27,9 @@ class FunnelController extends Controller
         $model->event = $request['event'];
         $model->uid = $request['uid'];
         $model->user_id = $request['userId'];
-        $model->extra = json_decode($request['extra']);
+        $model->extra = $request['extra'];
         if ($model->save()) {
+            Yii::$app->response->statusCode = 201;
             return $model;
         }
         return $model->errors;

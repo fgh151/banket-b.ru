@@ -13,6 +13,7 @@ use yii\db\Expression;
  * @property int $restaurant_id
  * @property int $proposal_id
  * @property int $cost
+ * @property Proposal $proposal
  * @property string $created_at
  */
 class Cost extends ActiveRecord
@@ -70,5 +71,29 @@ class Cost extends ActiveRecord
             'cost' => 'Ставка',
             'created_at' => 'Created At',
         ];
+    }
+
+    public function getProposal()
+    {
+        return $this->hasOne(Proposal::class, ['id' => 'proposal_id']);
+    }
+
+    public function afterSave($insert, $changedAttributes)
+    {
+        if ($insert) {
+
+            try {
+
+                $proposalFunnel = ProposalFunnel::find()->where(['id' => $this->proposal_id])->one();
+                $funnel = new Funnel();
+                $funnel->user_id = $proposalFunnel->owner_id;
+                $funnel->event = Funnel::NEW_COST;
+                $funnel->uid = $proposalFunnel->uid;
+                $funnel->save();
+            } catch (\Exception $e) {
+                \Yii::error($funnel->errors, 'Save funnel error');
+            }
+        }
+        parent::afterSave($insert, $changedAttributes);
     }
 }

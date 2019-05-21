@@ -10,6 +10,7 @@ namespace app\console\controllers;
 
 
 use app\common\components\Constants;
+use app\common\models\Funnel;
 use app\common\models\Message;
 use app\common\models\Organization;
 use app\common\models\Proposal;
@@ -21,6 +22,7 @@ use paragraph1\phpFCM\Notification;
 use paragraph1\phpFCM\Recipient\Device;
 use Yii;
 use yii\console\Controller;
+use yii\db\Expression;
 use yii\queue\db\Queue;
 use yii\swiftmailer\Mailer;
 
@@ -84,7 +86,6 @@ class TestController extends Controller
         $message->save();
     }
 
-
     public function actionPush()
     {
         $client = new Client();
@@ -144,6 +145,17 @@ class TestController extends Controller
 //        ->getSnapshot();
 
         var_dump($ref->getValue());
+    }
+
+    public function actionFunnel()
+    {
+        $c = Funnel::find()
+            ->where([
+                '=', new Expression("(extra->>'id')"), 111
+            ])
+            ->count();
+        var_dump($c);
+
     }
 
 }
