@@ -20,9 +20,12 @@ use paragraph1\phpFCM\Client;
 use paragraph1\phpFCM\Message as FCMMessage;
 use paragraph1\phpFCM\Notification;
 use paragraph1\phpFCM\Recipient\Device;
+use Sendpulse\RestApi\ApiClient;
+use Sendpulse\RestApi\Storage\FileStorage;
 use Yii;
 use yii\console\Controller;
 use yii\db\Expression;
+use yii\helpers\Url;
 use yii\queue\db\Queue;
 
 class TestController extends Controller
@@ -39,8 +42,7 @@ class TestController extends Controller
 //        print_r(Yii::$app->mailqueue);
 //        die;
 
-        /** @var \app\common\components\sendpulse\Mailer $mailer */
-        $mailer = Yii::$app->pulsemailer;
+        $mailer = Yii::$app->mailer;
         $recipient = Organization::findOne(1);
 
 
@@ -51,7 +53,7 @@ class TestController extends Controller
             'proposal' => Proposal::findOne(291),
             'recipient' => $recipient
         ])->setFrom('fedor@support-pc.org')
-            ->setTo('fedor@support-pc.org')
+            ->setTo('vkarpen@yandex.ru')
             ->setSubject('Новая заявка')
             ->send();
 
@@ -148,4 +150,95 @@ class TestController extends Controller
 
     }
 
+
+    public function actionPulse()
+    {
+        $SPApiClient = new ApiClient(
+            'e0cedb31c08e3bbaff55bd25a8e603d8',
+            '0ddd68fdee59c75829462da7f2a26c26',
+            new FileStorage(
+                \Yii::getAlias('@runtime') . DIRECTORY_SEPARATOR
+            )
+        );
+//Создаем книгу
+//        $book = $SPApiClient->createAddressBook('test-book');
+//        $bookId = $book->id; //153560
+        $bookId = 153560;
+        $templateId = 34755;
+//Добавляем получателей в книгу
+//        $emails = [
+//            [
+//                'email' => 'fedor@support-pc.org',
+//                'variables' => [
+//                    'name' => 'Fedor Gorsky',
+//                ]
+//            ],
+//            [
+//                'email' => 'vkarpen@yandex.ru',
+//                'variables' => [
+//                    'name' => 'Владимир',
+//                ]
+//            ]
+//        ];
+//
+//        $r = $SPApiClient->addEmails($bookId, $emails);
+//        $r->result = true;
+
+//Отправка письма
+//        $c = $SPApiClient->createCampaign(
+//            'Test sender',
+//            'noreply@banket-b.ru',
+//                        'test subject',
+//            'Test campain body',
+//            $bookId,
+//            'test campain name'
+//            );
+
+
+//        {{name}}
+//        {{proposal_link}}
+//        {{unsubscribe_url}}
+//        {{email}}
+
+        //pr7880600@gmail.com
+
+
+        $proposal = Proposal::findOne(315);
+
+
+        /** @var Organization[] $users */
+        $users = Organization::find()->where(['in', 'id', [98, 22]])->all();
+        $emails = [];
+        foreach ($users as $user) {
+
+
+            $emails[] = [
+                'email' => $user->email,
+                'variables' => [
+                    'name' => $user->name,
+                    'email' => $user->email,
+                    'proposal_link' => 'https://banket-b.ru/conversation/index/' . $proposal->id,
+                    'unsubscribe' => Url::to(['site/unsubscribe', 'uid' => $user->id, 'hash' => $user->getHash()], true)
+                ]
+            ];
+        }
+//        die;
+        $book = $SPApiClient->createAddressBook('Уведомление о заявке № ' . $proposal->id);
+        $bookId = $book->id;
+        $r = $SPApiClient->addEmails($bookId, $emails);
+
+        $c = $SPApiClient->createCampaign(
+            'Banket-b',
+            'noreply@banket-b.ru',
+            'Новая заявка',
+            $templateId,
+            $bookId,
+            'Уведомление о заявке № ' . $proposal->id,
+            '',
+            '',
+            true
+        );
+
+
+    }
 }

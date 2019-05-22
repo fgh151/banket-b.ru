@@ -5,7 +5,7 @@ namespace app\common\models;
 
 use app\common\components\Constants;
 use app\common\models\geo\GeoCity;
-use nterms\mailqueue\MailQueue;
+use app\jobs\SendNotifyAboutNewProposalJob;
 use Yii;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
@@ -327,71 +327,10 @@ class Proposal extends ActiveRecord
      */
     public function afterSave($insert, $changedAttributes)
     {
-//        if ($insert && !empty($this->organizations)) {
-//            foreach ($this->organizations as $organizationId) {
-//                $message = new Message();
-//                $message->organization_id = $organizationId;
-//                $message->author_class = MobileUser::class;
-//                $message->proposal_id = $this->id;
-//                $message->message = 'Хочу заказать у вас банкет';
-//                $message->save();
-//            }
-//        }
         if ($insert) {
-
-
-            $recipients = Organization::find()
-                ->where(['state' => Constants::ORGANIZATION_STATE_PAID])
-                ->where(['unsubscribe' => true])
-                ->Where(['NOT ILIKE', 'email', 'banket-b.ru'])
-                ->all();
-            foreach ($recipients as $recipient) {
-                /** @var MailQueue $m */
-//                $mailer = Yii::$app->mailqueue;
-//
-//                $mailer->getView()->params['recipient'] = $recipient;
-//
-//                /** @var \Swift_Message $message */
-//                $message = $mailer->compose('proposal-html', [
-//                    'proposal' => $this,
-//                    'recipient' => $recipient
-//                ]);
-//                $message->setFrom(Yii::$app->params['adminEmail'])
-//                    ->setTo($recipient->email)
-//                    ->setSubject('Новая заявка');
-//
-//                $headers = $message->getHeaders();
-//                $headers->addTextHeader('Precedence', 'bulk');
-//                $headers->addTextHeader('List-Unsubscribe', '<' . $recipient->getUnsubscribeUrl() . '>');
-//
-//
-//                $message->queue();
-
-
-                $text = "Здравствуйте, в ваш ресторан $recipient->name поступила новая заявка №$this->id на проведение банкета. 
-            Для просмотра заявки зайдите в личный кабинет <a href=\"https://banket-b.ru/conversation/index/' . $this->id . '\">ссылка</a>.
-            С уважение, команда Банкет Батл.
-            ";
-
-
-//                Yii::$app->mailqueue->compose()
-//                    ->setFrom(Yii::$app->params['adminEmail'])
-//                    ->setTo($recipient->email)
-//                    ->setSubject('Новая заявка')
-//                    ->setHtmlBody($text)
-//                    ->queue();
-
-            }
-            Yii::$app->mailqueue->compose()
-                ->setFrom(Yii::$app->params['adminEmail'])
-                ->setTo('zkzrr@yandex.ru')
-                ->setSubject('Новая заявка')
-                ->setHtmlBody('В разделе заявок появилась новая заявка <a href="https://admin.banket-b.ru/proposal/update/' . $this->id . '">посмотреть</a>')
-                ->queue();
-
             /** @var Queue $queue */
-//            $queue = Yii::$app->queue;
-//            $queue->delay(Yii::$app->params['autoAnswerDelay'])->push(new RRMessageJob(['proposal' => $this]));
+            $queue = Yii::$app->queue;
+            $queue->push(new SendNotifyAboutNewProposalJob(['proposal' => $this]));
 
         }
         parent::afterSave($insert, $changedAttributes);

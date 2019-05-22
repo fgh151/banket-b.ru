@@ -38,45 +38,13 @@ return [
             'table' => '{{%mail_queue}}',
             'transport' => [
                 'class' => 'Swift_SmtpTransport',
-                'host' => 'smtp.yandex.ru',
-                'username' => 'restorateru',
-                'password' => 'Oc5aecee',
+                'host' => 'smtp-pulse.com',
+                'username' => 'vkarpen@yandex.ru',
+                'password' => 'P4JRgKcWGXgB',
                 'port' => '465',
                 'encryption' => 'ssl', // у яндекса SSL
-//                'encryption' => 'ssl', // у яндекса SSL
             ],
         ],
-        'testmailer' => [
-            'class' => 'yii\swiftmailer\Mailer',
-            'viewPath' => '@common/mail',
-            // send all mails to a file by default. You have to set
-            // 'useFileTransport' to false and configure a transport
-            // for the mailer to send real emails.
-            'useFileTransport' => false,
-            'transport' => [
-                'class' => 'Swift_SmtpTransport',
-                'host' => 'smtp.yandex.ru',
-                'username' => 'fedor@support-pc.org',
-                'password' => 'idr4mvnax',
-                'port' => '587',
-                'encryption' => 'tls', // у яндекса SSL
-
-            ],
-        ],
-
-
-        'pulsemailer' => [
-            'class' => \app\common\components\sendpulse\Mailer::class,
-            'viewPath' => '@common/mail',
-            // send all mails to a file by default. You have to set
-            // 'useFileTransport' to false and configure a transport
-            // for the mailer to send real emails.
-            'useFileTransport' => false,
-            'api_secret' => '0ddd68fdee59c75829462da7f2a26c26',
-            'api_user' => 'e0cedb31c08e3bbaff55bd25a8e603d8'
-        ],
-
-
         'queue' => [
             'class' => \yii\queue\db\Queue::class,
             'db' => 'db', // DB connection component or its config
