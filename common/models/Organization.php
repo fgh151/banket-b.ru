@@ -49,6 +49,8 @@ use yii\web\IdentityInterface;
  *
  * @property double $latitude
  * @property double $longitude
+ * @property bool $unsubscribe [boolean]
+ * @property ProposalSearch $proposal_search
  *
  */
 class Organization extends ActiveRecord implements IdentityInterface
@@ -116,7 +118,9 @@ class Organization extends ActiveRecord implements IdentityInterface
             [['state', 'state_statistic', 'state_promo', 'state_direct'],'default', 'value' => Constants::ORGANIZATION_STATE_FREE],
             [['password', 'url', 'image_field'], 'safe'],
             ['city_id', ExistValidator::class, 'targetClass' => GeoCity::class, 'targetAttribute' => 'id'],
-            ['rating', 'number', 'max' => 10, 'min' => 0]
+            ['rating', 'number', 'max' => 10, 'min' => 0],
+            ['unsubscribe', 'boolean'],
+            ['proposal_search', 'string']
         ];
     }
 
@@ -174,6 +178,26 @@ class Organization extends ActiveRecord implements IdentityInterface
         parent::afterFind();
         $activity = OrganizationLinkActivity::find()->where(['organization_id' => $this->id])->one();
         $this->activity_field = $activity ? $activity->activity_id : null;
+
+        if ($this->proposal_search === null) {
+            $this->proposal_search = new ProposalSearch();
+        } else {
+            $this->proposal_search = unserialize(base64_decode($this->proposal_search));
+        }
+    }
+
+    /**
+     * Сериализация модели поиска перед сохранением
+     * @return bool
+     */
+    public function beforeValidate()
+    {
+        if ($this->proposal_search === null) {
+            $this->proposal_search = new ProposalSearch();
+        }
+        $this->proposal_search = base64_encode(serialize($this->proposal_search));
+
+        return parent::beforeValidate();
     }
 
     /**

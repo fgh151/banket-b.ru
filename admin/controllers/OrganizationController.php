@@ -207,11 +207,31 @@ WHERE ml.city_id = ' . $model->city_id . ' ORDER BY name;')
         throw new NotFoundHttpException('The requested page does not exist.');
     }
 
-
     public function actionAuth($userId)
     {
 
         (new LoginForm)->authAdmin($userId);
         return $this->goHome();
+    }
+
+    /**
+     * @param $id
+     * @return string
+     * @throws NotFoundHttpException
+     */
+    public function actionFilters($id)
+    {
+        $organization = $this->findModel($id);
+        $model = $organization->proposal_search;
+
+        if ($model->load(Yii::$app->request->post())) {
+            $organization->proposal_search = $model;
+            $organization->save();
+        }
+
+        return $this->render('filters', [
+            'model' => $model
+        ]);
+
     }
 }

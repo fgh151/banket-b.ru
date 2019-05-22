@@ -13,7 +13,6 @@ use app\common\components\Constants;
 use app\common\models\Organization;
 use app\common\models\OrganizationProposalStatus;
 use app\common\models\Proposal;
-use app\common\models\ProposalSearch;
 use Yii;
 use yii\data\ActiveDataProvider;
 use yii\filters\AccessControl;
@@ -62,11 +61,12 @@ class BattleController extends Controller
      */
     public function actionIndex()
     {
-//        $this->throwIfNotPay('state');
-        $searchModel = new ProposalSearch();
-
         /** @var Organization $organization */
         $organization = Yii::$app->getUser()->getIdentity();
+//        $this->throwIfNotPay('state');
+        $searchModel = $organization->proposal_search;
+
+
         if ($organization->state == Constants::ORGANIZATION_STATE_PAID) {
 
             $rejected = OrganizationProposalStatus::find()
@@ -80,12 +80,7 @@ class BattleController extends Controller
                 $searchModel->rejected[] = $record['proposal_id'];
             }
             $searchModel->status = Constants::PROPOSAL_STATUS_CREATED;
-            $searchModel->guests_count = 8;
-
             $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-
-
-
         } else {
             // Формируем запрос, который заведомо ничего не вернет
             $dataProvider = new ActiveDataProvider();
