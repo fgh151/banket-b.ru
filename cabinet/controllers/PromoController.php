@@ -14,6 +14,7 @@ use app\common\models\Promo;
 use yii\data\ActiveDataProvider;
 use yii\filters\AccessControl;
 use yii\helpers\FileHelper;
+use yii\web\NotAcceptableHttpException;
 use yii\web\NotFoundHttpException;
 use yii\web\UploadedFile;
 
@@ -48,8 +49,10 @@ class PromoController extends CabinetController
      */
     public function beforeAction($action)
     {
-        $this->throwIfNotPay('state_promo');
-        return parent::beforeAction($action);
+        throw new NotAcceptableHttpException('Раздел находиться в разработке');
+
+//        $this->throwIfNotPay('state_promo');
+//        return parent::beforeAction($action);
     }
 
     public function actionIndex()

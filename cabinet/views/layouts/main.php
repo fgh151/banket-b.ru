@@ -58,7 +58,7 @@ $homeLinkLable = (new Mobile_Detect())->isMobile() ? '<span>
     } else {
         $menuItems[] = ['label' => 'Заявки', 'url' => ['/battle/index']];
         $menuItems[] = ['label' => 'Статистика', 'url' => ['/site/index']];
-        $menuItems[] = ['label' => 'Реклама', 'url' => ['/promo/index']];
+//        $menuItems[] = ['label' => 'Реклама', 'url' => ['/promo/index']];
         $menuItems[] = ['label' => 'Профиль', 'url' => ['/user/edit']];
         $menuItems[] = '<li>'
             . Html::beginForm(['/site/logout'], 'post', ['class' => 'logout-form'])
