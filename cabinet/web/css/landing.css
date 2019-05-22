@@ -1,24 +1,86 @@
-h1 {
-    font-size: 3.8rem;
-    font-weight: 200;
-    color: #d80 !important;
+a {
+    color: #0C21E2 !important;
 }
 
-p, li {
-    color: #fff;
+.description, .promo-buttons, .promo-image {
+    position: absolute;
+}
+
+.promo-image {
+    top: -23%;
+    left: -6%;
+}
+
+.description {
+    top: 550px;
+}
+
+.promo-buttons {
+    top: 770px;
+}
+
+.promo-logo {
+    width: 72px;
+    height: 72px;
 }
 
 .footer {
-    position: fixed;
-    bottom: 0;
-    width: 100%;
-    height: auto !important;
+    display: none;
 }
 
-.footer p {
-    color: #000;
-}
+@media (min-width: 768px) {
 
-body > .container {
-    margin-bottom: 400px;
+
+    .descripton-text {
+        max-width: 38%;
+    }
+
+    .promo-wrapper {
+        position: relative;
+    }
+
+    .container {
+
+        padding-top: 3%;
+        height: 90vh;
+    }
+
+    .container:after {
+        display: table;
+        content: '';
+        clear: both;
+    }
+
+    .description, .promo-buttons, .promo-image {
+        position: relative;
+        top: 0;
+        left: 0;
+    }
+
+    .description, .promo-buttons {
+        float: left;
+        width: 50%;
+    }
+
+    .promo-buttons {
+        position: absolute;
+        bottom: 30%;
+        height: auto;
+        top: auto;
+        padding-left: 15px;
+    }
+
+    .description {
+        float: left;
+        width: 50%;
+        position: relative;
+        height: auto;
+
+        top: 10%;
+    }
+
+    .promo-image {
+        float: right;
+        width: 50%;
+    }
 }

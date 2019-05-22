@@ -21,12 +21,9 @@ use yii\helpers\Url;
 use yii\widgets\MaskedInput;
 
 $this->title = 'Регистрация';
-$this->params['breadcrumbs'][] = $this->title;
 ?>
     <div class="site-signup">
         <h1><?= Html::encode($this->title) ?></h1>
-
-        <p>Для регистрации заполните форму ниже:</p>
 
         <div class="row">
             <div class="col-lg-5">
@@ -201,12 +198,30 @@ $this->params['breadcrumbs'][] = $this->title;
                 <?= $form->field($model, 'email') ?>
                 <?= $form->field($model, 'url') ?>
 
-                <?= $form->field($model, 'password')->passwordInput() ?>
-                <?= $form->field($model, 'confirm_password')->passwordInput() ?>
+                <div class="row">
+                    <div class="col-xs-6">
+                        <?= $form->field($model, 'password')->passwordInput() ?>
+                    </div>
+                    <div class="col-xs-6">
+                        <?= $form->field($model, 'confirm_password')->passwordInput() ?>
+                    </div>
+                </div>
 
-                <div class="form-group">
-                    <?= Html::submitButton('Зарегистрироваться',
-                        ['class' => 'btn btn-primary', 'name' => 'signup-button']) ?>
+                <div class="row">
+                    <div class="col-xs-12">
+                        <script src='https://www.google.com/recaptcha/api.js'></script>
+                        <div class="g-recaptcha" data-sitekey="6LcFr6QUAAAAAJVeTBa8Oj9XAcbQsGcGKCLxNvfi"></div>
+                    </div>
+                </div>
+
+
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div class="form-group">
+                            <?= Html::submitButton('Зарегистрироваться',
+                                ['class' => 'btn btn-primary', 'name' => 'signup-button']) ?>
+                        </div>
+                    </div>
                 </div>
 
                 <?php ActiveForm::end(); ?>
@@ -255,6 +270,19 @@ function changeMetroSelector(){
     changeMetroSelector();
 });
 }
+
+
+
+
+$('#form-signup').on('beforeValidate', function (event, messages, deferreds) {
+   
+    
+    if (!grecaptcha.getResponse()) {
+         alert('Вы не заполнили поле Я не робот!');
+         return false; 
+    }
+    
+});
 JS;
 
 $this->registerJs($js);

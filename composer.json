@@ -1,5 +1,5 @@
 {
-  "name": "banket-b",
+  "name": "banketb",
   "description": "banket-b server",
   "version": "2.0.0",
   "homepage": "http://www.yiiframework.com/",
@@ -35,7 +35,11 @@
     "ext-curl": "*",
     "yiisoft/yii2-queue": "^2.1",
     "paragraph1/php-fcm": "^0.7.0",
-    "bower-asset/react": "^16.1"
+    "bower-asset/react": "^16.1",
+    "aprsoft/yii2-dropify": "^1.2",
+    "mobiledetect/mobiledetectlib": "^2.8",
+    "nikitich/yii2-smsc": "^0.1.1",
+    "sendpulse/rest-api": "^1.0"
   },
   "require-dev": {
     "yiisoft/yii2-debug": "~2.0.0",

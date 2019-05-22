@@ -11,68 +11,107 @@
  * @var $index int
  */
 
-use app\common\components\Constants;
+use app\common\components\MonthHelper;
 use app\common\models\Proposal;
+use yii\helpers\Url;
 
-$ru_month = [
-    'Января',
-    'Февраля',
-    'Марта',
-    'Апреля',
-    'Майя',
-    'Июня',
-    'Июля',
-    'Августа',
-    'Сентября',
-    'Октября',
-    'Ноября',
-    'Декабря'
-];
-$en_month = [
-    'January',
-    'February',
-    'March',
-    'April',
-    'May',
-    'June',
-    'July',
-    'August',
-    'September',
-    'October',
-    'November',
-    'December'
-];
 ?>
-<div class="panel panel-default">
-    <div class="panel-body">
+<a href="<?= Url::to(['conversation/index', 'proposalId' => $model->id], ['class' => 'btn btn-primary']); ?>"
+   class="proposal-item row<?= !$model->isActual() ? ' closed-proposals' : '' ?>">
+    <div class="col-xs-12 col-md-3 proposal-mobile-header">
         <div class="row">
-            <div class="col-xs-12 col-md-2">
-                № <?= $model->id ?>
+            <div class="col-xs-8">
+                <?= $this->render('_best_cost', ['model' => $model]); ?>
             </div>
-            <div class="col-xs-12 col-md-2">
-                <?= Proposal::typeLabels()[$model->event_type] ?>
-                <?= str_replace($en_month, $ru_month, $model->getWhen()->format('d F Y в H:i')); ?>
-            </div>
-
-            <div class="col-xs-12 col-md-2">
-                <?= $model->guests_count ?>
-            </div>
-            <div class="col-xs-12 col-md-2">
-                Ставок
-            </div>
-            <div class="col-xs-12 col-md-2">
-                Лучшая ставка
-            </div>
-            <div class="col-xs-12 col-md-2">
-                <?php
-                if (Yii::$app->getUser()->getIdentity()->state == Constants::ORGANIZATION_STATE_PAID) :
-                    if ($model->isActual()) :
-                        echo $this->render('_controls', ['model' => $model]);
-                    else:
-                        echo '<span style="color: #843534">Заявка не актуальная, стоимость заявки ' . $model->guests_count * $model->amount . ' ₽</span>';
-                    endif;
-                endif; ?>
+            <div class="col-xs-4 show-mobile my-price-description">
+                <?= count($model->uniqueCosts) ?> <?= Yii::t('app', '{n, plural, =0{ставок} =1{ставка} other{ставки}}', ['n' => count($model->uniqueCosts)]); ?>
             </div>
         </div>
     </div>
-</div>
+
+    <div class="col-xs-12 show-mobile">
+        <p class="my-price-description">
+            Лучшая ставка
+        </p>
+
+
+        <p>
+            <?php if ($model->getMinCost() === null) : ?>
+
+                <?= Yii::$app->formatter->asRubles($model->amount); ?>
+                <span class="my-price-description">
+            <?= Yii::$app->formatter->asRubles(round($model->amount / $model->guests_count)); ?> ₽ /чел.
+        </span>
+            <?php else: ?>
+                <?= Yii::$app->formatter->asRubles($model->getMinCost()); ?>
+                <span class="my-price-description">
+            <?= Yii::$app->formatter->asRubles(round($model->getMinCost() / $model->guests_count)); ?> ₽ /чел.
+        </span>
+            <?php endif; ?>
+        </p>
+
+
+    </div>
+
+    <div class="col-xs-12 col-md-3">
+        <p class="proposal-item-time">
+            <?= MonthHelper::formatDate($model->getWhen()); ?>, <?= str_replace('-', '&#8212;', $model->time) ?>
+        </p>
+        <p class="proposal-item-type">
+            <?= Proposal::typeLabels()[$model->event_type] ?>
+        </p>
+    </div>
+
+    <div class="col-xs-12 col-md-1 p-t-5 list-guests-count">
+        <?= $model->guests_count ?>
+        <span class="show-mobile">
+            <?= Yii::t('app', '{n, plural, one{гостя} few{гостей} other{гостей}}', ['n' => $model->guests_count]); ?>
+        </span>
+    </div>
+    <div class="col-xs-12 col-md-1 hidden-xs">
+        <?= $model->costsCount ?>
+    </div>
+    <div class="col-xs-12 col-md-2 hidden-xs">
+
+
+        <?php if ($model->getMinCost() === null) : ?>
+
+            <p>
+                <?= Yii::$app->formatter->asRubles($model->amount * $model->guests_count); ?>
+            </p>
+            <p class="my-price-description hidden-xs">
+                <?= Yii::$app->formatter->asRubles(round($model->amount)); ?> ₽ /чел.
+            </p>
+        <?php else: ?>
+            <p>
+                <?= Yii::$app->formatter->asRubles($model->getMinCost()); ?>
+            </p>
+            <p class="my-price-description hidden-xs">
+                <?= Yii::$app->formatter->asRubles(round($model->getMinCost() / $model->guests_count)); ?> ₽ /чел.
+            </p>
+        <?php endif; ?>
+    </div>
+    <div class="col-xs-12 col-md-2 p-t-20 cost-column ">
+
+        <?php if ($model->getIsRestaurantBest(Yii::$app->getUser()->getId()) === null && $model->isActual()) : ?>
+
+            <span class="cost-btn">Сделать ставку</span>
+        <?php else: ?>
+            <p class="my-price hidden-xs">
+                <?= Yii::$app->formatter->asRubles($model->getMyMinCost()); ?> ₽
+            </p>
+            <p class="my-price-description hidden-xs">
+                <?= Yii::$app->formatter->asRubles(round($model->getMyMinCost() / $model->guests_count)); ?> ₽ /чел.
+            </p>
+
+            <p class="show-mobile">
+                <span class="my-cost"> Ваша ставка <?= Yii::$app->formatter->asRubles($model->getMyMinCost()); ?> ₽&nbsp;</span><span
+                        class="cost-btn">Изменить</span>
+            </p>
+
+        <?php endif; ?>
+
+
+    </div>
+
+</a>

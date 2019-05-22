@@ -8,7 +8,7 @@
 
 namespace app\cabinet\controllers;
 
-
+use app\cabinet\components\CabinetController;
 use app\common\components\Constants;
 use app\common\models\Organization;
 use app\common\models\OrganizationProposalStatus;
@@ -16,13 +16,10 @@ use app\common\models\Proposal;
 use Yii;
 use yii\data\ActiveDataProvider;
 use yii\filters\AccessControl;
-use yii\web\Controller;
 
-class BattleController extends Controller
+class BattleController extends CabinetController
 {
-
     use CheckPayTrait;
-
 
     /**
      * {@inheritdoc}
@@ -51,7 +48,6 @@ class BattleController extends Controller
      */
     public function beforeAction($action)
     {
-//        $this->throwIfNotPay('state');
         return parent::beforeAction($action);
     }
 
@@ -61,14 +57,13 @@ class BattleController extends Controller
      */
     public function actionIndex()
     {
+
+
         /** @var Organization $organization */
         $organization = Yii::$app->getUser()->getIdentity();
 //        $this->throwIfNotPay('state');
         $searchModel = $organization->proposal_search;
-
-
         if ($organization->state == Constants::ORGANIZATION_STATE_PAID) {
-
             $rejected = OrganizationProposalStatus::find()
                 ->where([
                     'organization_id' => $organization->getId(),
@@ -80,6 +75,9 @@ class BattleController extends Controller
                 $searchModel->rejected[] = $record['proposal_id'];
             }
             $searchModel->status = Constants::PROPOSAL_STATUS_CREATED;
+
+            $searchModel->date = date('Y-m-d');
+//            $searchModel->guests_count = 8;
             $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
         } else {
             // Формируем запрос, который заведомо ничего не вернет
@@ -92,58 +90,5 @@ class BattleController extends Controller
             'organization' => $organization,
             'dataProvider' => $dataProvider
         ]);
-    }
-
-    /**
-     * @return string
-     * @throws \Throwable
-     */
-//    public function actionDirect()
-//    {
-//        $this->throwIfNotPay('state_direct');
-//        $searchModel = new ProposalSearch();
-//
-//        /** @var Organization $organization */
-//        $organization = Yii::$app->getUser()->getIdentity();
-//        if ($organization->state == Constants::ORGANIZATION_STATE_PAID) {
-//
-//
-//            $rejected = OrganizationProposalStatus::find()
-//                ->where([
-//                    'organization_id' => $organization->getId(),
-//                    'status' => Constants::ORGANIZATION_PROPOSAL_STATUS_REJECT
-//                ])
-//                ->select('proposal_id')->asArray()->all();
-//
-//            foreach ($rejected as $record) {
-//                $searchModel->rejected[] = $record['proposal_id'];
-//            }
-//            $searchModel->status = Constants::PROPOSAL_STATUS_CREATED;
-//
-//            $dataProvider = $searchModel->search(Yii::$app->request->queryParams, Yii::$app->getUser()->getId());
-//
-//
-//
-//        } else {
-//            // Формируем запрос, который заведомо ничего не вернет
-//            $dataProvider = new ActiveDataProvider();
-//            $dataProvider->query = Proposal::find()->where(['id' => 0]);
-//        }
-//
-//        return $this->render('index', [
-//            'searchModel' => $searchModel,
-//            'organization' => $organization,
-//            'dataProvider' => $dataProvider
-//        ]);
-//    }
-
-    public function actionReject($id)
-    {
-        $model = new OrganizationProposalStatus();
-        $model->organization_id = Yii::$app->getUser()->getId();
-        $model->proposal_id = $id;
-        $model->status = Constants::ORGANIZATION_PROPOSAL_STATUS_REJECT;
-        $model->save();
-        $this->redirect(['index']);
     }
 }

@@ -25,7 +25,7 @@ trait CheckPayTrait
     {
         /** @var Organization $user */
         $user = Yii::$app->getUser()->getIdentity();
-        if ($user->$state_attribute === Constants::ORGANIZATION_STATE_FREE) {
+        if ($user && $user->$state_attribute === Constants::ORGANIZATION_STATE_FREE) {
             throw new NotPayException();
         }
     }

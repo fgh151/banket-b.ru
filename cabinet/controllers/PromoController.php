@@ -9,15 +9,16 @@
 namespace app\cabinet\controllers;
 
 
+use app\cabinet\components\CabinetController;
 use app\common\models\Promo;
 use yii\data\ActiveDataProvider;
 use yii\filters\AccessControl;
 use yii\helpers\FileHelper;
-use yii\web\Controller;
+use yii\web\NotAcceptableHttpException;
 use yii\web\NotFoundHttpException;
 use yii\web\UploadedFile;
 
-class PromoController extends Controller
+class PromoController extends CabinetController
 {
     use CheckPayTrait;
 
@@ -48,8 +49,10 @@ class PromoController extends Controller
      */
     public function beforeAction($action)
     {
-        $this->throwIfNotPay('state_promo');
-        return parent::beforeAction($action);
+        throw new NotAcceptableHttpException('Раздел находиться в разработке');
+
+//        $this->throwIfNotPay('state_promo');
+//        return parent::beforeAction($action);
     }
 
     public function actionIndex()
@@ -138,7 +141,5 @@ class PromoController extends Controller
 
         throw new NotFoundHttpException('The requested page does not exist.');
     }
-
-
 
 }

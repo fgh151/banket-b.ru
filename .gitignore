@@ -34,3 +34,11 @@ phpunit.phar
 # vagrant runtime
 /.vagrant
 /node_modules
+buildid
+
+
+\S+/config/\S+-local.php
+
+backend/config/main-local.php
+backend/config/params-local.php
+backend/config/test-local.php

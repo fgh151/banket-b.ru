@@ -2,6 +2,7 @@
 
 namespace app\cabinet\controllers;
 
+use app\cabinet\components\CabinetController;
 use app\cabinet\models\ContactForm;
 use app\cabinet\models\LoginForm;
 use app\cabinet\models\PasswordResetRequestForm;
@@ -25,13 +26,12 @@ use yii\helpers\FileHelper;
 use yii\helpers\Json;
 use yii\helpers\Url;
 use yii\web\BadRequestHttpException;
-use yii\web\Controller;
 use yii\web\UploadedFile;
 
 /**
  * Site controller
  */
-class SiteController extends Controller
+class SiteController extends CabinetController
 {
     use CheckPayTrait;
 
@@ -366,13 +366,12 @@ class SiteController extends Controller
 
 
         if (!Yii::$app->user->isGuest) {
-            return $this->redirect('index');
+            return $this->redirect(['battle/index']);
         }
 
         $model = new LoginForm();
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
-            Yii::$app->homeUrl = Url::to('index');
-            return $this->goBack();
+            return $this->redirect(['battle/index']);
         } else {
             $model->password = '';
 
@@ -425,7 +424,7 @@ class SiteController extends Controller
     public function actionAbout()
     {
         if (!Yii::$app->getUser()->getIsGuest()) {
-            return $this->redirect('site/index');
+            return $this->redirect(['battle/index']);
         }
         $this->layout = 'blank';
         return $this->render('about');
@@ -461,34 +460,38 @@ class SiteController extends Controller
         $post = Yii::$app->request->post();
 
         if ($model->load($post)) {
-            if ($user = $model->signup()) {
-                $this->uploadOrganizationImage($model, $user);
+            if ($this->checkRecaptcha()) {
+                if ($user = $model->signup()) {
+                    $this->uploadOrganizationImage($model, $user);
 
-                if ($modelParams->load($post)) {
-                    $modelParams->organization_id = $user->id;
-                    $modelParams->save();
-                }
+                    if ($modelParams->load($post)) {
+                        $modelParams->organization_id = $user->id;
+                        $modelParams->save();
+                    }
 
-                /** @var RestaurantHall[] $halls */
-                $halls = Model::createMultiple(RestaurantHall::class);
-                Model::loadMultiple($halls, Yii::$app->request->post());
-                foreach ($halls as $hall) {
-                    $hall->restaurant_id = $user->id;
-                    $hall->save();
-                }
+                    /** @var RestaurantHall[] $halls */
+                    $halls = Model::createMultiple(RestaurantHall::class);
+                    Model::loadMultiple($halls, Yii::$app->request->post());
+                    foreach ($halls as $hall) {
+                        $hall->restaurant_id = $user->id;
+                        $hall->save();
+                    }
 
-                /** @var OrganizationLinkMetro[] $metros */
-                $metros = Model::createMultiple(OrganizationLinkMetro::class);
-                Model::loadMultiple($metros, Yii::$app->request->post());
-                foreach ($metros as $station) {
-                    $station->organization_id = $user->id;
-                    $station->save();
-                }
+                    /** @var OrganizationLinkMetro[] $metros */
+                    $metros = Model::createMultiple(OrganizationLinkMetro::class);
+                    Model::loadMultiple($metros, Yii::$app->request->post());
+                    foreach ($metros as $station) {
+                        $station->organization_id = $user->id;
+                        $station->save();
+                    }
 
-                if (Yii::$app->getUser()->login($user)) {
-                    Yii::$app->homeUrl = Url::to('/site/index');
-                    return $this->goHome();
+                    if (Yii::$app->getUser()->login($user)) {
+                        Yii::$app->homeUrl = Url::to(['/battle/index']);
+                        return $this->goHome();
+                    }
                 }
+            } else {
+                $model->addError('title', 'Необходимо указать что вы не робот');
             }
         }
 
@@ -498,6 +501,26 @@ class SiteController extends Controller
             'halls' => (empty($halls) ? [new RestaurantHall()] : $halls),
             'metro' => (empty($metro) ? [new OrganizationLinkMetro()] : $metro),
         ]);
+    }
+
+    private function checkRecaptcha()
+    {
+        $url = 'https://www.google.com/recaptcha/api/siteverify';
+        $data = [
+            'secret' => '6LcFr6QUAAAAAM6IFLvubkKGYViVaFIWkSng8RyN',
+            'response' => Yii::$app->request->post('g-recaptcha-response')
+        ];
+        $options = [
+            'http' => [
+                'method' => 'POST',
+                'content' => http_build_query($data)
+            ]
+        ];
+        $context = stream_context_create($options);
+        $verify = file_get_contents($url, false, $context);
+        $captcha_success = json_decode($verify);
+
+        return $captcha_success->success;
     }
 
     /**
@@ -622,5 +645,11 @@ class SiteController extends Controller
         return $this->render('resetPassword', [
             'model' => $model,
         ]);
+    }
+
+    public function actionUnsubscribe()
+    {
+
+        return $this->render('unsubscribe');
     }
 }

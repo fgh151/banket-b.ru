@@ -26,9 +26,9 @@ $this->title = 'My Yii Application';
 
     <div class="row">
         <div class="col-xs-12">
-            <?= Html::a('Все заявки', ['site/index']) ?>
-            <?= Html::a('Заявки в моем городе', ['site/index', 'proposals' => 'my']) ?>
-            <?= Html::a('Заявки за прошлый месяц', ['site/index', 'month' => 'last']) ?>
+            <?= Html::a('Все заявки', ['site/index'], ['class' => 'btn btn-default']) ?>
+            <?= Html::a('Заявки в моем городе', ['site/index', 'proposals' => 'my'], ['class' => 'btn btn-default']) ?>
+            <?= Html::a('Заявки за прошлый месяц', ['site/index', 'month' => 'last'], ['class' => 'btn btn-default']) ?>
         </div>
     </div>
 

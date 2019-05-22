@@ -1,6 +1,7 @@
 <?php
 
 /* @var $this \yii\web\View */
+
 /* @var $content string */
 
 use app\cabinet\assets\AppAsset;
@@ -8,9 +9,17 @@ use app\common\widgets\Alert;
 use yii\bootstrap\Nav;
 use yii\bootstrap\NavBar;
 use yii\helpers\Html;
+use yii\widgets\Breadcrumbs;
 
 AppAsset::register($this);
 $this->title = 'Банкетный Баттл';
+
+$homeLinkLable = (new Mobile_Detect())->isMobile() ? '<span>
+                    <svg width="22" height="14" viewBox="0 0 22 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M22 7H2" stroke="black" stroke-width="1.5"/>
+<path d="M7.03656 12.0364L2 6.99988L6.96912 2.03076" stroke="black" stroke-width="1.5" stroke-linecap="square"/>
+</svg>' : '<';
+
 ?>
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
@@ -36,29 +45,25 @@ $this->title = 'Банкетный Баттл';
 <div class="wrap">
     <?php
     NavBar::begin([
-        'brandLabel' => Yii::$app->getUser()->getIsGuest() ? Yii::$app->name : 'Личный кабинет ' . Yii::$app->getUser()->getIdentity()->name,
+        'brandLabel' => Html::img('/favicon-32x32.png') . Yii::$app->name . ' <span class="app-description hidden-xs">личный кабинет</span>',
         'brandUrl' => Yii::$app->homeUrl,
         'options' => [
-            'class' => 'navbar-inverse navbar-fixed-top',
+            'class' => 'navbar navbar-fixed-top',
         ],
     ]);
-    $menuItems = [
-//        ['label' => 'About', 'url' => ['/site/about']],
-//        ['label' => 'Contact', 'url' => ['/site/contact']],
-    ];
+    $menuItems = [];
     if (Yii::$app->user->isGuest) {
-        $menuItems[] = ['label' => 'Регистрация', 'url' => ['/site/signup']];
         $menuItems[] = ['label' => 'Вход', 'url' => ['/site/login']];
+        $menuItems[] = ['label' => 'Регистрация', 'url' => ['/site/signup']];
     } else {
         $menuItems[] = ['label' => 'Заявки', 'url' => ['/battle/index']];
-//        $menuItems[] = ['label' => 'Прямые заявки', 'url' => ['/battle/direct']];
         $menuItems[] = ['label' => 'Статистика', 'url' => ['/site/index']];
-        $menuItems[] = ['label' => 'Мои предложения', 'url' => ['/promo/index']];
+//        $menuItems[] = ['label' => 'Реклама', 'url' => ['/promo/index']];
         $menuItems[] = ['label' => 'Профиль', 'url' => ['/user/edit']];
         $menuItems[] = '<li>'
-            . Html::beginForm(['/site/logout'], 'post')
+            . Html::beginForm(['/site/logout'], 'post', ['class' => 'logout-form'])
             . Html::submitButton(
-                'Выйти (' . Yii::$app->user->identity->name . ')',
+                'Выйти',
                 ['class' => 'btn btn-link logout']
             )
             . Html::endForm()
@@ -71,7 +76,13 @@ $this->title = 'Банкетный Баттл';
     NavBar::end();
     ?>
 
+
     <div class="container">
+        <?= Breadcrumbs::widget([
+            'encodeLabels' => false,
+            'homeLink' => ['label' => $homeLinkLable, 'url' => '/'],
+            'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
+        ]) ?>
         <?= Alert::widget() ?>
         <?= $content ?>
     </div>

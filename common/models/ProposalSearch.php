@@ -13,6 +13,8 @@ class ProposalSearch extends Proposal
 {
     public $rejected;
 
+    public $order;
+
     /**
      * {@inheritdoc}
      */
@@ -23,6 +25,7 @@ class ProposalSearch extends Proposal
             [['City', 'date', 'time', 'comment', 'status', 'rejected'], 'safe'],
             [['amount'], 'number'],
             [['dance', 'private', 'own_alcohol', 'parking'], 'boolean'],
+            ['order', 'in', 'range' => ['date']]
         ];
     }
 
@@ -50,8 +53,13 @@ class ProposalSearch extends Proposal
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
-            'sort' => ['defaultOrder' => ['date' => SORT_DESC]]
+//            'sort' => ['defaultOrder' => ['id' => SORT_DESC]]
         ]);
+
+        if ($this->order) {
+            $dataProvider->sort = ['defaultOrder' => [$this->order => SORT_DESC]];
+        }
+
 
         $this->load($params);
 
@@ -67,7 +75,6 @@ class ProposalSearch extends Proposal
         $query->andFilterWhere([
             'id' => $this->id,
             'owner_id' => $this->owner_id,
-            'date' => $this->date,
             'time' => $this->time,
             'event_type' => $this->event_type,
             'metro' => $this->metro,
@@ -77,6 +84,10 @@ class ProposalSearch extends Proposal
             'parking' => $this->parking,
 //            'status' => $this->status
         ]);
+
+        if ($this->date) {
+            $query->andWhere(['>=', 'date', $this->date]);
+        }
 
         $query->andFilterWhere(['>', 'guests_count', $this->guests_count]);
 
@@ -101,7 +112,7 @@ class ProposalSearch extends Proposal
         $query->andFilterWhere(['ilike', 'City', $this->City])
             ->andFilterWhere(['ilike', 'comment', $this->comment]);
 
-//        $query->orderBy('id DESC');
+        $query->orderBy('date ASC');
 
 
         if ($this->rejected) {
@@ -111,6 +122,7 @@ class ProposalSearch extends Proposal
         }
 
 //        var_dump($query->createCommand()->getRawSql()); die;
+
 
         return $dataProvider;
     }

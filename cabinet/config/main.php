@@ -8,7 +8,7 @@ $params = array_merge(
 
 return [
     'id' => 'app-cabinet',
-    'name' => 'Банкетный Батл личный кабинет',
+    'name' => 'Банкетный Батл',
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
     'language' => 'ru-RU',

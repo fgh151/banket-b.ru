@@ -5,7 +5,7 @@ namespace app\common\models;
 
 use app\common\components\Constants;
 use app\common\models\geo\GeoCity;
-use Kreait\Firebase\Database;
+use app\jobs\SendNotifyAboutNewProposalJob;
 use Yii;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
@@ -36,7 +36,6 @@ use yii\queue\Queue;
  * @property \DateTime $when
  * @property int $cuisineString
  * @property int $eventType
- * @property $this $isConstructor
  * @property MobileUser $owner
  * @property boolean $floristics
  * @property boolean $hall
@@ -49,19 +48,19 @@ use yii\queue\Queue;
  * @property integer $city_id
  * @property integer $region_id
  * @property bool|array|mixed $answers
- * @property bool|array $directOrganizations
  * @property \yii\db\ActiveQuery|\app\common\models\geo\GeoCity $geoCity
  * @property integer $all_regions
  *
  *
  *
  * @property integer $minCost
- * @property double $profit
  *
  * @property boolean $send15
  * @property boolean $send120
  * @property string $type [integer]
  * @property string $cuisine [integer]
+ *
+ * @property Cost $bestCost
  */
 //TODO: remove type
 class Proposal extends ActiveRecord
@@ -80,36 +79,58 @@ class Proposal extends ActiveRecord
     }
 
     /**
-     * @return array
+     * @param Proposal $proposal
+     * @return float|int
+     * @throws \yii\db\Exception
      */
-    public static function cuisineLabels()
+    public static function getProfit(Proposal $proposal)
     {
-        return [
-            1 => 'Нет предпочтений',
-            2 => 'Русская',
-            3 => 'Европейская',
-            4 => 'Паназиатская',
-            5 => 'Восточная',
-            6 => 'Итальянская',
-            7 => 'Японская',
-            8 => 'Китайская'
-        ];
+        $cost = $proposal->amount * $proposal->guests_count; ///стоимость заявки
+        $restaurantCost = $proposal->getMinCost(); // мин ставка
+        return round(100 - ($restaurantCost * 100 / $cost));
     }
 
     /**
-     * @return array
+     * @return false|string|null
+     * @throws \yii\db\Exception
      */
-    public static function typeLabels()
+    public function getMinCost()
     {
-        return [
-            1 => 'Банкет',
-            2 => 'Корпоратив',
-            3 => 'Детский праздник',
-            4 => 'День Рождения',
-            5 => 'Юбилей',
-            6 => 'Свадьба',
-            7 => 'Другое'
-        ];
+        return self::getMinCostForRestaurant($this->id, false);
+    }
+
+    /**
+     * @param $proposalId
+     * @param null $restaurantId
+     * @return false|int|null
+     * @throws \yii\db\Exception
+     */
+    public static function getMinCostForRestaurant($proposalId, $restaurantId = null)
+    {
+        if ($restaurantId === false) {
+            return Yii::$app
+                ->getDb()
+                ->createCommand(
+                    'SELECT min(cost) FROM cost WHERE proposal_id = :pid;', [
+                        ':pid' => $proposalId
+                    ]
+                )
+                ->queryScalar();
+        }
+
+        if ($restaurantId === null) {
+            $restaurantId = Yii::$app->getUser()->getId();
+        }
+
+        return Yii::$app
+            ->getDb()
+            ->createCommand(
+                'SELECT min(cost) FROM cost WHERE restaurant_id = :rid AND proposal_id = :pid;', [
+                    ':rid' => $restaurantId,
+                    ':pid' => $proposalId
+                ]
+            )
+            ->queryScalar();
     }
 
     /**
@@ -251,7 +272,6 @@ class Proposal extends ActiveRecord
         return $this->hasOne(GeoCity::class, ['id' => 'city_id']);
     }
 
-
     /**
      * @return int
      */
@@ -261,18 +281,20 @@ class Proposal extends ActiveRecord
     }
 
     /**
-     * @return bool
+     * @return array
      */
-    public function getIsConstructor()
+    public static function cuisineLabels()
     {
-        return $this->floristics ||
-            $this->hall ||
-            $this->photo ||
-            $this->stylists ||
-            $this->cake ||
-            $this->entertainment ||
-            $this->transport ||
-            $this->present;
+        return [
+            1 => 'Нет предпочтений',
+            2 => 'Русская',
+            3 => 'Европейская',
+            4 => 'Паназиатская',
+            5 => 'Восточная',
+            6 => 'Итальянская',
+            7 => 'Японская',
+            8 => 'Китайская'
+        ];
     }
 
     /**
@@ -284,44 +306,31 @@ class Proposal extends ActiveRecord
     }
 
     /**
+     * @return array
+     */
+    public static function typeLabels()
+    {
+        return [
+            1 => 'Банкет',
+            2 => 'Корпоратив',
+            3 => 'Детский праздник',
+            4 => 'День Рождения',
+            5 => 'Юбилей',
+            6 => 'Свадьба',
+            7 => 'Другое'
+        ];
+    }
+
+    /**
      * @param bool $insert
      * @param array $changedAttributes
      */
     public function afterSave($insert, $changedAttributes)
     {
-//        if ($insert && !empty($this->organizations)) {
-//            foreach ($this->organizations as $organizationId) {
-//                $message = new Message();
-//                $message->organization_id = $organizationId;
-//                $message->author_class = MobileUser::class;
-//                $message->proposal_id = $this->id;
-//                $message->message = 'Хочу заказать у вас банкет';
-//                $message->save();
-//            }
-//        }
         if ($insert) {
-            $recipients = Organization::find()
-//                ->where(['state' => Constants::ORGANIZATION_STATE_PAID])
-                ->Where(['NOT ILIKE', 'email', 'banket-b.ru'])
-                ->all();
-//            foreach ($recipients as $recipient) {
-//                Yii::$app->mailqueue->compose()
-//                    ->setFrom(Yii::$app->params['adminEmail'])
-//                    ->setTo($recipient->email)
-//                    ->setSubject('Новая заявка')
-//                    ->setHtmlBody('В разделе заявок появилась новая заявка <a href="https://banket-b.ru/conversation/index/' . $this->id . '">посмотреть</a>')
-//                    ->queue();
-//            }
-//            Yii::$app->mailqueue->compose()
-//                ->setFrom(Yii::$app->params['adminEmail'])
-//                ->setTo('zkzrr@yandex.ru')
-//                ->setSubject('Новая заявка')
-//                ->setHtmlBody('В разделе заявок появилась новая заявка <a href="https://admin.banket-b.ru/proposal/update/' . $this->id . '">посмотреть</a>')
-//                ->queue();
-
             /** @var Queue $queue */
             $queue = Yii::$app->queue;
-//            $queue->delay(Yii::$app->params['autoAnswerDelay'])->push(new RRMessageJob(['proposal' => $this]));
+            $queue->push(new SendNotifyAboutNewProposalJob(['proposal' => $this]));
 
         }
         parent::afterSave($insert, $changedAttributes);
@@ -333,110 +342,32 @@ class Proposal extends ActiveRecord
      */
     public function getAnswers()
     {
-        $result = [];
-        $cache = \Yii::$app->cache;
+//        $result = [];
+//        $cache = \Yii::$app->cache;
 //        $result = $cache->get('proposal-answers-' . $this->id);
 
 //        if ($result == false) {
-            $messages = Message::findAll($this->owner_id, $this->id);
-            $tmp = $result = [];
-            foreach ($messages as $organizationId => $messagesArray) {
-                $tmp[$organizationId] = min(array_keys($messagesArray));
-            }
+        $messages = Message::findAll($this->owner_id, $this->id);
+        $tmp = $result = [];
+        foreach ($messages as $organizationId => $messagesArray) {
+            $tmp[$organizationId] = min(array_keys($messagesArray));
+        }
 
-            foreach ($tmp as $organizationId => $timestamp) {
-                $result[Organization::findOne(intval($organizationId))->name] = \Yii::$app->formatter->asDatetime($timestamp);
-            }
-//            $cache->set('proposal-answers-' . $this->id, $result);
+        foreach ($tmp as $organizationId => $timestamp) {
+            $result[Organization::findOne(intval($organizationId))->name] = \Yii::$app->formatter->asDatetime($timestamp);
+        }
 //        }
 
         return $result;
     }
 
-    public function getOrganizationAnswers($organizationId)
-    {
-        $messages = Message::getConversation($this->owner_id, $this->id, $organizationId);
-        return $messages;
-    }
-
     /**
-     * @return array|bool|mixed
+     * @return false|string|null
+     * @throws \yii\db\Exception
      */
-    public function getDirectOrganizations()
+    public function getMyMinCost()
     {
-        $cache = \Yii::$app->cache;
-        $result = $cache->get('proposal-direct-organizations-' . $this->id);
-        if ($result === false) {
-
-            if (is_array($this->organizations)) {
-                foreach ($this->organizations as $organizationId) {
-                    $result[] = Organization::findOne(intval($organizationId))->name;
-                }
-            }
-            $cache->set('proposal-direct-organizations-' . $this->id, $result);
-        }
-        return $result;
-    }
-
-    /**
-     * @param $organizationId
-     * @return int
-     */
-    public function getReadMessagesCount($organizationId)
-    {
-        $message = ReadMessage::find()->where(['proposal_id' => $this->id, 'organization_id' => $organizationId])->one();
-        if ($message) {
-            return $message->count;
-        }
-
-        return count(Message::getConversation($this->owner_id, $this->id, $organizationId));
-    }
-
-    public function getMinCost()
-    {
-        if ($this->_minCost === null) {
-            /** @var Database $database */
-            $database = Yii::$app->firebase->getDatabase();
-            $m = $database
-                ->getReference('proposal_2/u_' . $this->owner_id . '/p_' . $this->id . '/')
-                ->getSnapshot()
-                ->getValue();
-            $a = end($m);
-
-            $end = end($a);
-            if (isset($end['cost'])) {
-                $this->_minCost = $end['cost'];
-            }
-
-            array_walk($m, [$this, 'searchMin']);
-        }
-
-        return $this->_minCost;
-    }
-
-    /**
-     * @param $item array
-     */
-    private function searchMin($item)
-    {
-        array_walk($item,
-
-            function ($item) {
-                if ($this->_minCost > $item['cost']) {
-                    $this->_minCost = $item['cost'];
-                }
-            }
-        );
-    }
-
-    /**
-     * @return float|int
-     */
-    public function getProfit()
-    {
-        $cost = $this->amount * $this->guests_count;
-        $one = $cost / 100;
-        return ($cost - $this->minCost) * $one;
+        return self::getMinCostForRestaurant($this->id);
     }
 
     /**
@@ -446,4 +377,52 @@ class Proposal extends ActiveRecord
     {
         return $this->status === Constants::PROPOSAL_STATUS_CREATED && $this->date >= date('Y-m-d');
     }
+
+    /**
+     * @param $restaurant
+     * @return Cost|ActiveRecord|null
+     */
+    public function getRestaurantMinCost($restaurant)
+    {
+        return Cost::find()->where(['proposal_id' => $this->id, 'restaurant_id' => $restaurant])->orderBy('cost')->one();
+    }
+
+    /**
+     * @param $restaurant
+     * @return bool|null
+     */
+    public function getIsRestaurantBest($restaurant)
+    {
+        if ($this->bestCost) {
+            return $this->bestCost->restaurant_id === $restaurant;
+        }
+        return null;
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery|Cost
+     */
+    public function getBestCost()
+    {
+        return $this->hasOne(Cost::class, ['proposal_id' => 'id'])->orderBy('cost');
+    }
+
+    public function getCostsCount()
+    {
+        return $this->getCosts()->count();
+    }
+
+    public function getCosts()
+    {
+        return $this->hasMany(Cost::class, ['proposal_id' => 'id']);
+    }
+
+    public function getUniqueCosts()
+    {
+        return $this->hasMany(Cost::class, ['proposal_id' => 'id'])
+            ->select('count(*)')
+            ->groupBy('restaurant_id');
+    }
+
+
 }

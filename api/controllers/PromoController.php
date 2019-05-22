@@ -9,7 +9,6 @@
 namespace app\api\controllers;
 
 
-use app\api\models\Promo as PromoModel;
 use app\common\models\Activity;
 use app\common\models\Promo;
 use app\common\models\PromoRedirect;
@@ -20,12 +19,13 @@ class PromoController extends Controller
 
     public function actionList($id = null)
     {
-        return PromoModel::findActive($id)
-                         ->andWhere(['<=', 'start', date('Y-m-d')])
-                         ->andWhere(['>=', 'end', date('Y-m-d')])
-                         ->limit(20)
-                         ->orderBy('random()')
-                         ->all();
+        return [];
+//        return PromoModel::findActive($id)
+//                         ->andWhere(['<=', 'start', date('Y-m-d')])
+//                         ->andWhere(['>=', 'end', date('Y-m-d')])
+//                         ->limit(20)
+//                         ->orderBy('random()')
+//                         ->all();
     }
 
     public function actionRedirect($id)

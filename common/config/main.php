@@ -38,12 +38,11 @@ return [
             'table' => '{{%mail_queue}}',
             'transport' => [
                 'class' => 'Swift_SmtpTransport',
-                'host' => 'smtp.yandex.ru',
-                'username' => 'restorateru',
-                'password' => 'Oc5aecee',
+                'host' => 'smtp-pulse.com',
+                'username' => 'vkarpen@yandex.ru',
+                'password' => 'P4JRgKcWGXgB',
                 'port' => '465',
                 'encryption' => 'ssl', // у яндекса SSL
-//                'encryption' => 'ssl', // у яндекса SSL
             ],
         ],
         'queue' => [
@@ -54,8 +53,18 @@ return [
             'mutex' => \yii\mutex\FileMutex::class
         ],
         'sms' => [
-            'class' => \app\common\components\Sms::class
-        ]
+            'class' => \app\common\components\Sms::class,
+//            'class' => \app\common\components\Smsc::class
+        ],
+        'SMSCenter' => [
+            'class' => 'integready\smsc\SMSCenter',
+            'login' => 'vkarpen@yandex.ru',
+            'password' => '*(Kar6#Pen*)',
+            'useSSL' => false,
+            'options' => [
+                'sender' => 'SenderName',   // имя отправителя
+            ],
+        ],
     ],
     'modules'    => [
         'smsGate' => [

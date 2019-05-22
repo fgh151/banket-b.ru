@@ -10,15 +10,22 @@ namespace app\console\controllers;
 
 
 use app\common\components\Constants;
+use app\common\models\Funnel;
 use app\common\models\Message;
 use app\common\models\Organization;
 use app\common\models\Proposal;
+use GuzzleHttp\Psr7\Uri;
+use Kreait\Firebase\Database;
 use paragraph1\phpFCM\Client;
 use paragraph1\phpFCM\Message as FCMMessage;
 use paragraph1\phpFCM\Notification;
 use paragraph1\phpFCM\Recipient\Device;
+use Sendpulse\RestApi\ApiClient;
+use Sendpulse\RestApi\Storage\FileStorage;
 use Yii;
 use yii\console\Controller;
+use yii\db\Expression;
+use yii\helpers\Url;
 use yii\queue\db\Queue;
 
 class TestController extends Controller
@@ -32,17 +39,24 @@ class TestController extends Controller
     public function actionMail()
     {
 
-        print_r(Yii::$app->mailqueue);
-        die;
+//        print_r(Yii::$app->mailqueue);
+//        die;
+
+        $mailer = Yii::$app->mailer;
+        $recipient = Organization::findOne(1);
 
 
-        print_r(Yii::$app->mailqueue->compose()
-            ->setFrom(Yii::$app->params['adminEmail'])
-            ->setTo('fedor@support-pc.org')
-            ->setSubject('banket-b')
-            ->setTextBody('banket-b')
-            ->queue());
-//            ->send());
+        $mailer->getView()->params['recipient'] = $recipient;
+
+        /** @var \Swift_Message $message */
+        $mailer->compose('proposal-html', [
+            'proposal' => Proposal::findOne(291),
+            'recipient' => $recipient
+        ])->setFrom('fedor@support-pc.org')
+            ->setTo('vkarpen@yandex.ru')
+            ->setSubject('Новая заявка')
+            ->send();
+
     }
 
     public function actionQeue()
@@ -63,7 +77,6 @@ class TestController extends Controller
 
         $message->save();
     }
-
 
     public function actionPush()
     {
@@ -96,18 +109,136 @@ class TestController extends Controller
         return $t;
     }
 
-
-    public function actionCost()
+    public function actionFirebase()
     {
-        $p = \app\api\models\Proposal::findOne(218); /* find()
-            ->where([
-                'owner_id' => 64,
-                'status' => Constants::PROPOSAL_STATUS_CREATED
-            ])
-            ->andFilterWhere(['>=', 'date', date('Y-m-d')])
-            ->orderBy(['date' => SORT_ASC])
-            ->all();*/
+        /** @var Database $database */
+        $database = Yii::$app->firebase->getDatabase();
 
-        var_dump($p->getMinPrice());
+        $ref = $database
+            ->getReference('/proposal_2/u_64/p_218/o_1')
+            ->orderByChild('author_class')
+            ->equalTo('app\common\models\Organization');
+
+        $uri = $ref->getUri();
+        $filter = new Uri('https://banket-b.firebaseio.com/' . $uri->getPath() . '?' . $uri->getQuery());
+
+//        var_dump($filter);
+
+//        $ref1 = $database->getReferenceFromUrl($filter);
+
+//            ->getUri();
+//            ->orderByChild('cost')
+//            ->limitToLast(2);
+        ;
+
+//        $ref = $database->getReferenceFromUrl($firstFilterUri);
+//        $ref->orderByChild('cost')
+//            ->limitToLast(1)
+//        ->getSnapshot();
+
+        var_dump($ref->getValue());
+    }
+
+    public function actionFunnel()
+    {
+        $c = Funnel::find()
+            ->where([
+                '=', new Expression("(extra->>'id')"), 111
+            ])
+            ->count();
+        var_dump($c);
+
+    }
+
+
+    public function actionPulse()
+    {
+        $SPApiClient = new ApiClient(
+            'e0cedb31c08e3bbaff55bd25a8e603d8',
+            '0ddd68fdee59c75829462da7f2a26c26',
+            new FileStorage(
+                \Yii::getAlias('@runtime') . DIRECTORY_SEPARATOR
+            )
+        );
+//Создаем книгу
+//        $book = $SPApiClient->createAddressBook('test-book');
+//        $bookId = $book->id; //153560
+        $bookId = 153560;
+        $templateId = 34755;
+//Добавляем получателей в книгу
+//        $emails = [
+//            [
+//                'email' => 'fedor@support-pc.org',
+//                'variables' => [
+//                    'name' => 'Fedor Gorsky',
+//                ]
+//            ],
+//            [
+//                'email' => 'vkarpen@yandex.ru',
+//                'variables' => [
+//                    'name' => 'Владимир',
+//                ]
+//            ]
+//        ];
+//
+//        $r = $SPApiClient->addEmails($bookId, $emails);
+//        $r->result = true;
+
+//Отправка письма
+//        $c = $SPApiClient->createCampaign(
+//            'Test sender',
+//            'noreply@banket-b.ru',
+//                        'test subject',
+//            'Test campain body',
+//            $bookId,
+//            'test campain name'
+//            );
+
+
+//        {{name}}
+//        {{proposal_link}}
+//        {{unsubscribe_url}}
+//        {{email}}
+
+        //pr7880600@gmail.com
+
+
+        $proposal = Proposal::findOne(315);
+
+
+        /** @var Organization[] $users */
+        $users = Organization::find()->where(['in', 'id', [98, 22]])->all();
+        $emails = [];
+        foreach ($users as $user) {
+
+
+            $emails[] = [
+                'email' => $user->email,
+                'variables' => [
+                    'name' => $user->name,
+                    'email' => $user->email,
+                    'proposal_link' => 'https://banket-b.ru/conversation/index/' . $proposal->id,
+                    'unsubscribe' => Url::to(['site/unsubscribe', 'uid' => $user->id, 'hash' => $user->getHash()], true)
+                ]
+            ];
+        }
+//        die;
+        $book = $SPApiClient->createAddressBook('Уведомление о заявке № ' . $proposal->id);
+        $bookId = $book->id;
+        $r = $SPApiClient->addEmails($bookId, $emails);
+
+        $c = $SPApiClient->createCampaign(
+            'Banket-b',
+            'noreply@banket-b.ru',
+            'Новая заявка',
+            $templateId,
+            $bookId,
+            'Уведомление о заявке № ' . $proposal->id,
+            '',
+            '',
+            true
+        );
+
+
     }
 }

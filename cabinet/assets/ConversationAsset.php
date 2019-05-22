@@ -19,7 +19,7 @@ class ConversationAsset extends AssetBundle
     ];
 
     public $js = [
-        'js/Messenger.js'
+        'js/Messenger.js?v2'
     ];
 
     public $jsOptions = [
@@ -27,6 +27,7 @@ class ConversationAsset extends AssetBundle
     ];
 
     public $depends = [
+        MomentJsAsset::class,
         FirebaseAsset::class,
         ReactAsset::class
     ];
