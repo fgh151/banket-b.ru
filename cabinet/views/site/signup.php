@@ -209,8 +209,8 @@ $this->title = 'Регистрация';
 
                 <div class="row">
                     <div class="col-xs-12">
-                        <!--                        <script src='https://www.google.com/recaptcha/api.js'></script>-->
-                        <!--                        <div class="g-recaptcha" data-sitekey="6LcFr6QUAAAAAJVeTBa8Oj9XAcbQsGcGKCLxNvfi"></div>-->
+                        <script src='https://www.google.com/recaptcha/api.js'></script>
+                        <div class="g-recaptcha" data-sitekey="6LcFr6QUAAAAAJVeTBa8Oj9XAcbQsGcGKCLxNvfi"></div>
                     </div>
                 </div>
 
