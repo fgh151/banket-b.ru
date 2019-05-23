@@ -67,7 +67,12 @@ class Organization extends \app\common\models\Organization
      */
     public static function getMinPrice(Organization $organization)
     {
-        return Proposal::getMinCostForRestaurant($organization->proposal->id, $organization->id);
+        $min = Proposal::getMinCostForRestaurant($organization->proposal->id, $organization->id);
+
+        if ($min === null) {
+            return $organization->proposal->amount * $organization->proposal->guests_count;
+        }
+        return $min;
     }
 
     /**

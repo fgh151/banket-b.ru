@@ -51,9 +51,9 @@ use yii\web\IdentityInterface;
  * @property double $latitude
  * @property double $longitude
  * @property bool $unsubscribe [boolean]
+ * @property string $hash
+ * @property string $unsubscribeUrl
  * @property ProposalSearch $proposal_search
- *
- * @property boolean unsubscribe
  *
  */
 class Organization extends ActiveRecord implements IdentityInterface

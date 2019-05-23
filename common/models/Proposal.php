@@ -87,6 +87,9 @@ class Proposal extends ActiveRecord
     {
         $cost = $proposal->amount * $proposal->guests_count; ///стоимость заявки
         $restaurantCost = $proposal->getMinCost(); // мин ставка
+        if ($restaurantCost === null) {
+            return 0;
+        }
         return round(100 - ($restaurantCost * 100 / $cost));
     }
 
