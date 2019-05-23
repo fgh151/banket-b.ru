@@ -11,9 +11,9 @@ namespace app\common\components;
 
 class MonthHelper
 {
-    static function formatDate(\DateTime $date)
+    static function formatDate(\DateTime $date, $format = 'd F', $case = 1)
     {
-        return str_replace(self::getEnMonths(), self::getRuMonths(), $date->format('d F'));
+        return str_replace(self::getEnMonths(), self::getRuMonths($case), $date->format($format));
     }
 
     static function getEnMonths()
@@ -34,21 +34,39 @@ class MonthHelper
         ];
     }
 
-    static function getRuMonths()
+    static function getRuMonths($case = 1)
     {
-        return [
-            'Января',
-            'Февраля',
-            'Марта',
-            'Апреля',
-            'Мая',
-            'Июня',
-            'Июля',
-            'Августа',
-            'Сентября',
-            'Октября',
-            'Ноября',
-            'Декабря'
+        $ru = [
+            1 => [
+                'Января',
+                'Февраля',
+                'Марта',
+                'Апреля',
+                'Мая',
+                'Июня',
+                'Июля',
+                'Августа',
+                'Сентября',
+                'Октября',
+                'Ноября',
+                'Декабря'
+            ],
+            2 => [
+                'Январь',
+                'Февраль',
+                'Март',
+                'Апрель',
+                'Май',
+                'Июнь',
+                'Июль',
+                'Август',
+                'Сентябрь',
+                'Октябрь',
+                'Ноябрь',
+                'Декабрь'
+            ]
         ];
+
+        return $ru[$case];
     }
 }

@@ -153,87 +153,39 @@ class TestController extends Controller
 
     public function actionPulse()
     {
+
+        $bookId = 153560;
+        $templateId = 34755;
+
+        $emails = [];
+        $emails[] = [
+            'email' => 'fedor@support-pc.org',
+            'variables' => [
+                'name' => 'fedor@support-pc.org',
+                'email' => 'fedor@support-pc.org',
+                'proposal_link' => 'https://banket-b.ru/conversation/index/' . 1,
+                'un_url' => Url::to(['site/unsubscribe', 'uid' => 1, 'hash' => 1], true)
+            ]
+        ];
+
         $SPApiClient = new ApiClient(
             'e0cedb31c08e3bbaff55bd25a8e603d8',
             '0ddd68fdee59c75829462da7f2a26c26',
             new FileStorage(
-                \Yii::getAlias('@runtime') . DIRECTORY_SEPARATOR
+                Yii::getAlias('@runtime') . DIRECTORY_SEPARATOR
             )
         );
-//Создаем книгу
-//        $book = $SPApiClient->createAddressBook('test-book');
-//        $bookId = $book->id; //153560
-        $bookId = 153560;
-        $templateId = 34755;
-//Добавляем получателей в книгу
-//        $emails = [
-//            [
-//                'email' => 'fedor@support-pc.org',
-//                'variables' => [
-//                    'name' => 'Fedor Gorsky',
-//                ]
-//            ],
-//            [
-//                'email' => 'vkarpen@yandex.ru',
-//                'variables' => [
-//                    'name' => 'Владимир',
-//                ]
-//            ]
-//        ];
-//
-//        $r = $SPApiClient->addEmails($bookId, $emails);
-//        $r->result = true;
 
-//Отправка письма
-//        $c = $SPApiClient->createCampaign(
-//            'Test sender',
-//            'noreply@banket-b.ru',
-//                        'test subject',
-//            'Test campain body',
-//            $bookId,
-//            'test campain name'
-//            );
+        $book = $SPApiClient->createAddressBook('Уведомление о заявке № test');
+        $SPApiClient->addEmails($book->id, $emails);
 
-
-//        {{name}}
-//        {{proposal_link}}
-//        {{unsubscribe_url}}
-//        {{email}}
-
-        //pr7880600@gmail.com
-
-
-        $proposal = Proposal::findOne(315);
-
-
-        /** @var Organization[] $users */
-        $users = Organization::find()->where(['in', 'id', [98, 22]])->all();
-        $emails = [];
-        foreach ($users as $user) {
-
-
-            $emails[] = [
-                'email' => $user->email,
-                'variables' => [
-                    'name' => $user->name,
-                    'email' => $user->email,
-                    'proposal_link' => 'https://banket-b.ru/conversation/index/' . $proposal->id,
-                    'unsubscribe' => Url::to(['site/unsubscribe', 'uid' => $user->id, 'hash' => $user->getHash()], true)
-                ]
-            ];
-        }
-//        die;
-        $book = $SPApiClient->createAddressBook('Уведомление о заявке № ' . $proposal->id);
-        $bookId = $book->id;
-        $r = $SPApiClient->addEmails($bookId, $emails);
-
-        $c = $SPApiClient->createCampaign(
+        $SPApiClient->createCampaign(
             'Banket-b',
             'noreply@banket-b.ru',
             'Новая заявка',
-            $templateId,
-            $bookId,
-            'Уведомление о заявке № ' . $proposal->id,
+            34755,
+            $book->id,
+            'Уведомление о заявке № test',
             '',
             '',
             true

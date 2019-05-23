@@ -175,22 +175,6 @@ class SiteController extends CabinetController
             $val = round($val * $onePercent, 2);
         });
 
-
-//        $sql = 'SELECT date_part(\'hour\', time) AS hour, * FROM proposal '.$criteriaSql.' ORDER BY hour';
-//        $proposalsAr = $db->createCommand($sql)->queryAll();
-//        foreach ($proposalsAr as $proposal) {
-//            $tmp[] = $proposal['hour'];
-//        }
-//        $tmp = array_count_values($tmp);
-//        $hours = Yii::$app->params['chart']['byHours'];
-//        $byHours = $tmp+$hours;
-//        ksort($byHours);
-//
-//        array_walk($byHours, function (&$val, $key) use ($onePercent) {
-//            $val = round($val * $onePercent, 2);
-//        });
-
-
         $sql = 'SELECT to_char(date, \'Month\') AS month, * FROM proposal ' . $criteriaSql . ' ORDER BY month';
         $proposalsAr = $db->createCommand($sql)->queryAll();
 
@@ -338,10 +322,8 @@ class SiteController extends CabinetController
             $val = round($val * $onePercent, 2);
         });
 
-
         return $this->render('index', [
             'byDay' => $byDay,
-//            'byHours' => $byHours,
             'byPrice' => $byPrice,
             'byPeoples' => $byPeoples,
             'byHall' => $byHall,
@@ -349,7 +331,8 @@ class SiteController extends CabinetController
             'byAlko' => $byAlko,
             'byParking' => $byParking,
             'byTypes' => $byTypes,
-            'byMonth' => $byMonth
+            'byMonth' => $byMonth,
+            'organization' => $organization
         ]);
     }
 
