@@ -20,12 +20,9 @@ use paragraph1\phpFCM\Client;
 use paragraph1\phpFCM\Message as FCMMessage;
 use paragraph1\phpFCM\Notification;
 use paragraph1\phpFCM\Recipient\Device;
-use Sendpulse\RestApi\ApiClient;
-use Sendpulse\RestApi\Storage\FileStorage;
 use Yii;
 use yii\console\Controller;
 use yii\db\Expression;
-use yii\helpers\Url;
 use yii\queue\db\Queue;
 
 class TestController extends Controller
@@ -154,42 +151,14 @@ class TestController extends Controller
     public function actionPulse()
     {
 
-        $bookId = 153560;
-        $templateId = 34755;
+        $recipients = Organization::find()
+            ->where(['state' => Constants::ORGANIZATION_STATE_PAID])
+            ->andFilterWhere(['unsubscribe' => true])
+            ->andFilterWhere(['NOT ILIKE', 'email', 'banket-b.ru'])
+            ->createCommand()
+            ->getRawSql();
 
-        $emails = [];
-        $emails[] = [
-            'email' => 'fedor@support-pc.org',
-            'variables' => [
-                'name' => 'fedor@support-pc.org',
-                'email' => 'fedor@support-pc.org',
-                'proposal_link' => 'https://banket-b.ru/conversation/index/' . 1,
-                'un_url' => Url::to(['site/unsubscribe', 'uid' => 1, 'hash' => 1], true)
-            ]
-        ];
-
-        $SPApiClient = new ApiClient(
-            'e0cedb31c08e3bbaff55bd25a8e603d8',
-            '0ddd68fdee59c75829462da7f2a26c26',
-            new FileStorage(
-                Yii::getAlias('@runtime') . DIRECTORY_SEPARATOR
-            )
-        );
-
-        $book = $SPApiClient->createAddressBook('Уведомление о заявке № test');
-        $SPApiClient->addEmails($book->id, $emails);
-
-        $SPApiClient->createCampaign(
-            'Banket-b',
-            'noreply@banket-b.ru',
-            'Новая заявка',
-            34755,
-            $book->id,
-            'Уведомление о заявке № test',
-            '',
-            '',
-            true
-        );
+        var_dump($recipients);
 
 
     }

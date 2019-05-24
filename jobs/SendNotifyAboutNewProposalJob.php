@@ -34,8 +34,8 @@ class SendNotifyAboutNewProposalJob extends BaseObject implements JobInterface
     {
         $recipients = Organization::find()
             ->where(['state' => Constants::ORGANIZATION_STATE_PAID])
-            ->where(['unsubscribe' => true])
-            ->Where(['NOT ILIKE', 'email', 'banket-b.ru'])
+            ->andFilterWhere(['unsubscribe' => true])
+            ->andFilterWhere(['NOT ILIKE', 'email', 'banket-b.ru'])
             ->all();
         $emails = [];
         foreach ($recipients as $user) {
