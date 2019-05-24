@@ -22,14 +22,12 @@ use dosamigos\chartjs\ChartJs;
 $this->title = 'My Yii Application';
 ?>
 <div class="site-index">
-
     <?php /*
     <div class="row">
         <div class="col-xs-12">
             <?= Report::widget()?>
         </div>
     </div> */ ?>
-
     <div class="row">
         <div class="col-xs-12 col-md-4" style="background-color: #fff">
             <h3>Распределение входящих заявок по дням недели</h3>
@@ -56,7 +54,5 @@ $this->title = 'My Yii Application';
                 ]
             ]);
             ?>
-
         </div>
-
 </div>
