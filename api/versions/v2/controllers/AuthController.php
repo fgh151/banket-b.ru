@@ -61,12 +61,29 @@ class AuthController extends Controller
     public function actionSendcode()
     {
         $model = $this->loadModel();
+        return $this->sendCode($model);
+    }
+
+    public function actionSendregistercode()
+    {
+        $model = $this->loadModel(Auth::SCENARIO_REGISTER);
+        return $this->sendCode($model);
+    }
+
+    /**
+     * @param Auth|null $model
+     * @return array
+     * @throws \yii\base\Exception
+     */
+    protected function sendCode(?Auth $model)
+    {
         if ($model !== false) {
             $code = $model->getCode();
             if ($code) {
                 /** @var SmsInterface $smsService */
                 $smsService = Yii::$app->sms;
-                if ($smsService->sendSms('Код подтверждения ' . $code, $model->phone)) {
+                $r = $smsService->sendSms('Код подтверждения ' . $code, $model->phone);
+                if ($r) {
                     return ['code' => $code];
                 }
             }
