@@ -6,8 +6,37 @@
  * Time: 17:31
  */
 ?>
+<table id="rec104492982" style="width:100%; border-collapse:collapse; border-spacing:0; margin:0; border:0;"
+       cellpadding="0" cellspacing="0" data-record-type="618">
+    <tr>
+        <td style="padding-left:15px; padding-right:15px; ">
+            <table id="recin104492982" class="r"
+                   style="margin: 0 auto;background-color:#ffffff;border-spacing: 0;width:600px;"
+                   align="center">
+                <tr>
+                    <td style="padding-top:30px;padding-bottom:30px;padding-left:30px;padding-right:30px;">
+                        <table border="0" cellpadding="0" cellspacing="0" width="100%" style="width:100%;">
+                            <tr>
+                                <td>
+                                    <table border="0" cellpadding="0" cellspacing="0"
+                                           style="margin: 0 auto;">
+                                        <tr>
+                                            <td>
+                                                Здравствуйте, ресторан <?= $recipient->name ?>, в ваш личный кабинет
+                                                поступила новая заявка на проведение банкета.
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>
 
-Здравствуйте, в ваш ресторан <?= $recipient->name ?> поступила новая заявка  на проведение банкета.
 
 <table id="rec104492982" style="width:100%; border-collapse:collapse; border-spacing:0; margin:0; border:0;"
        cellpadding="0" cellspacing="0" data-record-type="618">

@@ -14,6 +14,7 @@ use app\common\models\Funnel;
 use app\common\models\Message;
 use app\common\models\Organization;
 use app\common\models\Proposal;
+use app\jobs\SendNotifyAboutNewProposalJob;
 use GuzzleHttp\Psr7\Uri;
 use Kreait\Firebase\Database;
 use paragraph1\phpFCM\Client;
@@ -30,7 +31,9 @@ class TestController extends Controller
 
     public function actionTest()
     {
-        echo "test\n";
+
+        $queue = Yii::$app->queue;
+        $queue->push(new SendNotifyAboutNewProposalJob(['proposal' => Proposal::findOne(297)]));
     }
 
     public function actionMail()
@@ -49,8 +52,9 @@ class TestController extends Controller
         $mailer->compose('proposal-html', [
             'proposal' => Proposal::findOne(291),
             'recipient' => $recipient
-        ])->setFrom('fedor@support-pc.org')
-            ->setTo('vkarpen@yandex.ru')
+        ])
+            ->setFrom('noreply@banket-b.ru')
+            ->setTo('fedor@support-pc.org')
             ->setSubject('Новая заявка')
             ->send();
 
