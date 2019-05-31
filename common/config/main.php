@@ -53,17 +53,11 @@ return [
             'mutex' => \yii\mutex\FileMutex::class
         ],
         'sms' => [
-            'class' => \app\common\components\Sms::class,
-//            'class' => \app\common\components\Smsc::class
-        ],
-        'SMSCenter' => [
-            'class' => 'integready\smsc\SMSCenter',
+//            'class' => \app\common\components\Sms::class,
+            'class' => \app\common\components\Smsc::class,
             'login' => 'vkarpen@yandex.ru',
             'password' => '*(Kar6#Pen*)',
-            'useSSL' => false,
-            'options' => [
-                'sender' => 'SenderName',   // имя отправителя
-            ],
+            'sender' => 'banket-b'
         ],
     ],
     'modules'    => [
