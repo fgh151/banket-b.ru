@@ -50,7 +50,9 @@ class ProposalSearchForm extends Model
             'own_alcoholFalse' => 'Со свойи алкоголем',
             'own_alcoholTrue' => 'Без своего алкоголя',
             'parkingTrue' => 'С парковкой',
-            'parkingFalse' => 'Без парковки'
+            'parkingFalse' => 'Без парковки',
+            'guest_count' => 'Количество гостей от',
+            'amount', 'Стоимость от'
         ];
     }
 
