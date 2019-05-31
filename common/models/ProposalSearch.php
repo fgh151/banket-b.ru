@@ -5,6 +5,7 @@ namespace app\common\models;
 use app\common\components\Constants;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
+use yii\db\ActiveQuery;
 
 /**
  * ProposalSearch represents the model behind the search form of `app\common\models\Proposal`.
@@ -36,6 +37,19 @@ class ProposalSearch extends Proposal
     {
         // bypass scenarios() implementation in the parent class
         return Model::scenarios();
+    }
+
+    /**
+     * @param ActiveQuery $query
+     * @param $field
+     * @return ActiveQuery
+     */
+    private function addBoolCondition(ActiveQuery $query, $field)
+    {
+        if ($this->$field !== null) {
+            $query->andFilterWhere([$field => $this->$field]);
+        }
+        return $query;
     }
 
     /**
@@ -78,12 +92,12 @@ class ProposalSearch extends Proposal
             'time' => $this->time,
             'event_type' => $this->event_type,
             'metro' => $this->metro,
-            'dance' => $this->dance,
-            'private' => $this->private,
-            'own_alcohol' => $this->own_alcohol,
-            'parking' => $this->parking,
-//            'status' => $this->status
         ]);
+
+        $query = $this->addBoolCondition($query, 'dance');
+        $query = $this->addBoolCondition($query, 'private');
+        $query = $this->addBoolCondition($query, 'own_alcohol');
+        $query = $this->addBoolCondition($query, 'parking');
 
         if ($this->date) {
             $query->andWhere(['>=', 'date', $this->date]);
@@ -91,13 +105,13 @@ class ProposalSearch extends Proposal
 
         $query->andFilterWhere(['>', 'guests_count', $this->guests_count]);
 
-        if (!$admin) {
-            if ($direct == false) {
-                $query->andFilterWhere(['organizations' => '"[]"']);
-            } else {
-                $query->andFilterWhere(['@>', 'organizations', '[' . $direct . ']']);
-            }
-        }
+//        if (!$admin) {
+//            if ($direct == false) {
+//                $query->andFilterWhere(['organizations' => '"[]"']);
+//            } else {
+//                $query->andFilterWhere(['@>', 'organizations', '[' . $direct . ']']);
+//            }
+//        }
 
         if ($this->status !== null) {
             if ($this->status == Constants::PROPOSAL_STATUS_CREATED) {
@@ -115,6 +129,7 @@ class ProposalSearch extends Proposal
         $query->orderBy('date ASC');
 
 
+        //TODO: переделать. Сделать join и фильтровать по нему
         if ($this->rejected) {
             $query->andWhere([
                 'not in',

@@ -183,7 +183,7 @@ class Organization extends ActiveRecord implements IdentityInterface
         $activity = OrganizationLinkActivity::find()->where(['organization_id' => $this->id])->one();
         $this->activity_field = $activity ? $activity->activity_id : null;
 
-        if ($this->proposal_search === null) {
+        if ($this->proposal_search === null || $this->proposal_search === '') {
             $this->proposal_search = new ProposalSearch();
         } else {
             $this->proposal_search = unserialize(base64_decode($this->proposal_search));
@@ -283,4 +283,5 @@ class Organization extends ActiveRecord implements IdentityInterface
         $salt = '10tit9Waey8ffMo1quae7Halichu4e2OoZoo0Ah14d4';
         return substr(md5($salt . $this->id), 0, 40);
     }
+
 }
