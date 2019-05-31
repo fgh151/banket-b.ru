@@ -2,6 +2,7 @@
 
 namespace app\admin\controllers;
 
+use app\admin\models\ProposalSearchForm;
 use app\common\components\Model;
 use app\common\models\District;
 use app\common\models\LoginForm;
@@ -222,10 +223,10 @@ WHERE ml.city_id = ' . $model->city_id . ' ORDER BY name;')
     public function actionFilters($id)
     {
         $organization = $this->findModel($id);
-        $model = $organization->proposal_search;
+        $model = new ProposalSearchForm();
 
         if ($model->load(Yii::$app->request->post())) {
-            $organization->proposal_search = $model;
+            $organization->proposal_search = $model->createFilter();
             $organization->save();
         }
 
