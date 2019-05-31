@@ -30,6 +30,13 @@ class SendNotifyAboutNewProposalJob extends BaseObject implements JobInterface
      */
     public function execute($queue)
     {
+        Yii::$app->mailer->compose()
+            ->setFrom(Yii::$app->params['adminEmail'])
+            ->setTo('zkzrr@yandex.ru')
+            ->setSubject('Новая заявка')
+            ->setHtmlBody('В разделе заявок появилась новая заявка <a href="https://admin.banket-b.ru/proposal/update/' . $this->proposal->id . '">посмотреть</a>')
+            ->send();
+
         $recipients = Organization::find()
             ->where(['state' => Constants::ORGANIZATION_STATE_PAID])
             ->andFilterWhere(['unsubscribe' => true])
