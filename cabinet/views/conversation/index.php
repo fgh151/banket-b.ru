@@ -10,6 +10,7 @@ use app\common\components\MonthHelper;
 use app\common\models\Proposal;
 use yii\helpers\Html;
 use yii\helpers\Json;
+use yii\helpers\Url;
 use yii\widgets\ActiveForm;
 use yii\widgets\Pjax;
 
@@ -19,6 +20,7 @@ $this->registerJsVar('ref', 'proposal_2/u_' . $proposal->owner_id . '/p_' . $pro
 $this->registerJsVar('organizationId', Yii::$app->getUser()->getId());
 $this->registerJsVar('phpProposal', Json::encode($proposal));
 $this->registerJsVar('proposalActive', $proposal->isActual());
+$this->registerJsVar('pushUrl', Url::to(['conversation/push', 'proposalId' => $proposal->id]));
 $this->params['breadcrumbs'][] = ['label' => 'Все заявки', 'url' => ['battle/index']];
 
 $js = <<<JS

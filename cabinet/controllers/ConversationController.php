@@ -77,4 +77,11 @@ class ConversationController extends CabinetController
         ]);
     }
 
+    public function actionPush($proposalId)
+    {
+
+        $proposal = $this->findModel($proposalId);
+        $sendResult = Yii::$app->push->send($proposal->owner, 'У Вас новое сообщение', 'У Вас новое сообщение');
+    }
+
 }
