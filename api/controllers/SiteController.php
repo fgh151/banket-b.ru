@@ -15,13 +15,10 @@ use yii\web\NotFoundHttpException;
 
 class SiteController extends Controller
 {
-
-
-
     public function actionError()
     {
-        if (($exception = Yii::$app->getErrorHandler()->exception) === null) {
-            $exception = new NotFoundHttpException(Yii::t('yii', 'Page not found.'));
+        if (Yii::$app->getErrorHandler()->exception === null) {
+            Yii::$app->getErrorHandler()->exception = new NotFoundHttpException(Yii::t('yii', 'Page not found.'));
         }
 
         return Yii::$app->getErrorHandler()->exception;
