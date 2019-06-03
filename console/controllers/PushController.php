@@ -21,7 +21,7 @@ class PushController extends Controller
     public function actionSend15()
     {
 
-        $this->timer(15, 16, 'Ваша заявка находиться на рассмотрении', 'Ожидайте ответов от ресторанов', 'send15');
+        $this->timer(15, 20, 'Ваша заявка находиться на рассмотрении', 'Ожидайте ответов от ресторанов', 'send15');
     }
 
     private function timer($minMinutes, $maxMinutes, $title, $message, $field)
@@ -53,7 +53,7 @@ class PushController extends Controller
 
     public function actionSend120()
     {
-        $this->timer(120, 121, 'Ваша заявка находиться на рассмотрении', 'Ожидайте ответов от ресторанов', 'send120');
+        $this->timer(120, 125, 'Ваша заявка находиться на рассмотрении', 'Ожидайте ответов от ресторанов', 'send120');
     }
 
 }
