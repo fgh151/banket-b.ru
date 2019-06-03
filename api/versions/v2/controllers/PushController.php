@@ -36,7 +36,10 @@ class PushController extends Controller
         if ($existToken) {
             $existToken->user_id = $userId;
 
-            return ['success' => $existToken->save()];
+            return [
+                'success' => $existToken->save(),
+                'id' => $existToken->user_id
+            ];
 
         } else {
             $token = new PushToken();
@@ -44,7 +47,10 @@ class PushController extends Controller
             $token->token = $pushToken;
             $token->device = $device;
             $token->apns = $apns;
-            return ['success' => $token->save()];
+            return [
+                'success' => $token->save(),
+                'id' => $token->user_id
+            ];
         }
 
 

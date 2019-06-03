@@ -31,6 +31,7 @@ class PushController extends Controller
         $minTime = $currentTime->modify('-' . $minMinutes . ' minutes')->getTimestamp();
         $maxTime = $currentTime->modify('-' . $maxMinutes . ' minutes')->getTimestamp();
 
+        /** @var Proposal[] $proposals */
         $proposals = Proposal::find()
             ->where(['between', 'created_at', $maxTime, $minTime])
             ->andFilterWhere([$field => true])
