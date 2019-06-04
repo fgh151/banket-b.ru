@@ -14,6 +14,10 @@ use DatePeriod;
 use DateTime;
 use yii\base\Widget;
 
+/**
+ *
+ * @property array $reportDates
+ */
 class Report extends Widget
 {
 
@@ -27,7 +31,7 @@ class Report extends Widget
     private function getReportDates()
     {
         $result = [];
-        $regDate = new \DateTime();
+        $regDate = new DateTime();
         $regDate->setTimestamp(1546300800); //1.1.2019
         $start = $regDate->modify('first day of this month');
         $end = (new DateTime())->modify('first day of next month');

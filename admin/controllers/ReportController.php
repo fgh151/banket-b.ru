@@ -10,9 +10,11 @@ namespace app\admin\controllers;
 
 
 use app\common\models\Organization;
+use DateTime;
 use kartik\mpdf\Pdf;
 use Yii;
 use yii\web\Controller;
+use yii\web\Response;
 
 class ReportController extends Controller
 {
@@ -25,11 +27,11 @@ class ReportController extends Controller
      */
     public function actionIndex($date)
     {
-        $startDate = new \DateTime('01-' . $date . ' 00:00:00');
+        $startDate = new DateTime('01-' . $date . ' 00:00:00');
 
 
-        $organizations = Organization::find()->where(['<=', 'created_at', $startDate->getTimestamp()])
-//            ->createCommand()->getRawSql();
+        $organizations = Organization::find()
+            ->where(['<=', 'created_at', $startDate->getTimestamp()])
             ->all();
 
 
@@ -37,7 +39,7 @@ class ReportController extends Controller
         $endDate = $endDate->modify('last day of this month');
 
 
-        Yii::$app->response->format = \yii\web\Response::FORMAT_RAW;
+        Yii::$app->response->format = Response::FORMAT_RAW;
         $headers = Yii::$app->response->headers;
         $headers->add('Content-Type', 'application/pdf');
         $pdf = new Pdf([

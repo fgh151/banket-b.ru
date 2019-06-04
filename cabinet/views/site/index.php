@@ -16,6 +16,7 @@
  * @var $byHours array
  */
 
+use app\cabinet\widgets\Report;
 use dosamigos\chartjs\ChartJs;
 use yii\helpers\Html;
 
@@ -25,11 +26,11 @@ $this->title = 'My Yii Application';
 <div class="site-index">
 
 
-    <?php /*<div class="row">
+    <div class="row">
         <div class="col-xs-12">
             <?= Report::widget(['organization' => $organization]);?>
         </div>
-    </div> */ ?>
+    </div>
     <div class="row">
         <div class="col-xs-12">
             <?= Html::a('Все заявки', ['site/index'], ['class' => 'btn btn-default']) ?>
