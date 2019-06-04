@@ -66,10 +66,22 @@ class ConversationController extends CabinetController
         $cost->proposal_id = $proposalId;
 
         if ($cost->load(\Yii::$app->request->post())) {
-            if (\Yii::$app->request->isAjax) {
-                return $this->asJson(['success' => $cost->save()]);
+            $save = $cost->save();
+            if ($save) {
+                $push = Yii::$app->push;
+                $sendResult = $push->send(
+                    $proposal->owner,
+                    'У Вас новое сообщение', 'Для вашей заявки появилась новая ставка',
+                    [
+                        'proposalId' => $proposalId,
+                        'organizationId' => Yii::$app->getUser()->getId()
+                    ]
+                );
             }
-            $cost->save();
+
+            if (\Yii::$app->request->isAjax) {
+                return $this->asJson(['success' => $save]);
+            }
         }
 
         return $this->render('index', [
