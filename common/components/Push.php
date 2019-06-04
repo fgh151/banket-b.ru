@@ -26,14 +26,15 @@ class Push extends Component
      * @param MobileUser $user
      * @param $title
      * @param $message
+     * @param array $data
      * @return array
      */
-    public function send(MobileUser $user, $title, $message)
+    public function send(MobileUser $user, $title, $message, $data = [])
     {
         $userTokens = $user->pushTokens;
         $r = [];
         foreach ($userTokens as $token) {
-            $r[$token->token] = $this->sendToUser($title, $message, $token->token);
+            $r[$token->token] = $this->sendToUser($title, $message, $token->token, $data);
         }
         return $r;
     }
@@ -42,9 +43,10 @@ class Push extends Component
      * @param $title
      * @param $message
      * @param $token
+     * @param array $data
      * @return ResponseInterface | Response
      */
-    private function sendToUser($title, $message, $token)
+    private function sendToUser($title, $message, $token, $data = [])
     {
         Yii::info('send push to ' . $token);
         $client = new Client();
@@ -57,9 +59,9 @@ class Push extends Component
             ->setBadge(1);
 
         $message = new FCMMessage();
-        $message->addRecipient(new Device($token));
-        $message->setNotification($note)
-            ->setData(array('someId' => 111));
+        $message->addRecipient(new Device($token))
+            ->setNotification($note)
+            ->setData($data);
 
         return $client->send($message);
     }

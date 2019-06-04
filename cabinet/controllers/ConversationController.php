@@ -10,6 +10,7 @@ namespace app\cabinet\controllers;
 
 use app\admin\components\ProposalFindOneTrait;
 use app\cabinet\components\CabinetController;
+use app\common\components\Push;
 use app\common\models\Cost;
 use Yii;
 use yii\filters\AccessControl;
@@ -81,7 +82,16 @@ class ConversationController extends CabinetController
     {
 
         $proposal = $this->findModel($proposalId);
-        $sendResult = Yii::$app->push->send($proposal->owner, 'У Вас новое сообщение', 'У Вас новое сообщение');
+        /** @var Push $push */
+        $push = Yii::$app->push;
+        $sendResult = $push->send(
+            $proposal->owner,
+            'У Вас новое сообщение', 'У Вас новое сообщение',
+            [
+                'proposalId' => $proposalId,
+                'organizationId' => Yii::$app->getUser()->getId()
+            ]
+        );
     }
 
 }

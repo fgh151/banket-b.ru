@@ -10,6 +10,7 @@ use Yii;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
 use yii\queue\Queue;
+use yii\swiftmailer\Mailer;
 
 /**
  * This is the model class for table "proposal".
@@ -427,5 +428,38 @@ class Proposal extends ActiveRecord
             ->groupBy('restaurant_id');
     }
 
+
+    public function sendNotify()
+    {
+        Yii::$app->mailer->compose()
+            ->setFrom('noreply@banket-b.ru')
+            ->setTo('zkzrr@yandex.ru')
+            ->setSubject('Новая заявка')
+            ->setHtmlBody('В разделе заявок появилась новая заявка <a href="https://admin.banket-b.ru/proposal/update/' . $this->id . '">посмотреть</a>')
+            ->send();
+
+        $recipients = Organization::find()
+            ->where(['state' => Constants::ORGANIZATION_STATE_PAID])
+            ->andFilterWhere(['unsubscribe' => true])
+            ->andFilterWhere(['NOT ILIKE', 'email', 'banket-b.ru'])
+            ->all();
+        foreach ($recipients as $recipient) {
+
+
+            /** @var Mailer $mailer */
+            $mailer = Yii::$app->mailer;
+
+            $mailer->getView()->params['recipient'] = $recipient;
+
+            /** @var \Swift_Message $message */
+            $mailer->compose('proposal-html', [
+                'proposal' => $this,
+                'recipient' => $recipient
+            ])->setFrom('noreply@banket-b.ru')
+                ->setTo($recipient->email)
+                ->setSubject('Новая заявка')
+                ->send();
+        }
+    }
 
 }
