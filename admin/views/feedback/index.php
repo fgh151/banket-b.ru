@@ -20,9 +20,14 @@ $this->params['breadcrumbs'][] = $this->title;
         'dataProvider' => $dataProvider,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
-
-            'user.name',
-            'created_at',
+            [
+                'label' => 'Пользователь',
+                'attribute' => 'user.name'
+            ],
+            [
+                'label' => 'Дата обращения',
+                'attribute' => 'created_at'
+            ],
             'content'
         ],
     ]); ?>
