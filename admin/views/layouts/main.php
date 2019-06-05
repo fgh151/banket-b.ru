@@ -54,6 +54,7 @@ AppAsset::register($this);
         $menuItems[] = ['label' => 'Пользователи приложения', 'url' => ['/mobile-user/index']];
         $menuItems[] = ['label' => 'Заявки', 'url' => ['/proposal/index']];
         $menuItems[] = ['label' => 'Предложения от ресторанов', 'url' => ['/promo/index']];
+        $menuItems[] = ['label' => 'Обратная связь', 'url' => ['/feedback/index']];
 
 
         $menuItems[] = '<li>'
