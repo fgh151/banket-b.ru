@@ -16,6 +16,7 @@
  * @var $byHours array
  */
 
+use app\admin\widgets\Report;
 use dosamigos\chartjs\ChartJs;
 
 
