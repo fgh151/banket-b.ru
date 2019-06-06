@@ -39,25 +39,10 @@ class TestController extends Controller
     public function actionMail()
     {
 
-//        print_r(Yii::$app->mailqueue);
-//        die;
-
-        $mailer = Yii::$app->mailer;
-        $recipient = Organization::findOne(1);
+        $proposal = Proposal::findOne(356);
 
 
-        $mailer->getView()->params['recipient'] = $recipient;
-
-        /** @var \Swift_Message $message */
-        $mailer->compose('proposal-html', [
-            'proposal' => Proposal::findOne(291),
-            'recipient' => $recipient
-        ])
-            ->setFrom('noreply@banket-b.ru')
-            ->setTo('fedor@support-pc.org')
-            ->setSubject('Новая заявка')
-            ->send();
-
+        $proposal->sendNotify();
     }
 
     public function actionQeue()

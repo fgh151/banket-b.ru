@@ -438,14 +438,16 @@ class Proposal extends ActiveRecord
             ->setHtmlBody('В разделе заявок появилась новая заявка <a href="https://admin.banket-b.ru/proposal/update/' . $this->id . '">посмотреть</a>')
             ->send();
 
-        $recipients = Organization::find()
-            ->where(['state' => Constants::ORGANIZATION_STATE_PAID])
-            ->andFilterWhere(['unsubscribe' => true])
-            ->andFilterWhere(['NOT ILIKE', 'email', 'banket-b.ru'])
-            ->all();
+//        $recipients = Organization::find()
+//            ->where(['state' => Constants::ORGANIZATION_STATE_PAID])
+//            ->andFilterWhere(['unsubscribe' => true])
+//            ->andFilterWhere(['NOT ILIKE', 'email', 'banket-b.ru'])
+//            ->all();
+
+        $recipients = Organization::find()->where(['id' => 1])->all();
         foreach ($recipients as $recipient) {
-
-
+//
+//
             /** @var Mailer $mailer */
             $mailer = Yii::$app->mailer;
 
