@@ -25,6 +25,10 @@ $this->params['breadcrumbs'][] = $this->title;
                 'attribute' => 'user.name'
             ],
             [
+                'label' => 'Тедефон',
+                'attribute' => 'user.phone'
+            ],
+            [
                 'label' => 'Дата обращения',
                 'attribute' => 'created_at'
             ],
