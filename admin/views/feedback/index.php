@@ -1,5 +1,6 @@
 <?php
 
+use app\common\models\Feedback;
 use yii\grid\GridView;
 use yii\helpers\Html;
 use yii\widgets\Pjax;
@@ -32,7 +33,14 @@ $this->params['breadcrumbs'][] = $this->title;
                 'label' => 'Дата обращения',
                 'attribute' => 'created_at'
             ],
-            'content'
+            [
+                'attribute' => 'content',
+                'value' => function (Feedback $model) {
+                    return Html::decode($model->content);
+                },
+                'format' => 'html',
+                'contentOptions' => ['class' => 'text-wrap'],
+            ]
         ],
     ]); ?>
     <?php Pjax::end(); ?>

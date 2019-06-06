@@ -124,3 +124,7 @@ a.desc:after {
         width: 80%;
     }
 }
+
+.grid-view td.text-wrap {
+    white-space: initial;
+}
