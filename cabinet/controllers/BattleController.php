@@ -57,8 +57,6 @@ class BattleController extends CabinetController
      */
     public function actionIndex()
     {
-
-
         /** @var Organization $organization */
         $organization = Yii::$app->getUser()->getIdentity();
 //        $this->throwIfNotPay('state');
@@ -77,7 +75,6 @@ class BattleController extends CabinetController
             $searchModel->status = Constants::PROPOSAL_STATUS_CREATED;
 
             $searchModel->date = date('Y-m-d');
-//            $searchModel->guests_count = 8;
             $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
         } else {
             // Формируем запрос, который заведомо ничего не вернет
@@ -86,7 +83,6 @@ class BattleController extends CabinetController
         }
 
         return $this->render('index', [
-            'searchModel' => $searchModel,
             'organization' => $organization,
             'dataProvider' => $dataProvider
         ]);

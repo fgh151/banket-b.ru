@@ -61,9 +61,12 @@ use yii\swiftmailer\Mailer;
  * @property string $type [integer]
  * @property string $cuisine [integer]
  *
+ * @property null|string|false $myMinCost
+ * @property mixed $costsCount
+ * @property mixed $uniqueCosts
+ * @property mixed $costs
  * @property Cost $bestCost
  */
-//TODO: remove type
 class Proposal extends ActiveRecord
 {
 
@@ -115,7 +118,16 @@ class Proposal extends ActiveRecord
             return Yii::$app
                 ->getDb()
                 ->createCommand(
-                    'SELECT min(cost) FROM cost WHERE proposal_id = :pid;', [
+                    '
+                    SELECT min(cost)
+                    FROM (
+                           SELECT DISTINCT ON (restaurant_id) restaurant_id,
+                                                              cost
+                           FROM cost
+                           WHERE proposal_id = :pid
+                           ORDER BY restaurant_id, cost DESC
+                         ) as cost;
+                    ', [
                         ':pid' => $proposalId
                     ]
                 )
@@ -129,7 +141,8 @@ class Proposal extends ActiveRecord
         return Yii::$app
             ->getDb()
             ->createCommand(
-                'SELECT min(cost) FROM cost WHERE restaurant_id = :rid AND proposal_id = :pid;', [
+                'SELECT cost as min FROM cost WHERE restaurant_id = :rid AND proposal_id = :pid ORDER BY id DESC limit 1;',
+                [
                     ':rid' => $restaurantId,
                     ':pid' => $proposalId
                 ]

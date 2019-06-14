@@ -15,17 +15,6 @@ $this->title = 'Заявки';
 
     <div class="page-title clearfix">
         <h1><?= $this->title ?></h1>
-
-        <?php /* $form = ActiveForm::begin([
-            'layout' => 'inline',
-            'method' => 'get',
-            'id' => 'proposal-search'
-        ]) ?>
-        <?= $form->field($searchModel, 'order')
-            ->dropDownList(['date' => 'Самые новые'], ['prompt' => 'Сортировка'])
-            ->label(false); ?>
-        <?php ActiveForm::end(); */ ?>
-
     </div>
 
     <div class="panel-header hidden-xs proposal-columns">
@@ -65,21 +54,6 @@ $this->title = 'Заявки';
                 'itemOptions' => [
                     'class' => 'col-xs-12'
                 ],
-//                'afterItem' => function (Proposal $model, $key, $index, ListView $list) {
-//                    $nextProposal = null;
-//                    if (isset($list->dataProvider->getModels()[$index + 1])) {
-//                        $nextProposal = $list->dataProvider->getModels()[$index + 1];
-//                    }
-//
-//                    /** @var \yii\web\View $this */
-//                    return $this->render('_after_item', [
-//                        'currentProposal' => $model,
-//                        'nextProposal' => $nextProposal,
-//                        'key' => $key,
-//                        'index' => $index,
-//                        'list' => $list
-//                    ]);
-//                }
             ]) ?>
         </div>
     </div>
