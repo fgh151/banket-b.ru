@@ -100,7 +100,7 @@ $this->registerJs($js);
         </div>
         <div class=" dialog-element">
             <p class="proposal-item-time">
-                <?= MonthHelper::formatDate($proposal->getWhen()); ?>
+                <?= MonthHelper::formatDateWithYear($proposal->getWhen()); ?>
                 , <?= str_replace('-', '&#8212;', $proposal->time) ?>
             </p>
             <p class="proposal-item-type">
@@ -210,7 +210,7 @@ $this->registerJs($js);
 <path d="M7.03656 12.0364L2 6.99988L6.96912 2.03076" stroke="black" stroke-width="1.5" stroke-linecap="square"/>
 </svg>
 
-                   &nbsp; <?= Proposal::typeLabels()[$proposal->event_type] ?> <?= MonthHelper::formatDate($proposal->getWhen()); ?>
+                   &nbsp; <?= Proposal::typeLabels()[$proposal->event_type] ?> <?= MonthHelper::formatDateWithYear($proposal->getWhen()); ?>
                 </span>
             </div>
             <div class="panel-heading proposal-owner clearfix">

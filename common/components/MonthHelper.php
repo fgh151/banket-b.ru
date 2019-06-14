@@ -16,6 +16,14 @@ class MonthHelper
         return str_replace(self::getEnMonths(), self::getRuMonths($case), $date->format($format));
     }
 
+    static function formatDateWithYear(\DateTime $date, $format = 'd F Y', $case = 1)
+    {
+        if ($date->format('Y') == date('Y')) {
+            $format = str_replace(' Y', '', $format);
+        }
+        return str_replace(self::getEnMonths(), self::getRuMonths($case), $date->format($format));
+    }
+
     static function getEnMonths()
     {
         return [

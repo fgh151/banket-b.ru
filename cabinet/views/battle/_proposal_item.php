@@ -48,7 +48,7 @@ use yii\helpers\Url;
     </div>
     <div class="col-xs-12 col-md-3">
         <p class="proposal-item-time">
-            <?= MonthHelper::formatDate($model->getWhen()); ?>, <?= str_replace('-', '&#8212;', $model->time) ?>
+            <?= MonthHelper::formatDateWithYear($model->getWhen()); ?>, <?= str_replace('-', '&#8212;', $model->time) ?>
         </p>
         <p class="proposal-item-type">
             <?= Proposal::typeLabels()[$model->event_type] ?>
