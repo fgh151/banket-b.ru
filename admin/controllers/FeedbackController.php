@@ -36,7 +36,7 @@ class FeedbackController extends Controller
 
     public function actionIndex()
     {
-        $dataProvider = new ActiveDataProvider(['query' => Feedback::find()]);
+        $dataProvider = new ActiveDataProvider(['query' => Feedback::find(), 'sort' => ['defaultOrder' => ['id' => SORT_DESC]]]);
         return $this->render('index', ['dataProvider' => $dataProvider]);
     }
 }
