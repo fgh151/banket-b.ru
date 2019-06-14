@@ -53,6 +53,7 @@ use yii\web\IdentityInterface;
  * @property bool $unsubscribe [boolean]
  * @property string $hash
  * @property string $unsubscribeUrl
+ * @property OrganizationLinkActivity $mainActivity
  * @property ProposalSearch $proposal_search
  *
  */
@@ -180,14 +181,18 @@ class Organization extends ActiveRecord implements IdentityInterface
     public function afterFind()
     {
         parent::afterFind();
-        $activity = OrganizationLinkActivity::find()->where(['organization_id' => $this->id])->one();
-        $this->activity_field = $activity ? $activity->activity_id : null;
+        $this->activity_field = $this->mainActivity ? $this->mainActivity->activity_id : null;
 
         if ($this->proposal_search === null || $this->proposal_search === '') {
             $this->proposal_search = new ProposalSearch();
         } else {
             $this->proposal_search = unserialize(base64_decode($this->proposal_search));
         }
+    }
+
+    public function getMainActivity()
+    {
+        return $this->hasOne(OrganizationLinkActivity::class, ['organization_id' => 'id']);
     }
 
     /**

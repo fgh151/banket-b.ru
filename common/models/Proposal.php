@@ -354,7 +354,7 @@ class Proposal extends ActiveRecord
     }
 
     /**
-     * @return array|bool|mixed
+     * @return array<int, string>
      * @throws \yii\base\InvalidConfigException
      */
     public function getAnswers()
@@ -370,8 +370,14 @@ class Proposal extends ActiveRecord
             $tmp[$organizationId] = min(array_keys($messagesArray));
         }
 
+        $organizations = [];
+        $orgs = Organization::find()->where(['in', 'id', array_keys($messages)])->with('mainActivity')->all();
+        foreach ($orgs as $org) {
+            $organizations[$org->id] = $org->name;
+        }
+
         foreach ($tmp as $organizationId => $timestamp) {
-            $result[Organization::findOne(intval($organizationId))->name] = \Yii::$app->formatter->asDatetime($timestamp);
+            $result[$organizations[$organizationId]] = \Yii::$app->formatter->asDatetime($timestamp);
         }
 //        }
 

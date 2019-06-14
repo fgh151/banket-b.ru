@@ -61,7 +61,7 @@ class ProposalSearch extends Proposal
      */
     public function search($params, $direct = false, $admin = false)
     {
-        $query = Proposal::find();
+        $query = Proposal::find()->with('owner');
 
         // add conditions that should always apply here
 
