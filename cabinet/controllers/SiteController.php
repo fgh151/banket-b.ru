@@ -437,7 +437,7 @@ class SiteController extends CabinetController
     {
         $model = new SignupForm();
         $modelParams = new RestaurantParams();
-        $halls = [new RestaurantHall()];
+        $halls = [new RestaurantHall(['scenario' => RestaurantHall::SCENARIO_REGISTER])];
         $metro = [new OrganizationLinkMetro()];
 
         $post = Yii::$app->request->post();
@@ -493,10 +493,14 @@ class SiteController extends CabinetController
             'secret' => '6LcFr6QUAAAAAM6IFLvubkKGYViVaFIWkSng8RyN',
             'response' => Yii::$app->request->post('g-recaptcha-response')
         ];
+        $query = http_build_query($data);
         $options = [
             'http' => [
                 'method' => 'POST',
-                'content' => http_build_query($data)
+                'content' => $query,
+                'header' => "Content-Type: application/x-www-form-urlencoded\r\n" .
+                    "Content-Length: " . strlen($query) . "\r\n" .
+                    "User-Agent:banket-b.server/1.0\r\n",
             ]
         ];
         $context = stream_context_create($options);

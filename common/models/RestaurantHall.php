@@ -13,6 +13,9 @@ namespace app\common\models;
  */
 class RestaurantHall extends \yii\db\ActiveRecord
 {
+
+    const SCENARIO_REGISTER = 'register';
+
     /**
      * {@inheritdoc}
      */
@@ -32,6 +35,13 @@ class RestaurantHall extends \yii\db\ActiveRecord
             [['restaurant_id', 'size'], 'integer'],
             [['title'], 'string', 'max' => 255],
         ];
+    }
+
+    public function scenarios()
+    {
+        $scenarios = parent::scenarios();
+        $scenarios[self::SCENARIO_REGISTER] = ['restaurant_id', 'size', 'title'];
+        return $scenarios;
     }
 
     /**
