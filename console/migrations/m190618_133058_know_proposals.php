@@ -21,6 +21,7 @@ class m190618_133058_know_proposals extends Migration
                 $knowledge->proposal_id = $proposal->id;
                 $knowledge->organization_id = $org->id;
                 $knowledge->save();
+                echo $proposal->id . ' ' . $org->id . ' ' . $knowledge->id . "\n";
             }
         }
     }
