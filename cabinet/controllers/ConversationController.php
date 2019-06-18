@@ -12,6 +12,7 @@ use app\admin\components\ProposalFindOneTrait;
 use app\cabinet\components\CabinetController;
 use app\common\components\Push;
 use app\common\models\Cost;
+use app\common\models\KnownProposal;
 use Yii;
 use yii\filters\AccessControl;
 
@@ -64,6 +65,14 @@ class ConversationController extends CabinetController
         $cost->cost = Yii::$app->formatter->asRubles($proposal->getMyMinCost());
         $cost->restaurant_id = \Yii::$app->getUser()->getId();
         $cost->proposal_id = $proposalId;
+
+        $known = KnownProposal::find()->where(['proposal_id' => $proposalId, 'organization_id' => Yii::$app->getUser()->getId()])->one();
+        if ($known === null) {
+            $known = new KnownProposal();
+            $known->organization_id = Yii::$app->getUser()->getId();
+            $known->proposal_id = $proposalId;
+            $known->save();
+        }
 
         if ($cost->load(\Yii::$app->request->post())) {
             $save = $cost->save();
