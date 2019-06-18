@@ -2,7 +2,11 @@
 
 namespace app\common\models;
 
+use Yii;
 use yii\db\ActiveRecord;
+use yii\db\Expression;
+use yii\helpers\Json;
+use yii\swiftmailer\Mailer;
 
 /**
  * This is the model class for table "funnel".
@@ -11,7 +15,7 @@ use yii\db\ActiveRecord;
  * @property string $event
  * @property string $uid
  * @property int $user_id
- * @property array $extra
+ * @property string $extra
  */
 class Funnel extends ActiveRecord
 {
@@ -70,4 +74,50 @@ class Funnel extends ActiveRecord
             'extra' => 'Extra',
         ];
     }
+
+    /**
+     * @param bool $insert
+     * @param array $changedAttributes
+     * @throws \Exception
+     */
+    public function afterSave($insert, $changedAttributes)
+    {
+        if ($this->event === 'chan-answer') {
+            $extra = Json::decode($this->extra);
+            $organizationId = intval($extra['organization']);
+            $proposalId = intval($extra['proposal']);
+
+            $proposal = Proposal::findOne($proposalId);
+
+            $period = Yii::$app->params['offlinePeriod'];
+            $organization = Organization::find()
+                ->where(['id' => $organizationId, 'send_notify' => true])
+                ->andWhere(new Expression(
+                    "last_visit <= NOW() - INTERVAL '{$period} minutes'"
+                ))
+                ->one();
+            if ($organization !== null) {
+
+                /** @var Mailer $mailer */
+                $mailer = Yii::$app->mailer;
+
+                $mailer->getView()->params['recipient'] = $organization;
+
+                /** @var \Swift_Message $message */
+                $mailer->compose('new-message-html', [
+                    'proposal' => $proposal,
+                    'recipient' => $organization
+                ])->setFrom('noreply@banket-b.ru')
+                    ->setTo($organization->email)
+                    ->setSubject('Новая заявка')
+                    ->send();
+
+                $organization->send_notify = false;
+                $organization->save();
+            }
+
+        }
+        parent::afterSave($insert, $changedAttributes);
+    }
+
 }

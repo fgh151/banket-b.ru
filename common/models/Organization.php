@@ -56,6 +56,8 @@ use yii\web\IdentityInterface;
  * @property OrganizationLinkActivity $mainActivity
  * @property ProposalSearch $proposal_search
  *
+ * @property string $last_visit
+ * @property boolean $send_notify
  */
 class Organization extends ActiveRecord implements IdentityInterface
 {
@@ -124,7 +126,8 @@ class Organization extends ActiveRecord implements IdentityInterface
             ['city_id', ExistValidator::class, 'targetClass' => GeoCity::class, 'targetAttribute' => 'id'],
             ['rating', 'number', 'max' => 10, 'min' => 0],
             ['proposal_search', 'string'],
-            ['unsubscribe', 'boolean']
+            [['unsubscribe', 'send_notify'], 'boolean'],
+            [['last_visit'], 'safe']
         ];
     }
 

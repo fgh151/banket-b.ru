@@ -10,7 +10,6 @@ namespace app\console\controllers;
 
 
 use app\common\components\Constants;
-use app\common\models\Funnel;
 use app\common\models\Message;
 use app\common\models\Organization;
 use app\common\models\Proposal;
@@ -127,12 +126,15 @@ class TestController extends Controller
 
     public function actionFunnel()
     {
-        $c = Funnel::find()
-            ->where([
-                '=', new Expression("(extra->>'id')"), 111
-            ])
-            ->count();
-        var_dump($c);
+        $period = Yii::$app->params['offlinePeriod'];
+        $organization = Organization::find()
+            ->where(['id' => 1])
+            ->andWhere(new Expression(
+                "last_visit <= NOW() - INTERVAL '{$period} minutes'"
+            ))
+            ->one();
+
+        var_dump($organization);
 
     }
 

@@ -455,3 +455,16 @@ h2.closed-proposals {
 
 .mobile-breadcrumbs {
 }
+
+.label-danger {
+    background-color: #D1001A;
+}
+
+.proposal-label {
+    position: absolute;
+    right: 10px;
+    top: 0;
+    font-size: 16px;
+    line-height: 19px;
+    border-radius: 8px;
+}

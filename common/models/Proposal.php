@@ -65,6 +65,8 @@ use yii\swiftmailer\Mailer;
  * @property mixed $costsCount
  * @property mixed $uniqueCosts
  * @property mixed $costs
+ * @property KnownProposal|\yii\db\ActiveQuery $known
+ * @property ReadMessage|null $readMessage
  * @property Cost $bestCost
  */
 class Proposal extends ActiveRecord
@@ -481,6 +483,26 @@ class Proposal extends ActiveRecord
                 ->setSubject('Новая заявка')
                 ->send();
         }
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery|KnownProposal
+     */
+    public function getKnown()
+    {
+        return $this->hasOne(KnownProposal::class, ['proposal_id' => 'id'])
+            ->andWhere(['organization_id' => Yii::$app->getUser()->getId()]);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery|ReadMessage
+     */
+    public function getReadMessage()
+    {
+        return $this->hasOne(ReadMessage::class, ['proposal_id' => 'id'])
+            ->andWhere([
+                'organization_id' => Yii::$app->getUser()->getId()
+            ]);
     }
 
 }

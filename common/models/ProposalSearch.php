@@ -16,6 +16,8 @@ class ProposalSearch extends Proposal
 
     public $order;
 
+    public $with = ['owner'];
+
     /**
      * {@inheritdoc}
      */
@@ -61,7 +63,7 @@ class ProposalSearch extends Proposal
      */
     public function search($params, $direct = false, $admin = false)
     {
-        $query = Proposal::find()->with('owner');
+        $query = Proposal::find()->with($this->with);
 
         // add conditions that should always apply here
 
