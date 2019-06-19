@@ -72,6 +72,9 @@ class Organization extends ActiveRecord implements IdentityInterface
 
     public $cuisine_field;
 
+    /** @var ProposalSearch */
+    public $proposalSearchModel;
+
 
     use AuthTrait;
 
@@ -184,12 +187,15 @@ class Organization extends ActiveRecord implements IdentityInterface
     public function afterFind()
     {
         parent::afterFind();
+
+
         $this->activity_field = $this->mainActivity ? $this->mainActivity->activity_id : null;
 
+
         if ($this->proposal_search === null || $this->proposal_search === '') {
-            $this->proposal_search = new ProposalSearch();
+            $this->proposalSearchModel = new ProposalSearch();
         } else {
-            $this->proposal_search = unserialize(base64_decode($this->proposal_search));
+            $this->proposalSearchModel = unserialize(base64_decode($this->proposal_search));
         }
     }
 
@@ -198,19 +204,6 @@ class Organization extends ActiveRecord implements IdentityInterface
         return $this->hasOne(OrganizationLinkActivity::class, ['organization_id' => 'id']);
     }
 
-    /**
-     * Сериализация модели поиска перед сохранением
-     * @return bool
-     */
-    public function beforeValidate()
-    {
-        if ($this->proposal_search === null) {
-            $this->proposal_search = new ProposalSearch();
-        }
-        $this->proposal_search = base64_encode(serialize($this->proposal_search));
-
-        return parent::beforeValidate();
-    }
 
     /**
      * @return \yii\db\ActiveQuery | Activity[]

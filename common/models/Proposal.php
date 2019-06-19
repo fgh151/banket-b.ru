@@ -116,6 +116,7 @@ class Proposal extends ActiveRecord
      */
     public static function getMinCostForRestaurant($proposalId, $restaurantId = null)
     {
+        //DISTINCT ON (restaurant_id)
         if ($restaurantId === false) {
             return Yii::$app
                 ->getDb()
@@ -123,7 +124,7 @@ class Proposal extends ActiveRecord
                     '
                     SELECT min(cost)
                     FROM (
-                           SELECT DISTINCT ON (restaurant_id) restaurant_id,
+                           SELECT restaurant_id,
                                                               cost
                            FROM cost
                            WHERE proposal_id = :pid

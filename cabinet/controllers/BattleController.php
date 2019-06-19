@@ -58,9 +58,9 @@ class BattleController extends CabinetController
     public function actionIndex()
     {
         /** @var Organization $organization */
-        $organization = Yii::$app->getUser()->getIdentity();
+        $organization = Organization::findOne(Yii::$app->getUser()->getId());
 //        $this->throwIfNotPay('state');
-        $searchModel = $organization->proposal_search;
+        $searchModel = $organization->proposalSearchModel;
         if ($organization->state == Constants::ORGANIZATION_STATE_PAID) {
             $rejected = OrganizationProposalStatus::find()
                 ->where([
