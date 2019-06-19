@@ -13,6 +13,7 @@ use app\cabinet\components\CabinetController;
 use app\common\components\Push;
 use app\common\models\Cost;
 use app\common\models\KnownProposal;
+use app\common\models\ReadMessage;
 use Yii;
 use yii\filters\AccessControl;
 
@@ -72,6 +73,18 @@ class ConversationController extends CabinetController
             $known->organization_id = Yii::$app->getUser()->getId();
             $known->proposal_id = $proposalId;
             $known->save();
+        }
+
+        $rm = ReadMessage::find()->where(['proposal_id' => $proposalId, 'organization_id' => Yii::$app->getUser()->getId()])->one();
+        if ($rm !== null) {
+            $rm->count = $rm->user_messages;
+            $rm->save();
+        } else {
+            $rm = new ReadMessage();
+            $rm->organization_id = Yii::$app->getUser()->getId();
+            $rm->proposal_id = $proposalId;
+            $rm->count = $rm->user_messages = 0;
+            $rm->save();
         }
 
         if ($cost->load(\Yii::$app->request->post())) {

@@ -5,7 +5,6 @@ namespace app\common\models;
 use Yii;
 use yii\db\ActiveRecord;
 use yii\db\Expression;
-use yii\helpers\Json;
 use yii\swiftmailer\Mailer;
 
 /**
@@ -83,9 +82,25 @@ class Funnel extends ActiveRecord
     public function afterSave($insert, $changedAttributes)
     {
         if ($this->event === 'chan-answer') {
-            $extra = Json::decode($this->extra);
+
+
+            $extra = $this->extra; //Json::decode($this->extra);
             $organizationId = intval($extra['organization']);
             $proposalId = intval($extra['proposal']);
+
+            $rm = ReadMessage::find()->where(['organization_id' => $organizationId, 'proposal_id' => $proposalId])->one();
+            if ($rm !== null) {
+                $rm->user_messages++;
+                $rm->save();
+            } else {
+                $rm = new ReadMessage();
+                $rm->organization_id = $organizationId;
+                $rm->proposal_id = $proposalId;
+                $rm->count = 0;
+                $rm->user_messages = 1;
+                $rm->save();
+            }
+
 
             $proposal = Proposal::findOne($proposalId);
 
