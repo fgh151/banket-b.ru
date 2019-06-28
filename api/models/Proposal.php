@@ -29,8 +29,18 @@ class Proposal extends CommonProposal
             'profit' => function () {
                 return CommonProposal::getProfit($this);
             },
+            //Количество ставок
             'answers' => function () {
                 return count($this->getMessages());
+            },
+            //Общее кол-во сообщений
+            'messages' => function () {
+                $result = 0;
+                $messages = $this->getMessages();
+                foreach ($messages as $org => $messagesArray) {
+                    $result += count($messagesArray);
+                }
+                return $result;
             },
             'key' => function ($model) {
                 return (string)$model->id;

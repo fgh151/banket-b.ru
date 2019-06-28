@@ -55,6 +55,9 @@ class Organization extends \app\common\models\Organization
                     return $this->getLastMessageTime();
                 }
                 return null;
+            },
+            'messages' => function () {
+                return count($this->getConversation());
             }
         ]);
 
