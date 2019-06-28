@@ -95,6 +95,20 @@ use yii\widgets\ActiveForm;
         <?= $form->field($params, 'dance')->checkbox(); ?>
         <?= $form->field($params, 'parking')->checkbox(); ?>
         <?= $form->field($params, 'amount')->input('number'); ?>
+
+        <?php if ($model->images) : ?>
+            <div class="row">
+                <?php foreach ($model->images as $image) : ?>
+                    <div class="panel panel-default col-xs-12 col-md-2">
+                        <div class="panel-body">
+                            <?= Html::img('https://banket-b.ru/upload/organization/' . $model->id . '/' . $image->fsFileName, ['class' => 'img-responsive']); ?>
+                            <?= Html::a('Удалить', ['organization/img-delete', 'id' => $image->id]); ?>
+                        </div>
+                    </div>
+                <?php endforeach; ?>
+            </div>
+        <?php endif; ?>
+
         <?= $form->field($model, 'image_field')->fileInput()->label('Добавить картинку'); ?>
 
         <?php DynamicFormWidget::begin([

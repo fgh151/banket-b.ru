@@ -14,6 +14,7 @@ use app\common\components\Model;
 use app\common\models\District;
 use app\common\models\Metro;
 use app\common\models\Organization;
+use app\common\models\OrganizationImage;
 use app\common\models\OrganizationLinkMetro;
 use app\common\models\RestaurantHall;
 use app\common\models\RestaurantParams;
@@ -117,6 +118,14 @@ WHERE ml.city_id = ' . $model->city_id . ' ORDER BY name;')
             'params' => $params ? $params : new RestaurantParams(['organization_id' => $model->id]),
             'halls' => empty($model->halls) ? [new RestaurantHall()] : $model->halls,
         ]);
+    }
+
+
+    public function actionImgDelete($id)
+    {
+        $model = OrganizationImage::findOne(['upload_id' => $id]);
+        OrganizationImage::deleteAll(['upload_id' => $id]);
+        return $this->redirect(['organization/update', 'id' => $model->organization_id]);
     }
 
 }
