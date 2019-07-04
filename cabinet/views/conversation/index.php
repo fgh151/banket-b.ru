@@ -86,7 +86,7 @@ $this->registerJs($js);
                     <?php $form = ActiveForm::begin(['id' => 'cost-change']); ?>
                     <div class="row">
                         <div class="col-xs-7">
-                            <?= $form->field($model, 'cost')->label('Ваша ставка, руб.'); ?>
+                            <?= $form->field($model, 'cost', ['enableClientValidation' => false])->label('Ваша ставка, руб.'); ?>
                         </div>
                         <div class="col-xs-5 p-t-30">
                             <?= Html::submitButton($proposal->getMyMinCost() ? 'Изменить' : 'Отправить') ?>

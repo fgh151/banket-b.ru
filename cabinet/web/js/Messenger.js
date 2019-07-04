@@ -141,7 +141,7 @@ class Form extends React.PureComponent {
             message: "",
             btnDisabled: true,
         });
-        $.post(pushUrl);
+        $.post(pushUrl, {organization: organizationId, message: this.state.message});
     }
 
     handleChange() {

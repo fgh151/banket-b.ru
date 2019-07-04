@@ -102,8 +102,12 @@ class ConversationController extends CabinetController
             $save = $cost->save();
             if ($save) {
 
-                $m = Message::getConversation($proposal->owner_id, $proposalId, $this->organizationId);
-                if (empty($m)) {
+//                $m = Message::getConversation($proposal->owner_id, $proposalId, $this->organizationId);
+
+
+//                var_dump($m); die;
+
+//                if (empty($m) || $m === null) {
                     $message = new Message();
 
                     $message->organization_id = $this->organizationId;
@@ -113,7 +117,7 @@ class ConversationController extends CabinetController
                     $message->message = 'Ресторан сделал ставку ' . $cost->cost . ' руб.';
                     $message->save();
 
-                } else {
+//                } else {
                     $push = Yii::$app->push;
                     $sendResult = $push->send(
                         $proposal->owner,
@@ -123,7 +127,7 @@ class ConversationController extends CabinetController
                             'organizationId' => Yii::$app->getUser()->getId()
                         ]
                     );
-                }
+//                }
             }
 
 
@@ -140,13 +144,24 @@ class ConversationController extends CabinetController
 
     public function actionPush($proposalId)
     {
+        $restaurant = Yii::$app->request->post('organization');
+        $restaurant = Organization::findOne($restaurant);
+        $message = Yii::$app->request->post('message');
+
+        $notifyText = 'У Вас новое сообщение';
+
+        if ($restaurant !== null && $message !== '') {
+            $notifyText = $message;
+        }
+
+        $title = $restaurant ? $restaurant->name : 'У Вас новое сообщение';
 
         $proposal = $this->findModel($proposalId);
         /** @var Push $push */
         $push = Yii::$app->push;
         $sendResult = $push->send(
             $proposal->owner,
-            'У Вас новое сообщение', 'У Вас новое сообщение',
+            $title, $notifyText,
             [
                 'proposalId' => $proposalId,
                 'organizationId' => Yii::$app->getUser()->getId()
