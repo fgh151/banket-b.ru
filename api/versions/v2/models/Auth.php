@@ -110,7 +110,7 @@ class Auth extends Model
             $this->_user = MobileUser::findByPhone($this->phone);
         }
 
-        if ($this->_user === null && $this->scenario === self::SCENARIO_SMS) {
+        if ($this->_user === null) {
             $this->_user = $this->createUser() ?: null;
         }
 
@@ -134,6 +134,8 @@ class Auth extends Model
         $user->created_at = $user->updated_at = time();
         $user->status = Constants::USER_STATUS_ACTIVE;
         $user->generatePasswordResetToken();
+
+        $user->validate();
 
         return $user->save() ? $user : $user->errors;
     }

@@ -18,6 +18,10 @@ use yii\rest\Controller;
 class AuthController extends Controller
 {
 
+    /**
+     * @return array
+     * @throws \yii\base\Exception
+     */
     public function actionIndex()
     {
 
@@ -38,7 +42,7 @@ class AuthController extends Controller
             $model->login();
             return [
                 'access_token' => $model->getUser()->getAuthKey(),
-                'id' => (string)Yii::$app->getUser()->getId()
+                'id' => (string)$model->getUser()->id
             ];
         }
     }
@@ -58,12 +62,20 @@ class AuthController extends Controller
         return $load ? $model : false;
     }
 
+    /**
+     * @return array
+     * @throws \yii\base\Exception
+     */
     public function actionSendcode()
     {
         $model = $this->loadModel();
         return $this->sendCode($model);
     }
 
+    /**
+     * @return array
+     * @throws \yii\base\Exception
+     */
     public function actionSendregistercode()
     {
         $model = $this->loadModel(Auth::SCENARIO_REGISTER);
@@ -81,6 +93,7 @@ class AuthController extends Controller
             $code = $model->getCode();
             if ($code) {
                 /** @var SmsInterface $smsService */
+                /** @noinspection PhpUndefinedFieldInspection */
                 $smsService = Yii::$app->sms;
                 $r = $smsService->sendSms('Код подтверждения ' . $code, $model->phone);
                 if ($r) {
