@@ -69,6 +69,7 @@ class ConversationController extends CabinetController
      * @return string
      * @throws \yii\db\Exception
      * @throws \yii\web\NotFoundHttpException
+     * @throws \Throwable
      */
     public function actionIndex($proposalId)
     {
@@ -119,9 +120,11 @@ class ConversationController extends CabinetController
 
 //                } else {
                     $push = Yii::$app->push;
+                /** @var Organization $restaurant */
+                $restaurant = Yii::$app->getUser()->getIdentity();
                     $sendResult = $push->send(
                         $proposal->owner,
-                        'У Вас новое сообщение', 'Для вашей заявки появилась новая ставка',
+                        $restaurant->name, 'Для вашей заявки появилась новая ставка',
                         [
                             'proposalId' => $proposalId,
                             'organizationId' => Yii::$app->getUser()->getId()
