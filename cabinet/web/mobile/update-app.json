@@ -1,0 +1,8 @@
+{
+  "version": "2.0.42",
+  "minContainerVersion": "1.0",
+  "url": {
+    "url": "/mobile/main.jsbundle",
+    "isRelative": true
+  }
+}

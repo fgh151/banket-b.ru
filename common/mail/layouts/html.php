@@ -236,7 +236,7 @@ $recipient = $this->params['recipient'];
                                                             href="https://banket-b.ru"><span
                                                                 style="color: rgb(12, 33, 226);">banket-b.ru</span><br/></a>Если
                                                     у вас есть какие-либо вопросы,<br/>команда Банкет Батл всегда рада
-                                                    помочь:<br/>+7 495 788 06 00<br/>support@banket-b.ru<br/><br/>
+                                                    помочь:<br/>support@banket-b.ru<br/><br/>
                                                     <a style="color:#8c8c8c;"
                                                        href="<?= $recipient->getUnsubscribeUrl() ?>">Отписаться
                                                         от рассылки</a>

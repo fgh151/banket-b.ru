@@ -39,7 +39,8 @@
     "aprsoft/yii2-dropify": "^1.2",
     "mobiledetect/mobiledetectlib": "^2.8",
     "sendpulse/rest-api": "^1.0",
-    "kartik-v/yii2-mpdf": "^1.0"
+    "kartik-v/yii2-mpdf": "^1.0",
+    "longman/telegram-bot": "^0.59.1"
   },
   "require-dev": {
     "yiisoft/yii2-debug": "~2.0.0",
