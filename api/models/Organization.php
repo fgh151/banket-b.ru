@@ -33,7 +33,7 @@ class Organization extends \app\common\models\Organization
             },
             'profit' => function () {
                 if ($this->proposal) {
-                    return Proposal::getProfit($this->proposal);
+                    return Proposal::getProfit($this);
                 }
                 return null;
             },
@@ -58,6 +58,9 @@ class Organization extends \app\common\models\Organization
             },
             'messages' => function () {
                 return count($this->getConversation());
+            },
+            'phone' => function () {
+                return $this->organization_phone;
             }
         ]);
 
@@ -70,7 +73,7 @@ class Organization extends \app\common\models\Organization
      */
     public static function getMinPrice(Organization $organization)
     {
-        $min = Proposal::getMinCostForRestaurant($organization->proposal->id, $organization->id);
+        $min = Proposal::getMinCostForRestaurant($organization->proposal, $organization->id);
 
         if ($min === null) {
             return $organization->proposal->amount * $organization->proposal->guests_count;

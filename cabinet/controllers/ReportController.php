@@ -34,6 +34,10 @@ class ReportController extends Controller
         /** @var Organization $organization */
         $organization = Yii::$app->getUser()->getIdentity();
 
+        if (is_string($organization->proposal_search)) {
+            $organization->proposal_search = unserialize(base64_decode($organization->proposal_search));
+        }
+
 
         $searchModel = $organization->proposal_search;
         $query = $searchModel->search([]);

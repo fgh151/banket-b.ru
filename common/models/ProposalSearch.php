@@ -18,17 +18,30 @@ class ProposalSearch extends Proposal
 
     public $with = ['owner'];
 
+    public $amount_to;
+
+    public $guests_count_to;
+
     /**
      * {@inheritdoc}
      */
     public function rules()
     {
         return [
-            [['id', 'owner_id', 'guests_count', 'event_type', 'metro'], 'integer'],
+            [['id', 'owner_id', 'guests_count', 'guests_count_to', 'event_type', 'metro'], 'integer'],
             [['City', 'date', 'time', 'comment', 'status', 'rejected'], 'safe'],
-            [['amount'], 'number'],
+            [['amount', 'amount_to'], 'number'],
+
             [['dance', 'private', 'own_alcohol', 'parking'], 'boolean'],
             ['order', 'in', 'range' => ['date']]
+        ];
+    }
+
+    public function attributeLabels()
+    {
+        return [
+            'guests_count' => 'Количество гостей',
+            'amount' => 'Стоимость'
         ];
     }
 
@@ -105,8 +118,12 @@ class ProposalSearch extends Proposal
             $query->andWhere(['>=', 'date', $this->date]);
         }
 
-        $query->andFilterWhere(['>', 'guests_count', $this->guests_count]);
-
+        if ($this->guests_count !== null) {
+            $query->andFilterWhere(['>', 'guests_count', $this->guests_count]);
+        }
+        if ($this->guests_count_to !== null) {
+            $query->andFilterWhere(['<', 'guests_count', $this->guests_count_to]);
+        }
 //        if (!$admin) {
 //            if ($direct == false) {
 //                $query->andFilterWhere(['organizations' => '"[]"']);
@@ -123,7 +140,12 @@ class ProposalSearch extends Proposal
             }
         }
 
-        $query->andFilterWhere(['>', 'amount', $this->amount]);
+        if ($this->amount) {
+            $query->andFilterWhere(['>', 'amount', $this->amount]);
+        }
+        if ($this->amount_to) {
+            $query->andFilterWhere(['<', 'amount', $this->amount_to]);
+        }
 
         $query->andFilterWhere(['ilike', 'City', $this->City])
             ->andFilterWhere(['ilike', 'comment', $this->comment]);

@@ -29,7 +29,9 @@ class CityController extends Controller
 
     public function actionCity()
     {
-        return GeoCity::find()->where(['in', 'id', Organization::find()->select(['city_id'])])
+        return GeoCity::find()
+            ->where(['in', 'id', Organization::find()->select(['city_id'])])
+            ->with('metro')
             ->all();
 //        return GeoRegion::find()->orderBy(['order' => SORT_ASC])->with('cities')->all();
     }

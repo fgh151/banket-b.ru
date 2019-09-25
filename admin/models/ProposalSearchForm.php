@@ -29,6 +29,8 @@ class ProposalSearchForm extends Model
 
     public $guests_count;
     public $amount;
+    public $amount_to;
+    public $guests_count_to;
 
 
     public function rules()
@@ -36,7 +38,7 @@ class ProposalSearchForm extends Model
         return [
             [['danceFalse', 'danceTrue', 'privateFalse', 'privateTrue', 'own_alcoholFalse', 'own_alcoholTrue', 'parkingTrue', 'parkingFalse'], 'boolean'],
             [['danceFalse', 'danceTrue', 'privateFalse', 'privateTrue', 'own_alcoholFalse', 'own_alcoholTrue', 'parkingTrue', 'parkingFalse'], 'default', 'value' => true],
-            [['guests_count', 'amount'], 'integer']
+            [['guests_count', 'guests_count_to', 'amount', 'amount_to'], 'integer']
         ];
     }
 
@@ -59,7 +61,9 @@ class ProposalSearchForm extends Model
     public function createForm(ProposalSearch $model)
     {
         $this->guests_count = $model->guests_count;
+        $this->guests_count_to = $model->guests_count_to;
         $this->amount = $model->amount;
+        $this->amount_to = $model->amount_to;
 
         $this->createBooleanFormField($model, 'dance');
         $this->createBooleanFormField($model, 'private');
@@ -90,7 +94,9 @@ class ProposalSearchForm extends Model
         $filter = $this->addBooleanFilter($filter, 'parking');
 
         $filter = $this->addIntFilter($filter, 'guests_count');
+        $filter = $this->addIntFilter($filter, 'guests_count_to');
         $filter = $this->addIntFilter($filter, 'amount');
+        $filter = $this->addIntFilter($filter, 'amount_to');
 
         return $filter;
     }

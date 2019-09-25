@@ -48,7 +48,6 @@ class ProposalController extends Controller
     {
         $request = Json::decode(Yii::$app->getRequest()->getRawBody(), true);
         $request['owner_id'] = Yii::$app->getUser()->getId();
-        $request['city_id'] = $request['cityId'];
 
         $proposal = new Proposal();
         $proposal->load($request, '');

@@ -19,6 +19,7 @@ use app\common\models\OrganizationLinkMetro;
 use app\common\models\RestaurantHall;
 use app\common\models\RestaurantParams;
 use Yii;
+use yii\db\ActiveRecord;
 use yii\filters\AccessControl;
 use yii\helpers\ArrayHelper;
 
@@ -44,6 +45,20 @@ class UserController extends CabinetController
         ];
     }
 
+
+    private function saveAttributes($containerClass, $modelId)
+    {
+        /** @var ActiveRecord $containerClass */
+        $containerClass::deleteAll(['organization_id' => $modelId]);
+        /** @var OrganizationLinkMetro[] $receivers */
+        $receivers = Model::createMultiple($containerClass);
+        Model::loadMultiple($receivers, Yii::$app->request->post());
+        foreach ($receivers as $receiver) {
+            $receiver->organization_id = $modelId;
+            $receiver->save();
+        }
+    }
+
     /**
      * @return string
      * @throws \Throwable
@@ -57,9 +72,9 @@ class UserController extends CabinetController
         $params = $model->params;
 
         if ($model->load(\Yii::$app->request->post())) {
-//            if ($model->password !== '') {
-//                $model->setPassword($model->password);
-//            }
+            if ($model->password !== '') {
+                $model->setPassword($model->password);
+            }
             if ($model->save()) {
 
                 $params->load(Yii::$app->request->post());
@@ -69,25 +84,8 @@ class UserController extends CabinetController
                     $model->linkActivity[0]->save();
                 }
 
-                OrganizationLinkMetro::deleteAll(['organization_id' => $model->id]);
-                /** @var OrganizationLinkMetro[] $metros */
-                $metros = Model::createMultiple(OrganizationLinkMetro::class);
-                Model::loadMultiple($metros, Yii::$app->request->post());
-                foreach ($metros as $station) {
-                    $station->organization_id = $model->id;
-                    $station->save();
-                }
-
-
-                RestaurantHall::deleteAll(['restaurant_id' => $model->id]);
-
-                /** @var RestaurantHall[] $halls */
-                $halls = Model::createMultiple(RestaurantHall::class);
-                Model::loadMultiple($halls, Yii::$app->request->post());
-                foreach ($halls as $hall) {
-                    $hall->restaurant_id = $model->id;
-                    $hall->save();
-                }
+                $this->saveAttributes(OrganizationLinkMetro::class, $model->id);
+                $this->saveAttributes(RestaurantHall::class, $model->id);
 
                 \Yii::$app->session->setFlash('success', 'Данные успешно сохранены');
             }
@@ -123,9 +121,8 @@ WHERE ml.city_id = ' . $model->city_id . ' ORDER BY name;')
 
     public function actionImgDelete($id)
     {
-        $model = OrganizationImage::findOne(['upload_id' => $id]);
         OrganizationImage::deleteAll(['upload_id' => $id]);
-        return $this->redirect(['organization/update', 'id' => $model->organization_id]);
+        return $this->redirect(['user/edit']);
     }
 
 }

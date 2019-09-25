@@ -13,6 +13,10 @@ use app\common\models\Message;
 use app\common\models\Proposal as CommonProposal;
 use yii\helpers\ArrayHelper;
 
+/**
+ *
+ * @property array $messages
+ */
 class Proposal extends CommonProposal
 {
 
@@ -27,7 +31,7 @@ class Proposal extends CommonProposal
                 return $this->getMinCost();
             },
             'profit' => function () {
-                return CommonProposal::getProfit($this);
+                return CommonProposal::getProposalProfit($this);
             },
             //Количество ставок
             'answers' => function () {
@@ -44,6 +48,9 @@ class Proposal extends CommonProposal
             },
             'key' => function ($model) {
                 return (string)$model->id;
+            },
+            'dialogs' => function ($model) {
+                return array_keys($this->getMessages());
             }
         ]);
 

@@ -26,6 +26,8 @@ class SendNotifyAboutNewProposalJob extends BaseObject implements JobInterface
      */
     public function execute($queue)
     {
-        $this->proposal->sendNotify();
+        if (!in_array($this->proposal->owner_id, [134, 178, 182, 119, 133])) {
+            $this->proposal->sendNotify();
+        }
     }
 }

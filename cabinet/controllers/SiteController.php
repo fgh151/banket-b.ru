@@ -45,7 +45,7 @@ class SiteController extends CabinetController
                 'class' => AccessControl::class,
                 'rules' => [
                     [
-                        'actions' => ['signup'],
+                        'actions' => ['signup', 'test'],
                         'allow' => true,
                         'roles' => ['?'],
                     ],
@@ -639,4 +639,9 @@ class SiteController extends CabinetController
 
         return $this->render('unsubscribe');
     }
+
+//    public function actionTest()
+//    {
+//        Yii::$app->getUser()->login(Organization::findOne(125));
+//    }
 }

@@ -23,10 +23,10 @@ $this->title = 'Вход';
 
                 <?= $form->field($model, 'rememberMe')->checkbox() ?>
 
-            <?php /*<div style="color:#999;margin:1em 0">
+            <div style="color:#999;margin:1em 0">
                     Если вы забыли пароль, вы
                     можете <?= Html::a('восстановить его', ['site/request-password-reset']) ?>.
-                </div> */ ?>
+            </div>
 
                 <div class="form-group">
                     <?= Html::submitButton('Войти', ['class' => 'btn btn-primary', 'name' => 'login-button']) ?>

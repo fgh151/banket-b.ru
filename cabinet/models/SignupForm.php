@@ -1,4 +1,5 @@
 <?php
+
 namespace app\cabinet\models;
 
 use app\common\components\Constants;
@@ -6,6 +7,7 @@ use app\common\components\validators\ConfirmPassword;
 use app\common\models\geo\GeoCity;
 use app\common\models\Organization;
 use app\common\models\OrganizationLinkActivity;
+use Yii;
 use yii\base\Model;
 use yii\validators\ExistValidator;
 
@@ -41,7 +43,7 @@ class SignupForm extends Model
     {
         return [
             ['name', 'trim'],
-            [['name','address', 'contact', 'phone', 'confirm_password', 'activities'], 'required'],
+            [['name', 'address', 'contact', 'phone', 'confirm_password', 'activities'], 'required'],
             ['name', 'unique', 'targetClass' => 'app\common\models\Organization', 'message' => 'This name has already been taken.'],
             ['name', 'string', 'min' => 2, 'max' => 255],
 
@@ -61,7 +63,7 @@ class SignupForm extends Model
             [
                 'city_id',
                 ExistValidator::class,
-                'targetClass'     => GeoCity::class,
+                'targetClass' => GeoCity::class,
                 'targetAttribute' => 'id'
             ],
             ['district_id', 'integer'],
@@ -72,15 +74,15 @@ class SignupForm extends Model
     public function attributeLabels()
     {
         return [
-            'name'             => 'Название организации',
-            'address'          => 'Адрес',
-            'contact'          => 'Контактное лицо',
-            'phone'            => 'Контактный телефон',
+            'name' => 'Название организации',
+            'address' => 'Адрес',
+            'contact' => 'Контактное лицо',
+            'phone' => 'Контактный телефон',
             'confirm_password' => 'Пароль еще раз',
-            'password'         => 'Пароль',
-            'activities'       => 'Деятельность компании',
+            'password' => 'Пароль',
+            'activities' => 'Деятельность компании',
             'url' => 'Веб - сайт',
-            'city_id'          => 'Город',
+            'city_id' => 'Город',
             'district_id' => 'Район',
             'email' => 'Электронная почта'
         ];
@@ -97,7 +99,7 @@ class SignupForm extends Model
         if (!$this->validate()) {
             return null;
         }
-        
+
         $user = new Organization();
         $user->name = $this->name;
         $user->email = $this->email;
@@ -106,12 +108,12 @@ class SignupForm extends Model
         $user->contact = $this->contact;
         $user->setPassword($this->password);
         $user->generateAuthKey();
-        $user->created_at  = time();
-        $user->updated_at  = time();
-        $user->status      = Constants::USER_STATUS_ACTIVE;
-        $user->state       = Constants::ORGANIZATION_STATE_FREE;
-        $user->url         = $this->url;
-        $user->city_id     = $this->city_id;
+        $user->created_at = time();
+        $user->updated_at = time();
+        $user->status = Constants::USER_STATUS_ACTIVE;
+        $user->state = Constants::ORGANIZATION_STATE_FREE;
+        $user->url = $this->url;
+        $user->city_id = $this->city_id;
         $user->district_id = $this->district_id;
 //        $user->image_field = $this->image_field;
 
@@ -126,6 +128,15 @@ class SignupForm extends Model
             }
         }
 
-        return  $saved ? $user : null;
+        if ($saved) {
+            Yii::$app->mailer->compose()
+                ->setFrom('noreply@banket-b.ru')
+                ->setTo('pr7880600@gmail.com')
+                ->setSubject('Зарегистрировался новый ресторан!')
+                ->setHtmlBody('<a href="https://admin.banket-b.ru/organization/update/' . $user->id . '">посмотреть в админке</a><br> Контактное лицо: ' . $user->contact . ' <br> Телефон: ' . $user->phone . '<br>Email: ' . $user->email)
+                ->send();
+        }
+
+        return $saved ? $user : null;
     }
 }

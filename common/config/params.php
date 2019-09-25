@@ -11,5 +11,6 @@ return [
 
     'tgBotToken' => '898152498:AAEM6D5bMoYUkVPZLE9aQ2PVB5EY70Vssd8',
     'tgBotName' => 'Banketb_Bot',
-    'tgBotUrl' => 't.me/Banketb_Bot'
+    'tgBotUrl' => 't.me/Banketb_Bot',
+    'durationAuth' => 3600 * 60
 ];

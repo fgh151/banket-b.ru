@@ -36,6 +36,7 @@ use yii\widgets\ActiveForm;
     <?= $form->field($model, 'contact')->textInput(['maxlength' => true]) ?>
 
     <?= $form->field($model, 'phone')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'organization_phone'); ?>
 
     <?= $form->field($model,
         'city_id')->dropDownList(ArrayHelper::map(GeoCity::find()->select([

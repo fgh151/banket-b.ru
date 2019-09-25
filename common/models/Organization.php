@@ -58,6 +58,8 @@ use yii\web\IdentityInterface;
  *
  * @property string $last_visit
  * @property boolean $send_notify
+ *
+ * @property string $organization_phone
  */
 class Organization extends ActiveRecord implements IdentityInterface
 {
@@ -102,7 +104,7 @@ class Organization extends ActiveRecord implements IdentityInterface
         return [
             [
                 'class' => FileUploadBehavior::class,
-                'attribute' => 'image_field',
+                'attribute' => 'image_fieldp[]',
                 'storageClass' => OrganizationImage::class,
                 'storageAttribute' => 'organization_id',
                 'folder' => 'organization'
@@ -121,7 +123,7 @@ class Organization extends ActiveRecord implements IdentityInterface
             [['status', 'created_at', 'updated_at'], 'default', 'value' => null],
             [['status', 'created_at', 'updated_at', 'city_id', 'district_id', 'activity_field'], 'integer'],
             [['auth_key'], 'string', 'max' => 32],
-            [['password_hash', 'password_reset_token', 'email', 'name', 'contact', 'phone', /*'restogram_id' */], 'string', 'max' => 255],
+            [['password_hash', 'password_reset_token', 'email', 'name', 'contact', 'phone', 'organization_phone' /*'restogram_id' */], 'string', 'max' => 255],
             [['email'], 'unique'],
             [['password_reset_token'], 'unique'],
             [['state', 'state_statistic', 'state_promo', 'state_direct'],'default', 'value' => Constants::ORGANIZATION_STATE_FREE],
@@ -180,7 +182,8 @@ class Organization extends ActiveRecord implements IdentityInterface
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
             'district_id' => 'Район',
-            'unsubscribe' => 'Получать уведомления'
+            'unsubscribe' => 'Получать уведомления',
+            'organization_phone' => 'Телефон организации'
         ];
     }
 
@@ -195,7 +198,12 @@ class Organization extends ActiveRecord implements IdentityInterface
         if ($this->proposal_search === null || $this->proposal_search === '') {
             $this->proposalSearchModel = new ProposalSearch();
         } else {
-            $this->proposalSearchModel = unserialize(base64_decode($this->proposal_search));
+            $this->proposalSearchModel = new ProposalSearch();
+            /** @var ProposalSearch $decoded */
+            $decoded = unserialize(base64_decode($this->proposal_search));
+            if ($decoded) {
+                $this->proposalSearchModel->setAttributes($decoded->attributes);
+            }
         }
     }
 

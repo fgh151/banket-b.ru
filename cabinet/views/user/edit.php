@@ -85,9 +85,10 @@ use yii\widgets\ActiveForm;
     </div>
     <?php DynamicFormWidget::end(); ?>
 <?= $form->field($model, 'contact'); ?>
-<?= $form->field($model, 'phone'); ?>
+    <?= $form->field($model, 'phone'); ?>
+    <?= $form->field($model, 'organization_phone'); ?>
     <?php /*= $form->field($model, 'email');*/ ?>
-    <?php /*= $form->field($model, 'password')->label('Изменить пароль'); */ ?>
+    <?= $form->field($model, 'password')->label('Изменить пароль'); ?>
 
     <?php if ($model->isRestaurant()) : ?>
         <?= $form->field($params, 'ownAlko')->checkbox(); ?>
@@ -97,19 +98,20 @@ use yii\widgets\ActiveForm;
         <?= $form->field($params, 'amount')->input('number'); ?>
 
         <?php if ($model->images) : ?>
+            <!--        --><?php //var_dump($model->images);?>
             <div class="row">
                 <?php foreach ($model->images as $image) : ?>
                     <div class="panel panel-default col-xs-12 col-md-2">
                         <div class="panel-body">
                             <?= Html::img('https://banket-b.ru/upload/organization/' . $model->id . '/' . $image->fsFileName, ['class' => 'img-responsive']); ?>
-                            <?= Html::a('Удалить', ['organization/img-delete', 'id' => $image->id]); ?>
+                            <?= Html::a('Удалить', ['user/img-delete', 'id' => $image->id]); ?>
                         </div>
                     </div>
                 <?php endforeach; ?>
             </div>
         <?php endif; ?>
 
-        <?= $form->field($model, 'image_field')->fileInput()->label('Добавить картинку'); ?>
+        <?= $form->field($model, 'image_field[]')->fileInput()->label('Добавить картинку'); ?>
 
         <?php DynamicFormWidget::begin([
             'widgetContainer' => 'dynamicform_wrapper_hall',
@@ -139,12 +141,12 @@ use yii\widgets\ActiveForm;
                     <div class="panel-heading">
                         <h3 class="panel-title pull-left">Добавить зал</h3>
                         <div class="pull-right">
-                            <button type="button"
-                                    class="add-item btn btn-success btn-xs"><i
-                                        class="glyphicon glyphicon-plus"></i></button>
-                            <button type="button"
-                                    class="remove-item btn btn-danger btn-xs"><i
-                                        class="glyphicon glyphicon-minus"></i></button>
+                            <button type="button" class="add-item btn btn-success btn-xs">
+                                <i class="glyphicon glyphicon-plus"></i>
+                            </button>
+                            <button type="button" class="remove-item btn btn-danger btn-xs">
+                                <i class="glyphicon glyphicon-minus"></i>
+                            </button>
                         </div>
                         <div class="clearfix"></div>
                     </div>

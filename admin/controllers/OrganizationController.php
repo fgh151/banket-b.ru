@@ -225,14 +225,18 @@ WHERE ml.city_id = ' . $model->city_id . ' ORDER BY name;')
         $organization = $this->findModel($id);
         $model = new ProposalSearchForm();
 
+        if ($organization->proposalSearchModel !== null) {
+            $model->setAttributes($organization->proposalSearchModel->attributes);
+        }
+
         if ($model->load(Yii::$app->request->post())) {
-            $organization->proposal_search = $model->createFilter();
+            $organization->proposal_search = base64_encode(serialize($model->createFilter()));
             $organization->save();
+            $organization->refresh();
         }
 
         return $this->render('filters', [
             'model' => $model
         ]);
-
     }
 }

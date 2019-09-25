@@ -7,6 +7,7 @@
 
 use app\cabinet\assets\ConversationAsset;
 use app\common\components\MonthHelper;
+use app\common\models\Message;
 use app\common\models\Proposal;
 use yii\helpers\Html;
 use yii\helpers\Json;
@@ -15,9 +16,10 @@ use yii\widgets\ActiveForm;
 use yii\widgets\Pjax;
 
 ConversationAsset::register($this);
+$organizationId = Yii::$app->getUser()->getId();
 
-$this->registerJsVar('ref', 'proposal_2/u_' . $proposal->owner_id . '/p_' . $proposal->id . '/o_' . Yii::$app->getUser()->getId());
-$this->registerJsVar('organizationId', Yii::$app->getUser()->getId());
+$this->registerJsVar('ref', 'proposal_2/u_' . $proposal->owner_id . '/p_' . $proposal->id . '/o_' . $organizationId);
+$this->registerJsVar('organizationId', $organizationId);
 $this->registerJsVar('phpProposal', Json::encode($proposal));
 $this->registerJsVar('proposalActive', $proposal->isActual());
 $this->registerJsVar('pushUrl', Url::to(['conversation/push', 'proposalId' => $proposal->id]));
@@ -33,7 +35,7 @@ form.on('beforeSubmit', function(){
             data: data,
             success: function(res){
                 $.pjax.reload({container : '#proposal-costs', async: false, timeout : false});
-                console.log(res);
+                $('.panel.panel-default.disabled').removeClass('disabled');
             },
             error: function(){
             }
@@ -48,18 +50,6 @@ $this->registerJs($js);
 <div class="row">
     <div class="col-xs-12 col-sm-4 proposal-info" id="chart-info">
 
-        <button class="mobile-btn-chat"
-                onclick="$('#chart-aside').toggle(); $('#chart-info').toggle(); Messenger.scroll()">
-            <svg width="24" height="23" viewBox="0 0 24 23" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path fill-rule="evenodd" clip-rule="evenodd"
-                      d="M20.4 15.8C22 14.2 23 12.2 23 10C23 5 18.1 1 12 1C5.9 1 1 5 1 10C1 15 5.9 19 12 19C13.1 19 14.1 18.9 15.1 18.6L21 21L20.4 15.8Z"
-                      stroke="white" stroke-width="2" stroke-linecap="square"/>
-                <path d="M8 8H16" stroke="white" stroke-width="2" stroke-linecap="square"/>
-                <path d="M8 12H13" stroke="white" stroke-width="2" stroke-linecap="square"/>
-            </svg>
-
-            Чат с гостем
-        </button>
 
         <div class="dialog-element">
             <div class="proposal-detil-cost">
@@ -80,15 +70,23 @@ $this->registerJs($js);
                     ₽ /чел.
                 </p>
 
+
+                <p>
+                    <?= Yii::$app->formatter->asRubles($proposal->amount) ?> ₽ /чел.
+                    Начальная стоимость
+                </p>
+
+
                 <?php Pjax::end(); ?>
 
                 <div class="proposal-item-cost-form">
                     <?php $form = ActiveForm::begin(['id' => 'cost-change']); ?>
                     <div class="row">
                         <div class="col-xs-7">
-                            <?= $form->field($model, 'cost', ['enableClientValidation' => false])->label('Ваша ставка, руб.'); ?>
+                            <?= $form->field($model, 'cost', ['enableClientValidation' => false])
+                                ->label('Ваша ставка за человека, руб.'); ?>
                         </div>
-                        <div class="col-xs-5 p-t-30">
+                        <div class="col-xs-5 p-t-40">
                             <?= Html::submitButton($proposal->getMyMinCost() ? 'Изменить' : 'Отправить') ?>
                         </div>
                     </div>
@@ -98,6 +96,12 @@ $this->registerJs($js);
             </div>
 
         </div>
+        <button class="mobile-btn-chat"
+                onclick="$('#chart-aside').toggle(); $('#chart-info').toggle(); Messenger.scroll()">
+            <?= $this->render('_chat_icon'); ?>
+
+            Поприветствуйте гостя
+        </button>
         <div class=" dialog-element">
             <p class="proposal-item-time">
                 <?= MonthHelper::formatDateWithYear($proposal->getWhen()); ?>
@@ -109,6 +113,10 @@ $this->registerJs($js);
             <p>
                 <?= $proposal->guests_count ?> <?= Yii::t('app', '{n, plural, one{гостя} few{гостей} other{гостей}}', ['n' => $proposal->guests_count]); ?>
             </p>
+            <?php if ($proposal->metroStation !== null) : ?>
+                <p class="my-price-description">Желаемое метро</p>
+                <p><?= $proposal->metroStation->title ?></p>
+            <?php endif; ?>
             <?php if (
                 $proposal->floristics === true ||
                 $proposal->hall === true ||
@@ -201,8 +209,8 @@ $this->registerJs($js);
     </div>
 
     <div class="col-xs-12 col-sm-8" id="chart-aside">
-
-        <div class="panel panel-default">
+        <div class="panel panel-default<?= Message::getConversation($proposal->owner_id, $proposal->id, $organizationId) === null ? 'disabled' : '' ?>">
+            <!--.disabled-->
             <div class="panel-heading show-mobile mobile-breadcrumbs">
                 <span onclick="$('#chart-aside').toggle(); $('#chart-info').toggle();">
                     <svg width="22" height="14" viewBox="0 0 22 14" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -237,8 +245,8 @@ $this->registerJs($js);
                 </div>
 
 
-                <span class="proposal-owner-name">
-                <?= $proposal->owner->name ?>
+                <span class="proposal-owner-name" data-id="<?= $proposal->owner_id ?>">
+                    <?= $proposal->owner->name ?> <?= substr($proposal->owner->phone, 0, -2) ?>**
                     </span>
 
 
@@ -246,8 +254,19 @@ $this->registerJs($js);
             <div class="panel-body">
                 <div id="dialog"></div>
             </div>
+            <div class="disabled-messenger">
+                <div class="vertical-wrapper">
+                    <div class="vertical-content">
+                        <div class="disabled-icon">
+                            <?= $this->render('_chat_icon'); ?>
+                        </div>
+                        <div class="disabled-text p-l-30">
+                            <h3>Сделайте ставку</h3>
+                            <p>для начала общения с гостем</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-
-
     </div>
 </div>

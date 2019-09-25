@@ -9,12 +9,12 @@
 namespace app\cabinet\controllers;
 
 use app\admin\components\ProposalFindOneTrait;
-use app\api\models\Organization;
 use app\cabinet\components\CabinetController;
 use app\common\components\Push;
 use app\common\models\Cost;
 use app\common\models\KnownProposal;
 use app\common\models\Message;
+use app\common\models\Organization;
 use app\common\models\ReadMessage;
 use Yii;
 use yii\filters\AccessControl;
@@ -74,6 +74,9 @@ class ConversationController extends CabinetController
     public function actionIndex($proposalId)
     {
         $proposal = $this->findModel($proposalId);
+        if ($proposal->isActual() === false) {
+            return $this->render('closed');
+        }
         $cost = new Cost();
         $cost->cost = Yii::$app->formatter->asRubles($proposal->getMyMinCost());
         $cost->restaurant_id = \Yii::$app->getUser()->getId();
@@ -115,7 +118,7 @@ class ConversationController extends CabinetController
                     $message->proposal_id = $proposalId;
                     $message->user_id = $proposal->owner_id;
                     $message->author_class = Organization::class;
-                    $message->message = 'Ресторан сделал ставку ' . $cost->cost . ' руб.';
+                $message->message = 'Ресторан сделал ставку ' . $cost->cost . ' руб. / чел';
                     $message->save();
 
 //                } else {
@@ -127,7 +130,8 @@ class ConversationController extends CabinetController
                         $restaurant->name, 'Для вашей заявки появилась новая ставка',
                         [
                             'proposalId' => $proposalId,
-                            'organizationId' => Yii::$app->getUser()->getId()
+                            'organizationId' => Yii::$app->getUser()->getId(),
+                            'cost' => $cost->cost
                         ]
                     );
 //                }
@@ -157,7 +161,7 @@ class ConversationController extends CabinetController
             $notifyText = $message;
         }
 
-        $title = $restaurant ? $restaurant->name : 'У Вас новое сообщение';
+        $title = $restaurant ? 'Ответ от ресторана ' . $restaurant->name : 'У Вас новое сообщение';
 
         $proposal = $this->findModel($proposalId);
         /** @var Push $push */

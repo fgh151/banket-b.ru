@@ -71,7 +71,7 @@ class Message extends React.PureComponent {
         var date = new Date(this.props.message.created_at * 1000);
 
 
-        this.time = date.getHours() + ':' + date.getMinutes();
+        this.time = date.getDay() + ' ' + date.getMonth() + ' ' + date.getFullYear() + ' ' + date.getHours() + ':' + date.getMinutes();
     }
 
     render() {

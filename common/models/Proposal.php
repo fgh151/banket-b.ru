@@ -67,6 +67,7 @@ use yii\swiftmailer\Mailer;
  * @property mixed $costs
  * @property KnownProposal|\yii\db\ActiveQuery $known
  * @property ReadMessage|null $readMessage
+ * @property \yii\db\ActiveQuery|\app\common\models\Metro $metroStation
  * @property Cost $bestCost
  */
 class Proposal extends ActiveRecord
@@ -89,11 +90,28 @@ class Proposal extends ActiveRecord
      * @return float|int
      * @throws \yii\db\Exception
      */
-    public static function getProfit(Proposal $proposal)
+    public static function getProposalProfit(Proposal $proposal)
     {
+
         $cost = $proposal->amount * $proposal->guests_count; ///стоимость заявки
         $restaurantCost = $proposal->getMinCost(); // мин ставка
-        if ($restaurantCost === null) {
+        if ($restaurantCost === null || $restaurantCost === 0) {
+            return 0;
+        }
+        return round(100 - ($restaurantCost * 100 / $cost));
+    }
+
+    /**
+     * @param \app\common\models\Organization $organization
+     * @return float|int
+     * @throws \yii\db\Exception
+     */
+    public static function getProfit(Organization $organization)
+    {
+
+        $cost = $organization->proposal->amount; ///стоимость заявки
+        $restaurantCost = self::getMinCostForRestaurant($organization->proposal, $organization->id);
+        if ($restaurantCost === null || $restaurantCost === 0 || $restaurantCost === false) {
             return 0;
         }
         return round(100 - ($restaurantCost * 100 / $cost));
@@ -105,7 +123,7 @@ class Proposal extends ActiveRecord
      */
     public function getMinCost()
     {
-        return self::getMinCostForRestaurant($this->id, false);
+        return self::getMinCostForRestaurant($this, false);
     }
 
     /**
@@ -114,11 +132,14 @@ class Proposal extends ActiveRecord
      * @return false|int|null
      * @throws \yii\db\Exception
      */
-    public static function getMinCostForRestaurant($proposalId, $restaurantId = null)
+    public static function getMinCostForRestaurant(Proposal $proposal, $restaurantId = null)
     {
         //DISTINCT ON (restaurant_id)
+
+        $result = null;
+
         if ($restaurantId === false) {
-            return Yii::$app
+            $result = Yii::$app
                 ->getDb()
                 ->createCommand(
                     '
@@ -131,26 +152,29 @@ class Proposal extends ActiveRecord
                            ORDER BY restaurant_id, cost DESC
                          ) as cost;
                     ', [
-                        ':pid' => $proposalId
+                        ':pid' => $proposal->id
                     ]
                 )
                 ->queryScalar();
+            return $result * $proposal->guests_count;
         }
 
         if ($restaurantId === null) {
             $restaurantId = Yii::$app->getUser()->getId();
         }
 
-        return Yii::$app
+        $result = Yii::$app
             ->getDb()
             ->createCommand(
                 'SELECT cost as min FROM cost WHERE restaurant_id = :rid AND proposal_id = :pid ORDER BY id DESC limit 1;',
                 [
                     ':rid' => $restaurantId,
-                    ':pid' => $proposalId
+                    ':pid' => $proposal->id
                 ]
             )
             ->queryScalar();
+
+        return $result; // * $proposal->guests_count;
     }
 
     /**
@@ -393,7 +417,7 @@ class Proposal extends ActiveRecord
      */
     public function getMyMinCost()
     {
-        return self::getMinCostForRestaurant($this->id);
+        return self::getMinCostForRestaurant($this);
     }
 
     /**
@@ -453,12 +477,12 @@ class Proposal extends ActiveRecord
 
     public function sendNotify()
     {
-        Yii::$app->mailer->compose()
-            ->setFrom('noreply@banket-b.ru')
-            ->setTo('zkzrr@yandex.ru')
-            ->setSubject('Новая заявка')
-            ->setHtmlBody('В разделе заявок появилась новая заявка <a href="https://admin.banket-b.ru/proposal/update/' . $this->id . '">посмотреть</a>')
-            ->send();
+//        Yii::$app->mailer->compose()
+//            ->setFrom('noreply@banket-b.ru')
+//            ->setTo('zkzrr@yandex.ru')
+//            ->setSubject('Новая заявка')
+//            ->setHtmlBody('В разделе заявок появилась новая заявка <a href="https://admin.banket-b.ru/proposal/update/' . $this->id . '">посмотреть</a>')
+//            ->send();
 
         $recipients = Organization::find()
             ->where(['state' => Constants::ORGANIZATION_STATE_PAID])
@@ -504,6 +528,14 @@ class Proposal extends ActiveRecord
             ->andWhere([
                 'organization_id' => Yii::$app->getUser()->getId()
             ]);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery | Metro
+     */
+    public function getMetroStation()
+    {
+        return $this->hasOne(Metro::class, ['id' => 'metro']);
     }
 
 }

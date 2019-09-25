@@ -275,7 +275,7 @@ h1 {
     }
 
     .messages-area {
-        height: calc(100vh - 200px);
+        height: calc(100vh - 260px);
     }
 
     .navbar-brand {
@@ -431,6 +431,10 @@ h2.closed-proposals {
     padding-top: 30px;
 }
 
+.p-t-40 {
+    padding-top: 40px;
+}
+
 .proposal-owner-name {
     left: 87px;
     position: absolute;
@@ -467,4 +471,47 @@ h2.closed-proposals {
     font-size: 16px;
     line-height: 19px;
     border-radius: 8px;
+}
+
+.panel .disabled-messenger {
+    display: none;
+}
+
+.panel.disabled .disabled-messenger {
+    display: block;
+}
+
+.disabled-messenger {
+    position: absolute;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, .8);
+}
+
+.vertical-wrapper {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.vertical-content {
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    left: 25%;
+    -ms-transform: translateY(-50%);
+    transform: translateY(-50%);
+}
+
+.disabled-messenger svg {
+    fill: black;
+}
+
+.disabled-messenger .vertical-content div {
+    display: inline-block;
+}
+
+.p-l-30 {
+    padding-left: 30px;
 }

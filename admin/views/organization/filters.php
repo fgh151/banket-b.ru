@@ -9,11 +9,12 @@ use yii\widgets\ActiveForm;
 
 ?>
 
-
 <?php $form = ActiveForm::begin(); ?>
 
-<?= $form->field($model, 'guests_count'); ?>
-<?= $form->field($model, 'amount'); ?>
+<?= $form->field($model, 'guests_count')->label('Количество гостей от'); ?>
+<?= $form->field($model, 'guests_count_to')->label('Количество гостей до'); ?>
+<?= $form->field($model, 'amount')->label('Стоимость от'); ?>
+<?= $form->field($model, 'amount_to')->label('Стоимость до'); ?>
 <?= $form->field($model, 'danceFalse')->checkbox(); ?>
 <?= $form->field($model, 'danceTrue')->checkbox(); ?>
 <?= $form->field($model, 'privateFalse')->checkbox(); ?>

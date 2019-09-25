@@ -9,6 +9,8 @@
 namespace app\api\versions\v2\controllers;
 
 
+use app\api\models\Organization;
+use app\api\models\Proposal;
 use app\common\models\PushToken;
 use Yii;
 use yii\helpers\Json;
@@ -52,8 +54,17 @@ class PushController extends Controller
                 'id' => $token->user_id
             ];
         }
+    }
 
-
+    public function actionInfo($organizationId, $proposalId)
+    {
+        $proposal = Proposal::findOne($proposalId);
+        $organization = Organization::findOne($organizationId);
+        $organization->proposal = $proposal;
+        return [
+            'organization' => $organization,
+            'proposal' => $proposal
+        ];
     }
 
 

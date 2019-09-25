@@ -44,17 +44,11 @@ use yii\helpers\Url;
             Лучшая ставка
         </p>
         <p>
-            <?php if ($model->getMinCost() === null) : ?>
-                <?= Yii::$app->formatter->asRubles($model->amount); ?>
-                <span class="my-price-description">
-                    <?= Yii::$app->formatter->asRubles(round($model->amount / $model->guests_count)); ?> ₽ /чел.
+            <?= Yii::$app->formatter->asRubles($model->getMinCost() ? $model->getMinCost() : $model->amount * $model->guests_count); ?>
+            <span class="my-price-description">
+                <?= Yii::$app->formatter->asRubles(round($model->getMinCost() ? $model->getMinCost() / $model->guests_count : $model->amount)); ?>
+                    ₽ /чел.
                 </span>
-            <?php else: ?>
-                <?= Yii::$app->formatter->asRubles($model->getMinCost()); ?>
-                <span class="my-price-description">
-                <?= Yii::$app->formatter->asRubles(round($model->getMinCost() / $model->guests_count)); ?> ₽ /чел.
-                </span>
-            <?php endif; ?>
         </p>
     </div>
     <div class="col-xs-12 col-md-3">
@@ -96,10 +90,10 @@ use yii\helpers\Url;
             <span class="cost-btn">Сделать ставку</span>
         <?php else: ?>
             <p class="my-price hidden-xs">
-                <?= Yii::$app->formatter->asRubles($model->getMyMinCost()); ?> ₽
+                <?= Yii::$app->formatter->asRubles($model->getMyMinCost() * $model->guests_count); ?> ₽
             </p>
             <p class="my-price-description hidden-xs">
-                <?= Yii::$app->formatter->asRubles(round($model->getMyMinCost() / $model->guests_count)); ?> ₽ /чел.
+                <?= Yii::$app->formatter->asRubles(round($model->getMyMinCost())); ?> ₽ /чел.
             </p>
             <p class="show-mobile">
                 <span class="my-cost"> Ваша ставка <?= Yii::$app->formatter->asRubles($model->getMyMinCost()); ?> ₽&nbsp;</span><span

@@ -60,6 +60,13 @@ $this->params['breadcrumbs'][] = $this->title;
                 }
                 ]
             ],
+            [
+                'label' => '',
+                'format' => 'html',
+                'value' => function (Organization $model) {
+                    return Html::a('Авторизация', ['organization/auth', 'id' => $model->id]);
+                }
+            ],
         ],
     ]); ?>
     <?php Pjax::end(); ?>
