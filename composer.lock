@@ -208,7 +208,7 @@
             "version": "v1.3.2",
             "source": {
                 "type": "git",
-                "url": "git@github.com:bestiejs/punycode.js.git",
+              "url": "https://github.com/bestiejs/punycode.js.git",
                 "reference": "38c8d3131a82567bfef18da09f7f4db68c84f8a3"
             },
             "dist": {
@@ -1180,20 +1180,21 @@
         },
         {
           "name": "kartik-v/yii2-widget-select2",
-          "version": "v2.1.3",
+          "version": "v2.1.4",
           "source": {
             "type": "git",
             "url": "https://github.com/kartik-v/yii2-widget-select2.git",
-            "reference": "f1ae98b7ec3e46ba0193471647ce15d07aa67f58"
+            "reference": "798dcea12997d806da14c5affde2f166338a6d54"
           },
           "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/kartik-v/yii2-widget-select2/zipball/f1ae98b7ec3e46ba0193471647ce15d07aa67f58",
-            "reference": "f1ae98b7ec3e46ba0193471647ce15d07aa67f58",
+            "url": "https://api.github.com/repos/kartik-v/yii2-widget-select2/zipball/798dcea12997d806da14c5affde2f166338a6d54",
+            "reference": "798dcea12997d806da14c5affde2f166338a6d54",
             "shasum": ""
           },
           "require": {
-            "kartik-v/yii2-krajee-base": ">=1.9"
+            "kartik-v/yii2-krajee-base": ">=1.9",
+            "select2/select2": ">=4.0"
           },
           "type": "yii2-extension",
           "extra": {
@@ -1229,7 +1230,7 @@
             "widget",
             "yii2"
           ],
-          "time": "2018-09-07T08:11:16+00:00"
+          "time": "2019-09-02T12:53:16+00:00"
         },
       {
             "name": "kreait/firebase-php",
@@ -2109,49 +2110,87 @@
             "time": "2017-10-23T01:57:42+00:00"
         },
         {
-          "name": "sendpulse/rest-api",
-          "version": "1.0.10",
+          "name": "select2/select2",
+          "version": "4.0.10",
           "source": {
             "type": "git",
-            "url": "https://github.com/sendpulse/sendpulse-rest-api-php.git",
-            "reference": "01932257cb99f06cb05b5baaf13d2b5f7ec174cf"
+            "url": "https://github.com/select2/select2.git",
+            "reference": "c4b730a0a014ea38641bfbcb245e4b7aa0ca5657"
           },
           "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/sendpulse/sendpulse-rest-api-php/zipball/01932257cb99f06cb05b5baaf13d2b5f7ec174cf",
-            "reference": "01932257cb99f06cb05b5baaf13d2b5f7ec174cf",
+            "url": "https://api.github.com/repos/select2/select2/zipball/c4b730a0a014ea38641bfbcb245e4b7aa0ca5657",
+            "reference": "c4b730a0a014ea38641bfbcb245e4b7aa0ca5657",
             "shasum": ""
           },
-          "require": {
-            "php": ">=5.4.0"
-          },
-          "type": "library",
-          "autoload": {
-            "psr-4": {
-              "Sendpulse\\RestApi\\": "src/"
+          "type": "component",
+          "extra": {
+            "component": {
+              "scripts": [
+                "dist/js/select2.js"
+              ],
+              "styles": [
+                "dist/css/select2.css"
+              ],
+              "files": [
+                "dist/js/select2.js",
+                "dist/js/i18n/*.js",
+                "dist/css/select2.css"
+              ]
             }
           },
           "notification-url": "https://packagist.org/downloads/",
           "license": [
             "MIT"
           ],
-          "authors": [
-            {
-              "name": "Maksym Ustymenko",
-              "email": "m.ustymenko@sendpulse.com"
-            },
-            {
-              "name": "Alexey Moroz",
-              "email": "a.moroz@sendpulse.com"
-            }
-          ],
-          "description": "Sendpulse REST API client library",
-          "keywords": [
-            "api",
-            "rest",
-            "sendpulse"
-          ],
-          "time": "2019-04-09T13:01:27+00:00"
+          "description": "Select2 is a jQuery based replacement for select boxes.",
+          "homepage": "https://select2.org/",
+          "time": "2019-08-28T03:09:32+00:00"
+        },
+      {
+        "name": "sendpulse/rest-api",
+        "version": "1.0.10",
+        "source": {
+          "type": "git",
+          "url": "https://github.com/sendpulse/sendpulse-rest-api-php.git",
+          "reference": "01932257cb99f06cb05b5baaf13d2b5f7ec174cf"
+        },
+        "dist": {
+          "type": "zip",
+          "url": "https://api.github.com/repos/sendpulse/sendpulse-rest-api-php/zipball/01932257cb99f06cb05b5baaf13d2b5f7ec174cf",
+          "reference": "01932257cb99f06cb05b5baaf13d2b5f7ec174cf",
+          "shasum": ""
+        },
+        "require": {
+          "php": ">=5.4.0"
+        },
+        "type": "library",
+        "autoload": {
+          "psr-4": {
+            "Sendpulse\\RestApi\\": "src/"
+          }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+          "MIT"
+        ],
+        "authors": [
+          {
+            "name": "Maksym Ustymenko",
+            "email": "m.ustymenko@sendpulse.com"
+          },
+          {
+            "name": "Alexey Moroz",
+            "email": "a.moroz@sendpulse.com"
+          }
+        ],
+        "description": "Sendpulse REST API client library",
+        "keywords": [
+          "api",
+          "rest",
+          "sendpulse"
+        ],
+        "time": "2019-04-09T13:01:27+00:00"
         },
       {
         "name": "sentry/sentry",

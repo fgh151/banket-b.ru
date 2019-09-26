@@ -46,15 +46,15 @@ class UserController extends CabinetController
     }
 
 
-    private function saveAttributes($containerClass, $modelId)
+    private function saveAttributes($containerClass, $modelId, $containerParam)
     {
         /** @var ActiveRecord $containerClass */
-        $containerClass::deleteAll(['organization_id' => $modelId]);
+        $containerClass::deleteAll([$containerParam => $modelId]);
         /** @var OrganizationLinkMetro[] $receivers */
         $receivers = Model::createMultiple($containerClass);
         Model::loadMultiple($receivers, Yii::$app->request->post());
         foreach ($receivers as $receiver) {
-            $receiver->organization_id = $modelId;
+            $receiver->$containerParam = $modelId;
             $receiver->save();
         }
     }
@@ -84,8 +84,8 @@ class UserController extends CabinetController
                     $model->linkActivity[0]->save();
                 }
 
-                $this->saveAttributes(OrganizationLinkMetro::class, $model->id);
-                $this->saveAttributes(RestaurantHall::class, $model->id);
+                $this->saveAttributes(OrganizationLinkMetro::class, $model->id, 'organization_id');
+                $this->saveAttributes(RestaurantHall::class, $model->id, 'restaurant_id');
 
                 \Yii::$app->session->setFlash('success', 'Данные успешно сохранены');
             }

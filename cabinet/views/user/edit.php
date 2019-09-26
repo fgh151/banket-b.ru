@@ -1,16 +1,23 @@
 <?php
 /**
- * @var                                 $this \yii\web\View
- * @var \app\common\models\Organization $model
- * @var \app\common\models\District[] $districts
- * @var \app\common\models\Metro $metro
- * @var \app\common\models\Metro[] $metros
- * @var \app\common\models\RestaurantParams $params
- * @var \app\common\models\RestaurantHall[] $halls
+ * @var                                 $this View
+ * @var Organization $model
+ * @var District[] $districts
+ * @var Metro $metro
+ * @var Metro[] $metros
+ * @var RestaurantParams $params
+ * @var RestaurantHall[] $halls
  */
 
+use app\common\models\District;
+use app\common\models\Metro;
+use app\common\models\Organization;
+use app\common\models\RestaurantHall;
+use app\common\models\RestaurantParams;
+use kartik\select2\Select2;
 use wbraganca\dynamicform\DynamicFormWidget;
 use yii\helpers\Html;
+use yii\web\View;
 use yii\widgets\ActiveForm;
 
 
@@ -20,7 +27,7 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'unsubscribe')->checkbox(); ?>
     <?= $form->field($model, 'name'); ?>
-<?= $form->field($model, 'address')->textarea(); ?>
+    <?= $form->field($model, 'address')->textarea(); ?>
     <?= $form->field($model, 'district_id')->dropDownList($districts); ?>
     <?php DynamicFormWidget::begin([
         'widgetContainer' => 'dynamicform_wrapper',
@@ -74,9 +81,15 @@ use yii\widgets\ActiveForm;
                                 echo Html::activeHiddenInput($metroStation, "[{$i}]id");
                             }
                             ?>
-
                             <?= $form->field($metroStation,
-                                "[{$i}]metro_id")->dropDownList($metros); ?>
+                                "[{$i}]metro_id")
+                                ->widget(Select2::class, [
+                                    'data' => $metros,
+                                    'options' => ['placeholder' => 'Select a state ...'],
+                                    'pluginOptions' => [
+                                        'allowClear' => true
+                                    ],
+                                ]); ?>
                         </div>
                     </div>
                 <?php endforeach; ?>
@@ -84,7 +97,7 @@ use yii\widgets\ActiveForm;
         </div>
     </div>
     <?php DynamicFormWidget::end(); ?>
-<?= $form->field($model, 'contact'); ?>
+    <?= $form->field($model, 'contact'); ?>
     <?= $form->field($model, 'phone'); ?>
     <?= $form->field($model, 'organization_phone'); ?>
     <?php /*= $form->field($model, 'email');*/ ?>
@@ -169,8 +182,8 @@ use yii\widgets\ActiveForm;
         <?php DynamicFormWidget::end(); ?>
     <?php endif; ?>
 
-<?= \yii\helpers\Html::submitButton('Сохранить', ['class' => 'btn btn-success']); ?>
+    <?= Html::submitButton('Сохранить', ['class' => 'btn btn-success']); ?>
 
 
-<?php ActiveForm::end() ?>
+    <?php ActiveForm::end() ?>
 </div>
