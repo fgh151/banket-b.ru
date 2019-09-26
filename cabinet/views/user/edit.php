@@ -182,6 +182,9 @@ use yii\widgets\ActiveForm;
         <?php DynamicFormWidget::end(); ?>
     <?php endif; ?>
 
+
+    <?= $form->field($model, 'description')->textarea(); ?>
+
     <?= Html::submitButton('Сохранить', ['class' => 'btn btn-success']); ?>
 
 

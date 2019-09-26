@@ -60,6 +60,8 @@ use yii\web\IdentityInterface;
  * @property boolean $send_notify
  *
  * @property string $organization_phone
+ *
+ * @property string $description
  */
 class Organization extends ActiveRecord implements IdentityInterface
 {
@@ -119,7 +121,7 @@ class Organization extends ActiveRecord implements IdentityInterface
     {
         return [
             [['state', 'auth_key', 'password_hash', 'email', 'name', 'address', 'contact', 'phone', 'created_at', 'updated_at'], 'required'],
-            [['address'], 'string'],
+            [['address', 'description'], 'string'],
             [['status', 'created_at', 'updated_at'], 'default', 'value' => null],
             [['status', 'created_at', 'updated_at', 'city_id', 'district_id', 'activity_field'], 'integer'],
             [['auth_key'], 'string', 'max' => 32],
@@ -183,7 +185,8 @@ class Organization extends ActiveRecord implements IdentityInterface
             'updated_at' => 'Updated At',
             'district_id' => 'Район',
             'unsubscribe' => 'Получать уведомления',
-            'organization_phone' => 'Телефон организации'
+            'organization_phone' => 'Телефон организации',
+            'description' => 'Описание организации'
         ];
     }
 
