@@ -157,6 +157,7 @@ class Organization extends ActiveRecord implements IdentityInterface
             'key' => function ($model) {
                 return (string)$model->id;
             },
+            'description'
         ];
     }
 

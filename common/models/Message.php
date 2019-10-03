@@ -18,7 +18,7 @@ use yii\base\Model;
 
 /**
  *
- * @property \app\common\models\MobileUser|null|\app\common\models\Organization $author
+ * @property MobileUser|null|Organization $author
  */
 class Message extends Model
 {
@@ -53,6 +53,8 @@ class Message extends Model
      */
     public static function findAll($user_id, $proposalId)
     {
+
+
         $result = [];
 
         $path = 'proposal_2/u_' . $user_id . '/p_' . $proposalId;
@@ -76,17 +78,20 @@ class Message extends Model
                 }
             }
         }
+
         return $result;
     }
 
-    public function attributeLabels()
+    public static function decode($message)
     {
-        return [
-            'message' => 'Сообщение',
-            'organization_id' => 'Организация',
-            'created_at' => 'Дата',
-            'cost' => 'Стоимость банкета'
-        ];
+
+
+        $object = new Message();
+
+        foreach ($message as $key => $value) {
+            $object->$key = $value;
+        }
+        return $object;// new Message(Json::decode($json, true));
     }
 
     /**
@@ -144,6 +149,16 @@ class Message extends Model
         return self::getReferenceValues($reference);
     }
 
+    public function attributeLabels()
+    {
+        return [
+            'message' => 'Сообщение',
+            'organization_id' => 'Организация',
+            'created_at' => 'Дата',
+            'cost' => 'Стоимость банкета'
+        ];
+    }
+
     /**
      * @return array
      */
@@ -196,40 +211,16 @@ class Message extends Model
         return $this;
     }
 
-    /**
-     * @return MobileUser|Organization|null
-     */
-    public function getAuthor()
+    public function beforeSave()
     {
-        if ($this->author_class == Organization::class) {
-            return Organization::findOne($this->organization_id);
-        } else {
-            return Proposal::findOne($this->proposal_id)->owner;
+        if ($this->organization_id == null) {
+            $this->organization_id = Yii::$app->getUser()->getId();
         }
     }
 
     private static function encode(Message $message)
     {
         return $message;// Json::encode($message);
-    }
-
-    public static function decode($message)
-    {
-
-
-        $object = new Message();
-
-        foreach ($message as $key => $value) {
-            $object->$key = $value;
-        }
-        return $object;// new Message(Json::decode($json, true));
-    }
-
-    public function beforeSave()
-    {
-        if ($this->organization_id == null) {
-            $this->organization_id = Yii::$app->getUser()->getId();
-        }
     }
 
     public function afterSave()
@@ -241,6 +232,18 @@ class Message extends Model
                 ->setSubject('Новый ответ на заявку')
                 ->setHtmlBody('На заявку ' . $this->proposal_id . ' поступил ответ от ресторана ' . $this->author->name . ' <a href="https://admin.banket-b.ru/proposal/answers/' . $this->proposal_id . '">посмотреть</a>')
                 ->send();
+        }
+    }
+
+    /**
+     * @return MobileUser|Organization|null
+     */
+    public function getAuthor()
+    {
+        if ($this->author_class == Organization::class) {
+            return Organization::findOne($this->organization_id);
+        } else {
+            return Proposal::findOne($this->proposal_id)->owner;
         }
     }
 

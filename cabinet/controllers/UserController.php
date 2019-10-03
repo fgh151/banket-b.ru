@@ -50,7 +50,7 @@ class UserController extends CabinetController
     {
         /** @var ActiveRecord $containerClass */
         $containerClass::deleteAll([$containerParam => $modelId]);
-        /** @var OrganizationLinkMetro[] $receivers */
+        /** @var ActiveRecord[] $receivers */
         $receivers = Model::createMultiple($containerClass);
         Model::loadMultiple($receivers, Yii::$app->request->post());
         foreach ($receivers as $receiver) {

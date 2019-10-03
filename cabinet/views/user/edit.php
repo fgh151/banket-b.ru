@@ -53,8 +53,9 @@ use yii\widgets\ActiveForm;
     <div class="panel panel-default">
         <div class="panel-heading">
             <h4>Ближайшие станции метро
-                <button type="button" class="add-metro btn btn-success btn-sm pull-right"><i
-                            class="glyphicon glyphicon-plus"></i></button>
+                <button type="button" class="add-metro btn btn-success btn-sm pull-right">
+                    <i class="glyphicon glyphicon-plus"></i>
+                </button>
             </h4>
         </div>
         <div class="panel-body">
@@ -62,15 +63,16 @@ use yii\widgets\ActiveForm;
                 <?php foreach ($metro as $i => $metroStation): ?>
                     <div class="metro panel panel-default"><!-- widgetBody -->
                         <div class="panel-heading">
-                            <h3 class="panel-title pull-left">Добавить станцию метро по
-                                близости</h3>
+                            <h3 class="panel-title pull-left">
+                                Добавить станцию метро по близости
+                            </h3>
                             <div class="pull-right">
                                 <!--                                    <button type="button"-->
                                 <!--                                            class="add-metro btn btn-success btn-xs"><i-->
                                 <!--                                                class="glyphicon glyphicon-plus"></i></button>-->
-                                <button type="button"
-                                        class="remove-metro btn btn-danger btn-xs"><i
-                                            class="glyphicon glyphicon-minus"></i></button>
+                                <button type="button" class="remove-metro btn btn-danger btn-xs">
+                                    <i class="glyphicon glyphicon-minus"></i>
+                                </button>
                             </div>
                             <div class="clearfix"></div>
                         </div>
@@ -124,7 +126,9 @@ use yii\widgets\ActiveForm;
             </div>
         <?php endif; ?>
 
-        <?= $form->field($model, 'image_field[]')->fileInput()->label('Добавить картинку'); ?>
+        <p>Наилучший размер фотографий для загрузки 800 x 600 пикселей</p>
+
+        <?= $form->field($model, 'image_field[]')->fileInput(['multiple' => true, 'accept' => 'image/*'])->label('Добавить картинку'); ?>
 
         <?php DynamicFormWidget::begin([
             'widgetContainer' => 'dynamicform_wrapper_hall',
@@ -182,11 +186,26 @@ use yii\widgets\ActiveForm;
         <?php DynamicFormWidget::end(); ?>
     <?php endif; ?>
 
-
     <?= $form->field($model, 'description')->textarea(); ?>
 
     <?= Html::submitButton('Сохранить', ['class' => 'btn btn-success']); ?>
 
-
     <?php ActiveForm::end() ?>
 </div>
+
+<?php
+$js = <<<JS
+window.initSelect2Loading = function(id, optVar){
+    initS2Loading(id, optVar)
+};
+
+
+
+// $(".dynamicform_wrapper").on("afterInsert", function(e, item) {
+//     e.preventDefault();
+//     $('[data-krajee-select2]').select2('destroy');
+//     $('[data-krajee-select2]').select2();
+// });
+JS;
+
+$this->registerJs($js);

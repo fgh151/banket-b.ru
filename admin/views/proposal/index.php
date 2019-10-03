@@ -74,12 +74,8 @@ $this->params['breadcrumbs'][] = $this->title;
                 'value' => function (Proposal $model) {
 
                     switch ($model->status) {
+                        case Constants::PROPOSAL_STATUS_REJECT:
                         case Constants::PROPOSAL_STATUS_CLOSED:
-                            {
-                                return 'Закрыта';
-                                break;
-                            }
-                        case Constants::PROPOSAL_STATUS_REJECT :
                             {
                                 return 'Закрыта';
                                 break;

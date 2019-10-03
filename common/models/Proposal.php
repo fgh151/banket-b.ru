@@ -386,6 +386,7 @@ class Proposal extends ActiveRecord
      */
     public function getAnswers()
     {
+
 //        $result = [];
 //        $cache = \Yii::$app->cache;
 //        $result = $cache->get('proposal-answers-' . $this->id);

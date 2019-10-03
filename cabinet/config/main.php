@@ -53,6 +53,14 @@ return [
         ],
         'formatter' => [
             'class' => \app\common\components\Formatter::class
+        ],
+        'assetManager' => [
+            'appendTimestamp' => true,
+            'bundles' => [
+                'wbraganca\dynamicform\DynamicFormAsset' => [
+                    'class' => 'app\cabinet\components\DynamicFormAsset',
+                ],
+            ]
         ]
     ],
     'params' => $params,
