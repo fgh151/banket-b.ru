@@ -246,7 +246,7 @@ $this->registerJs($js);
 
 
                 <span class="proposal-owner-name" data-id="<?= $proposal->owner_id ?>">
-                    <?= $proposal->owner->name ?> <?= substr($proposal->owner->phone, 0, -2) ?>**
+                    <?= $proposal->owner->name ?> <?= $proposal->owner->phone ?>
                     </span>
 
 
