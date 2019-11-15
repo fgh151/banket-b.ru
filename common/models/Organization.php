@@ -106,7 +106,7 @@ class Organization extends ActiveRecord implements IdentityInterface
         return [
             [
                 'class' => FileUploadBehavior::class,
-                'attribute' => 'image_fieldp[]',
+                'attribute' => 'image_field',
                 'storageClass' => OrganizationImage::class,
                 'storageAttribute' => 'organization_id',
                 'folder' => 'organization'
