@@ -10,6 +10,7 @@ namespace app\api\versions\v2\controllers;
 
 
 use app\common\models\Feedback;
+use app\jobs\SendFeedbackNotifyJob;
 use Yii;
 use yii\filters\auth\HttpBearerAuth;
 use yii\filters\ContentNegotiator;
@@ -53,6 +54,9 @@ class FeedbackController extends Controller
         if ($model->load($request, '')) {
             $model->user_id = Yii::$app->getUser()->getId();
             if ($model->save()) {
+                $queue = Yii::$app->queue;
+                $queue->push(new SendFeedbackNotifyJob());
+
                 Yii::$app->response->statusCode = 201;
                 return $model;
             }

@@ -144,7 +144,7 @@ class Form extends React.PureComponent {
         $.post(pushUrl, {organization: organizationId, message: this.state.message});
     }
 
-    handleChange() {
+    handleChange(event) {
         this.setState({message: event.target.value});
     }
 }
