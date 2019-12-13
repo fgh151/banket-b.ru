@@ -54,6 +54,7 @@ class ProposalController extends Controller
     {
         $searchModel = new ProposalSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams, false, true);
+        $dataProvider->pagination->pageSize = 15;
 
         return $this->render('index', [
             'searchModel' => $searchModel,

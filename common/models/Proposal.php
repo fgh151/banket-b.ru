@@ -6,9 +6,14 @@ namespace app\common\models;
 use app\common\components\Constants;
 use app\common\models\geo\GeoCity;
 use app\jobs\SendNotifyAboutNewProposalJob;
+use DateTime;
+use Swift_Message;
 use Yii;
+use yii\base\InvalidConfigException;
 use yii\behaviors\TimestampBehavior;
+use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
+use yii\db\Exception;
 use yii\queue\Queue;
 use yii\swiftmailer\Mailer;
 
@@ -34,7 +39,7 @@ use yii\swiftmailer\Mailer;
  * @property int $updated_at
  * @property array $organizations
  *
- * @property \DateTime $when
+ * @property DateTime $when
  * @property int $cuisineString
  * @property int $eventType
  * @property MobileUser $owner
@@ -49,7 +54,7 @@ use yii\swiftmailer\Mailer;
  * @property integer $city_id
  * @property integer $region_id
  * @property bool|array|mixed $answers
- * @property \yii\db\ActiveQuery|\app\common\models\geo\GeoCity $geoCity
+ * @property ActiveQuery|GeoCity $geoCity
  * @property integer $all_regions
  *
  *
@@ -65,9 +70,9 @@ use yii\swiftmailer\Mailer;
  * @property mixed $costsCount
  * @property mixed $uniqueCosts
  * @property mixed $costs
- * @property KnownProposal|\yii\db\ActiveQuery $known
+ * @property KnownProposal|ActiveQuery $known
  * @property ReadMessage|null $readMessage
- * @property \yii\db\ActiveQuery|\app\common\models\Metro $metroStation
+ * @property ActiveQuery|Metro $metroStation
  * @property Cost $bestCost
  */
 class Proposal extends ActiveRecord
@@ -88,7 +93,7 @@ class Proposal extends ActiveRecord
     /**
      * @param Proposal $proposal
      * @return float|int
-     * @throws \yii\db\Exception
+     * @throws Exception
      */
     public static function getProposalProfit(Proposal $proposal)
     {
@@ -102,24 +107,8 @@ class Proposal extends ActiveRecord
     }
 
     /**
-     * @param \app\common\models\Organization $organization
-     * @return float|int
-     * @throws \yii\db\Exception
-     */
-    public static function getProfit(Organization $organization)
-    {
-
-        $cost = $organization->proposal->amount; ///стоимость заявки
-        $restaurantCost = self::getMinCostForRestaurant($organization->proposal, $organization->id);
-        if ($restaurantCost === null || $restaurantCost === 0 || $restaurantCost === false) {
-            return 0;
-        }
-        return round(100 - ($restaurantCost * 100 / $cost));
-    }
-
-    /**
      * @return false|string|null
-     * @throws \yii\db\Exception
+     * @throws Exception
      */
     public function getMinCost()
     {
@@ -130,7 +119,7 @@ class Proposal extends ActiveRecord
      * @param $proposalId
      * @param null $restaurantId
      * @return false|int|null
-     * @throws \yii\db\Exception
+     * @throws Exception
      */
     public static function getMinCostForRestaurant(Proposal $proposal, $restaurantId = null)
     {
@@ -175,6 +164,22 @@ class Proposal extends ActiveRecord
             ->queryScalar();
 
         return $result; // * $proposal->guests_count;
+    }
+
+    /**
+     * @param Organization $organization
+     * @return float|int
+     * @throws Exception
+     */
+    public static function getProfit(Organization $organization)
+    {
+
+        $cost = $organization->proposal->amount; ///стоимость заявки
+        $restaurantCost = self::getMinCostForRestaurant($organization->proposal, $organization->id);
+        if ($restaurantCost === null || $restaurantCost === 0 || $restaurantCost === false) {
+            return 0;
+        }
+        return round(100 - ($restaurantCost * 100 / $cost));
     }
 
     /**
@@ -271,7 +276,7 @@ class Proposal extends ActiveRecord
     }
 
     /**
-     * @return \yii\db\ActiveQuery
+     * @return ActiveQuery
      */
     public function getOwner()
     {
@@ -279,12 +284,12 @@ class Proposal extends ActiveRecord
     }
 
     /**
-     * @return \DateTime
+     * @return DateTime
      * @throws \Exception
      */
     public function getWhen()
     {
-        return new \DateTime($this->date);
+        return new DateTime($this->date);
     }
 
     /**
@@ -309,7 +314,7 @@ class Proposal extends ActiveRecord
     }
 
     /**
-     * @return \yii\db\ActiveQuery|GeoCity
+     * @return ActiveQuery|GeoCity
      */
     public function getGeoCity()
     {
@@ -382,39 +387,41 @@ class Proposal extends ActiveRecord
 
     /**
      * @return array<int, string>
-     * @throws \yii\base\InvalidConfigException
+     * @throws InvalidConfigException
      */
     public function getAnswers()
     {
 
 //        $result = [];
-//        $cache = \Yii::$app->cache;
-//        $result = $cache->get('proposal-answers-' . $this->id);
+        $cache = Yii::$app->cache;
+        $result = $cache->get('proposal-answers-' . $this->id);
 
-//        if ($result == false) {
-        $messages = Message::findAll($this->owner_id, $this->id);
-        $tmp = $result = [];
-        foreach ($messages as $organizationId => $messagesArray) {
-            $tmp[$organizationId] = min(array_keys($messagesArray));
-        }
+        if ($result == false) {
+            $messages = Message::findAll($this->owner_id, $this->id);
+            $tmp = $result = [];
+            foreach ($messages as $organizationId => $messagesArray) {
+                $tmp[$organizationId] = min(array_keys($messagesArray));
+            }
 
-        $organizations = [];
-        $orgs = Organization::find()->where(['in', 'id', array_keys($messages)])->with('mainActivity')->all();
-        foreach ($orgs as $org) {
-            $organizations[$org->id] = $org->name;
-        }
+            $organizations = [];
+            $orgs = Organization::find()->where(['in', 'id', array_keys($messages)])->with('mainActivity')->all();
+            foreach ($orgs as $org) {
+                $organizations[$org->id] = $org->name;
+            }
 
-        foreach ($tmp as $organizationId => $timestamp) {
-            $result[$organizations[$organizationId]] = \Yii::$app->formatter->asDatetime($timestamp);
+            foreach ($tmp as $organizationId => $timestamp) {
+                $result[$organizations[$organizationId]] = Yii::$app->formatter->asDatetime($timestamp);
+            }
+
+            $cache->set('proposal-answers-' . $this->id, $result);
         }
-//        }
 
         return $result;
     }
 
     /**
      * @return false|string|null
-     * @throws \yii\db\Exception
+     * @throws Exception
      */
     public function getMyMinCost()
     {
@@ -451,7 +458,7 @@ class Proposal extends ActiveRecord
     }
 
     /**
-     * @return \yii\db\ActiveQuery|Cost
+     * @return ActiveQuery|Cost
      */
     public function getBestCost()
     {
@@ -500,7 +507,7 @@ class Proposal extends ActiveRecord
 
             $mailer->getView()->params['recipient'] = $recipient;
 
-            /** @var \Swift_Message $message */
+            /** @var Swift_Message $message */
             $mailer->compose('proposal-html', [
                 'proposal' => $this,
                 'recipient' => $recipient
@@ -512,7 +519,7 @@ class Proposal extends ActiveRecord
     }
 
     /**
-     * @return \yii\db\ActiveQuery|KnownProposal
+     * @return ActiveQuery|KnownProposal
      */
     public function getKnown()
     {
@@ -521,7 +528,7 @@ class Proposal extends ActiveRecord
     }
 
     /**
-     * @return \yii\db\ActiveQuery|ReadMessage
+     * @return ActiveQuery|ReadMessage
      */
     public function getReadMessage()
     {
@@ -532,7 +539,7 @@ class Proposal extends ActiveRecord
     }
 
     /**
-     * @return \yii\db\ActiveQuery | Metro
+     * @return ActiveQuery | Metro
      */
     public function getMetroStation()
     {
