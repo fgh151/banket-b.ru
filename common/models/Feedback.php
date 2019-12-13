@@ -9,6 +9,7 @@
 namespace app\common\models;
 
 
+use Yii;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
 use yii\db\Expression;
@@ -83,4 +84,17 @@ class Feedback extends ActiveRecord
         return $this->hasOne(MobileUser::class, ['id' => 'user_id']);
     }
 
+
+    public function afterSave($insert, $changedAttributes)
+    {
+        parent::afterSave($insert, $changedAttributes);
+        if ($insert) {
+            Yii::$app->mailer->compose()
+                ->setFrom('noreply@banket-b.ru')
+                ->setTo('banketbatl@mail.ru')
+                ->setSubject('Новая запись в обратной связи')
+                ->setHtmlBody(' <a href="https://admin.banket-b.ru/feedback/index' . $this->id . '">Посмотреть</a>')
+                ->send();
+        }
+    }
 }
