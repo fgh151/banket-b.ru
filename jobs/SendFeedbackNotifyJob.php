@@ -19,7 +19,7 @@ class SendFeedbackNotifyJob extends BaseObject implements JobInterface
             ->setFrom('noreply@banket-b.ru')
             ->setTo('pr7880600@gmail.com')
             ->setSubject('Новой сообщение в обратной связи banket-b')
-            ->setHtmlBody('<a href="https://admin.banket-b.ru/feedback/index/' . $this->id . '">посмотреть</a>')
+            ->setHtmlBody('<a href="https://admin.banket-b.ru/feedback/index/">посмотреть</a>')
             ->send();
     }
 
