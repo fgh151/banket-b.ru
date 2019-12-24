@@ -93,7 +93,7 @@ class Feedback extends ActiveRecord
                 ->setFrom('noreply@banket-b.ru')
                 ->setTo('banketbatl@mail.ru')
                 ->setSubject('Новая запись в обратной связи')
-                ->setHtmlBody(' <a href="https://admin.banket-b.ru/feedback/index' . $this->id . '">Посмотреть</a>')
+                ->setHtmlBody(' <a href="https://admin.banket-b.ru/feedback/index">Посмотреть</a>')
                 ->send();
         }
     }
