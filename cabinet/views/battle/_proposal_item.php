@@ -20,7 +20,7 @@ use yii\helpers\Url;
 ?>
 <a href="<?= Url::to(['conversation/index', 'proposalId' => $model->id], ['class' => 'btn btn-primary']); ?>"
    class="proposal-item row<?= !$model->isActual() ? ' closed-proposals' : '' ?>">
-    <?php if (!($model->known instanceof KnownProposal)) : ?>
+    <?php if (!($model->known instanceof KnownProposal)): ?>
         <div class="proposal-label label label-danger">
             <i class="glyphicon glyphicon-envelope"></i> Новая заявка
         </div>
@@ -69,7 +69,7 @@ use yii\helpers\Url;
         <?= $model->costsCount ?>
     </div>
     <div class="col-xs-12 col-md-2 hidden-xs">
-        <?php if ($model->getMinCost() === null) : ?>
+        <?php if ($model->getMinCost() === null): ?>
             <p>
                 <?= Yii::$app->formatter->asRubles($model->amount * $model->guests_count); ?>
             </p>
@@ -86,7 +86,7 @@ use yii\helpers\Url;
         <?php endif; ?>
     </div>
     <div class="col-xs-12 col-md-2 p-t-20 cost-column ">
-        <?php if ($model->getIsRestaurantBest(Yii::$app->getUser()->getId()) === null && $model->isActual()) : ?>
+        <?php if ($model->getIsRestaurantBest(Yii::$app->getUser()->getId()) === null && $model->isActual()): ?>
             <span class="cost-btn">Сделать ставку</span>
         <?php else: ?>
             <p class="my-price hidden-xs">

@@ -53,7 +53,6 @@ class Proposal extends CommonProposal
                 return array_keys($this->getMessages());
             }
         ]);
-
     }
 
     /**
@@ -77,8 +76,8 @@ class Proposal extends CommonProposal
     {
         $load = parent::load($data, $formName);
         if ($load) {
-            $ru_month = array('января', 'февраля', 'марта', 'апреля', 'мая', 'июня', 'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря');
-            $en_month = array('January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December');
+            $ru_month = ['января', 'февраля', 'марта', 'апреля', 'мая', 'июня', 'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря'];
+            $en_month = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
             $this->date = str_replace($ru_month, $en_month, $this->date);
             $this->date = (new \DateTime($this->date))->format('Y-m-d');
         }

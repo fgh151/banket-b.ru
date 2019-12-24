@@ -49,13 +49,9 @@ $this->registerJs($js);
 
 <div class="row">
     <div class="col-xs-12 col-sm-4 proposal-info" id="chart-info">
-
-
         <div class="dialog-element">
             <div class="proposal-detil-cost">
-
                 <?php Pjax::begin(['id' => 'proposal-costs']); ?>
-
                 <?= $this->render('../battle/_best_cost', ['model' => $proposal]); ?>
                 <p>
                     <?= $proposal->costsCount ?>
@@ -69,14 +65,10 @@ $this->registerJs($js);
                     <?= Yii::$app->formatter->asRubles(round($proposal->getMinCost() ? $proposal->getMinCost() / $proposal->guests_count : $proposal->amount)); ?>
                     ₽ /чел.
                 </p>
-
-
                 <p>
                     <?= Yii::$app->formatter->asRubles($proposal->amount) ?> ₽ /чел.
                     Начальная стоимость
                 </p>
-
-
                 <?php Pjax::end(); ?>
 
                 <div class="proposal-item-cost-form">
@@ -113,7 +105,7 @@ $this->registerJs($js);
             <p>
                 <?= $proposal->guests_count ?> <?= Yii::t('app', '{n, plural, one{гостя} few{гостей} other{гостей}}', ['n' => $proposal->guests_count]); ?>
             </p>
-            <?php if ($proposal->metroStation !== null) : ?>
+            <?php if ($proposal->metroStation !== null): ?>
                 <p class="my-price-description">Желаемое метро</p>
                 <p><?= $proposal->metroStation->title ?></p>
             <?php endif; ?>
@@ -129,7 +121,7 @@ $this->registerJs($js);
                 $proposal->parking === true ||
                 $proposal->private === true ||
                 $proposal->dance === true ||
-                $proposal->own_alcohol === true) : ?>
+                $proposal->own_alcohol === true): ?>
                 <p class="my-price-description">Дополнительные услуги</p>
 
                 <div class="service-items">
@@ -241,15 +233,11 @@ $this->registerJs($js);
                         <path d="M16 13.1999C16.0034 12.418 15.5483 11.7066 14.837 11.3819C12.6811 10.4438 10.351 9.97278 8.00002 9.99989C5.64902 9.97278 3.31892 10.4438 1.16302 11.3819C0.451701 11.7066 -0.00336782 12.418 1.87727e-05 13.1999V15.9999H16V13.1999Z"
                               fill="black"/>
                     </svg>
-
                 </div>
-
 
                 <span class="proposal-owner-name" data-id="<?= $proposal->owner_id ?>">
                     <?= $proposal->owner->name ?> <?= $proposal->owner->phone ?>
                     </span>
-
-
             </div>
             <div class="panel-body">
                 <div id="dialog"></div>

@@ -106,7 +106,12 @@ class ProposalSearch extends Proposal
             'owner_id' => $this->owner_id,
             'time' => $this->time,
             'event_type' => $this->event_type,
-            'metro' => $this->metro,
+        ]);
+
+        $query->andFilterWhere([
+            'or',
+            ['metro' => $this->metro],
+            ['metro' => null]
         ]);
 
         $query = $this->addBoolCondition($query, 'dance');
