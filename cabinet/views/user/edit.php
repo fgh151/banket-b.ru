@@ -85,7 +85,7 @@ use yii\widgets\ActiveForm;
                                 }
                                 ?>
 
-                                <?= $form->field($metroStation, "[{$i}]metro_id")
+                                <?= $form->field($metroStation, "[{$i}]metro_id", ['options' => ['class' => 'js-metro-select']])
                                     ->widget(Select2::class, [
                                         'data' => $metros,
                                         'options' => ['placeholder' => 'Выберите станцию ...'],
@@ -220,11 +220,12 @@ use yii\widgets\ActiveForm;
 $js = <<<JS
 window.initSelect2Loading = function(id, optVar){
     initS2Loading(id, optVar);
+    $('.js-metro-select select').last().val('');
 };
 
 $(".dynamicform_wrapper").on("afterInsert", function(e, item) {
     e.preventDefault();
-    $('.field-organizationlinkmetro-2-metro_id select').last().val('');
+    $('.js-metro-select select').last().val('');
 });
 JS;
 
