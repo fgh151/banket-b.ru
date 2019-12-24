@@ -84,15 +84,16 @@ use yii\widgets\ActiveForm;
                                     echo Html::activeHiddenInput($metroStation, "[{$i}]id");
                                 }
                                 ?>
-                                <?= $form->field($metroStation,
-                                    "[{$i}]metro_id")
+
+                                <?= $form->field($metroStation, "[{$i}]metro_id")
                                     ->widget(Select2::class, [
                                         'data' => $metros,
-                                        'options' => ['placeholder' => 'Select a state ...'],
+                                        'options' => ['placeholder' => 'Выберите станцию ...'],
                                         'pluginOptions' => [
                                             'allowClear' => true
                                         ],
-                                    ]); ?>
+                                    ]);
+                                ?>
                             </div>
                         </div>
                     <?php endforeach; ?>
@@ -106,7 +107,7 @@ use yii\widgets\ActiveForm;
         <?php /*= $form->field($model, 'email');*/ ?>
         <?= $form->field($model, 'password')->label('Изменить пароль'); ?>
 
-        <?php if ($model->isRestaurant()) : ?>
+        <?php if ($model->isRestaurant()): ?>
             <?= $form->field($params, 'ownAlko')->checkbox(); ?>
             <?= $form->field($params, 'scene')->checkbox(); ?>
             <?= $form->field($params, 'dance')->checkbox(); ?>
@@ -218,16 +219,13 @@ use yii\widgets\ActiveForm;
 <?php
 $js = <<<JS
 window.initSelect2Loading = function(id, optVar){
-    initS2Loading(id, optVar)
+    initS2Loading(id, optVar);
 };
 
-
-
-// $(".dynamicform_wrapper").on("afterInsert", function(e, item) {
-//     e.preventDefault();
-//     $('[data-krajee-select2]').select2('destroy');
-//     $('[data-krajee-select2]').select2();
-// });
+$(".dynamicform_wrapper").on("afterInsert", function(e, item) {
+    e.preventDefault();
+    $('.field-organizationlinkmetro-2-metro_id select').last().val('');
+});
 JS;
 
 $this->registerJs($js);

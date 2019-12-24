@@ -25,7 +25,6 @@ use yii\helpers\ArrayHelper;
 
 class UserController extends CabinetController
 {
-    /** @noinspection PhpUndefinedClassInspection */
 
     /**
      * {@inheritdoc}
@@ -45,7 +44,12 @@ class UserController extends CabinetController
         ];
     }
 
-
+    /**
+     * @param $containerClass
+     * @param $modelId
+     * @param $containerParam
+     * @throws \yii\base\InvalidConfigException
+     */
     private function saveAttributes($containerClass, $modelId, $containerParam)
     {
         /** @var ActiveRecord $containerClass */
@@ -69,14 +73,13 @@ class UserController extends CabinetController
         $model = \Yii::$app->getUser()->getIdentity();
 
 
-        $params = $model->params;
+        $params = $model->params === null ? new RestaurantParams() : $model->params;
 
         if ($model->load(\Yii::$app->request->post())) {
             if ($model->password !== '') {
                 $model->setPassword($model->password);
             }
             if ($model->save()) {
-
                 $params->load(Yii::$app->request->post());
                 $params->save();
 
@@ -118,7 +121,10 @@ WHERE ml.city_id = ' . $model->city_id . ' ORDER BY name;')
         ]);
     }
 
-
+    /**
+     * @param $id
+     * @return \yii\web\Response
+     */
     public function actionImgDelete($id)
     {
         OrganizationImage::deleteAll(['upload_id' => $id]);
