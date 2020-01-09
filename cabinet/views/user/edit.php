@@ -211,6 +211,8 @@ use yii\widgets\ActiveForm;
 
         <?= $form->field($model, 'description')->textarea(); ?>
 
+        <?= $form->field($model, 'tripadvisor_url') ?>
+
         <?= Html::submitButton('Сохранить', ['class' => 'btn btn-success']); ?>
 
         <?php ActiveForm::end() ?>

@@ -6,6 +6,7 @@ use app\common\components\AuthTrait;
 use app\common\components\behaviors\FileUploadBehavior;
 use app\common\components\Constants;
 use app\common\models\geo\GeoCity;
+use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
 use yii\helpers\Url;
 use yii\validators\ExistValidator;
@@ -33,8 +34,8 @@ use yii\web\IdentityInterface;
  * @property integer $city_id
  * @property RestaurantHall $halls
  * @property RestaurantParams $params
- * @property \app\common\models\Metro[]|\yii\db\ActiveQuery $metro
- * @property \yii\db\ActiveQuery|\app\common\models\Activity[] $activities
+ * @property \app\common\models\Metro[]|ActiveQuery $metro
+ * @property ActiveQuery|\app\common\models\Activity[] $activities
  * @property boolean $state_direct
  * @property integer $district_id
  * @property Upload[] $images
@@ -121,14 +122,14 @@ class Organization extends ActiveRecord implements IdentityInterface
     {
         return [
             [['state', 'auth_key', 'password_hash', 'email', 'name', 'address', 'contact', 'phone', 'created_at', 'updated_at'], 'required'],
-            [['address', 'description'], 'string'],
+            [['address', 'description', 'tripadvisor_url'], 'string'],
             [['status', 'created_at', 'updated_at'], 'default', 'value' => null],
             [['status', 'created_at', 'updated_at', 'city_id', 'district_id', 'activity_field'], 'integer'],
             [['auth_key'], 'string', 'max' => 32],
             [['password_hash', 'password_reset_token', 'email', 'name', 'contact', 'phone', 'organization_phone' /*'restogram_id' */], 'string', 'max' => 255],
             [['email'], 'unique'],
             [['password_reset_token'], 'unique'],
-            [['state', 'state_statistic', 'state_promo', 'state_direct'],'default', 'value' => Constants::ORGANIZATION_STATE_FREE],
+            [['state', 'state_statistic', 'state_promo', 'state_direct'], 'default', 'value' => Constants::ORGANIZATION_STATE_FREE],
             [['password', 'url', 'image_field'], 'safe'],
             ['city_id', ExistValidator::class, 'targetClass' => GeoCity::class, 'targetAttribute' => 'id'],
             ['rating', 'number', 'max' => 10, 'min' => 0],
@@ -141,7 +142,7 @@ class Organization extends ActiveRecord implements IdentityInterface
     public function fields()
     {
         return [
-            'id', 'name', 'contact', 'phone', 'email', 'address',
+            'id', 'name', 'contact', 'phone', 'email', 'address', 'tripadvisor_url',
             'images' => function (Organization $model) {
                 $img = [];
                 foreach ($model->images as $image) {
@@ -187,7 +188,8 @@ class Organization extends ActiveRecord implements IdentityInterface
             'district_id' => 'Район',
             'unsubscribe' => 'Получать уведомления',
             'organization_phone' => 'Телефон организации',
-            'description' => 'Описание организации'
+            'description' => 'Описание организации',
+            'tripadvisor_url' => 'Ссылка на страницу Tripadvisor'
         ];
     }
 
@@ -218,7 +220,8 @@ class Organization extends ActiveRecord implements IdentityInterface
 
 
     /**
-     * @return \yii\db\ActiveQuery | Activity[]
+     * @return ActiveQuery | Activity[]
+     * @throws \yii\base\InvalidConfigException
      */
     public function getActivities()
     {
@@ -253,7 +256,8 @@ class Organization extends ActiveRecord implements IdentityInterface
     }
 
     /**
-     * @return \yii\db\ActiveQuery|Metro[]
+     * @return ActiveQuery|Metro[]
+     * @throws \yii\base\InvalidConfigException
      */
     public function getMetro()
     {
@@ -262,7 +266,7 @@ class Organization extends ActiveRecord implements IdentityInterface
     }
 
     /**
-     * @return \yii\db\ActiveQuery|RestaurantParams
+     * @return ActiveQuery|RestaurantParams
      */
     public function getParams()
     {
@@ -270,7 +274,8 @@ class Organization extends ActiveRecord implements IdentityInterface
     }
 
     /**
-     * @return \yii\db\ActiveQuery| Upload[]
+     * @return ActiveQuery| Upload[]
+     * @throws \yii\base\InvalidConfigException
      */
     public function getImages()
     {
