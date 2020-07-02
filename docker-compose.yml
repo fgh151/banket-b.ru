@@ -3,7 +3,7 @@ volumes:
   fs_database:
 services:
   app:
-    image: 'ruvents/php:7.1'
+    image: 'ruvents/php:7.4'
     links:
       - database
     environment:
@@ -28,7 +28,7 @@ services:
     volumes_from:
       - app
   database:
-    image: 'postgres:9.6'
+    image: 'postgres:12.3'
     environment:
       POSTGRES_PASSWORD: ohnfdhbreh43qu2
       POSTGRES_USER: battle
