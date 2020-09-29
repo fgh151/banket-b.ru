@@ -6,7 +6,7 @@ $params = array_merge(
 //    require __DIR__ . '/params-local.php'
 );
 
-return [
+$config = [
     'id' => 'app-cabinet',
     'name' => 'Банкетный Батл',
     'basePath' => dirname(__DIR__),
@@ -65,3 +65,19 @@ return [
     ],
     'params' => $params,
 ];
+
+if (YII_DEBUG) {
+    // configuration adjustments for 'dev' environment
+    $config['bootstrap'][] = 'debug';
+    $config['modules']['debug'] = [
+        'class' => 'yii\debug\Module',
+        'allowedIPs' => ['*']
+    ];
+
+    $config['bootstrap'][] = 'gii';
+    $config['modules']['gii'] = [
+        'class' => 'yii\gii\Module',
+    ];
+}
+
+return $config;

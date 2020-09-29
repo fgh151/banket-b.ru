@@ -8,12 +8,7 @@ services:
       - database
     environment:
       DOCKER: yep
-      DATABASE_TYPE: pgsql
-      DATABASE_PORT: 5432
-      DATABASE_HOSTNAME: database
-      DATABASE_PASSWORD: ohnfdhbreh43qu2
-      DATABASE_USERNAME: battle
-      DATABASE_DATABASE: battle
+    env_file: .env
     volumes:
       - '.:/var/www/html/'
       - './docker/bootstrap.sh:/init.sh'
@@ -29,10 +24,7 @@ services:
       - app
   database:
     image: 'postgres:12.3'
-    environment:
-      POSTGRES_PASSWORD: ohnfdhbreh43qu2
-      POSTGRES_USER: battle
-      POSTGRES_DB: battle
+    env_file: .env
     ports:
       - '5432:5432'
     volumes:

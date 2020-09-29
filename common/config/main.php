@@ -11,13 +11,22 @@ return [
     ],
     'vendorPath' => dirname(dirname(__DIR__)) . '/vendor',
     'components' => [
+        'db' => [
+            'class' => 'yii\db\Connection',
+            'dsn' => "{$_ENV['DATABASE_TYPE']}:host={$_ENV['DATABASE_HOSTNAME']};port={$_ENV['DATABASE_PORT']};dbname={$_ENV['DATABASE_DATABASE']}",
+            'username' => $_ENV['DATABASE_USERNAME'],
+            'password' => $_ENV['DATABASE_PASSWORD'], //'uoSh8iiv',
+            'charset' => 'utf8',
+        ],
         'cache' => [
             'class' => 'yii\caching\FileCache',
         ],
         'firebase' => [
             'class' => 'grptx\Firebase\Firebase',
-            'credential_file' => __DIR__ . DIRECTORY_SEPARATOR . 'banket-b-firebase-adminsdk-6k90k-61ed2acee9.json', // (see https://firebase.google.com/docs/admin/setup#add_firebase_to_your_app)
-            'database_uri' => 'https://banket-b.firebaseio.com/', // (optional)
+            'credential_file' => __DIR__ . DIRECTORY_SEPARATOR . 'banket-b-firebase-adminsdk-6k90k-61ed2acee9.json',
+            // (see https://firebase.google.com/docs/admin/setup#add_firebase_to_your_app)
+            'database_uri' => 'https://banket-b.firebaseio.com/',
+            // (optional)
         ],
         'push' => [
             'class' => \app\common\components\Push::class
@@ -38,11 +47,11 @@ return [
             'table' => '{{%mail_queue}}',
             'transport' => [
                 'class' => 'Swift_SmtpTransport',
-                'host' => 'smtp-pulse.com',
-                'username' => 'vkarpen@yandex.ru',
-                'password' => 'P4JRgKcWGXgB',
-                'port' => '465',
-                'encryption' => 'ssl', // у яндекса SSL
+                'host' => getenv('SMTP_HOST'),
+                'username' => getenv('SMTP_USER'),
+                'password' => getenv('SMTP_PASSWORD'),
+                'port' => getenv('SMTP_PORT'),
+                'encryption' => getenv('SMTP_ENCRYPTION'),
             ],
         ],
         'queue' => [
@@ -55,16 +64,16 @@ return [
         'sms' => [
 //            'class' => \app\common\components\Sms::class,
             'class' => \app\common\components\Smsc::class,
-            'login' => 'vkarpen@yandex.ru',
-            'password' => '*(Kar6#Pen*)',
-            'sender' => 'banket-b'
+            'login' => getenv('SMS_LOGIN'),
+            'password' => getenv('SMS_PASSWORD'),
+            'sender' => getenv('SMS_SENDER')
         ],
     ],
     'modules'    => [
         'smsGate' => [
             'class' => 'fgh151\modules\epochta\Module',
-            'sms_key_private' => 'ac2ea781ced8dd8a479849addcd758a6',
-            'sms_key_public' => '0012c0439ade32a5c19974d4053b22f8',
+            'sms_key_private' => getenv('SMS_GATE_PRIVATE_KEY'),
+            'sms_key_public' => getenv('SMS_GATE_PUBLIC_KEY'),
             'testMode' => false, //Включение тестового режима
         ],
     ],

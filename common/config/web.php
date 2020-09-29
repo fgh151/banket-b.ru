@@ -12,7 +12,7 @@ return [
             // ...
             'cookieParams' => [
                 'path' => '/',
-                'domain' => YII_ENV_DEV ? '.banket-b.ois' : ".banket-b.ru",
+                'domain' => '.' . getenv('DOMAIN'),
             ],
         ],
         'user' => [
@@ -22,7 +22,7 @@ return [
             'identityCookie' => [
                 'name' => '_identity',
                 'path' => '/',
-                'domain' => YII_ENV_DEV ? '.banket-b.ois' : ".banket-b.ru",
+                'domain' => '.' . getenv('DOMAIN'),
             ],
         ],
         'request' => [
@@ -30,7 +30,7 @@ return [
             'csrfCookie' => [
                 'name' => '_csrf',
                 'path' => '/',
-                'domain' => YII_ENV_DEV ? '.banket-b.ois' : ".banket-b.ru",
+                'domain' => '.' . getenv('DOMAIN'),
             ],
         ],
     ],

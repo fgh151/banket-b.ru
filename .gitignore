@@ -42,3 +42,5 @@ buildid
 backend/config/main-local.php
 backend/config/params-local.php
 backend/config/test-local.php
+
+.env
