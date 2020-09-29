@@ -490,7 +490,7 @@ class SiteController extends CabinetController
     {
         $url = 'https://www.google.com/recaptcha/api/siteverify';
         $data = [
-            'secret' => '6LcFr6QUAAAAAM6IFLvubkKGYViVaFIWkSng8RyN',
+            'secret' => getenv('RECAPTCHA_SECRET'),
             'response' => Yii::$app->request->post('g-recaptcha-response')
         ];
         $query = http_build_query($data);

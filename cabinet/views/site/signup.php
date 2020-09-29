@@ -4,14 +4,18 @@
  * @var $this yii\web\View
  *
  * @var $form yii\bootstrap\ActiveForm *
- * @var $model \app\cabinet\models\SignupForm
- * @var $modelParams \app\common\models\RestaurantParams
- * @var $halls \app\common\models\RestaurantHall[]
- * @var $metro \app\common\models\OrganizationLinkMetro[]
+ * @var $model SignupForm
+ * @var $modelParams RestaurantParams
+ * @var $halls RestaurantHall[]
+ * @var $metro OrganizationLinkMetro[]
  */
 
+use app\cabinet\models\SignupForm;
 use app\common\models\Activity;
 use app\common\models\geo\GeoCity;
+use app\common\models\OrganizationLinkMetro;
+use app\common\models\RestaurantHall;
+use app\common\models\RestaurantParams;
 use kartik\depdrop\DepDrop;
 use wbraganca\dynamicform\DynamicFormWidget;
 use yii\bootstrap\ActiveForm;
@@ -107,7 +111,8 @@ $this->title = 'Регистрация';
                                         ?>
 
                                         <?= $form->field($metroStation,
-                                            "[{$i}]metro_id")->dropDownList([], ['class' => 'js-metro-select form-control'
+                                            "[{$i}]metro_id")->dropDownList([], [
+                                            'class' => 'js-metro-select form-control'
                                         ]); ?>
                                     </div>
                                 </div>
@@ -210,7 +215,7 @@ $this->title = 'Регистрация';
                 <div class="row">
                     <div class="col-xs-12">
                         <script src='https://www.google.com/recaptcha/api.js'></script>
-                        <div class="g-recaptcha" data-sitekey="6LcFr6QUAAAAAJVeTBa8Oj9XAcbQsGcGKCLxNvfi"></div>
+                        <div class="g-recaptcha" data-sitekey="<?= getenv('RECAPTCHA_SECRET') ?>"></div>
                     </div>
                 </div>
 
