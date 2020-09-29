@@ -34,8 +34,6 @@ phpunit.phar
 # vagrant runtime
 /.vagrant
 /node_modules
-buildid
-
 
 \S+/config/\S+-local.php
 
