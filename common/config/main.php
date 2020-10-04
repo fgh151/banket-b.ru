@@ -22,11 +22,19 @@ return [
             'class' => 'yii\caching\FileCache',
         ],
         'firebase' => [
-            'class' => 'grptx\Firebase\Firebase',
-            'credential_file' => __DIR__ . DIRECTORY_SEPARATOR . 'banket-b-firebase-adminsdk-6k90k-61ed2acee9.json',
+            'class' => app\common\components\Firebase::class,
             // (see https://firebase.google.com/docs/admin/setup#add_firebase_to_your_app)
-            'database_uri' => 'https://banket-b.firebaseio.com/',
-            // (optional)
+            'type' => getenv('FIREBASE_TYPE'),
+            'projectId' => getenv('FIREBASE_PROJECT_ID'),
+            'privateKeyId' => getenv('FIREBASE_PRIVATE_KEY_ID'),
+            'privateKey' => getenv('FIREBASE_PRIVATE_KEY'),
+            'clientEmail' => getenv('FIREBASE_CLIENT_EMAIL'),
+            'clientId' => getenv('FIREBASE_CLIENT_ID'),
+            'authUri' => getenv('FIREBASE_AUTH_URI'),
+            'tokenUri' => getenv('FIREBASE_TOKEN_URI'),
+            'authProviderCertUrl' => getenv('FIREBASE_AUTH_PROVIDER_CERT_URL'),
+            'clientCertUrl' => getenv('FIREBASE_CLIENT_CERT_URL'),
+            'databaseUri' => getenv('FIREBASE_DB_URL'),
         ],
         'push' => [
             'class' => \app\common\components\Push::class
