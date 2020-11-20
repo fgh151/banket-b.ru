@@ -4,12 +4,12 @@ return [
     'sourceLanguage' => 'en-US',
     'aliases' => [
         '@bower' => '@vendor/bower-asset',
-        '@npm'   => '@vendor/npm-asset',
+        '@npm' => '@vendor/npm-asset',
     ],
     'bootstrap' => [
         'queue', // The component registers its own console commands
     ],
-    'vendorPath' => dirname(dirname(__DIR__)) . '/vendor',
+    'vendorPath' => dirname(__DIR__, 2) . '/vendor',
     'components' => [
         'db' => [
             'class' => 'yii\db\Connection',

@@ -122,7 +122,7 @@ class Funnel extends ActiveRecord
                 $mailer->compose('new-message-html', [
                     'proposal' => $proposal,
                     'recipient' => $organization
-                ])->setFrom('noreply@banket-b.ru')
+                ])->setFrom(getenv('MAIL_FROM'))
                     ->setTo($organization->email)
                     ->setSubject('Новая заявка')
                     ->send();

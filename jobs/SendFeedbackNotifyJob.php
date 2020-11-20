@@ -16,8 +16,8 @@ class SendFeedbackNotifyJob extends BaseObject implements JobInterface
     public function execute($queue)
     {
         Yii::$app->mailer->compose()
-            ->setFrom('noreply@banket-b.ru')
-            ->setTo('pr7880600@gmail.com')
+            ->setFrom(getenv('MAIL_FROM'))
+            ->setTo(getenv('SUPPORT_EMAIL'))
             ->setSubject('Новой сообщение в обратной связи banket-b')
             ->setHtmlBody('<a href="https://admin.banket-b.ru/feedback/index/">посмотреть</a>')
             ->send();

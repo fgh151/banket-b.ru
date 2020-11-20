@@ -130,8 +130,8 @@ class SignupForm extends Model
 
         if ($saved) {
             Yii::$app->mailer->compose()
-                ->setFrom('noreply@banket-b.ru')
-                ->setTo('pr7880600@gmail.com')
+                ->setFrom(getenv('MAIL_FROM'))
+                ->setTo(getenv('SUPPORT_EMAIL'))
                 ->setSubject('Зарегистрировался новый ресторан!')
                 ->setHtmlBody('<a href="https://admin.banket-b.ru/organization/update/' . $user->id . '">посмотреть в админке</a><br> Контактное лицо: ' . $user->contact . ' <br> Телефон: ' . $user->phone . '<br>Email: ' . $user->email)
                 ->send();

@@ -16,7 +16,6 @@ use yii\queue\Queue;
 
 class SendNotifyAboutNewProposalJob extends BaseObject implements JobInterface
 {
-    protected const SENDPULSE_TEMPLATE_ID = 34755;
     /** @var Proposal */
     public $proposal;
 

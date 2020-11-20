@@ -90,7 +90,7 @@ class Feedback extends ActiveRecord
         parent::afterSave($insert, $changedAttributes);
         if ($insert) {
             Yii::$app->mailer->compose()
-                ->setFrom('noreply@banket-b.ru')
+                ->setFrom(getenv('MAIL_FROM'))
                 ->setTo('banketbatl@mail.ru')
                 ->setSubject('Новая запись в обратной связи')
                 ->setHtmlBody(' <a href="https://admin.banket-b.ru/feedback/index">Посмотреть</a>')

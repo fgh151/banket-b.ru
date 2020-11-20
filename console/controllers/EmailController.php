@@ -75,7 +75,7 @@ class EmailController extends Controller
                 ->compose('start', ['restaurant' => $restaurant])
                 ->setTo($restaurant[0])
                 ->setSubject('Банкет Батл')
-                ->setFrom('noreply@banket-b.ru')
+                ->setFrom(getenv('MAIL_FROM'))
                 ->send());
 
             sleep(10);

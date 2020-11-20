@@ -486,7 +486,7 @@ class Proposal extends ActiveRecord
     public function sendNotify()
     {
 //        Yii::$app->mailer->compose()
-//            ->setFrom('noreply@banket-b.ru')
+//            ->setFrom(getenv('MAIL_FROM'))
 //            ->setTo('zkzrr@yandex.ru')
 //            ->setSubject('Новая заявка')
 //            ->setHtmlBody('В разделе заявок появилась новая заявка <a href="https://admin.banket-b.ru/proposal/update/' . $this->id . '">посмотреть</a>')
@@ -511,7 +511,7 @@ class Proposal extends ActiveRecord
             $mailer->compose('proposal-html', [
                 'proposal' => $this,
                 'recipient' => $recipient
-            ])->setFrom('noreply@banket-b.ru')
+            ])->setFrom(getenv('MAIL_FROM'))
                 ->setTo($recipient->email)
                 ->setSubject('Новая заявка')
                 ->send();

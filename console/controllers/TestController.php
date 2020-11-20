@@ -58,7 +58,7 @@ class TestController extends Controller
         $message->user_id = $proposal->owner_id;
         $message->author_class = Organization::class;
         $message->message = $proposal->owner->name . ', спасибо за оставленную заявку. 
-        В ближайшее время мы подберем для Вас предложение. Ваш персональный менеджер по телефону +7 495 788 0600';
+        В ближайшее время мы подберем для Вас предложение. Ваш персональный менеджер по телефону ' . getenv('SUPPORT_PHONE');
 
         $message->save();
     }
