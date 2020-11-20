@@ -28,7 +28,7 @@ class RRMessageJob extends BaseObject implements JobInterface
     public function execute($queue)
     {
         $message = new Message();
-        $message->organization_id = Constants::RR_ORGANIZATION_ID;
+        $message->organization_id = Constants::ADMIN_ORGANIZATION_ID;
         $message->proposal_id = $this->proposal->id;
         $message->user_id = $this->proposal->owner_id;
         $message->author_class = Organization::class;

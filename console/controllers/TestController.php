@@ -53,7 +53,7 @@ class TestController extends Controller
 
 
         $message = new Message();
-        $message->organization_id = Constants::RR_ORGANIZATION_ID;
+        $message->organization_id = Constants::ADMIN_ORGANIZATION_ID;
         $message->proposal_id = $proposal->id;
         $message->user_id = $proposal->owner_id;
         $message->author_class = Organization::class;

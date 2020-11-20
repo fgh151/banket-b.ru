@@ -26,12 +26,12 @@ class CabinetController extends Controller
         $uid = \Yii::$app->request->get('uid', false);
         $Hash = \Yii::$app->request->get('hash', false);
         if ($uid && $Hash) {
-            $this->FastAuth($uid, $Hash);
+            $this->fastAuth($uid, $Hash);
         }
         return parent::beforeAction($action);
     }
 
-    private function FastAuth($id, $Hash)
+    private function fastAuth($id, $Hash): void
     {
         $user = Organization::findOne($id);
         if ($user) {

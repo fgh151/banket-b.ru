@@ -14,7 +14,7 @@ use yii\base\Exception;
 /**
  * verifyEmail exception handler
  */
-class verifyEmailException extends Exception
+class VerifyEmailException extends Exception
 {
 
     /**
@@ -23,8 +23,7 @@ class verifyEmailException extends Exception
      */
     public function errorMessage()
     {
-        $errorMsg = $this->getMessage();
-        return $errorMsg;
+        return $this->getMessage();
     }
 
 }

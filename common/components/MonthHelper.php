@@ -11,20 +11,20 @@ namespace app\common\components;
 
 class MonthHelper
 {
-    static function formatDate(\DateTime $date, $format = 'd F', $case = 1)
+    public static function formatDate(\DateTime $date, $format = 'd F', $case = 1)
     {
         return str_replace(self::getEnMonths(), self::getRuMonths($case), $date->format($format));
     }
 
-    static function formatDateWithYear(\DateTime $date, $format = 'd F Y', $case = 1)
+    public static function formatDateWithYear(\DateTime $date, $format = 'd F Y', $case = 1)
     {
-        if ($date->format('Y') == date('Y')) {
+        if ($date->format('Y') === date('Y')) {
             $format = str_replace(' Y', '', $format);
         }
         return str_replace(self::getEnMonths(), self::getRuMonths($case), $date->format($format));
     }
 
-    static function getEnMonths()
+    public static function getEnMonths()
     {
         return [
             'January',
@@ -42,7 +42,7 @@ class MonthHelper
         ];
     }
 
-    static function getRuMonths($case = 1)
+    public static function getRuMonths($case = 1)
     {
         $ru = [
             1 => [

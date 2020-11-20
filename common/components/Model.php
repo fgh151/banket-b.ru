@@ -22,16 +22,16 @@ class Model extends \yii\base\Model
      * @return array
      * @throws \yii\base\InvalidConfigException
      */
-    public static function createMultiple($modelClass, $multipleModels = [])
+    public static function createMultiple($modelClass, $multipleModels = []): array
     {
         /** @var \yii\base\Model $model */
-        $model    = new $modelClass;
+        $model = new $modelClass;
         $formName = $model->formName();
-        $post     = Yii::$app->request->post($formName);
-        $models   = [];
+        $post = Yii::$app->request->post($formName);
+        $models = [];
 
-        if ( ! empty($multipleModels)) {
-            $keys           = array_keys(ArrayHelper::map($multipleModels, 'id', 'id'));
+        if (!empty($multipleModels)) {
+            $keys = array_keys(ArrayHelper::map($multipleModels, 'id', 'id'));
             $multipleModels = array_combine($keys, $multipleModels);
         }
 

@@ -3,7 +3,7 @@
 /* @var $this \yii\web\View */
 /* @var $content string */
 
-use admin\assets\AppAsset;
+use app\admin\assets\AppAsset;
 use app\common\widgets\Alert;
 use yii\bootstrap\Nav;
 use yii\bootstrap\NavBar;

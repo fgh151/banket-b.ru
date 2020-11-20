@@ -62,6 +62,7 @@ class FileUploadBehavior extends Behavior
      * Загрузка файлов
      * @throws \InvalidArgumentException
      * @throws Exception
+     * @throws \Exception
      */
     public function upload()
     {
@@ -70,15 +71,13 @@ class FileUploadBehavior extends Behavior
         $storageAttributeId = $this->storageAttributeId;
 
         foreach ($files as $file) {
-
-            /** @noinspection PhpUndefinedFieldInspection */
             $path = '@cabinet/web/upload' . DIRECTORY_SEPARATOR . $this->folder . DIRECTORY_SEPARATOR . $this->owner->id;
 
             $path = \Yii::getAlias($path);
 
             FileHelper::createDirectory($path);
 
-            $fileBaseName = substr(md5(microtime() . rand(0, 9999)), 0, 8);
+            $fileBaseName = substr(md5(microtime() . random_int(0, 9999)), 0, 8);
             $fileName = $fileBaseName . '_' . $this->owner->id . '.' . $file->extension;
 
             $file->saveAs($path . '/' . $fileName);
@@ -88,7 +87,6 @@ class FileUploadBehavior extends Behavior
 
             $storage = new $this->storageClass();
             /** @var ActiveRecord $storage */
-            /** @noinspection PhpUndefinedFieldInspection */
             $storage->$storageAttribute = $this->owner->id;
             $storage->$storageAttributeId = $upload->id;
             $storage->save();

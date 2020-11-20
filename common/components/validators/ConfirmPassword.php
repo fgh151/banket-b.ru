@@ -11,7 +11,7 @@ use yii\validators\Validator;
 /**
  * Class ConfirmPassword Валидатор для проверки совпадения пароля и подтверждения
  * @package app\common\components\validators
- * {@see app\frontend\models\RegistrationForm::rules()}
+ * @see app\cabinet\models\SignupForm::rules()
  */
 class ConfirmPassword extends Validator
 {

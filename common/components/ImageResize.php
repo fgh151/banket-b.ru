@@ -15,8 +15,8 @@ use yii\imagine\Image;
 class ImageResize
 {
 
-    const IMAGE_OUTBOUND = ManipulatorInterface::THUMBNAIL_OUTBOUND;
-    const IMAGE_INSET = ManipulatorInterface::THUMBNAIL_INSET;
+    public const IMAGE_OUTBOUND = ManipulatorInterface::THUMBNAIL_OUTBOUND;
+    public const IMAGE_INSET = ManipulatorInterface::THUMBNAIL_INSET;
 
     /** @var string $cachePath path alias relative with webroot where the cache files are kept */
     public $cachePath = '@frontend/upload';
@@ -51,7 +51,7 @@ class ImageResize
      * @throws RuntimeException
      * @throws Exception
      */
-    public function getUrl($filePath, $width, $height, $mode = 'outbound', $quality = null, $fileName = null)
+    public function getUrl($filePath, $width, $height, $mode = 'outbound', $quality = null, $fileName = null): string
     {
         //get original file
         $normalizePath = FileHelper::normalizePath(Yii::getAlias($filePath));
@@ -82,8 +82,14 @@ class ImageResize
      * @throws RuntimeException
      * @throws InvalidArgumentException
      */
-    public function generateImage($filePath, $width, $height, $mode = 'outbound', $quality = null, $chosenFileName = null)
-    {
+    public function generateImage(
+        $filePath,
+        $width,
+        $height,
+        $mode = 'outbound',
+        $quality = null,
+        $chosenFileName = null
+    ): string {
         $filePath = FileHelper::normalizePath(Yii::getAlias($filePath));
         if (!is_file($filePath)) {
             throw new Exception("File $filePath doesn't exist");

@@ -17,9 +17,6 @@ use yii\web\IdentityInterface;
 
 trait AuthTrait
 {
-
-    protected $PASSWORD_SALT = 'DengIePh5aiT2raibeexi5ae';
-
     /**
      * Finds an identity by the given ID.
      *
@@ -158,7 +155,7 @@ trait AuthTrait
      */
     public function validatePassword($password)
     {
-        return md5($password . $this->PASSWORD_SALT) === $this->password_hash;
+        return $this->calcPasswordHash($password) === $this->password_hash;
     }
 
     /**
@@ -169,7 +166,12 @@ trait AuthTrait
      */
     public function setPassword($password)
     {
-        $this->password_hash = md5($password . $this->PASSWORD_SALT);
+        $this->password_hash = $this->calcPasswordHash($password);
+    }
+
+    private function calcPasswordHash($password)
+    {
+        return md5($password . getenv('AUTH_PASSWORD_SALT'));
     }
 
     /**

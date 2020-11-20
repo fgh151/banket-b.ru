@@ -94,7 +94,7 @@ class VerifyEmail
             $this->set_error('Invalid address : ' . $email);
             $this->edebug($this->ErrorInfo);
             if ($this->exceptions) {
-                throw new verifyEmailException($this->ErrorInfo);
+                throw new VerifyEmailException($this->ErrorInfo);
             }
         }
         $this->from = $email;
@@ -208,7 +208,7 @@ class VerifyEmail
             $this->set_error("{$email} incorrect e-mail");
             $this->edebug($this->ErrorInfo);
             if ($this->exceptions) {
-                throw new verifyEmailException($this->ErrorInfo);
+                throw new VerifyEmailException($this->ErrorInfo);
             }
             return FALSE;
         }
@@ -228,7 +228,7 @@ class VerifyEmail
                     $this->set_error("Problem initializing the socket");
                     $this->edebug($this->ErrorInfo);
                     if ($this->exceptions) {
-                        throw new verifyEmailException($this->ErrorInfo);
+                        throw new VerifyEmailException($this->ErrorInfo);
                     }
                     return FALSE;
                 } else {
@@ -252,7 +252,7 @@ class VerifyEmail
             $this->set_error("All connection fails");
             $this->edebug($this->ErrorInfo);
             if ($this->exceptions) {
-                throw new verifyEmailException($this->ErrorInfo);
+                throw new VerifyEmailException($this->ErrorInfo);
             }
             return FALSE;
         }

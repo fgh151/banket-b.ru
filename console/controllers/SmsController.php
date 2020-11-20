@@ -23,8 +23,8 @@ class SmsController extends Controller
         $this->sendSms(
             'Код подтверждения ',
             '***REMOVED***',
-            '0012c0439ade32a5c19974d4053b22f8',
-            'ac2ea781ced8dd8a479849addcd758a6'
+            getenv('SMS_GATE_PUBLIC_KEY'),
+            getenv('SMS_GATE_PRIVATE_KEY')
         );
 
 
