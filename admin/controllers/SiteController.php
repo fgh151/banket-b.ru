@@ -96,7 +96,8 @@ class SiteController extends Controller
      */
     public function actionLogin()
     {
-//        Yii::$app->user->login(User::findOne(1));
+
+        $this->enableCsrfValidation = false;
 
         if (!Yii::$app->user->isGuest) {
             return $this->goHome();
