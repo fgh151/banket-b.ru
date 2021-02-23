@@ -9,6 +9,7 @@
 return [
     'components' => [
         'session' => [
+            'class' => 'yii\web\DbSession',
             // ...
             'cookieParams' => [
                 'path' => '/',
