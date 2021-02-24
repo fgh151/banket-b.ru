@@ -49,3 +49,20 @@ services:
     volumes:
       - './docker/database.sql:/docker-entrypoint-initdb.d/dump.sql'
       - 'fs_database:/var/lib/postgresql/data'
+
+  pgbackups3:
+    image: schickling/postgres-backup-s3
+    env_file: .env
+    links:
+      - database
+    environment:
+      SCHEDULE: '@weekly'
+      S3_REGION: region
+      S3_ACCESS_KEY_ID: ${S3_KEY}
+      S3_SECRET_ACCESS_KEY: ${S3_SECRET}
+      S3_BUCKET: backup
+      S3_PREFIX: banket
+      POSTGRES_DATABASE: ${DATABASE_DATABASE}
+      POSTGRES_USER: ${DATABASE_USERNAME}
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
+      POSTGRES_EXTRA_OPTS: '--schema=public --blobs'
