@@ -22,7 +22,7 @@ class SmsController extends Controller
 
         $this->sendSms(
             'Код подтверждения ',
-            '***REMOVED***',
+            '79778069428',
             getenv('SMS_GATE_PUBLIC_KEY'),
             getenv('SMS_GATE_PRIVATE_KEY')
         );
@@ -101,7 +101,7 @@ class SmsController extends Controller
     {
         $sms = new Smsc();
         var_dump(
-            $sms->sendSms('test', '***REMOVED***')
+            $sms->sendSms('test', '79778069428')
         );
     }
 }
