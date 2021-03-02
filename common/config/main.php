@@ -76,6 +76,17 @@ return [
             'password' => getenv('SMS_PASSWORD'),
             'sender' => getenv('SMS_SENDER')
         ],
+        'log' => [
+            'traceLevel' => YII_DEBUG ? 3 : 0,
+            'targets' => [
+                [
+                    'class' => \app\common\components\SentryTarget::class,
+                    'dsn' => getenv('SENTRY_DSN'),
+                    'levels' => ['error', 'warning'],
+                    'context' => true,
+                ],
+            ],
+        ],
     ],
     'modules'    => [
         'smsGate' => [
