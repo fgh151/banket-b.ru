@@ -81,7 +81,7 @@ return [
             'targets' => [
                 [
                     'class' => \app\common\components\SentryTarget::class,
-                    'dsn' => getenv('SENTRY_DSN'),
+                    'dsn' => $_ENV['SENTRY_DSN'],
                     'levels' => ['error', 'warning'],
                     'context' => true,
                 ],
