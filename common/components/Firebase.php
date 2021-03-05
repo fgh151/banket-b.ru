@@ -79,13 +79,12 @@ class Firebase extends Component
     public function init()
     {
         parent::init();
-        $privateKey = str_replace('\n', "\n", $this->privateKey);
         $this->factory = new Factory();
         $this->factory->withServiceAccount([
             'type' => $this->type,
             'project_id' => $this->projectId,
             'private_key_id' => $this->privateKeyId,
-            'private_key' => $privateKey,
+            'private_key' => str_replace('\n', "\n", $this->privateKey),
             'client_email' => $this->clientEmail,
             'client_id' => $this->clientId,
             'auth_uri' => $this->authUri,

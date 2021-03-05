@@ -17,7 +17,6 @@
     "yiisoft/yii2": "~2.0.6",
     "yiisoft/yii2-bootstrap": "~2.0.0",
     "yiisoft/yii2-swiftmailer": "~2.0.0 || ~2.1.0",
-    "grptx/yii2-firebase": "~0.3.1",
     "yiisoft/yii2-imagine": "^2.1",
     "2amigos/yii2-chartjs-widget": "^2.1",
     "yiisoft/yii2-jui": "^2.0",
@@ -39,7 +38,8 @@
     "sendpulse/rest-api": "^1.0",
     "kartik-v/yii2-mpdf": "^1.0",
     "longman/telegram-bot": "^0.59.1",
-    "2amigos/yii2-file-upload-widget": "^1.0"
+    "2amigos/yii2-file-upload-widget": "^1.0",
+    "kreait/firebase-php": "5.4"
   },
   "require-dev": {
     "yiisoft/yii2-debug": "~2.0.0",
