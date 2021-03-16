@@ -485,12 +485,12 @@ class Proposal extends ActiveRecord
 
     public function sendNotify()
     {
-//        Yii::$app->mailer->compose()
-//            ->setFrom(getenv('MAIL_FROM'))
-//            ->setTo('zkzrr@yandex.ru')
-//            ->setSubject('Новая заявка')
-//            ->setHtmlBody('В разделе заявок появилась новая заявка <a href="https://admin.banket-b.ru/proposal/update/' . $this->id . '">посмотреть</a>')
-//            ->send();
+        Yii::$app->mailer->compose()
+            ->setFrom(getenv('MAIL_FROM'))
+            ->setTo(getenv('SUPPORT_EMAIL'))
+            ->setSubject('Новая заявка')
+            ->setHtmlBody('В разделе заявок появилась новая заявка <a href="https://admin.banket-b.ru/proposal/update/' . $this->id . '">посмотреть</a>')
+            ->send();
 
         $recipients = Organization::find()
             ->where(['state' => Constants::ORGANIZATION_STATE_PAID])
