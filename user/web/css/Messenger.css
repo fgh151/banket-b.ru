@@ -1,0 +1,100 @@
+.messages-area {
+    height: 60vh;
+    overflow-y: scroll;
+    padding: 15px;
+}
+
+/*@media (min-width: 768px) {*/
+/*.messages-area {*/
+/*max-height: 80vh;*/
+/*}*/
+/*}*/
+
+
+.loading {
+    width: 100px;
+    height: 100px;
+    margin: 0 auto;
+    display: block;
+    font-size: 100px;
+}
+
+.user-message {
+    float: left;
+    background: #F6F6F6;
+    margin-left: 15px;
+}
+
+.organization-message {
+    float: right;
+    background-color: #DFEAFF;
+    margin-right: 15px;
+}
+
+.message {
+    font-size: 15px;
+    line-height: 18px;
+    padding: 5px 15px;
+    border-radius: 15px;
+    margin: 15px;
+    position: relative;
+}
+
+.preloader {
+    margin: 0 auto;
+    display: block;
+    width: 100px;
+}
+
+.message-form {
+    margin: 0 -15px -15px -15px;
+    background-color: #F7F7F7;
+    padding: 7px 10px;
+
+    border-top: 1px solid #D8D8D8;
+}
+
+.message-input {
+    outline: none;
+    background: #FFFFFF;
+    border: 1px solid #D8D8D8;
+    box-sizing: border-box;
+    border-radius: 30px;
+
+    width: 100%;
+
+
+    height: 29px;
+
+    padding-left: 15px;
+}
+
+.send-button {
+    height: 29px;
+    width: 29px;
+    background-image: url("/img/send.svg");
+    border: none;
+    background-color: inherit;
+}
+
+.message-time {
+    font-size: 12px;
+    line-height: 15px; /* identical to box height, or 125% */
+    text-align: right;
+
+    color: #878787;
+    margin-left: 10px;
+}
+
+.message {
+    display: table;
+}
+
+.message > div {
+    display: table-cell;
+}
+
+.message-time {
+    vertical-align: bottom;
+    padding-left: 10px;
+}

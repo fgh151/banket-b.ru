@@ -27,4 +27,4 @@ services:
       - router
       - default
     volumes:
-      - './docker/nginx.dev.conf:/etc/nginx/nginx.conf'
+      - './docker/nginx.${APP}.dev.conf:/etc/nginx/nginx.conf'

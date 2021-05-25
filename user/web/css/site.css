@@ -1,0 +1,517 @@
+:root {
+    --white: #ffffff;
+    --red: #D0021B;
+    --green: #7ED321;
+    --light-black: rgba(0, 0, 0, .5);
+    --blue: #0C21E2
+}
+
+body {
+    font-family: "LatoWeb";
+    font-style: normal;
+    font-weight: normal;
+    font-size: 15px;
+    line-height: 18px;
+    color: #333;
+    background-color: #fff;
+
+    padding-bottom: 50px;
+}
+
+h1 {
+    font-style: normal;
+    font-weight: bold;
+    font-size: 36px;
+    line-height: 44px;
+}
+
+.navbar {
+    background-color: var(--white);
+
+    border-bottom: 1px solid #dddddd;
+}
+
+.navbar-brand img {
+    display: inline-block;
+}
+
+.navbar-brand {
+    color: #000000;
+    font-size: 20px;
+    line-height: 24px;
+}
+
+.navbar-brand .app-description {
+    color: rgba(0, 0, 0, .5);
+}
+
+.navbar-nav > li.active {
+    background-color: var(--blue);
+}
+
+
+.navbar-nav > li.active a {
+    color: #ffffff;
+}
+
+.navbar-nav a {
+    color: #000000;
+}
+
+.logout-form {
+    padding-top: 9px;
+}
+
+.logout {
+    color: #000000;
+}
+
+.nav > li > a:hover, .nav > li > a:focus {
+    color: var(--blue);
+}
+
+.wrap {
+    padding-top: 88px;
+}
+
+.breadcrumb > li + li:before {
+    padding: 0;
+    color: inherit;
+    content: "";
+}
+
+.breadcrumb a {
+    color: #000000;
+    font-size: 20px;
+    line-height: 24px;
+}
+
+.breadcrumb > .active {
+    color: #000000;
+}
+
+.breadcrumb {
+    background-color: inherit;
+}
+
+.page-title {
+    margin-top: -36px;
+}
+
+.page-title h1, .page-title .form-inline {
+    display: block;
+    float: left;
+}
+
+#proposal-search {
+    padding-top: 30px;
+}
+
+.panel-header {
+    margin-bottom: 10px;
+    background: #F5F5F5;
+    border-radius: 5px;
+}
+
+.proposal-columns {
+    font-size: 13px;
+    line-height: 16px; /* identical to box height, or 123% */
+
+    color: #000000;
+
+    mix-blend-mode: normal;
+    opacity: 0.5;
+
+    padding: 15px 0;
+}
+
+.proposal-item {
+    background: #FFFFFF;
+    border: 1px solid #DDDDDD;
+    box-sizing: border-box;
+    border-radius: 5px;
+    margin: 10px auto;
+    display: block;
+    padding: 28px;
+    color: #000000;
+}
+
+.proposal-item:hover {
+    background-color: #f8f8f8;
+}
+
+.proposal-item-time {
+    font-size: 16px;
+    line-height: 19px;
+
+    margin: 10px 0 0 0;
+
+}
+
+.proposal-item-type {
+    font-size: 13px;
+    line-height: 16px; /* identical to box height, or 123% */
+    color: #000000;
+    mix-blend-mode: normal;
+    opacity: 0.5;
+}
+
+.waiting-cost {
+    font-size: 16px;
+    line-height: 19px; /* identical to box height, or 119% */
+    color: var(--light-black);
+}
+
+.best-cost {
+    font-size: 16px;
+    line-height: 19px; /* identical to box height, or 119% */
+    color: var(--green);
+}
+
+.not-best-cost {
+    font-size: 16px;
+    line-height: 19px; /* identical to box height, or 119% */
+    color: var(--red);
+}
+
+.waiting-cost:before {
+    background-color: var(--light-black);
+}
+
+.best-cost:before {
+
+    background-color: var(--green);
+}
+
+.not-best-cost:before {
+
+    background-color: var(--red);
+}
+
+.cost-description:before {
+    content: '';
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border-radius: 5px;
+    margin-right: 10px;
+}
+
+.proposal-id {
+    color: var(--light-black);
+    font-size: 13px;
+    line-height: 16px;
+    padding-left: 20px;
+}
+
+.dialog-element {
+    border: 1px solid #DDDDDD;
+    box-sizing: border-box;
+    border-radius: 5px;
+
+    padding: 27px 23px 31px 31px;
+    margin-bottom: 10px;
+}
+
+.service-items {
+    margin: 0 -10px;
+}
+
+.service {
+    display: inline-block;
+    margin: 10px;
+    background: #C2C2C2;
+    border-radius: 20px;
+    padding: 5px 10px;
+    color: var(--white);
+    font-size: 15px;
+    line-height: 18px;
+}
+
+@media (min-width: 768px) {
+    .mobile-btn-chat {
+        display: none !important;
+    }
+
+    .cost-column {
+        padding-top: 0 !important;
+    }
+
+
+    .show-mobile {
+        display: none;
+    }
+
+    .list-guests-count {
+        padding-top: 0 !important;
+    }
+
+    .proposal-item-time {
+        margin-top: 0 !important;
+    }
+}
+
+@media (max-width: 768px) {
+    #chart-aside {
+        position: absolute;
+        top: 60px;
+        left: 0;
+
+        display: none;
+    }
+
+
+    .panel-default > .panel-heading {
+        background-color: var(--white);
+    }
+
+    #chart-aside {
+        padding-left: 0;
+        padding-right: 0;
+    }
+
+    #chart-aside > .panel {
+        margin-bottom: 0;
+    }
+
+    .messages-area {
+        height: calc(100vh - 260px);
+    }
+
+    .navbar-brand {
+        font-size: 19px;
+        line-height: 23px;
+    }
+
+    .proposal-owner > span, .proposal-owner > svg {
+        display: block;
+        float: left;
+
+
+        margin-top: 25px !important;
+        margin-left: -38px !important;
+    }
+
+    .proposal-owner > span {
+        margin-top: 37px;
+        /*12px;*/
+        margin-left: 10px;
+    }
+
+
+    .proposal-mobile-header {
+        width: calc(100% + 57px);
+        margin-left: -29px;
+        border-bottom: 1px solid #DDDDDD;
+        padding-left: 43px;
+
+        padding-bottom: 15px;
+        margin-bottom: 15px;
+    }
+
+    .my-price-description {
+        margin-bottom: 0;
+    }
+
+    .proposal-item-cost-form {
+        margin-top: 10px;
+    }
+}
+
+.proposal-info button.mobile-btn-chat {
+    background-color: var(--blue);
+    color: var(--white);
+    border-radius: 5px;
+    border: none;
+    outline: none;
+    margin-bottom: 10px;
+    width: 100%;
+    font-size: 18px;
+    line-height: 22px;
+    padding: 10px;
+}
+
+.navbar-toggle .icon-bar {
+    background-color: #000000;
+}
+
+.cost-btn {
+    background: #0C21E2;
+    border-radius: 20.5px;
+    color: var(--white);
+    font-size: 16px;
+    line-height: 19px;
+    padding: 5px 10px;
+}
+
+.p-t-20 {
+    padding-top: 20px;
+}
+
+.my-price {
+    font-size: 16px;
+    line-height: 19px; /* or 119% */
+    color: #7A00FF;
+}
+
+.my-price-description {
+    font-size: 13px;
+    line-height: 16px;
+    color: var(--light-black);
+}
+
+h2.closed-proposals {
+    font-style: normal;
+    font-weight: bold;
+    font-size: 20px;
+    line-height: 24px; /* identical to box height, or 120% */
+    color: #000000;
+    mix-blend-mode: normal;
+    opacity: 0.3;
+}
+
+.closed-proposals {
+    opacity: .3;
+}
+
+#proposal-search {
+    margin-left: 20px;
+}
+
+.pagination > .active > a, .pagination > .active > span, .pagination > .active > a:hover, .pagination > .active > span:hover, .pagination > .active > a:focus, .pagination > .active > span:focus {
+    background-color: var(--blue);
+    border-color: var(--blue);
+}
+
+.pagination > li > a, .pagination > li > span {
+    color: var(--blue);
+}
+
+.btn-success {
+    color: #fff;
+    background-color: var(--blue);
+    border-color: var(--blue);
+}
+
+.btn-primary {
+    color: #fff;
+    background-color: var(--blue);
+    border-color: var(--blue);
+}
+
+
+.btn-success:hover {
+    color: #fff;
+    background-color: var(--blue);
+    border-color: var(--blue);
+}
+
+.btn-danger {
+    color: #fff;
+    background-color: var(--red);
+    border-color: #d43f3a;
+}
+
+.proposal-info .control-label {
+    font-size: 13px;
+    line-height: 16px;
+    color: var(--light-black);
+}
+
+.proposal-info button {
+    font-size: 16px;
+    line-height: 19px; /* identical to box height, or 119% */
+
+    color: #4D00FB;
+    background: inherit;
+    border: none;
+}
+
+.p-t-30 {
+    padding-top: 30px;
+}
+
+.p-t-40 {
+    padding-top: 40px;
+}
+
+.proposal-owner-name {
+    left: 87px;
+    position: absolute;
+    top: 23px;
+}
+
+.mobile-cost-form {
+    margin-top: 15px;
+}
+
+.my-cost + .cost-btn {
+    margin-left: 10px;
+}
+
+.p-t-5 {
+    padding-top: 5px;
+}
+
+.m-b-0 {
+    margin-bottom: 0;
+}
+
+.mobile-breadcrumbs {
+}
+
+.label-danger {
+    background-color: #D1001A;
+}
+
+.proposal-label {
+    position: absolute;
+    right: 10px;
+    top: 0;
+    font-size: 16px;
+    line-height: 19px;
+    border-radius: 8px;
+}
+
+.panel .disabled-messenger {
+    display: none;
+}
+
+.panel.disabled .disabled-messenger {
+    display: block;
+}
+
+.disabled-messenger {
+    position: absolute;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, .8);
+}
+
+.vertical-wrapper {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.vertical-content {
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    left: 25%;
+    -ms-transform: translateY(-50%);
+    transform: translateY(-50%);
+}
+
+.disabled-messenger svg {
+    fill: black;
+}
+
+.disabled-messenger .vertical-content div {
+    display: inline-block;
+}
+
+.p-l-30 {
+    padding-left: 30px;
+}
