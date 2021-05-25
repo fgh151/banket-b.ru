@@ -34,6 +34,16 @@ use yii\web\UploadedFile;
 class SiteController extends CabinetController
 {
 
+    public function oAuthSuccess($client)
+    {
+        $userAttributes = $client->getUserAttributes();
+
+        var_dump($userAttributes);
+        die;
+
+        echo $userAttributes['email'];
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -49,7 +59,7 @@ class SiteController extends CabinetController
                         'roles' => ['?'],
                     ],
                     [
-                        'actions' => ['login'],
+                        'actions' => ['login', 'auth'],
                         'allow' => true,
                         'roles' => ['?'],
                     ],
@@ -100,6 +110,10 @@ class SiteController extends CabinetController
             'captcha' => [
                 'class' => 'yii\captcha\CaptchaAction',
                 'fixedVerifyCode' => YII_ENV_TEST ? 'testme' : null,
+            ],
+            'auth' => [
+                'class' => 'yii\authclient\AuthAction',
+                'successCallback' => [$this, 'oAuthSuccess'],
             ],
         ];
     }

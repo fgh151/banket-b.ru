@@ -22,7 +22,3 @@ if (false === getenv('DOCKER')) {
         putenv("{$param}={$value}");
     }
 }
-
-define('YII_ENV_DEV', getenv('ENVIRONMENT') === 'dev');
-define('YII_DEBUG', getenv('ENVIRONMENT') === 'dev');
-define('YII_ENV', getenv('ENVIRONMENT'));

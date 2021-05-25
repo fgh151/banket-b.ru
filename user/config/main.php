@@ -13,7 +13,7 @@ $config = [
     'bootstrap' => ['log'],
     'language' => 'ru-RU',
     'sourceLanguage' => 'en-US',
-    'controllerNamespace' => 'app\cabinet\controllers',
+    'controllerNamespace' => 'app\user\controllers',
     'components' => [
         'request' => [
             'csrfParam' => '_csrf-cabinet',
@@ -62,7 +62,57 @@ $config = [
                     'class' => 'app\cabinet\components\DynamicFormAsset',
                 ],
             ]
-        ]
+        ],
+        'authClientCollection' => [
+            'class' => 'yii\authclient\Collection',
+            'clients' => [
+                'facebook' => [
+                    'class' => 'yii\authclient\clients\Facebook',
+                    /** @see https://developers.facebook.com/apps */
+                    'clientId' => 'APP_CLIENT_ID',
+                    'clientSecret' => 'APP_CLIENT_SECRET',
+                    'attributeNames' => ['name', 'email', 'first_name', 'last_name'],
+                ],
+                'vkontakte' => [
+                    /** @see http://vk.com/editapp?act=create */
+                    'class' => 'yii\authclient\clients\VKontakte',
+                    'clientId' => 'vkontakte_client_id',
+                    'clientSecret' => 'vkontakte_client_secret',
+                ],
+                'google' => [
+                    /**
+                     * @see https://console.developers.google.com/project
+                     * @see https://console.developers.google.com/apis/credentials?project=[yourProjectId].
+                     */
+                    'class' => 'yii\authclient\clients\Google',
+                    'clientId' => 'google_client_id',
+                    'clientSecret' => 'google_client_secret',
+                ],
+                'twitter' => [
+                    /** @see https://dev.twitter.com/apps/new */
+                    'class' => 'yii\authclient\clients\Twitter',
+                    'attributeParams' => [
+                        'include_email' => 'true'
+                    ],
+                    'consumerKey' => 'twitter_consumer_key',
+                    'consumerSecret' => 'twitter_consumer_secret',
+                ],
+                'yandex' => [
+                    /** @see https://oauth.yandex.ru/client/new */
+                    'class' => 'yii\authclient\clients\Yandex',
+                    'clientId' => '66ca03f9111140efa3eff0cc31e3f7c8',
+                    'clientSecret' => '1ef397668dd249c5b950c22f570700e9',
+
+//                    ID: 66ca03f9111140efa3eff0cc31e3f7c8
+//Пароль: 1ef397668dd249c5b950c22f570700e9
+//Callback URL: http://banket-b.ois/site/auth
+//Время жизни токена: Не менее, чем 1 год
+//Дата создания: 25.05.2021
+
+
+                ],
+            ],
+        ],
     ],
     'params' => $params,
 ];

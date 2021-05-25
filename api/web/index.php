@@ -1,4 +1,8 @@
 <?php
+define('YII_ENV_DEV', getenv('ENVIRONMENT') === 'dev');
+define('YII_DEBUG', getenv('ENVIRONMENT') === 'dev');
+define('YII_ENV', getenv('ENVIRONMENT'));
+
 require __DIR__ . '/../../vendor/autoload.php';
 require __DIR__ . '/../../vendor/yiisoft/yii2/Yii.php';
 require __DIR__ . '/../../common/config/bootstrap.php';
