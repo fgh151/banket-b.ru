@@ -14,9 +14,6 @@ services:
       - './docker/bootstrap.sh:/init.sh'
   nginx:
     image: nginx
-    ports:
-      - '80:80'
-      - '443:443'
     links:
       - app
     volumes:
