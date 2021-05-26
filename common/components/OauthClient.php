@@ -27,9 +27,16 @@ class OauthClient
         return $pos;
     }
 
+    /** @noinspection PhpUnusedPrivateMethodInspection */
     private static function handlerYandex(BaseOAuth $client): MobileUser
     {
         $attributes = $client->getUserAttributes();
+        /** @var MobileUser $existUser */
+        $existUser = MobileUser::find()->where(['email' => $attributes['default_email']])->one();
+        if ($existUser !== null) {
+            return $existUser;
+        }
+
         /** @var OauthSocial $exist */
         $exist = OauthSocial::find()->where(['source' => 'yandex', 'source_id' => $attributes['client_id']])->one();
         if ($exist !== null) {
@@ -50,9 +57,6 @@ class OauthClient
         $social->source = 'yandex';
         $social->source_id = $attributes['client_id'];
         $social->save();
-
-        var_dump($social->errors);
-        die;
 
         return $user;
     }

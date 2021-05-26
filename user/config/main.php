@@ -76,8 +76,8 @@ $config = [
                 'vkontakte' => [
                     /** @see http://vk.com/editapp?act=create */
                     'class' => 'yii\authclient\clients\VKontakte',
-                    'clientId' => 'vkontakte_client_id',
-                    'clientSecret' => 'vkontakte_client_secret',
+                    'clientId' => getenv('OAUTH_VK_ID'),
+                    'clientSecret' => getenv('OAUTH_VK_SECRET'),
                 ],
                 'google' => [
                     /**
@@ -85,8 +85,8 @@ $config = [
                      * @see https://console.developers.google.com/apis/credentials?project=[yourProjectId].
                      */
                     'class' => 'yii\authclient\clients\Google',
-                    'clientId' => 'google_client_id',
-                    'clientSecret' => 'google_client_secret',
+                    'clientId' => getenv('OAUTH_GOOGLE_CLIENT_ID'),
+                    'clientSecret' => getenv('OAUTH_GOOGLE_CLIENT_SECRET'),
                 ],
                 'twitter' => [
                     /** @see https://dev.twitter.com/apps/new */
