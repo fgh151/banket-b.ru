@@ -100,16 +100,8 @@ $config = [
                 'yandex' => [
                     /** @see https://oauth.yandex.ru/client/new */
                     'class' => 'yii\authclient\clients\Yandex',
-                    'clientId' => '66ca03f9111140efa3eff0cc31e3f7c8',
-                    'clientSecret' => '1ef397668dd249c5b950c22f570700e9',
-
-//                    ID: 66ca03f9111140efa3eff0cc31e3f7c8
-//Пароль: 1ef397668dd249c5b950c22f570700e9
-//Callback URL: http://banket-b.ois/site/auth
-//Время жизни токена: Не менее, чем 1 год
-//Дата создания: 25.05.2021
-
-
+                    'clientId' => getenv('OAUTH_YANDEX_CLIENT_ID'),
+                    'clientSecret' => getenv('OAUTH_YANDEX_XLIENT_SECRET'),
                 ],
             ],
         ],

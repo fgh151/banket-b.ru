@@ -92,7 +92,7 @@ trait AuthTrait
      *
      * @param string $username
      *
-     * @return static|null
+     * @return static|ActiveRecord|null
      */
     public static function findByUsername($username)
     {
@@ -101,7 +101,6 @@ trait AuthTrait
         $query->andFilterWhere(['LOWER("email")' => mb_strtolower($username)]);
 
         return $query->one();
-//        return self::findOne(['LOWER("email")' => mb_strtolower($username), 'status' => Constants::USER_STATUS_ACTIVE]);
     }
 
 

@@ -2,13 +2,13 @@
 
 namespace app\user\controllers;
 
-use app\cabinet\components\CabinetController;
 use app\cabinet\models\ContactForm;
 use app\cabinet\models\LoginForm;
 use app\cabinet\models\PasswordResetRequestForm;
 use app\cabinet\models\ResetPasswordForm;
 use app\cabinet\models\SignupForm;
 use app\common\components\Model;
+use app\common\components\OauthClient;
 use app\common\models\District;
 use app\common\models\Metro;
 use app\common\models\MetroLine;
@@ -20,28 +20,27 @@ use app\common\models\RestaurantHall;
 use app\common\models\RestaurantParams;
 use app\common\models\Upload;
 use Yii;
+use yii\authclient\BaseOAuth;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use yii\helpers\FileHelper;
 use yii\helpers\Json;
 use yii\helpers\Url;
 use yii\web\BadRequestHttpException;
+use yii\web\Controller;
 use yii\web\UploadedFile;
 
 /**
  * Site controller
  */
-class SiteController extends CabinetController
+class SiteController extends Controller
 {
 
-    public function oAuthSuccess($client)
+    public function oAuthSuccess(BaseOAuth $client)
     {
-        $userAttributes = $client->getUserAttributes();
-
-        var_dump($userAttributes);
-        die;
-
-        echo $userAttributes['email'];
+        $user = OauthClient::getUserFromRemote($client);
+        Yii::$app->getUser()->login($user, Yii::$app->params['durationAuth']);
+        echo $user->name;
     }
 
     /**
