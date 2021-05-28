@@ -17,26 +17,12 @@ services:
     links:
       - app
     volumes:
-      - './docker/nginx.${APP}.conf:/etc/nginx/nginx.conf'
+      - './docker/nginx.${ENVIRONMENT}.conf:/etc/nginx/nginx.conf'
       - ./docker/certbot/conf:/etc/letsencrypt
       - ./docker/certbot/www:/var/www/certbot
     volumes_from:
       - app
     command: "/bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\"'"
-
-  certbot:
-    image: certbot/certbot
-    command: certbot certonly --webroot --webroot-path=/var/www/html/cabinet/web --email fedor@support-pc.org --agree-tos --no-eff-email  -d banket-b.ru -d api.banket-b.ru -d admin.banket-b.ru
-    volumes:
-
-      - './docker/nginx.conf:/etc/nginx/nginx.conf'
-      - ./docker/certbot/conf:/etc/letsencrypt
-      - ./docker/certbot/www:/var/www/certbot
-    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
-
-    volumes_from:
-      - app
-      - nginx
 
   database:
     image: 'postgres:12.3'
@@ -46,20 +32,3 @@ services:
     volumes:
       - './docker/database.sql:/docker-entrypoint-initdb.d/dump.sql'
       - 'fs_database:/var/lib/postgresql/data'
-
-  pgbackups3:
-    image: schickling/postgres-backup-s3
-    env_file: .env
-    links:
-      - database
-    environment:
-      SCHEDULE: '@weekly'
-      S3_REGION: region
-      S3_ACCESS_KEY_ID: ${S3_KEY}
-      S3_SECRET_ACCESS_KEY: ${S3_SECRET}
-      S3_BUCKET: backup
-      S3_PREFIX: banket
-      POSTGRES_DATABASE: ${DATABASE_DATABASE}
-      POSTGRES_USER: ${DATABASE_USERNAME}
-      POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
-      POSTGRES_EXTRA_OPTS: '--schema=public --blobs'

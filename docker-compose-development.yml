@@ -21,10 +21,8 @@ services:
     ports: [ ]
     labels:
       traefik.enable: '1'
-      traefik.frontend.rule: Host:banket-b.ois,api.banket-b.ois,admin.banket-b.ois
+      traefik.frontend.rule: Host:banket-b.ois,api.banket-b.ois,admin.banket-b.ois,user.banket-b.ois
       traefik.docker.network: router
     networks:
       - router
       - default
-    volumes:
-      - './docker/nginx.${APP}.dev.conf:/etc/nginx/nginx.conf'

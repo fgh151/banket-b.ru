@@ -35,7 +35,7 @@ $this->registerCssFile('@web/css/landing.css');
                 <?= Html::a('Регистрация для ресторатора', ['signup']) ?>
             </p>
             <p>
-                <?= Html::a('Вход для ресторатора', ['login']) ?>
+                <?= Html::a('Вход', ['login']) ?>
             </p>
         </div>
     </div>
