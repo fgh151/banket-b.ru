@@ -18,25 +18,18 @@ $this->registerCssFile('@web/css/landing.css');
         <div class="description">
             <img src="/android-chrome-192x192.png" class="promo-logo"/>
             <h1>Банкет-батл</h1>
-            <p class="descripton-text">
-                Здесь рестораны соревнуются друг
-                с другом, чтобы сделать для вас лучший банкет. Вам остается только выбрать победителя аукциона!
-            </p>
-            <p>
-
-                <a href="/prezentation.pdf">
-                    <img src="/img/presentation.svg" class="presentation-icon fill-svg"/>
-                    Скачать презентацию (pdf)
-                </a>
-            </p>
         </div>
         <div class="promo-buttons">
             <p>
-                <?= Html::a('Регистрация для ресторатора', ['signup']) ?>
+                <?= Html::a('Регистрация', ['signup']) ?>
             </p>
             <p>
                 <?= Html::a('Вход', ['login']) ?>
             </p>
+            <p>
+                <?= Html::a('Blog', ['blog/index']) ?>
+            </p>
+
         </div>
     </div>
 

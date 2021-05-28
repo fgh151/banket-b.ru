@@ -48,6 +48,8 @@ $config = [
                 '/' => 'site/about',
                 'site/reset-password/<token:\S+>' => 'site/reset-password',
                 'conversation/index/<proposalId:\d+>' => 'conversation/index',
+                '/blog' => 'blog/index',
+                '/blog/<alias:\S+>' => 'blog/view',
                 '<controller:\w+>/<action:\w+>/<id:\d+>/' => '<controller>/<action>',
                 '<controller:\w+>/<action:\w+>' => '<controller>/<action>',
             ],

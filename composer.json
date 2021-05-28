@@ -40,7 +40,8 @@
     "longman/telegram-bot": "^0.59.1",
     "2amigos/yii2-file-upload-widget": "^1.0",
     "kreait/firebase-php": "5.4",
-    "yiisoft/yii2-authclient": "^2.2"
+    "yiisoft/yii2-authclient": "^2.2",
+    "vova07/yii2-imperavi-widget": "^2.0"
   },
   "require-dev": {
     "yiisoft/yii2-debug": "~2.0.0",
