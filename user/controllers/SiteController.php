@@ -13,23 +13,19 @@ use app\common\models\District;
 use app\common\models\Metro;
 use app\common\models\MetroLine;
 use app\common\models\Organization;
-use app\common\models\OrganizationImage;
 use app\common\models\OrganizationLinkMetro;
 use app\common\models\Proposal;
 use app\common\models\RestaurantHall;
 use app\common\models\RestaurantParams;
-use app\common\models\Upload;
-use app\user\models\LandingForm;
+use app\user\models\ProposalForm;
 use Yii;
 use yii\authclient\BaseOAuth;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
-use yii\helpers\FileHelper;
 use yii\helpers\Json;
 use yii\helpers\Url;
 use yii\web\BadRequestHttpException;
 use yii\web\Controller;
-use yii\web\UploadedFile;
 
 /**
  * Site controller
@@ -109,6 +105,7 @@ class SiteController extends Controller
             'auth' => [
                 'class' => 'yii\authclient\AuthAction',
                 'successCallback' => [$this, 'oAuthSuccess'],
+                'redirectView' => ProposalForm::hasDataInStore() ? '@app/views/oauthRedirectCreate.php' : null,
             ],
         ];
     }
@@ -161,7 +158,6 @@ class SiteController extends Controller
         }
 
 
-        $this->throwIfNotPay('state_statistic');
 
         $db = Yii::$app->getDb();
         $sql = 'SELECT to_char(date, \'Day\') AS day, * FROM proposal ' . $criteriaSql . ' ORDER BY day';
@@ -449,7 +445,11 @@ class SiteController extends Controller
         }
         $this->layout = 'landing';
 
-        $model = new Proposal();
+        $model = new ProposalForm();
+
+        if ($model->load(Yii::$app->getRequest()->post()) && $model->store()) {
+            return $this->redirect(['/site/create']);
+        }
 
         return $this->render('about', [
             'model' => $model
@@ -458,13 +458,16 @@ class SiteController extends Controller
 
     public function actionCreate()
     {
-        $model = new Proposal();
+
+        $model = ProposalForm::restoreOrCreate();
 
         if ($model->load(Yii::$app->getRequest()->post()) && $model->save()) {
 
         }
 
-        return $this->render('create');
+        return $this->render('create', [
+            'model' => $model
+        ]);
     }
 
     /**
@@ -564,42 +567,6 @@ class SiteController extends Controller
         return $captcha_success->success;
     }
 
-    /**
-     * @param SignupForm $model
-     * @param Organization $organization
-     * @throws \yii\base\Exception
-     */
-    protected function uploadOrganizationImage(SignupForm $model, Organization $organization)
-    {
-        $files = UploadedFile::getInstances($model, 'image_field');
-
-
-        foreach ($files as $file) {
-
-
-            /** @noinspection PhpUndefinedFieldInspection */
-            $path = '/web/upload' . DIRECTORY_SEPARATOR . 'organization' . DIRECTORY_SEPARATOR . $organization->id;
-
-            $path = \Yii::getAlias('@cabinet') . $path;
-
-            FileHelper::createDirectory($path);
-
-            $fileBaseName = substr(md5(microtime() . rand(0, 9999)), 0, 8);
-            $fileName = $fileBaseName . '_' . $this->owner->id . '.' . $file->extension;
-
-            $file->saveAs($path . '/' . $fileName);
-            $upload = new Upload();
-            $upload->fsFileName = $fileName;
-            $upload->save();
-
-            $storage = new OrganizationImage();
-            $storage->organization_id = $organization->id;
-            $storage->upload_id = $upload->id;
-            $storage->save();
-        }
-    }
-
-
     public function actionDistrict()
     {
         if (isset($_POST['depdrop_parents'])) {
@@ -617,7 +584,6 @@ class SiteController extends Controller
 
         return Json::encode(['output' => '', 'selected' => '']);
     }
-
 
     public function actionMetro()
     {
@@ -694,8 +660,4 @@ class SiteController extends Controller
         return $this->render('unsubscribe');
     }
 
-//    public function actionTest()
-//    {
-//        Yii::$app->getUser()->login(Organization::findOne(125));
-//    }
 }

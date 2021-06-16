@@ -2,7 +2,7 @@
 
 /**
  * @var $this yii\web\View
- * @var $model \app\user\models\LandingForm
+ * @var $model \app\user\models\ProposalForm
  */
 
 use yii\widgets\ActiveForm;
@@ -105,7 +105,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 </div>
                 <div class="col-md-4 col-sm-12">
                     <div class="right-info">
-                        <?php $form = ActiveForm::begin(['id' => 'form-submit', 'action' => ['/site/create']]); ?>
+                        <?php $form = ActiveForm::begin(['id' => 'form-submit']); ?>
                         <div class="row">
 
                             <div class="col-md-6">

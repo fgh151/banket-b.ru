@@ -25,7 +25,7 @@ $config = [
 //            'identityCookie' => ['name' => '_identity-cabinet', 'httpOnly' => true],
         ],
         'session' => [
-            'class' => \yii\web\Session::class,
+            'class' => \yii\web\DbSession::class,
             // this is the name of the session cookie used for login on the cabinet
             'name' => 'advanced-cabinet',
         ],
