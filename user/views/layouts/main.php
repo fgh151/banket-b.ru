@@ -67,7 +67,7 @@ $homeLinkLable = (new Mobile_Detect())->isMobile() ? '<span>
 <div class="wrap">
     <?php
     NavBar::begin([
-        'brandLabel' => Html::img('/favicon-32x32.png') . Yii::$app->name . ' <span class="app-description hidden-xs">личный кабинет</span>',
+        'brandLabel' => Html::img('/favicon-32x32.png') . Yii::$app->name,
         'brandUrl' => Yii::$app->homeUrl,
         'options' => [
             'class' => 'navbar navbar-fixed-top',

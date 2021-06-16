@@ -19,6 +19,7 @@ use app\common\models\Proposal;
 use app\common\models\RestaurantHall;
 use app\common\models\RestaurantParams;
 use app\common\models\Upload;
+use app\user\models\LandingForm;
 use Yii;
 use yii\authclient\BaseOAuth;
 use yii\filters\AccessControl;
@@ -53,12 +54,7 @@ class SiteController extends Controller
                 'class' => AccessControl::class,
                 'rules' => [
                     [
-                        'actions' => ['signup', 'test'],
-                        'allow' => true,
-                        'roles' => ['?'],
-                    ],
-                    [
-                        'actions' => ['login', 'auth'],
+                        'actions' => ['signup', 'create', 'login', 'auth'],
                         'allow' => true,
                         'roles' => ['?'],
                     ],
@@ -451,8 +447,24 @@ class SiteController extends Controller
         if (!Yii::$app->getUser()->getIsGuest()) {
             return $this->redirect(['battle/index']);
         }
-        $this->layout = 'blank';
-        return $this->render('about');
+        $this->layout = 'landing';
+
+        $model = new Proposal();
+
+        return $this->render('about', [
+            'model' => $model
+        ]);
+    }
+
+    public function actionCreate()
+    {
+        $model = new Proposal();
+
+        if ($model->load(Yii::$app->getRequest()->post()) && $model->save()) {
+
+        }
+
+        return $this->render('create');
     }
 
     /**

@@ -7,8 +7,8 @@ $params = array_merge(
 );
 
 $config = [
-    'id' => 'app-cabinet',
-    'name' => 'Банкетный Батл',
+    'id' => 'app-user',
+    'name' => 'Банкет fun',
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
     'language' => 'ru-RU',
