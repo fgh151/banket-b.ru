@@ -79,7 +79,7 @@ $homeLinkLable = (new Mobile_Detect())->isMobile() ? '<span>
         $menuItems[] = ['label' => 'Регистрация', 'url' => ['/site/signup']];
     } else {
         $menuItems[] = ['label' => 'Заявки', 'url' => ['/battle/index']];
-        $menuItems[] = ['label' => 'Статистика', 'url' => ['/site/index']];
+        $menuItems[] = ['label' => 'Создать', 'url' => ['/site/create']];
 //        $menuItems[] = ['label' => 'Реклама', 'url' => ['/promo/index']];
         $menuItems[] = ['label' => 'Профиль', 'url' => ['/user/edit']];
         $menuItems[] = '<li>'

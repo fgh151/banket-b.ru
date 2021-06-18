@@ -39,7 +39,6 @@ class MobileUser extends ActiveRecord implements IdentityInterface
     }
 
     /**
-     * TODO: drop email not null
      * {@inheritdoc}
      */
     public function rules()
@@ -72,6 +71,7 @@ class MobileUser extends ActiveRecord implements IdentityInterface
             'status' => 'Статус',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
+            'name' => 'Имя',
         ];
     }
 
