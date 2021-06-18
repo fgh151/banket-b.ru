@@ -2,16 +2,12 @@
 
 namespace app\user\controllers;
 
-use app\cabinet\models\ContactForm;
 use app\cabinet\models\LoginForm;
 use app\cabinet\models\PasswordResetRequestForm;
 use app\cabinet\models\ResetPasswordForm;
 use app\cabinet\models\SignupForm;
 use app\common\components\Model;
 use app\common\components\OauthClient;
-use app\common\models\District;
-use app\common\models\Metro;
-use app\common\models\MetroLine;
 use app\common\models\Organization;
 use app\common\models\OrganizationLinkMetro;
 use app\common\models\Proposal;
@@ -22,7 +18,6 @@ use Yii;
 use yii\authclient\BaseOAuth;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
-use yii\helpers\Json;
 use yii\helpers\Url;
 use yii\web\BadRequestHttpException;
 use yii\web\Controller;
@@ -376,13 +371,8 @@ class SiteController extends Controller
      */
     public function actionLogin()
     {
-
-//        $u = Organization::findOne(1);
-//        Yii::$app->user->login($u);
-
-
         if (!Yii::$app->user->isGuest) {
-            return $this->redirect(['battle/index']);
+            return $this->redirect(['site/index']);
         }
 
         $model = new LoginForm();
@@ -410,30 +400,6 @@ class SiteController extends Controller
     }
 
     /**
-     * Displays contact page.
-     *
-     * @return mixed
-     */
-    public function actionContact()
-    {
-        $model = new ContactForm();
-        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-            if ($model->sendEmail(Yii::$app->params['adminEmail'])) {
-                Yii::$app->session->setFlash('success',
-                    'Thank you for contacting us. We will respond to you as soon as possible.');
-            } else {
-                Yii::$app->session->setFlash('error', 'There was an error sending your message.');
-            }
-
-            return $this->refresh();
-        } else {
-            return $this->render('contact', [
-                'model' => $model,
-            ]);
-        }
-    }
-
-    /**
      * Displays about page.
      *
      * @return mixed
@@ -458,11 +424,12 @@ class SiteController extends Controller
 
     public function actionCreate()
     {
-
         $model = ProposalForm::restoreOrCreate();
 
         if ($model->load(Yii::$app->getRequest()->post()) && $model->save()) {
 
+            Yii::$app->getSession()->setFlash('success', 'Банкет создан!');
+            return $this->redirect(['/site/index']);
         }
 
         return $this->render('create', [
@@ -543,71 +510,6 @@ class SiteController extends Controller
         ]);
     }
 
-    private function checkRecaptcha()
-    {
-        $url = 'https://www.google.com/recaptcha/api/siteverify';
-        $data = [
-            'secret' => getenv('RECAPTCHA_SECRET'),
-            'response' => Yii::$app->request->post('g-recaptcha-response')
-        ];
-        $query = http_build_query($data);
-        $options = [
-            'http' => [
-                'method' => 'POST',
-                'content' => $query,
-                'header' => "Content-Type: application/x-www-form-urlencoded\r\n" .
-                    "Content-Length: " . strlen($query) . "\r\n" .
-                    "User-Agent:banket-b.server/1.0\r\n",
-            ]
-        ];
-        $context = stream_context_create($options);
-        $verify = file_get_contents($url, false, $context);
-        $captcha_success = json_decode($verify);
-
-        return $captcha_success->success;
-    }
-
-    public function actionDistrict()
-    {
-        if (isset($_POST['depdrop_parents'])) {
-            $parents = $_POST['depdrop_parents'];
-            if ($parents != null) {
-                $city_id = $parents[0];
-                $out = District::find()
-                    ->select('id as id, title as name')
-                    ->where(['city_id' => $city_id])
-                    ->asArray()
-                    ->all();
-                return Json::encode(['output' => $out, 'selected' => '']);
-            }
-        }
-
-        return Json::encode(['output' => '', 'selected' => '']);
-    }
-
-    public function actionMetro()
-    {
-        if (isset($_POST['depdrop_parents'])) {
-            $parents = $_POST['depdrop_parents'];
-            if ($parents != null) {
-                $city_id = $parents[0];
-                $out = Metro::find()
-                    ->select('id as id, title as name')
-                    ->where([
-                        'in',
-                        'line_id',
-                        MetroLine::find()->where(['city_id' => $city_id])->select('id')
-                    ])
-                    ->orderBy('title')
-                    ->asArray()
-                    ->all();
-                return Json::encode(['output' => $out, 'selected' => '']);
-            }
-        }
-
-        return Json::encode(['output' => '', 'selected' => '']);
-    }
-
     /**
      * Requests password reset.
      *
@@ -652,12 +554,6 @@ class SiteController extends Controller
         return $this->render('resetPassword', [
             'model' => $model,
         ]);
-    }
-
-    public function actionUnsubscribe()
-    {
-
-        return $this->render('unsubscribe');
     }
 
 }

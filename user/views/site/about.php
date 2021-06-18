@@ -115,7 +115,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             </div>
                             <div class="col-md-6">
                                 <fieldset>
-                                    <?= $form->field($model, 'date')->input('time')->label(false); ?>
+                                    <?= $form->field($model, 'time')->input('time')->label(false); ?>
                                 </fieldset>
                             </div>
                             <div class="col-md-6">
