@@ -5,13 +5,8 @@ namespace app\user\controllers;
 use app\cabinet\models\LoginForm;
 use app\cabinet\models\PasswordResetRequestForm;
 use app\cabinet\models\ResetPasswordForm;
-use app\cabinet\models\SignupForm;
-use app\common\components\Model;
 use app\common\components\OauthClient;
 use app\common\models\Blog;
-use app\common\models\OrganizationLinkMetro;
-use app\common\models\RestaurantHall;
-use app\common\models\RestaurantParams;
 use app\user\models\ProposalForm;
 use Yii;
 use yii\authclient\BaseOAuth;
@@ -137,6 +132,8 @@ class SiteController extends Controller
             return $this->redirect(['site/index']);
         }
 
+        $this->layout = 'landing';
+
         $model = new LoginForm();
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
             return $this->redirect(['battle/index']);
@@ -191,65 +188,6 @@ class SiteController extends Controller
     }
 
     /**
-     * Signs user up.
-     *
-     * @return mixed
-     * @throws \yii\base\Exception
-     */
-    public function actionSignup()
-    {
-        $model = new SignupForm();
-        $modelParams = new RestaurantParams();
-        $halls = [new RestaurantHall(['scenario' => RestaurantHall::SCENARIO_REGISTER])];
-        $metro = [new OrganizationLinkMetro()];
-
-        $post = Yii::$app->request->post();
-
-        if ($model->load($post)) {
-            if ($this->checkRecaptcha()) {
-                if ($user = $model->signup()) {
-                    $this->uploadOrganizationImage($model, $user);
-
-                    if ($modelParams->load($post)) {
-                        $modelParams->organization_id = $user->id;
-                        $modelParams->save();
-                    }
-
-                    /** @var RestaurantHall[] $halls */
-                    $halls = Model::createMultiple(RestaurantHall::class);
-                    Model::loadMultiple($halls, Yii::$app->request->post());
-                    foreach ($halls as $hall) {
-                        $hall->restaurant_id = $user->id;
-                        $hall->save();
-                    }
-
-                    /** @var OrganizationLinkMetro[] $metros */
-                    $metros = Model::createMultiple(OrganizationLinkMetro::class);
-                    Model::loadMultiple($metros, Yii::$app->request->post());
-                    foreach ($metros as $station) {
-                        $station->organization_id = $user->id;
-                        $station->save();
-                    }
-
-                    if (Yii::$app->getUser()->login($user)) {
-                        Yii::$app->homeUrl = Url::to(['/battle/index']);
-                        return $this->goHome();
-                    }
-                }
-            } else {
-                $model->addError('title', 'Необходимо указать что вы не робот');
-            }
-        }
-
-        return $this->render('signup', [
-            'model' => $model,
-            'modelParams' => $modelParams,
-            'halls' => (empty($halls) ? [new RestaurantHall()] : $halls),
-            'metro' => (empty($metro) ? [new OrganizationLinkMetro()] : $metro),
-        ]);
-    }
-
-    /**
      * Requests password reset.
      *
      * @return mixed
@@ -257,6 +195,7 @@ class SiteController extends Controller
      */
     public function actionRequestPasswordReset()
     {
+        $this->layout = 'landing';
         $model = new PasswordResetRequestForm();
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             if ($model->sendEmail()) {
