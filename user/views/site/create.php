@@ -28,6 +28,12 @@ use yii\widgets\ActiveForm;
 
     <?php endif; ?>
 
+    <?php if (false === ProposalForm::hasDataInStore()): ?>
+        <h3>Когда будет банкет?</h3>
+        <?= $form->field($model, 'date')->input('date'); ?>
+        <?= $form->field($model, 'time')->input('time'); ?>
+    <?php endif; ?>
+
     <h3>Какой банкет Вас интересует?</h3>
 
     <?= $form->field($model, 'guests_count'); ?>
