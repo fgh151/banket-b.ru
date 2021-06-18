@@ -1,9 +1,10 @@
 :root {
-    --white: #ffffff;
+    --white: #eaf0ff;
     --red: #D0021B;
     --green: #7ED321;
     --light-black: rgba(0, 0, 0, .5);
-    --blue: #0C21E2
+    --blue: #0C21E2;
+    --accent: #f2745f;
 }
 
 body {
@@ -46,7 +47,7 @@ h1 {
 }
 
 .navbar-nav > li.active {
-    background-color: var(--blue);
+    background-color: var(--accent);
 }
 
 
@@ -67,7 +68,7 @@ h1 {
 }
 
 .nav > li > a:hover, .nav > li > a:focus {
-    color: var(--blue);
+    color: var(--accent);
 }
 
 .wrap {
@@ -389,8 +390,8 @@ h2.closed-proposals {
 
 .btn-success {
     color: #fff;
-    background-color: var(--blue);
-    border-color: var(--blue);
+    background-color: var(--accent);
+    border-color: var(--accent);
 }
 
 .btn-primary {
@@ -402,8 +403,8 @@ h2.closed-proposals {
 
 .btn-success:hover {
     color: #fff;
-    background-color: var(--blue);
-    border-color: var(--blue);
+    background-color: var(--accent);
+    border-color: var(--accent);
 }
 
 .btn-danger {

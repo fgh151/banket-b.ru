@@ -101,10 +101,6 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        if (!Yii::$app->getUser()->getIsGuest()) {
-            return $this->redirect(['battle/index']);
-        }
-
         $this->layout = 'landing';
 
         $model = new ProposalForm();
