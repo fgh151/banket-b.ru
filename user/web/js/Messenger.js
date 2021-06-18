@@ -10,6 +10,117 @@ var database = firebase.database();
 
 const proposal = JSON.parse(phpProposal);
 
+
+class Client {
+
+    constructor(authToken, baseUrl = '', {headers = {}} = {}) {
+        this.headers = {
+            'Accept': '*/*',
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${authToken}`
+        };
+        Object.assign(this.headers, headers);
+        this.baseUrl = config.apiUrl; // baseUrl;
+    }
+
+    static sendCode(params) {
+        const api = new Client();
+        api.POST('/v2/auth/sendcode', params)
+            .then(response => {
+                if (response.hasOwnProperty('code')) {
+                    let state = new GlobalState();
+                    state.AuthCode = response.code;
+                }
+            })
+    }
+
+    static sendRegisterCode(params) {
+        const api = new Client();
+        api.POST('/v2/auth/sendregistercode', params)
+            .then(response => {
+                console.log(response)
+                if (response.hasOwnProperty('code')) {
+                    let state = new GlobalState();
+                    state.AuthCode = response.code;
+                }
+            }).catch(e => console.log(e))
+    }
+
+    login(phone, code) {
+        // Returns a Promise with the response.
+        return this.POST('/v2/auth/index', {phone: phone, code: code});
+    }
+
+    getCurrentUser() {
+        // If the request is successful, you can return the expected object
+        // instead of the whole response.
+        return this.GET('/auth')
+            .then(response => response.user);
+    }
+
+    _fullRoute(url) {
+        return `${this.baseUrl}${url}`;
+    }
+
+    _fetch(route, method, body, isQuery = false, debugInfo = '') {
+
+        if (!route) throw new Error('Route is undefined');
+        let fullRoute = this._fullRoute(route);
+
+
+        if (isQuery && body) {
+            let qs = require('qs');
+            const query = qs.stringify(body);
+            fullRoute = `${fullRoute}?${query}`;
+            body = undefined;
+        }
+        let opts = {
+            method,
+            headers: this.headers
+        };
+        if (body) {
+            Object.assign(opts, {body: JSON.stringify(body)});
+        }
+
+        console.log(fullRoute, body);
+
+        return this.onlineFetch(fullRoute, opts, debugInfo);
+
+    }
+
+    onlineFetch(fullRoute, opts, debugInfo = '') {
+        const fetchPromise = () => fetch(fullRoute, opts);
+
+
+        // console.log(connectionInfo.type);
+
+        // if (connectionInfo.type !== 'none') {
+        return fetchPromise()
+            .then(response => {
+                console.log(response);
+                // response.json().then(data => console.log(data, debugInfo, fullRoute));
+                return response.json()
+            });
+    }
+
+
+    GET(route, query, debugInfo = '') {
+        return this._fetch(route, 'GET', query, true, debugInfo);
+    }
+
+    POST(route, body) {
+        return this._fetch(route, 'POST', body);
+    }
+
+    PUT(route, body) {
+        return this._fetch(route, 'PUT', body);
+    }
+
+    DELETE(route, query) {
+        return this._fetch(route, 'DELETE', query, true);
+    }
+};
+
 class Messenger extends React.PureComponent {
 
     state = {
@@ -149,7 +260,64 @@ class Form extends React.PureComponent {
     }
 }
 
+class Dialogs extends React.Component {
+
+    state = {
+        items: [],
+        listTitle: '',
+        loaded: false,
+    };
+
+    /**
+     * fetch data from API
+     */
+    componentDidMount(clearCache = false) {
+        const api = new Client(token);
+        api.GET('/proposal/dialogs/' + proposal.id)
+            .then(
+                (responseData) => {
+                    this.updateList(responseData);
+                }
+            )
+
+    }
+
+    updateList(items) {
+        // noinspection JSAccessibilityCheck
+        this.setState({
+            items: items,
+            loaded: true,
+            refreshing: false
+        });
+    }
+
+    render() {
+        if (!this.state.loaded) {
+            return (
+                <img src={'/img/preloader.gif'} className={'preloader'} alt={'preloader'}/>
+            )
+        }
+
+        if (this.state.items.length < 1) {
+            return (
+                <div>Пока никто не отозвался</div>
+            )
+        }
+
+        return (
+            <div>list</div>
+        );
+    }
+};
+
 ReactDOM.render(
     <Messenger/>,
     document.getElementById('dialog')
 );
+
+
+ReactDOM.render(
+    <Dialogs/>,
+    document.getElementById('dialogs')
+);
+

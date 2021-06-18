@@ -1,17 +1,16 @@
 <?php
 /**
  * @var $this yii\web\View
- * @var $model \app\common\models\Cost
- * @var $proposal \app\common\models\Proposal
+ * @var $model Cost
+ * @var $proposal Proposal
  */
 
-use app\cabinet\assets\ConversationAsset;
 use app\common\components\MonthHelper;
-use app\common\models\Message;
+use app\common\models\Cost;
 use app\common\models\Proposal;
+use app\user\assets\ConversationAsset;
 use yii\helpers\Json;
 use yii\helpers\Url;
-use yii\widgets\Pjax;
 
 ConversationAsset::register($this);
 $organizationId = Yii::$app->getUser()->getId();
@@ -22,19 +21,120 @@ $this->registerJsVar('phpProposal', Json::encode($proposal));
 $this->registerJsVar('proposalActive', $proposal->isActual());
 $this->registerJsVar('pushUrl', Url::to(['conversation/push', 'proposalId' => $proposal->id]));
 $this->params['breadcrumbs'][] = ['label' => 'Все заявки', 'url' => ['battle/index']];
+
+$this->registerJsVar('token', Yii::$app->getUser()->getIdentity()->getAuthKey())
 ?>
 
 <div class="row">
-    <div class="col-xs-12 col-sm-4 proposal-info" id="chart-info">
-        <div class="dialog-element">
-            <div class="proposal-detil-cost">
-                <?php Pjax::begin(['id' => 'proposal-costs']); ?>
-                <?= $this->render('../battle/_best_cost', ['model' => $proposal]); ?>
-                <p>
-                    <?= $proposal->costsCount ?>
-                    <?= Yii::t('app', '{n, plural, one{ставка} few{ставкок} other{ставок}}',
-                        ['n' => $proposal->costsCount]); ?>
+    <div class="col-xs-12 proposal-info" id="chart-info">
+        <div class=" dialog-element row">
+            <div class="col-xs-12 col-md-2">
+                <p class="proposal-item-time">
+                    <?= MonthHelper::formatDateWithYear($proposal->getWhen()); ?>
+                    , <?= str_replace('-', '&#8212;', $proposal->time) ?>
                 </p>
+                <p class="proposal-item-type">
+                    <?= Proposal::typeLabels()[$proposal->event_type] ?>
+                </p>
+            </div>
+            <div class="col-xs-12 col-md-2">
+                <p>
+                    <?= $proposal->guests_count ?> <?= Yii::t('app',
+                        '{n, plural, one{гостя} few{гостей} other{гостей}}',
+                        ['n' => $proposal->guests_count]); ?>
+                </p>
+                <?php if ($proposal->metroStation !== null): ?>
+                    <p class="my-price-description">Желаемое метро</p>
+                    <p><?= $proposal->metroStation->title ?></p>
+                <?php endif; ?>
+            </div>
+            <div class="col-xs-12 col-md-6">
+                <?php if (
+                    $proposal->floristics === true ||
+                    $proposal->hall === true ||
+                    $proposal->photo === true ||
+                    $proposal->stylists === true ||
+                    $proposal->cake === true ||
+                    $proposal->transport === true ||
+                    $proposal->entertainment === true ||
+                    $proposal->present === true ||
+                    $proposal->parking === true ||
+                    $proposal->private === true ||
+                    $proposal->dance === true ||
+                    $proposal->own_alcohol === true): ?>
+                    <p class="my-price-description">Дополнительные услуги</p>
+                    <div class="service-items">
+                        <?php if ($proposal->floristics): ?>
+                            <div class="service">
+                                Флористика
+                            </div>
+                        <?php endif; ?>
+
+                        <?php if ($proposal->hall): ?>
+                            <div class="service">
+                                Оформление зала
+                            </div>
+                        <?php endif; ?>
+
+                        <?php if ($proposal->photo): ?>
+                            <div class="service">
+                                Фото и видео
+                            </div>
+                        <?php endif; ?>
+
+                        <?php if ($proposal->stylists): ?>
+                            <div class="service">
+                                Стилисты
+                            </div>
+                        <?php endif; ?>
+
+                        <?php if ($proposal->cake): ?>
+                            <div class="service">
+                                Торты
+                            </div>
+                        <?php endif; ?>
+
+                        <?php if ($proposal->transport): ?>
+                            <div class="service">
+                                Транспорт
+                            </div>
+                        <?php endif; ?>
+
+                        <?php if ($proposal->entertainment): ?>
+                            <div class="service">
+                                Развлекательная программа
+                            </div>
+                        <?php endif; ?>
+                        <?php if ($proposal->present): ?>
+                            <div class="service">
+                                Подарки
+                            </div>
+                        <?php endif; ?>
+                        <?php if ($proposal->parking): ?>
+                            <div class="service">
+                                Парковка
+                            </div>
+                        <?php endif; ?>
+                        <?php if ($proposal->private): ?>
+                            <div class="service">
+                                Отдельный зал
+                            </div>
+                        <?php endif; ?>
+                        <?php if ($proposal->dance): ?>
+                            <div class="service">
+                                Танцпол
+                            </div>
+                        <?php endif; ?>
+                        <?php if ($proposal->own_alcohol): ?>
+                            <div class="service">
+                                Свой алкоголь
+                            </div>
+                        <?php endif; ?>
+
+                    </div>
+                <?php endif; ?>
+            </div>
+            <div class="col-xs-12 col-md-2">
                 <p class="m-b-0">
                     <?= Yii::$app->formatter->asRubles($proposal->getMinCost() ?: $proposal->amount * $proposal->guests_count) ?>
                     Лучшая ставка
@@ -43,130 +143,19 @@ $this->params['breadcrumbs'][] = ['label' => 'Все заявки', 'url' => ['b
                     <?= Yii::$app->formatter->asRubles(round($proposal->getMinCost() ? $proposal->getMinCost() / $proposal->guests_count : $proposal->amount)); ?>
                     ₽ /чел.
                 </p>
-                <p>
-                    <?= Yii::$app->formatter->asRubles($proposal->amount) ?> ₽ /чел.
-                    Начальная стоимость
-                </p>
-                <?php Pjax::end(); ?>
             </div>
-
         </div>
-        <button class="mobile-btn-chat"
-                onclick="$('#chart-aside').toggle(); $('#chart-info').toggle(); Messenger.scroll()">
-            <?= $this->render('_chat_icon'); ?>
+    </div>
+</div>
 
-            Поприветствуйте гостя
-        </button>
-        <div class=" dialog-element">
-            <p class="proposal-item-time">
-                <?= MonthHelper::formatDateWithYear($proposal->getWhen()); ?>
-                , <?= str_replace('-', '&#8212;', $proposal->time) ?>
-            </p>
-            <p class="proposal-item-type">
-                <?= Proposal::typeLabels()[$proposal->event_type] ?>
-            </p>
-            <p>
-                <?= $proposal->guests_count ?> <?= Yii::t('app', '{n, plural, one{гостя} few{гостей} other{гостей}}',
-                    ['n' => $proposal->guests_count]); ?>
-            </p>
-            <?php if ($proposal->metroStation !== null): ?>
-                <p class="my-price-description">Желаемое метро</p>
-                <p><?= $proposal->metroStation->title ?></p>
-            <?php endif; ?>
-            <?php if (
-                $proposal->floristics === true ||
-                $proposal->hall === true ||
-                $proposal->photo === true ||
-                $proposal->stylists === true ||
-                $proposal->cake === true ||
-                $proposal->transport === true ||
-                $proposal->entertainment === true ||
-                $proposal->present === true ||
-                $proposal->parking === true ||
-                $proposal->private === true ||
-                $proposal->dance === true ||
-                $proposal->own_alcohol === true): ?>
-                <p class="my-price-description">Дополнительные услуги</p>
+<div class="row">
 
-                <div class="service-items">
-                    <?php if ($proposal->floristics): ?>
-                        <div class="service">
-                            Флористика
-                        </div>
-                    <?php endif; ?>
-
-                    <?php if ($proposal->hall): ?>
-                        <div class="service">
-                            Оформление зала
-                        </div>
-                    <?php endif; ?>
-
-                    <?php if ($proposal->photo): ?>
-                        <div class="service">
-                            Фото и видео
-                        </div>
-                    <?php endif; ?>
-
-                    <?php if ($proposal->stylists): ?>
-                        <div class="service">
-                            Стилисты
-                        </div>
-                    <?php endif; ?>
-
-                    <?php if ($proposal->cake): ?>
-                        <div class="service">
-                            Торты
-                        </div>
-                    <?php endif; ?>
-
-                    <?php if ($proposal->transport): ?>
-                        <div class="service">
-                            Транспорт
-                        </div>
-                    <?php endif; ?>
-
-                    <?php if ($proposal->entertainment): ?>
-                        <div class="service">
-                            Развлекательная программа
-                        </div>
-                    <?php endif; ?>
-                    <?php if ($proposal->present): ?>
-                        <div class="service">
-                            Подарки
-                        </div>
-                    <?php endif; ?>
-                    <?php if ($proposal->parking): ?>
-                        <div class="service">
-                            Парковка
-                        </div>
-                    <?php endif; ?>
-                    <?php if ($proposal->private): ?>
-                        <div class="service">
-                            Отдельный зал
-                        </div>
-                    <?php endif; ?>
-                    <?php if ($proposal->dance): ?>
-                        <div class="service">
-                            Танцпол
-                        </div>
-                    <?php endif; ?>
-                    <?php if ($proposal->own_alcohol): ?>
-                        <div class="service">
-                            Свой алкоголь
-                        </div>
-                    <?php endif; ?>
-
-                </div>
-            <?php endif; ?>
-            <p>
-                <?= $proposal->comment ?>
-            </p>
-        </div>
+    <div class="col-xs-12 col-sm-4">
+        <div id="dialogs"></div>
     </div>
 
     <div class="col-xs-12 col-sm-8" id="chart-aside">
-        <div class="panel panel-default<?= Message::getConversation($proposal->owner_id, $proposal->id,
-            $organizationId) === null ? 'disabled' : '' ?>">
+        <div class="panel panel-default">
             <!--.disabled-->
             <div class="panel-heading show-mobile mobile-breadcrumbs">
                 <span onclick="$('#chart-aside').toggle(); $('#chart-info').toggle();">
@@ -174,8 +163,7 @@ $this->params['breadcrumbs'][] = ['label' => 'Все заявки', 'url' => ['b
 <path d="M22 7H2" stroke="black" stroke-width="1.5"/>
 <path d="M7.03656 12.0364L2 6.99988L6.96912 2.03076" stroke="black" stroke-width="1.5" stroke-linecap="square"/>
 </svg>
-
-                   &nbsp; <?= Proposal::typeLabels()[$proposal->event_type] ?> <?= MonthHelper::formatDateWithYear($proposal->getWhen()); ?>
+                   &nbsp;<?= Proposal::typeLabels()[$proposal->event_type] ?> <?= MonthHelper::formatDateWithYear($proposal->getWhen()); ?>
                 </span>
             </div>
             <div class="panel-heading proposal-owner clearfix">
