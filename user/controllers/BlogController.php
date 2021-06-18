@@ -10,6 +10,7 @@ use yii\web\NotFoundHttpException;
 
 class BlogController extends \yii\web\Controller
 {
+    public $layout = 'landing';
 
     public function actionIndex()
     {

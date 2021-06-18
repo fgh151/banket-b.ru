@@ -45,7 +45,6 @@ $config = [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
-                '/' => 'site/about',
                 'site/reset-password/<token:\S+>' => 'site/reset-password',
                 'conversation/index/<proposalId:\d+>' => 'conversation/index',
                 '/blog' => 'blog/index',

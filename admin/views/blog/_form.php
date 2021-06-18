@@ -15,6 +15,9 @@ use yii\widgets\ActiveForm;
     <?php $form = ActiveForm::begin(); ?>
 
     <?= $form->field($model, 'title')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'seo_title')->textInput(['maxlength' => true]) ?>
+
+    <?= $form->field($model, 'image_field')->fileInput(); ?>
 
     <?= $form->field($model, 'preview_text')->widget(Widget::class, [
         'settings' => [
@@ -39,6 +42,9 @@ use yii\widgets\ActiveForm;
             'imageManagerJson' => Url::to(['/files/images-get']),
         ],
     ]); ?>
+
+    <?= $form->field($model, 'seo_description')->textarea(); ?>
+    <?= $form->field($model, 'seo_keywords')->textarea(); ?>
 
     <div class="form-group">
         <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>

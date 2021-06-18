@@ -8,9 +8,8 @@ use app\cabinet\models\ResetPasswordForm;
 use app\cabinet\models\SignupForm;
 use app\common\components\Model;
 use app\common\components\OauthClient;
-use app\common\models\Organization;
+use app\common\models\Blog;
 use app\common\models\OrganizationLinkMetro;
-use app\common\models\Proposal;
 use app\common\models\RestaurantHall;
 use app\common\models\RestaurantParams;
 use app\user\models\ProposalForm;
@@ -45,17 +44,14 @@ class SiteController extends Controller
                 'class' => AccessControl::class,
                 'rules' => [
                     [
-                        'actions' => ['signup', 'create', 'login', 'auth'],
-                        'allow' => true,
-                        'roles' => ['?'],
-                    ],
-                    [
                         'actions' => [
+                            'signup',
+                            'create',
+                            'login',
+                            'auth',
+                            'index',
                             'request-password-reset',
                             'reset-password',
-                            'about',
-                            'district',
-                            'metro'
                         ],
                         'allow' => true,
                         'roles' => ['?'],
@@ -107,260 +103,26 @@ class SiteController extends Controller
 
     /**
      * Displays homepage.
-     *
-     * @param null $proposals
-     *
-     * @param null $month
-     * @return mixed
-     * @throws \Throwable
-     * @throws \yii\db\Exception
      */
-    public function actionIndex($proposals = null, $month = null)
+    public function actionIndex()
     {
-        /** @var Organization $organization */
-        $organization = Yii::$app->getUser()->getIdentity();
-
-        if ($month) {
-            $firstDay = date('Y-m-d') . ' first day of last month';
-            $lastDay = date('Y-m-d') . ' last day of last month';
-
-            $createdAtCriteria = [
-                'between',
-                'created_at',
-                date_create($firstDay)->getTimestamp(),
-                date_create($lastDay)->getTimestamp()
-            ];
+        if (!Yii::$app->getUser()->getIsGuest()) {
+            return $this->redirect(['battle/index']);
         }
 
-        $proposalsCount = Proposal::find();
-        if ($proposals === 'my') {
-            $proposalsCount->where(['city_id' => $organization->city_id]);
-        }
-        if ($month) {
-            $proposalsCount->andFilterWhere($createdAtCriteria);
-        }
-        $proposalsCount = $proposalsCount->count();
-        $onePercent = $proposalsCount / 10;
+        $this->layout = 'landing';
 
-        $criteriaSql = '';
-        if ($proposals === 'my') {
-            $criteriaSql = 'WHERE city_id = ' . $organization->city_id;
-        }
-        if ($month) {
-            $criteriaSql .= $proposals === 'my' ? ' AND ' : '';
+        $model = new ProposalForm();
 
-            $criteriaSql .= 'WHERE  created_at BETWEEN  ' . date_create($firstDay)->getTimestamp() . ' AND ' . date_create($lastDay)->getTimestamp();
+        if ($model->load(Yii::$app->getRequest()->post()) && $model->store()) {
+            return $this->redirect(['/site/create']);
         }
 
-
-
-        $db = Yii::$app->getDb();
-        $sql = 'SELECT to_char(date, \'Day\') AS day, * FROM proposal ' . $criteriaSql . ' ORDER BY day';
-        $proposalsAr = $db->createCommand($sql)->queryAll();
-
-        $tmp = [];
-        foreach ($proposalsAr as $proposal) {
-            $tmp[] = $proposal['day'];
-        }
-        $tmp = array_count_values($tmp);
-
-        $byDay['Понедельник'] = (isset($tmp['Monday   ']) ? $tmp['Monday   '] : 0) + Yii::$app->params['chart']['byDay']['Понедельник'];
-        $byDay['Вторник'] = (isset($tmp['Tuesday   ']) ? $tmp['Tuesday   '] : 0) + Yii::$app->params['chart']['byDay']['Вторник'];
-        $byDay['Среда'] = (isset($tmp['Wednesday   ']) ? $tmp['Wednesday   '] : 0) + Yii::$app->params['chart']['byDay']['Среда'];
-        $byDay['Четверг'] = (isset($tmp['Thursday   ']) ? $tmp['Thursday   '] : 0) + Yii::$app->params['chart']['byDay']['Четверг'];
-        $byDay['Пятница'] = (isset($tmp['Friday   ']) ? $tmp['Friday   '] : 0) + Yii::$app->params['chart']['byDay']['Пятница'];
-        $byDay['Суббота'] = (isset($tmp['Saturday   ']) ? $tmp['Saturday   '] : 0) + Yii::$app->params['chart']['byDay']['Суббота'];
-        $byDay['Воскресенье'] = (isset($tmp['Sunday   ']) ? $tmp['Sunday   '] : 0) + Yii::$app->params['chart']['byDay']['Воскресенье'];
-
-
-        array_walk($byDay, function (&$val, $key) use ($onePercent) {
-            $val = round($val * $onePercent, 2);
-        });
-
-        $sql = 'SELECT to_char(date, \'Month\') AS month, * FROM proposal ' . $criteriaSql . ' ORDER BY month';
-        $proposalsAr = $db->createCommand($sql)->queryAll();
-
-        $tmp = [];
-        foreach ($proposalsAr as $proposal) {
-            $tmp[] = str_replace(
-                [
-                    'January',
-                    'February',
-                    'March',
-                    'April',
-                    'May',
-                    'June',
-                    'July',
-                    'August',
-                    'September',
-                    'October',
-                    'November',
-                    'December'
-                ],
-                [
-                    'Январь',
-                    'Февраль',
-                    'Март',
-                    'Апрель',
-                    'Май',
-                    'Июнь',
-                    'Июль',
-                    'Август',
-                    'Сентябрь',
-                    'Октябрь',
-                    'Ноябрь',
-                    'Декабрь'
-                ],
-                trim($proposal['month'])
-            );
-        }
-        $byMonth = array_count_values($tmp);
-        $byMonth = Yii::$app->params['chart']['byMonth'] + $byMonth;
-        array_walk($byMonth, function (&$val, $key) use ($onePercent) {
-            $val = round($val * $onePercent, 2);
-        });
-
-
-        $byPrice = [];
-        $proposalsByPrice = Proposal::find()->select(['amount']);
-
-        if ($proposals === 'my') {
-            $proposalsByPrice->where(['city_id' => $organization->city_id]);
-        }
-        if ($month) {
-            $proposalsByPrice->andFilterWhere($createdAtCriteria);
-        }
-        $proposalsByPrice = $proposalsByPrice->asArray()->all();
-        foreach ($proposalsByPrice as $p) {
-            $amount = $p['amount'];
-            $byPrice[$amount] = isset($byPrice[$amount]) ? $byPrice[$amount] + 1 : 1;
-        }
-        $byPrice = Yii::$app->params['chart']['byPrice'] + $byPrice;
-        ksort($byPrice);
-        array_walk($byPrice, function (&$val, $key) use ($onePercent) {
-            $val = round($val * $onePercent, 2);
-        });
-
-        $byPeoples = [];
-        $proposalsByPeoples = Proposal::find()->select(['guests_count']);
-        if ($proposals === 'my') {
-            $proposalsByPeoples->where(['city_id' => $organization->city_id]);
-        }
-        if ($month) {
-            $proposalsByPeoples->andFilterWhere($createdAtCriteria);
-        }
-        $proposalsByPeoples = $proposalsByPeoples->asArray()->all();
-        foreach ($proposalsByPeoples as $p) {
-            $count = $p['guests_count'];
-            $byPeoples[$count] = isset($byPeoples[$count]) ? $byPeoples[$count] + 1 : 1;
-        }
-        $byPeoples = Yii::$app->params['chart']['byPeoples'] + $byPeoples;
-        ksort($byPeoples);
-        array_walk($byPrice, function (&$val, $key) use ($onePercent) {
-            $val = round($val * $onePercent, 2);
-        });
-
-        $proposalsCount = Proposal::find();
-        if ($proposals === 'my') {
-            $proposalsCount->where(['city_id' => $organization->city_id]);
-        }
-        if ($month) {
-            $proposalsCount->andFilterWhere($createdAtCriteria);
-        }
-        $proposalsCount = $proposalsCount->count();
-
-        $hall = Proposal::find()->where(['hall' => true]);
-        if ($proposals === 'my') {
-            $hall->andWhere(['city_id' => $organization->city_id]);
-        }
-        if ($month) {
-            $hall->andFilterWhere($createdAtCriteria);
-        }
-        $hall = $hall->count();
-        $byHall = ['Нужен' => $hall, 'Не нужен' => $proposalsCount - $hall];
-
-        array_walk($byHall, function (&$val, $key) use ($onePercent) {
-            $val = round($val * $onePercent, 2);
-        });
-
-        $dance = Proposal::find()->where(['dance' => true]);
-        if ($proposals === 'my') {
-            $dance->andWhere(['city_id' => $organization->city_id]);
-        }
-        if ($month) {
-            $dance->andFilterWhere($createdAtCriteria);
-        }
-        $dance = $dance->count();
-        $byDance = ['Нужен' => $dance, 'Не нужен' => $proposalsCount - $dance];
-        array_walk($byDance, function (&$val, $key) use ($onePercent) {
-            $val = round($val * $onePercent, 2);
-        });
-
-        $alko = Proposal::find()->where(['own_alcohol' => true]);
-        if ($proposals === 'my') {
-            $alko->andWhere(['city_id' => $organization->city_id]);
-        }
-        if ($month) {
-            $alko->andFilterWhere($createdAtCriteria);
-        }
-        $alko = $alko->count();
-        $byAlko = ['Нужен' => $alko, 'Не нужен' => $proposalsCount - $alko];
-        array_walk($byAlko, function (&$val, $key) use ($onePercent) {
-            $val = round($val * $onePercent, 2);
-        });
-
-        $parking = Proposal::find()->where(['parking' => true]);
-        if ($proposals === 'my') {
-            $parking->andWhere(['city_id' => $organization->city_id]);
-        }
-        if ($month) {
-            $parking->andFilterWhere($createdAtCriteria);
-        }
-        $parking = $parking->count();
-        $byParking = ['Нужна' => $parking, 'Не нужна' => $proposalsCount - $parking];
-        array_walk($byParking, function (&$val, $key) use ($onePercent) {
-            $val = round($val * $onePercent, 2);
-        });
-
-
-        $kitchen = Proposal::find()->select(['types']);
-        if ($proposals === 'my') {
-            $kitchen->where(['city_id' => $organization->city_id]);
-        }
-        if ($month) {
-            $kitchen->andFilterWhere($createdAtCriteria);
-        }
-//        $kitchen = $kitchen->asArray()->all();
-
-        $type = Proposal::find()->select(['event_type']);
-        if ($proposals === 'my') {
-            $type->where(['city_id' => $organization->city_id]);
-        }
-        if ($month) {
-            $type->andFilterWhere($createdAtCriteria);
-        }
-        $type = $type->asArray()->all();
-        $byTypes = [];
-        foreach ($type as $item) {
-            $types = $item['event_type'];
-            $byTypes[$types] = isset($byTypes[$types]) ? $byTypes[$types] + 1 : 1;
-        }
-        ksort($byTypes);
-        array_walk($byTypes, function (&$val, $key) use ($onePercent) {
-            $val = round($val * $onePercent, 2);
-        });
+        $blogItems = Blog::find()->limit(4)->orderBy(['id' => SORT_DESC])->all();
 
         return $this->render('index', [
-            'byDay' => $byDay,
-            'byPrice' => $byPrice,
-            'byPeoples' => $byPeoples,
-            'byHall' => $byHall,
-            'byDance' => $byDance,
-            'byAlko' => $byAlko,
-            'byParking' => $byParking,
-            'byTypes' => $byTypes,
-            'byMonth' => $byMonth,
-            'organization' => $organization
+            'model' => $model,
+            'blogItems' => $blogItems,
         ]);
     }
 
@@ -397,29 +159,6 @@ class SiteController extends Controller
         Yii::$app->user->logout();
 
         return $this->redirect('index');
-    }
-
-    /**
-     * Displays about page.
-     *
-     * @return mixed
-     */
-    public function actionAbout()
-    {
-        if (!Yii::$app->getUser()->getIsGuest()) {
-            return $this->redirect(['battle/index']);
-        }
-        $this->layout = 'landing';
-
-        $model = new ProposalForm();
-
-        if ($model->load(Yii::$app->getRequest()->post()) && $model->store()) {
-            return $this->redirect(['/site/create']);
-        }
-
-        return $this->render('about', [
-            'model' => $model
-        ]);
     }
 
     public function actionCreate()
