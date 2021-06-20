@@ -27,18 +27,46 @@ class ProposalController extends Controller
 {
     use ProposalFindOneTrait;
 
+    /**
+     * @var bool See details {@link \yii\web\Controller::$enableCsrfValidation}.
+     */
+    public $enableCsrfValidation = false;
+
     public function behaviors()
     {
+
+        $behaviors = parent::behaviors();
+
+        $behaviors['authenticator'] = [
+            'class' => HttpBearerAuth::class,
+        ];
+
+        $behaviors['contentNegotiator'] = [
+            'class' => ContentNegotiator::class,
+            'formats' => [
+                'application/json' => Response::FORMAT_JSON,
+            ]
+        ];
+
+        $behaviors['cors'] = [
+            'class' => \yii\filters\Cors::class,
+            'cors' => [
+                'Origin' => static::allowedDomains(),
+                'Access-Control-Allow-Credentials' => false,
+                'Access-Control-Max-Age' => 3600,
+            ],
+        ];
+
+
+        return $behaviors;
+    }
+
+    public static function allowedDomains()
+    {
         return [
-            'authenticator' => [
-                'class' => HttpBearerAuth::class
-            ],
-            'contentNegotiator' => [
-                'class' => ContentNegotiator::class,
-                'formats' => [
-                    'application/json' => Response::FORMAT_JSON,
-                ]
-            ],
+            '*',                        // star allows all domains
+            'http://api.banket-b.ois',
+            'http://user.banket-b.ois/',
         ];
     }
 

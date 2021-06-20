@@ -1,0 +1,28 @@
+# Конфигурация Docker Compose, предоставляющая более комфортные средства для
+# работы разработчиков. Тут можно, например, указать привязку к портам для
+# прямого доступа к функционалу запущенных сервисов.
+
+version: '3'
+
+networks:
+  router:
+    external:
+      name: router
+
+volumes:
+  fs_database:
+
+services:
+  database:
+    ports:
+      - 6423:5432
+
+  nginx:
+    ports: [ ]
+    labels:
+      traefik.enable: '1'
+      traefik.frontend.rule: Host:banket-b.ois,api.banket-b.ois,admin.banket-b.ois,user.banket-b.ois
+      traefik.docker.network: router
+    networks:
+      - router
+      - default

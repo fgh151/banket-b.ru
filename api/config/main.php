@@ -47,6 +47,8 @@ return [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
+                'OPTIONS <controller:\w+>/<action:\w+>' => 'options/index',
+                'OPTIONS <controller:\w+>/<action:\w+>/<id:\d+>/' => 'options/index',
                 'proposal/delete/<proposalId:\w+>/<organizationId:\w+>' => 'proposal/delete',
                 'proposal/dialogs/<proposalId:\d+>' => 'proposal/dialogs',
                 '<controller:\w+>/<action:\w+>/<id:\d+>/' => '<controller>/<action>',

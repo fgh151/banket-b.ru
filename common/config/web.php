@@ -13,7 +13,7 @@ return [
             // ...
             'cookieParams' => [
                 'path' => '/',
-                'domain' => '.' . getenv('DOMAIN'),
+                'domain' => '.' . $_SERVER['SERVER_NAME']// . getenv('DOMAIN'),
             ],
         ],
         'user' => [
@@ -23,7 +23,7 @@ return [
             'identityCookie' => [
                 'name' => '_identity',
                 'path' => '/',
-                'domain' => '.' . getenv('DOMAIN'),
+                'domain' => '.' . $_SERVER['SERVER_NAME']//  . getenv('DOMAIN'),
             ],
         ],
         'request' => [
@@ -31,7 +31,7 @@ return [
             'csrfCookie' => [
                 'name' => '_csrf',
                 'path' => '/',
-                'domain' => '.' . getenv('DOMAIN'),
+                'domain' => '.' . $_SERVER['SERVER_NAME']//  . getenv('DOMAIN'),
             ],
         ],
     ],

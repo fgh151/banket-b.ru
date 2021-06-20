@@ -47,6 +47,8 @@ class FileUploadBehavior extends Behavior
     /** @var  string Аттрибут хранения идентификатора */
     public $storageAttributeId = 'upload_id';
 
+    public $path = '@cabinet';
+
     /**
      * {@inheritdoc}
      */
@@ -71,7 +73,7 @@ class FileUploadBehavior extends Behavior
         $storageAttributeId = $this->storageAttributeId;
 
         foreach ($files as $file) {
-            $path = '@cabinet/web/upload' . DIRECTORY_SEPARATOR . $this->folder . DIRECTORY_SEPARATOR . $this->owner->id;
+            $path = $this->path . '/web/upload' . DIRECTORY_SEPARATOR . $this->folder . DIRECTORY_SEPARATOR . $this->owner->id;
 
             $path = \Yii::getAlias($path);
 

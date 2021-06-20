@@ -2,7 +2,10 @@
 
 namespace app\admin\assets;
 
+use yii\bootstrap\BootstrapAsset;
 use yii\web\AssetBundle;
+use yii\web\JqueryAsset;
+use yii\web\YiiAsset;
 
 /**
  * Main admin application asset bundle.
@@ -17,7 +20,8 @@ class AppAsset extends AssetBundle
     public $js = [
     ];
     public $depends = [
-        'yii\web\YiiAsset',
-        'yii\bootstrap\BootstrapAsset',
+        JqueryAsset::class,
+        YiiAsset::class,
+        BootstrapAsset::class,
     ];
 }

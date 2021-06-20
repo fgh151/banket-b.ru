@@ -39,7 +39,6 @@ class MobileUser extends ActiveRecord implements IdentityInterface
     }
 
     /**
-     * TODO: drop email not null
      * {@inheritdoc}
      */
     public function rules()
@@ -72,6 +71,7 @@ class MobileUser extends ActiveRecord implements IdentityInterface
             'status' => 'Статус',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
+            'name' => 'Имя',
         ];
     }
 
@@ -98,7 +98,7 @@ class MobileUser extends ActiveRecord implements IdentityInterface
      */
     public function generatePasswordResetToken()
     {
-        $this->password_reset_token = (string)rand(1000, 9999);
+        $this->password_reset_token = (string)random_int(1000, 9999);
     }
 
     /**

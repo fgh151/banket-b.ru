@@ -16,14 +16,14 @@ return [
         '@npm'   => '@vendor/npm-asset',
     ],
     'controllerMap' => [
-        'migrate' => [
-            'class' => 'yii\console\controllers\MigrateController',
-            'migrationPath' => null,
-            'migrationNamespaces' => [
-                // ...
-                'yii\queue\db\migrations',
-            ],
-        ],
+//        'migrate' => [
+//            'class' => 'yii\console\controllers\MigrateController',
+//            'migrationPath' => null,
+//            'migrationNamespaces' => [
+//                // ...
+//                'yii\queue\db\migrations',
+//            ],
+//        ],
         'fixture' => [
             'class' => 'yii\console\controllers\FixtureController',
             'namespace' => 'common\fixtures',
@@ -50,8 +50,8 @@ return [
         ],
         'urlManager' => [
             'class' => 'yii\web\UrlManager',
-            'scriptUrl' => getenv('PUBLIC_URL'), // Setup your domain
-            'baseUrl' => getenv('PUBLIC_URL'), // Setup your domain
+            'scriptUrl' => $_SERVER['SERVER_NAME'], // getenv('PUBLIC_URL'), // Setup your domain
+            'baseUrl' => $_SERVER['SERVER_NAME'], // getenv('PUBLIC_URL'), // Setup your domain
             'enablePrettyUrl' => true,
             'showScriptName' => false,
         ],

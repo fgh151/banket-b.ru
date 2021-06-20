@@ -1,10 +1,11 @@
 <?php
 
 Yii::setAlias('@common', dirname(__DIR__));
-Yii::setAlias('@cabinet', dirname(dirname(__DIR__)) . '/cabinet');
-Yii::setAlias('@admin', dirname(dirname(__DIR__)) . '/admin');
-Yii::setAlias('@console', dirname(dirname(__DIR__)) . '/console');
-Yii::setAlias('@bower-asset', dirname(dirname(__DIR__)) . '/vendor/bower-asset');
+Yii::setAlias('@cabinet', dirname(__DIR__, 2) . '/cabinet');
+Yii::setAlias('@user', dirname(__DIR__, 2) . '/user');
+Yii::setAlias('@admin', dirname(__DIR__, 2) . '/admin');
+Yii::setAlias('@console', dirname(__DIR__, 2) . '/console');
+Yii::setAlias('@bower-asset', dirname(__DIR__, 2) . '/vendor/bower-asset');
 
 
 // В случае, если запуск происходит не из Docker, то вручную перечитываем .env файл.
@@ -22,7 +23,3 @@ if (false === getenv('DOCKER')) {
         putenv("{$param}={$value}");
     }
 }
-
-define('YII_ENV_DEV', getenv('ENVIRONMENT') === 'dev');
-define('YII_DEBUG', getenv('ENVIRONMENT') === 'dev');
-define('YII_ENV', getenv('ENVIRONMENT'));

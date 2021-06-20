@@ -1,0 +1,24 @@
+<IfModule mod_autoindex.c>
+        IndexIgnore */*
+</IfModule>
+
+
+Options +FollowSymLinks
+IndexIgnore */*
+RewriteEngine on
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule . index.php
+
+<filesMatch "\.(ico|gif|jpg|png|jpeg)$"> 
+	ExpiresActive On 
+	ExpiresDefault "access plus 11 month" 
+	Header append Cache-Control "public" 
+</filesMatch>
+
+
+<filesMatch "\.(html)$"> 
+	ExpiresActive On 
+	ExpiresDefault "access plus 1 days" 
+	Header append Cache-Control "public" 
+</filesMatch>
