@@ -21,7 +21,7 @@ $this->registerJsVar('pushUrl', Url::to(['conversation/push', 'proposalId' => $p
 $this->params['breadcrumbs'][] = ['label' => 'Все заявки', 'url' => ['battle/index']];
 
 $this->registerJsVar('token', Yii::$app->getUser()->getIdentity()->getAuthKey());
-$this->registerJsVar('apihost', 'http://api.banket-b.ois');
+$this->registerJsVar('apihost', 'http://api.' . getenv('DOMAIN'));
 $this->registerJsVar('ref', '');
 $this->registerJsVar('organizationId', '');
 ?>
