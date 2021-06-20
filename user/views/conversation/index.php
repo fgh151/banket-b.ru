@@ -15,14 +15,15 @@ use yii\helpers\Url;
 ConversationAsset::register($this);
 $organizationId = Yii::$app->getUser()->getId();
 
-$this->registerJsVar('ref', 'proposal_2/u_' . $proposal->owner_id . '/p_' . $proposal->id . '/o_' . $organizationId);
-$this->registerJsVar('organizationId', $organizationId);
 $this->registerJsVar('phpProposal', Json::encode($proposal));
 $this->registerJsVar('proposalActive', $proposal->isActual());
 $this->registerJsVar('pushUrl', Url::to(['conversation/push', 'proposalId' => $proposal->id]));
 $this->params['breadcrumbs'][] = ['label' => 'Все заявки', 'url' => ['battle/index']];
 
-$this->registerJsVar('token', Yii::$app->getUser()->getIdentity()->getAuthKey())
+$this->registerJsVar('token', Yii::$app->getUser()->getIdentity()->getAuthKey());
+$this->registerJsVar('apihost', 'http://api.banket-b.ois');
+$this->registerJsVar('ref', '');
+$this->registerJsVar('organizationId', '');
 ?>
 
 <div class="row">
@@ -189,11 +190,15 @@ $this->registerJsVar('token', Yii::$app->getUser()->getIdentity()->getAuthKey())
                 </div>
 
                 <span class="proposal-owner-name" data-id="<?= $proposal->owner_id ?>">
-                    <?= $proposal->owner->name ?> <?= $proposal->owner->phone ?>
+                    <?php /*= $proposal->owner->name ?> <?= $proposal->owner->phone */ ?>
                     </span>
             </div>
+
+
             <div class="panel-body">
-                <div id="dialog"></div>
+                <div id="dialog">
+                    Для начала общения, выберите организацию слева
+                </div>
             </div>
             <div class="disabled-messenger">
                 <div class="vertical-wrapper">
@@ -208,6 +213,8 @@ $this->registerJsVar('token', Yii::$app->getUser()->getIdentity()->getAuthKey())
                     </div>
                 </div>
             </div>
+
+
         </div>
     </div>
 </div>

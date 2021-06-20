@@ -17,10 +17,11 @@ class Client {
         this.headers = {
             'Accept': '*/*',
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${authToken}`
+            'Authorization': `Bearer ${authToken}`,
+            'Access-Control-Allow-Origin': 'http://user.banket-b.ois',
         };
         Object.assign(this.headers, headers);
-        this.baseUrl = config.apiUrl; // baseUrl;
+        this.baseUrl = apihost; // baseUrl;
     }
 
     static sendCode(params) {
@@ -75,14 +76,15 @@ class Client {
             body = undefined;
         }
         let opts = {
-            method,
+            // mode: 'no-cors',
+            method: method,
             headers: this.headers
         };
         if (body) {
             Object.assign(opts, {body: JSON.stringify(body)});
         }
 
-        console.log(fullRoute, body);
+        // console.log(fullRoute, body);
 
         return this.onlineFetch(fullRoute, opts, debugInfo);
 
@@ -97,7 +99,7 @@ class Client {
         // if (connectionInfo.type !== 'none') {
         return fetchPromise()
             .then(response => {
-                console.log(response);
+                // console.log(response);
                 // response.json().then(data => console.log(data, debugInfo, fullRoute));
                 return response.json()
             });
@@ -129,7 +131,7 @@ class Messenger extends React.PureComponent {
     };
 
     static isMy(model) {
-        return model.author_class === 'app\\common\\models\\Organization';
+        return model.author_class === 'app\\common\\models\\MobileUser';
     }
 
     static scroll() {
@@ -206,11 +208,20 @@ class Form extends React.PureComponent {
     constructor(props) {
         super(props);
         this.state = {
-            author_class: "app\\common\\models\\Organization",
+            // author_class: "app\\common\\models\\Organization",
+            // organization_id: organizationId,
+            // proposal_id: proposal.id,
+            // message: "",
+            // btnDisabled: true,
+
+
+            author_class: "app\\common\\models\\MobileUser",
             organization_id: organizationId,
             proposal_id: proposal.id,
             message: "",
+
             btnDisabled: true,
+
         };
 
         this.handleChange = this.handleChange.bind(this);
@@ -271,7 +282,7 @@ class Dialogs extends React.Component {
     /**
      * fetch data from API
      */
-    componentDidMount(clearCache = false) {
+    componentDidMount() {
         const api = new Client(token);
         api.GET('/proposal/dialogs/' + proposal.id)
             .then(
@@ -305,19 +316,49 @@ class Dialogs extends React.Component {
         }
 
         return (
-            <div>list</div>
+            <ul className={'list-group'}>
+                {this.state.items.map(function (org) {
+                    return <DialogItem org={org}/>
+                })}
+            </ul>
         );
     }
-};
+}
 
-ReactDOM.render(
-    <Messenger/>,
-    document.getElementById('dialog')
-);
+class DialogItem extends React.PureComponent {
 
+    constructor(props) {
+        super(props);
+        this.onClick = this.onClick.bind(this);
+    }
+
+    onClick() {
+        window.ref = 'proposal_2/u_' + proposal.owner_id + '/p_' + proposal.id + '/o_' + this.props.org.id;
+        window.organizationId = this.props.org.id;
+        destroyChat();
+        initChat();
+    }
+
+    render() {
+        return (
+            <a href="#" className={'list-group-item js-open-chat'} onClick={this.onClick}>{this.props.org.name}</a>
+        )
+    }
+
+}
 
 ReactDOM.render(
     <Dialogs/>,
     document.getElementById('dialogs')
 );
 
+function destroyChat() {
+    ReactDOM.unmountComponentAtNode(document.getElementById('dialog'));
+}
+
+function initChat() {
+    ReactDOM.render(
+        <Messenger/>,
+        document.getElementById('dialog')
+    );
+}
