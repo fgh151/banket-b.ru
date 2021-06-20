@@ -8,7 +8,7 @@ use app\cabinet\assets\AppAsset;
 use yii\helpers\Html;
 
 AppAsset::register($this);
-$this->title = 'Банкетный Баттл';
+$this->title = 'Банкет fun';
 ?>
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
@@ -59,7 +59,7 @@ $this->title = 'Банкетный Баттл';
 
 <footer class="footer">
     <div class="container">
-        <p class="pull-left">&copy; Банкет Батл <?= date('Y') ?></p>
+        <p class="pull-left">&copy; Банкет fun <?= date('Y') ?></p>
 
         <p class="pull-right hidden-xs">
             Свидетельство о регистрации программного обеспечения 2016617962 от 19.07.2016<br>

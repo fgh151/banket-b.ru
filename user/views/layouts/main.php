@@ -12,7 +12,7 @@ use yii\helpers\Html;
 use yii\widgets\Breadcrumbs;
 
 AppAsset::register($this);
-$this->title = 'Банкетный Баттл';
+$this->title = 'Банкет fun';
 
 $homeLinkLable = (new Mobile_Detect())->isMobile() ? '<span>
                     <svg width="22" height="14" viewBox="0 0 22 14" fill="none" xmlns="http://www.w3.org/2000/svg">

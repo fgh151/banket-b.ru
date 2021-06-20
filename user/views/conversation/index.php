@@ -171,7 +171,7 @@ $this->registerJsVar('organizationId', '');
 
                 <div class="hidden-xs">
                     <svg width="44" height="44" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path fill-rule="evenodd" clip-rule="evenodd"
+                        <path stroke="#dddddd" fill-rule="evenodd" clip-rule="evenodd"
                               d="M22 44C34.1503 44 44 34.1503 44 22C44 9.84974 34.1503 0 22 0C9.84974 0 0 9.84974 0 22C0 34.1503 9.84974 44 22 44Z"
                               fill="#EEEEEE"/>
                         <path d="M22 21C24.2091 21 26 19.2091 26 17C26 14.7909 24.2091 13 22 13C19.7909 13 18 14.7909 18 17C18 19.2091 19.7909 21 22 21Z"

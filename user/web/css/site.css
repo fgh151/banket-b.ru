@@ -516,3 +516,9 @@ h2.closed-proposals {
 .p-l-30 {
     padding-left: 30px;
 }
+
+.panel-default > .panel-heading {
+    color: #333333;
+    background-color: var(--white);
+    border-color: #ddd;
+}
