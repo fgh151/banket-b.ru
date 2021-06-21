@@ -74,8 +74,16 @@ class ProposalForm extends Proposal implements \Serializable
 
         $this->owner_id = Yii::$app->getUser()->getId();
 
+        $save = parent::save($runValidation, $attributeNames);
 
-        return parent::save($runValidation, $attributeNames);
+        Yii::$app->mailer->compose()
+            ->setFrom(getenv('MAIL_FROM'))
+            ->setTo(getenv('SUPPORT_EMAIL'))
+            ->setSubject('Новая заявка ' . getenv('USER_URL'))
+            ->setHtmlBody('<a href="https://admin.banket-b.ru/proposal/view/"' . $this->id . '>посмотреть</a>')
+            ->send();
+
+        return $save;
     }
 
     public function store()
