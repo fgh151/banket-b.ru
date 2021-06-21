@@ -129,13 +129,6 @@ class ProposalSearch extends Proposal
         if ($this->guests_count_to !== null) {
             $query->andFilterWhere(['<', 'guests_count', $this->guests_count_to]);
         }
-//        if (!$admin) {
-//            if ($direct == false) {
-//                $query->andFilterWhere(['organizations' => '"[]"']);
-//            } else {
-//                $query->andFilterWhere(['@>', 'organizations', '[' . $direct . ']']);
-//            }
-//        }
 
         if ($this->status !== null) {
             if ($this->status == Constants::PROPOSAL_STATUS_CREATED) {
@@ -155,9 +148,6 @@ class ProposalSearch extends Proposal
         $query->andFilterWhere(['ilike', 'City', $this->City])
             ->andFilterWhere(['ilike', 'comment', $this->comment]);
 
-        $query->orderBy('date ASC');
-
-
         //TODO: переделать. Сделать join и фильтровать по нему
         if ($this->rejected) {
             $query->andWhere([
@@ -165,8 +155,7 @@ class ProposalSearch extends Proposal
                 'id', $this->rejected]);
         }
 
-//        var_dump($query->createCommand()->getRawSql()); die;
-
+        $dataProvider->sort->defaultOrder = ['date' => SORT_ASC];
 
         return $dataProvider;
     }

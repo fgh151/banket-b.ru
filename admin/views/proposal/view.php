@@ -13,7 +13,13 @@ $this->params['breadcrumbs'][] = $this->title;
 
 
 $columns = [
-    'City', 'date', 'time', 'guests_count',
+    'owner.email',
+    'owner.phone',
+    'owner.name',
+    'City',
+    'date',
+    'time',
+    'guests_count',
     'amount',
     'eventType',
     'dance:boolean',
@@ -22,7 +28,7 @@ $columns = [
     'parking:boolean',
     [
         'attribute' => 'comment',
-        'value' => function (Proposal $model) {
+        'value' => static function (Proposal $model) {
             return Yii::$app->getUser()->getId() === 1 ? $model->comment : str_replace('бб', '', $model->comment);
         }
     ],

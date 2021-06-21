@@ -2,6 +2,7 @@
 
 use app\common\components\Constants;
 use app\common\models\Proposal;
+use yii\grid\ActionColumn;
 use yii\grid\GridView;
 use yii\helpers\Html;
 use yii\widgets\Pjax;
@@ -37,52 +38,19 @@ $this->params['breadcrumbs'][] = $this->title;
             'date',
             'time',
             'created_at:datetime',
-            //'guests_count',
-            //'amount',
-            //'type',
-            //'event_type',
-            //'metro',
-            //'dance:boolean',
-            //'private:boolean',
-            //'own_alcohol:boolean',
-            //'parking:boolean',
-            //'comment:ntext',
-            [
-                'label' => 'Ответы ресторанов',
-                'value' => function (Proposal $model) {
-                    $result = [];
-                    foreach ($model->getAnswers() as $org => $time) {
-                        $result[] = $org . '<br />(' . $time . ')';
-                    }
-                    return implode('<br />', $result);
-                },
-                'format' => 'html'
-            ],
-            [
-                'attribute' => null,
-                'label' => 'Ответы ресторанов для RR',
-                'value' => function (Proposal $model) {
-                    if ($model->owner_id == Yii::$app->params['restorateUserId']) {
-                        return Html::a('Ответы', ['proposal/answers', 'id' => $model->id]);
-                    }
-                    return '';
-                },
-                'format' => 'html'
-            ],
             [
                 'attribute' => 'status',
-                'value' => function (Proposal $model) {
+                'value' => static function (Proposal $model) {
 
                     switch ($model->status) {
                         case Constants::PROPOSAL_STATUS_REJECT:
                         case Constants::PROPOSAL_STATUS_CLOSED:
-                            {
-                                return 'Закрыта';
-                                break;
-                            }
+                        {
+                            return 'Закрыта';
+                        }
                         default :
-                            {
-                                return 'Открыта';
+                        {
+                            return 'Открыта';
                             }
                     }
                 },
@@ -92,11 +60,12 @@ $this->params['breadcrumbs'][] = $this->title;
                 ]
             ],
             [
-                'class' => 'yii\grid\ActionColumn',
+                'class' => ActionColumn::class,
                 'template' => '{view} {update} {delete} {close}',
                 'buttons' => [
-                    'close' => function ($url, $model, $key) {     // render your custom button
-                        return ' ' . Html::a('<span class="glyphicon glyphicon-remove"></span>', ['proposal/close', 'id' => $model->id]);
+                    'close' => static function ($url, $model, $key) {     // render your custom button
+                        return ' ' . Html::a('<span class="glyphicon glyphicon-remove"></span>',
+                                ['proposal/close', 'id' => $model->id]);
                     }
                 ]
             ],
