@@ -9,6 +9,7 @@ use app\user\models\ProposalForm;
 use yii\helpers\Html;
 use yii\web\View;
 use yii\widgets\ActiveForm;
+use yii\widgets\MaskedInput;
 
 ?>
 
@@ -23,8 +24,14 @@ use yii\widgets\ActiveForm;
         </h3>
 
         <?= $form->field($model, 'name')->label('Как Вас зовут?'); ?>
-        <?= $form->field($model, 'phone')->label('Укажите Ваш телефон'); ?>
-        <?= $form->field($model, 'email')->label('Укажите Вашу почту'); ?>
+        <?= $form->field($model, 'phone')
+            ->input('tel')
+            ->widget(
+                MaskedInput::class,
+                ['mask' => '+7 (999) 999-99-99']
+            )
+            ->label('Укажите Ваш телефон'); ?>
+        <?= $form->field($model, 'email')->input('email')->label('Укажите Вашу почту'); ?>
 
     <?php endif; ?>
 
@@ -36,8 +43,8 @@ use yii\widgets\ActiveForm;
 
     <h3>Какой банкет Вас интересует?</h3>
 
-    <?= $form->field($model, 'guests_count'); ?>
-    <?= $form->field($model, 'amount'); ?>
+    <?= $form->field($model, 'guests_count')->input('number'); ?>
+    <?= $form->field($model, 'amount')->input('number'); ?>
     <?= $form->field($model, 'event_type')->dropDownList(
         Proposal::typeLabels()
     ) ?>
