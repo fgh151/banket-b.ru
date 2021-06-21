@@ -161,7 +161,7 @@ class SiteController extends Controller
         if ($model->load(Yii::$app->getRequest()->post()) && $model->save()) {
 
             ProposalForm::clearStore();
-            Yii::$app->getSession()->setFlash('success', 'Банкет создан!');
+            Yii::$app->getSession()->setFlash('success', 'Спасибо! Начинаем поиск!');
             return $this->redirect(['/site/index']);
         }
 

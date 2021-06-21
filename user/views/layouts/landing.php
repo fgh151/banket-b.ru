@@ -52,9 +52,9 @@ LandingAsset::register($this);
                             <?= Html::a('Кабинет', ['/battle/index']); ?>
                         </li>
                     <?php endif; ?>
-                    <li>
+                    <?php /* <li>
                         <?= Html::a('Блог', ['/blog/index']); ?>
-                    </li>
+                    </li> */ ?>
                 </ul>
             </div>
             <!--/.navbar-collapse-->

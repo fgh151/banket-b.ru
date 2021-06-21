@@ -12,23 +12,12 @@
  */
 
 use app\common\components\MonthHelper;
-use app\common\models\KnownProposal;
 use app\common\models\Proposal;
-use app\common\models\ReadMessage;
 use yii\helpers\Url;
 
 ?>
 <a href="<?= Url::to(['conversation/index', 'proposalId' => $model->id], ['class' => 'btn btn-primary']); ?>"
    class="proposal-item row<?= !$model->isActual() ? ' closed-proposals' : '' ?>">
-    <?php if (!($model->known instanceof KnownProposal)): ?>
-        <div class="proposal-label label label-danger">
-            <i class="glyphicon glyphicon-envelope"></i> Новая заявка
-        </div>
-    <?php elseif ($model->readMessage instanceof ReadMessage && $model->readMessage->count < $model->readMessage->user_messages): ?>
-        <div class="proposal-label label label-info">
-            <i class="glyphicon glyphicon-star"></i> Новое сообщение
-        </div>
-    <?php endif; ?>
     <div class="col-xs-12 col-md-3 proposal-mobile-header">
         <div class="row">
             <div class="col-xs-8">
