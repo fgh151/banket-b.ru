@@ -38,6 +38,7 @@ $homeLinkLable = (new Mobile_Detect())->isMobile() ? '<span>
     <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
     <meta name="msapplication-TileColor" content="#eaf0ff">
     <meta name="theme-color" content="#eaf0ff">
+    <meta name="yandex-verification" content="<?= getenv('YA_WEBMASTER_ID') ?>"/>
 </head>
 <body>
 <?php $this->beginBody() ?>

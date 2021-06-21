@@ -26,13 +26,14 @@ $this->title = 'Банкетный Баттл';
     <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#0a2adb">
     <meta name="msapplication-TileColor" content="#0a2adb">
     <meta name="theme-color" content="#ffffff">
+    <meta name="yandex-verification" content="<?= getenv('YA_WEBMASTER_ID') ?>"/>
 </head>
 <body>
 <?php $this->beginBody() ?>
 
-    <div class="container">
-        <?= $content ?>
-    </div>
+<div class="container">
+    <?= $content ?>
+</div>
 
 <footer class="footer">
     <div class="container">
