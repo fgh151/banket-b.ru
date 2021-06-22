@@ -155,7 +155,7 @@ class ProposalSearch extends Proposal
                 'id', $this->rejected]);
         }
 
-        $dataProvider->sort->defaultOrder = ['date' => SORT_ASC];
+        $dataProvider->sort->defaultOrder = ['id' => SORT_DESC, 'date' => SORT_DESC];
 
         return $dataProvider;
     }
