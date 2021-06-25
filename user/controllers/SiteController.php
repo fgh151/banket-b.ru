@@ -179,7 +179,7 @@ class SiteController extends Controller
     public function beforeAction($action)
     {
         if (Yii::$app->getUser()->getIsGuest()) {
-            Yii::$app->homeUrl = Url::to('about');
+            Yii::$app->homeUrl = Url::to('index');
         }
         return parent::beforeAction($action);
     }

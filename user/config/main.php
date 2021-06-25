@@ -70,8 +70,8 @@ $config = [
                 'facebook' => [
                     'class' => 'yii\authclient\clients\Facebook',
                     /** @see https://developers.facebook.com/apps */
-                    'clientId' => 'APP_CLIENT_ID',
-                    'clientSecret' => 'APP_CLIENT_SECRET',
+                    'clientId' => getenv('FB_CLIENT_ID'),
+                    'clientSecret' => getenv('FB_CLENT_SECRET'),
                     'attributeNames' => ['name', 'email', 'first_name', 'last_name'],
                 ],
                 'vkontakte' => [
@@ -79,6 +79,10 @@ $config = [
                     'class' => 'yii\authclient\clients\VKontakte',
                     'clientId' => getenv('OAUTH_VK_ID'),
                     'clientSecret' => getenv('OAUTH_VK_SECRET'),
+                    'attributeNames' => [
+                        'uid',
+                        'first_name',
+                    ]
                 ],
                 'google' => [
                     /**
@@ -89,15 +93,15 @@ $config = [
                     'clientId' => getenv('OAUTH_GOOGLE_CLIENT_ID'),
                     'clientSecret' => getenv('OAUTH_GOOGLE_CLIENT_SECRET'),
                 ],
-                'twitter' => [
-                    /** @see https://dev.twitter.com/apps/new */
-                    'class' => 'yii\authclient\clients\Twitter',
-                    'attributeParams' => [
-                        'include_email' => 'true'
-                    ],
-                    'consumerKey' => 'twitter_consumer_key',
-                    'consumerSecret' => 'twitter_consumer_secret',
-                ],
+//                'twitter' => [
+//                    /** @see https://dev.twitter.com/apps/new */
+//                    'class' => 'yii\authclient\clients\Twitter',
+//                    'attributeParams' => [
+//                        'include_email' => 'true'
+//                    ],
+//                    'consumerKey' => 'twitter_consumer_key',
+//                    'consumerSecret' => 'twitter_consumer_secret',
+//                ],
                 'yandex' => [
                     /** @see https://oauth.yandex.ru/client/new */
                     'class' => 'yii\authclient\clients\Yandex',

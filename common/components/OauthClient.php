@@ -30,15 +30,35 @@ class OauthClient
     /** @noinspection PhpUnusedPrivateMethodInspection */
     private static function handlerYandex(BaseOAuth $client): MobileUser
     {
+        return self::handele($client, 'yandex', 'default_email', 'client_id', 'real_name');
+    }
+
+    private static function handlerGoogle(BaseOAuth $client): MobileUser
+    {
+        return self::handele($client, 'google');
+    }
+
+    private static function handlerFacebook(BaseOAuth $client): MobileUser
+    {
+        return self::handele($client, 'facebook');
+    }
+
+    private static function handlerVKontakte(BaseOAuth $client): MobileUser
+    {
+        return self::handele($client, 'vkontakte', '', 'user_id', 'first_name');
+    }
+
+    private static function handele(
+        BaseOAuth $client,
+        $socialName,
+        $emailAttr = 'email',
+        $idAttr = 'id',
+        $nameAttr = 'name'
+    ): MobileUser {
         $attributes = $client->getUserAttributes();
-        /** @var MobileUser $existUser */
-        $existUser = MobileUser::find()->where(['email' => $attributes['default_email']])->one();
-        if ($existUser !== null) {
-            return $existUser;
-        }
 
         /** @var OauthSocial $exist */
-        $exist = OauthSocial::find()->where(['source' => 'yandex', 'source_id' => $attributes['client_id']])->one();
+        $exist = OauthSocial::find()->where(['source' => $socialName, 'source_id' => $attributes[$idAttr]])->one();
         if ($exist !== null) {
             return $exist->user;
         }
@@ -46,16 +66,16 @@ class OauthClient
         $user->phone = time();
         $user->generateAuthKey();
         $user->setPassword(Yii::$app->getSecurity()->generateRandomString());
-        $user->email = $attributes['default_email'];
+        $user->email = $attributes[$emailAttr] ?? time() . '@' . $socialName . '.com';
         $user->created_at = $user->updated_at = time();
         $user->status = Constants::USER_STATUS_ACTIVE;
-        $user->name = $attributes['real_name'];
+        $user->name = $attributes[$nameAttr];
         $user->save();
 
         $social = new OauthSocial();
         $social->user_id = $user->id;
-        $social->source = 'yandex';
-        $social->source_id = $attributes['client_id'];
+        $social->source = $socialName;
+        $social->source_id = $attributes[$idAttr];
         $social->save();
 
         return $user;
