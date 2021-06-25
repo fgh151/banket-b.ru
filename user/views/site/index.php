@@ -42,37 +42,8 @@ $this->registerMetaTag([
         </div>
     </section>
 
-    <section class="cook-delecious">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-3 col-md-offset-1">
-                    <div class="first-image">
-                        <img src="/landing/img/cook_01.jpg" alt="">
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="cook-content">
-                        <h4>Организовать мероприятие</h4>
-                        <div class="contact-content">
-                            <span>Позвонить нам:</span>
-                            <h6>+7 (916) 106-26-00</h6>
-                        </div>
-                        <span>или</span>
-                        <div class="primary-white-button">
-                            <a href="#" class="scroll-link" data-id="book-table">Создать банкет</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="second-image">
-                        <img src="/landing/img/cook_02.jpg" alt="">
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
 
-    <section class="services">
+    <section class="services" style="padding-top: 50px">
         <div class="container">
             <div class="row">
                 <div class="col-md-3 col-sm-6 col-xs-12">
@@ -140,6 +111,36 @@ $this->registerMetaTag([
                             </div>
                         </div>
                         <?php ActiveForm::end(); ?>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="cook-delecious">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-3 col-md-offset-1">
+                    <div class="first-image">
+                        <img src="/landing/img/cook_01.jpg" alt="">
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="cook-content">
+                        <h4>Организовать мероприятие</h4>
+                        <div class="contact-content">
+                            <span>Позвонить нам:</span>
+                            <h6>+7 (916) 106-26-00</h6>
+                        </div>
+                        <span>или</span>
+                        <div class="primary-white-button">
+                            <a href="#" class="scroll-link" data-id="book-table">Создать банкет</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="second-image">
+                        <img src="/landing/img/cook_02.jpg" alt="">
                     </div>
                 </div>
             </div>
