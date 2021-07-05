@@ -130,7 +130,7 @@ $this->registerMetaTag([
                         <h4>Организовать мероприятие</h4>
                         <div class="contact-content">
                             <span>Позвонить нам:</span>
-                            <h6>+7 (916) 106-26-00</h6>
+                            <h6>+7 (929) 907-97-24</h6>
                         </div>
                         <span>или</span>
                         <div class="primary-white-button">
